@@ -4,8 +4,8 @@ const P_RAW={
   inbox:()=>db.collection('inbox'),inboxDoc:id=>db.doc('inbox/'+id),
   tasks:()=>db.collection('tasks'),task:id=>db.doc('tasks/'+id),
   sessions:()=>db.collection('sessions'),gallery:()=>db.collection('gallery'),
-  owner:()=>db.doc('channel/owner'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
-  current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),
+  owner:()=>db.doc('channel/owner'),ownerLog:()=>db.doc('channel/owner').collection('log'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
+  current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),caps:()=>db.doc('memory/caps'),
   crash:id=>db.doc('crashes/'+id),
   notes:()=>db.doc('memory/notes').collection('items'),prefs:()=>db.doc('memory/prefs').collection('items'),
   turns:()=>db.doc('chat/log').collection('turns'),decisions:()=>db.doc('decisions/log').collection('items'),
@@ -38,7 +38,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
-  sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
+  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',caps:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',

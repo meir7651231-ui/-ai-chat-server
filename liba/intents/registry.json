@@ -426,6 +426,91 @@
    "help": "\"תעלה את המנהל\""
   },
   {
+   "id": "route.where",
+   "where": "page",
+   "family": "אנשים",
+   "exact": [
+    "למי זה הלך",
+    "לאן זה הלך",
+    "למי שלחת את זה"
+   ],
+   "handler": "routeWhere",
+   "help": "\"למי זה הלך\""
+  },
+  {
+   "id": "route.other",
+   "where": "page",
+   "family": "אנשים",
+   "exact": [
+    "תחזיר לי את זה",
+    "זה לא בשבילו",
+    "תעביר את זה לצד השני",
+    "זה היה בשביל (ליבה|המנהל)"
+   ],
+   "handler": "routeOther",
+   "help": "\"תחזיר לי את זה\" (לצד השני)"
+  },
+  {
+   "id": "owner.pin",
+   "where": "page",
+   "family": "אנשים",
+   "exact": [
+    "תשאיר את זה אצל המנהל",
+    "תשאיר את המנהל על הקו",
+    "המנהל נשאר"
+   ],
+   "handler": "ownerPin",
+   "help": "\"תשאיר את זה אצל המנהל\" (עד סוף היום)"
+  },
+  {
+   "id": "days.all",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "הכול",
+    "הכל",
+    "תקריא הכול",
+    "תקריא הכל",
+    "תקריאי הכול"
+   ],
+   "handler": "catchupAll",
+   "pass": true,
+   "help": "\"הכול\" (אחרי תדרוך)"
+  },
+  {
+   "id": "days.yesterday",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "על מה דיברנו אתמול",
+    "מה היה אתמול",
+    "מה דיברנו אתמול"
+   ],
+   "handler": "daysYesterday",
+   "help": "\"על מה דיברנו אתמול\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "days.back",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "תחזור לשיחה על",
+    "תחזרי לשיחה על",
+    "מה אמרנו על"
+   ],
+   "handler": "daysBack",
+   "help": "\"תחזור לשיחה על X\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
    "id": "address.liba",
    "where": "page",
    "when": "manager",

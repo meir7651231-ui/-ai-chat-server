@@ -61,6 +61,23 @@ const EVENTS = +(process.env.EVENTS || 200), QA = +(process.env.QA || 50), TTL =
     total++; if (good) right++; else bad.push(`${asker}/${addr || '-'}→${sent || '(לא נשלח)'}`);
   }
   ok(right === total, `replyTo: ${right}/${total} answers went to whoever asked (or where a new topic said)` + (bad.length ? ': ' + bad.slice(0, 4).join(' ; ') : ''));
+  // (c) addressing: where did it go and why, send it to the other side, a pin that holds past the lease, and a log
+  await f.evaluate(t => window.__owner.ttl(t), TTL); await input('ליבה תחזור');
+  await input('משפט-רגיל-לליבה');
+  await f.evaluate(() => window.__h.set('inbox/qw', { from: 'manager', kind: 'ask', text: 'שאלת-מנהל', options: ['כן', 'לא'], spoken: false, ts: Date.now() }));
+  await speak(1400); said.length = 0; await input('כן אבל רק מחר');
+  ok(said.some(t => /זה הולך למנהל, כי הוא שאל/.test(t)), 'addressing: when the target changes, it is said once: ' + said.join(' | '));
+  said.length = 0; await input('למי זה הלך');
+  ok(said.some(t => /הלך למנהל, כי זו תשובה לשאלה שלו/.test(t)), '"למי זה הלך" says where and why: ' + said.join(' | '));
+  const n0 = (await f.evaluate(() => window.__h.sent.slice())).length; await input('תחזיר לי את זה');
+  const back = (await f.evaluate(() => window.__h.sent.slice())).slice(n0);
+  ok(back.some(t => t === '[ליבה] כן אבל רק מחר'), '"תחזיר לי את זה" sends the last sentence to the other side: ' + JSON.stringify(back));
+  await input('תשאיר את זה אצל המנהל'); await speak(TTL * 2.2);
+  const pinned = await f.evaluate(() => window.__owner.state().owner);
+  ok(pinned === 'manager', 'pin: the manager keeps the line past the lease, until the end of the day: ' + pinned);
+  await input('ליבה תחזור');
+  const log = await f.evaluate(() => window.__h.all('channel/owner/log'));
+  ok(log.length >= 3 && log.some(x => x.why === 'expired') && log.some(x => x.why === 'pinned'), 'addressing: every change of hands is in channel/owner/log with why: ' + [...new Set(log.map(x => x.why))].join(','));
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

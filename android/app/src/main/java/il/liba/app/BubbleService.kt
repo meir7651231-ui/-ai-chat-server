@@ -800,7 +800,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             id == "app.words.list" -> { val w = WordQueue.all(this); speak(if (w.isEmpty()) "אין משפטים שמורים." else "שמרתי ${w.size}: " + w.takeLast(3).joinToString("; ") { it.optString("t") }); return }
             id == "app.words.clear" -> { WordQueue.clear(this); speak("מחקתי את מה ששמרתי."); return }
             !pageReady -> { val dropped = WordQueue.add(this, t, System.currentTimeMillis()); tone("heard")
-                val now = SystemClock.elapsedRealtime(); if (now - wordsSaidAt > 10 * 60_000L) { wordsSaidAt = now; speak("שמרתי. הערוץ סגור, אשלח כשיחזור.") } else showLabel("נשמר (" + WordQueue.size(this) + ")", 3000)
+                val now = SystemClock.elapsedRealtime(); if (now - wordsSaidAt > 10 * 60_000L) { wordsSaidAt = now; speak("שמרתי, אשלח כשאחזור. אני לא מחוברת כי " + silentWhy() + ".") } else showLabel("נשמר (" + WordQueue.size(this) + ")", 3000)
                 if (dropped > 0) Trace.e(Trace.Code.E_PREFS, "words-cap"); return }
         }
         Prefs.log(this, "me", t); sentAt = SystemClock.elapsedRealtime()
@@ -811,8 +811,16 @@ class BubbleService : Service(), LibaWeb.Bridge {
     /** words-offline: the page is back - send what was said while it was down, oldest first, with when it was said.
      *  An item leaves the file only when the page reports it sent (onSent); anything left goes on the next ready. */
     private var wordsSaidAt = 0L; private val wordsInFlight = mutableMapOf<String, String>()
+    /** silent-why: the real reason the page is not there, in words - not "the channel is closed" */
+    private fun silentWhy(): String {
+        val net = runCatching { val cm = getSystemService(ConnectivityManager::class.java); cm.getNetworkCapabilities(cm.activeNetwork)?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true }.getOrDefault(true)
+        return when { !net -> "אין רשת"; loginWall -> "הדף התנתק מ-claude"; web == null -> "הדף לא עלה"; SystemClock.elapsedRealtime() - pageLoadedAt < 90_000 -> "הדף עוד נטען"; else -> "הדף לא עונה" }
+    }
     private fun drainWords() {
         val w = WordQueue.all(this); if (w.isEmpty() || !pageReady) return
+        // silent-why: a sentence kept for more than an hour is announced before it goes, so it never arrives looking new
+        val oldest = w.minOf { it.optLong("at") }
+        if (System.currentTimeMillis() - oldest > 3_600_000L) speak("יש " + w.size + " משפטים ששמרתי כשהייתי מנותקת, הישן מלפני " + ((System.currentTimeMillis() - oldest) / 3_600_000L) + " שעות. שולחת אותם עם השעה שבה אמרת.")
         val fmt = java.text.SimpleDateFormat("HH:mm", Locale("he"))
         w.forEachIndexed { i, o -> main.postDelayed({
             if (!pageReady) return@postDelayed

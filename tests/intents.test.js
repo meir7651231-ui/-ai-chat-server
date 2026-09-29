@@ -54,6 +54,14 @@ const TABLE = [
   // with nothing pending, "כן" is just an answer - it goes to Claude
   const b2 = (await sentNow()).length; await said('כן', 2600);
   ok((await sentNow()).slice(b2).some(t => /כן$/.test(t)), 'with nothing pending, "כן" is an answer and goes on to Claude');
+  // capability-registry: a never-used command heard inside a sentence to Claude earns one hint - and only one in four hours
+  const h1 = await said('תגידי לי בבקשה מה פספסתי אתמול', 3000);
+  ok(h1.some(t => /אגב, "מה פספסתי" לבד עושה את זה מיד/.test(t)), 'hint: a command inside a longer sentence gets one line: ' + h1.join(' | '));
+  const h2 = await said('ומה לא נשלח מאתמול בערב', 3000);
+  ok(!h2.some(t => /אגב/.test(t)), 'hint: a second one within four hours is not said: ' + h2.join(' | '));
+  await f.evaluate(() => { const c = window.__caps.state(); }); await said('מה פספסתי', 2000);
+  const st = await f.evaluate(() => window.__caps.state());
+  ok(st['missed.list'] && st['missed.list'].seen >= 1 && st['missed.list'].hints === 1, 'hint: using the command counts it as seen, and the hint count is kept: ' + JSON.stringify(st['missed.list']));
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

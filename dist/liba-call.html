@@ -105,6 +105,12 @@ const INTENTS=Object.freeze([
   {"id":"owner.liba","where":"page","when":"","exact":["היי ליבה תחזור","היי ליבה תחזרי","היי ליבה חזור","היי ליבה חזרי","הי ליבה תחזור","הי ליבה תחזרי","הי ליבה חזור","הי ליבה חזרי","ליבה תחזור","ליבה תחזרי","ליבה חזור","ליבה חזרי"],"prefix":[],"handler":"ownerLiba","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"owner.back","where":"page","when":"manager","exact":["תחזור","תחזרי","חזור","חזרי"],"prefix":[],"handler":"ownerLiba","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"owner.manager","where":"page","when":"","exact":["תעלה את המנהל","תעלה את מנהל","תעלה המנהל","תעלה מנהל","העלה את המנהל","העלה את מנהל","העלה המנהל","העלה מנהל","תעביר את המנהל","תעביר את מנהל","תעביר המנהל","תעביר מנהל","תן למנהל","תן להמנהל","תעביר למנהל","תעביר להמנהל","מנהל"],"prefix":[],"handler":"ownerManager","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"route.where","where":"page","when":"","exact":["למי זה הלך","לאן זה הלך","למי שלחת את זה"],"prefix":[],"handler":"routeWhere","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"route.other","where":"page","when":"","exact":["תחזיר לי את זה","זה לא בשבילו","תעביר את זה לצד השני","זה היה בשביל ליבה","זה היה בשביל המנהל"],"prefix":[],"handler":"routeOther","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"owner.pin","where":"page","when":"","exact":["תשאיר את זה אצל המנהל","תשאיר את המנהל על הקו","המנהל נשאר"],"prefix":[],"handler":"ownerPin","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"days.all","where":"page","when":"liba","exact":["הכול","הכל","תקריא הכול","תקריא הכל","תקריאי הכול"],"prefix":[],"handler":"catchupAll","confirm":false,"pass":true,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"days.yesterday","where":"page","when":"liba","exact":["על מה דיברנו אתמול","מה היה אתמול","מה דיברנו אתמול"],"prefix":[],"handler":"daysYesterday","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
+  {"id":"days.back","where":"page","when":"liba","exact":[],"prefix":["תחזור לשיחה על","תחזרי לשיחה על","מה אמרנו על"],"handler":"daysBack","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"address.liba","where":"page","when":"manager","exact":[],"prefix":["היי ליבה","הי ליבה","ליבה"],"handler":"addressLiba","confirm":false,"pass":true,"requires":[],"lead":[],"leadRequired":false},
   {"id":"address.manager","where":"page","when":"liba","exact":[],"prefix":["היי מנהל","הי מנהל","מנהל"],"handler":"addressManager","confirm":false,"pass":true,"requires":[],"lead":[],"leadRequired":false},
   {"id":"confirm.yes","where":"page","when":"","exact":["כן","תאשר","אשר","נכון","כן בבקשה","בטח"],"prefix":[],"handler":"confirmYes","confirm":false,"pass":true,"requires":[],"lead":[],"leadRequired":false},
@@ -123,13 +129,13 @@ const INTENTS=Object.freeze([
   {"id":"claude.cost","where":"claude","when":"","exact":["כמה עלה היום"],"prefix":[],"handler":"","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"claude.decisions","where":"claude","when":"","exact":["מה אישרתי היום"],"prefix":[],"handler":"","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false}
 ]);
-const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"ליבה תחזור\", \"תעלה את המנהל\", \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"מה פספסתי\", \"תשחרר הכול\", \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"תשכח את…\", \"אל תשאל אותי על…\", \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"תייצא את הזיכרון\""],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"מה למדנו היום\", \"כמה עלה היום\", \"מה אישרתי היום\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
+const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"ליבה תחזור\", \"תעלה את המנהל\", \"למי זה הלך\", \"תחזיר לי את זה\" (לצד השני), \"תשאיר את זה אצל המנהל\" (עד סוף היום), \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"מה פספסתי\", \"תשחרר הכול\", \"הכול\" (אחרי תדרוך), \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"תשכח את…\", \"אל תשאל אותי על…\", \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"על מה דיברנו אתמול\", \"תחזור לשיחה על X\", \"תייצא את הזיכרון\""],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"מה למדנו היום\", \"כמה עלה היום\", \"מה אישרתי היום\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
 const P_RAW={
   inbox:()=>db.collection('inbox'),inboxDoc:id=>db.doc('inbox/'+id),
   tasks:()=>db.collection('tasks'),task:id=>db.doc('tasks/'+id),
   sessions:()=>db.collection('sessions'),gallery:()=>db.collection('gallery'),
-  owner:()=>db.doc('channel/owner'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
-  current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),
+  owner:()=>db.doc('channel/owner'),ownerLog:()=>db.doc('channel/owner').collection('log'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
+  current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),caps:()=>db.doc('memory/caps'),
   crash:id=>db.doc('crashes/'+id),
   notes:()=>db.doc('memory/notes').collection('items'),prefs:()=>db.doc('memory/prefs').collection('items'),
   turns:()=>db.doc('chat/log').collection('turns'),decisions:()=>db.doc('decisions/log').collection('items'),
@@ -150,7 +156,7 @@ function mintId(){const t=Date.now();if(t===mintLast)mintSeq++;else{mintLast=t;m
   let r=0;try{const a=new Uint32Array(1);crypto.getRandomValues(a);r=a[0];}catch(e){r=Math.floor(Math.random()*4294967296);}
   return t.toString(36).padStart(9,'0')+mintSeq.toString(36).padStart(4,'0')+r.toString(36).padStart(7,'0');}
 /* budget-contract-gate: the collection contract (channel-budget.json), baked in at build time */
-const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":300,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":100,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"},"inbox/*/parts":{"cap":200,"ttlDays":2,"cls":"voice","time":"seq"}}};
+const BUDGET={"v":1,"ceiling":4000,"c":{"inbox":{"cap":200,"ttlDays":2,"cls":"voice","time":"ts"},"tasks":{"cap":60,"ttlDays":3,"cls":"state","time":"updatedAt"},"sessions":{"cap":60,"ttlDays":30,"cls":"state","time":"updatedAt"},"gallery":{"cap":150,"cls":"record","time":"ts"},"req":{"cap":800,"ttlDays":14,"cls":"record","time":"askedAt"},"chat/log/turns":{"cap":200,"ttlDays":2,"cls":"record","time":"ts"},"decisions/log/items":{"cap":120,"ttlDays":7,"cls":"record","time":"ts"},"crashes":{"cap":40,"ttlDays":7,"cls":"telemetry","time":"ts"},"telemetry/events/items":{"cap":400,"ttlDays":7,"cls":"telemetry","time":"ts"},"metrics/daily/days":{"cap":60,"cls":"telemetry","time":"at"},"memory/notes/items":{"cap":300,"cls":"record","time":"ts"},"memory/prefs/items":{"cap":100,"cls":"record","time":"ts"},"fold":{"cap":400,"cls":"janitor","time":"at"},"pulse":{"cap":4,"cls":"fixed","time":"at"},"ledger":{"cap":40,"ttlDays":30,"cls":"fixed","time":"at"},"channel":{"cap":12,"cls":"state","time":"at"},"chat":{"cap":4,"cls":"voice","time":"at"},"memory":{"cap":12,"cls":"record","time":"at"},"inbox/*/parts":{"cap":200,"ttlDays":2,"cls":"voice","time":"seq"},"channel/owner/log":{"cap":100,"ttlDays":14,"cls":"state","time":"at"}}};
 /* test hook: tests/inbox.chaos.js runs two instances in one browser and names them, so each keeps its own local
    stores like two devices would. A real page is never named, and its keys stay liba.<name>. */
 const LS_SUFFIX=(()=>{try{return window.__LIBA_INSTANCE?'.'+String(window.__LIBA_INSTANCE).replace(/[^a-z0-9]/gi,''):'';}catch(e){return '';}})();
@@ -162,7 +168,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
-  sessions:'state',budget:'state',gallery:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
+  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',caps:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',
@@ -350,10 +356,10 @@ let handsFree=true,seen=null,appMode=false,lastAsk=null;
 function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){fail('P_BRIDGE',e,kind);}}
 window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d=e.data;if(!d||!d.liba)return;
   /* what the phone already said (natively, or to the end before this page died) is marked before anything can pump */
-  if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
+  if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:61,pageHash:"f81c564a0e83",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:62,pageHash:"36e88b3b9351",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -433,7 +439,8 @@ function agoWords(now,ts){const ms=Math.max(0,now-ts),m=Math.floor(ms/60000);
   const h=Math.floor(m/60);if(h<24){if(h===1)return m>=90?'מלפני שעה וחצי':'מלפני שעה';if(h===2)return 'מלפני שעתיים';return 'מלפני '+h+' שעות';}
   const n=ilDay(now)-ilDay(ts);if(n<=1)return 'מאתמול';if(n===2)return 'משלשום';if(n<7)return 'מלפני '+n+' ימים';if(n<14)return 'מלפני שבוע';return 'מלפני '+Math.floor(n/7)+' שבועות';}
 function heAgo(ms,ts){const now=Date.now();return agoWords(now,ts!=null?ts:now-ms);}
-function expired(d){const lim=EXPIRE[d.kind||'say'];return !!lim&&!d.priority&&ageOf(d)>lim;}
+function expired(d){if(d.priority==='morning'&&d.ts>=CLOCK_MIN){const m8=new Date();m8.setHours(8,0,0,0);if(d.ts<m8.getTime()-864e5)return true;} /* days: meant for an earlier morning */
+  const lim=EXPIRE[d.kind||'say'];return !!lim&&!d.priority&&ageOf(d)>lim;}
 window.__kernel={state:()=>state,illegal:()=>illegalMoves,log:stateLog,forgetLoad:()=>spokenLocal.clear(),spoken:()=>Object.assign({},spokenStore)};
 function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.some(x=>x.id===d.id)&&!spokenLocal.has(d.id))inboxQ.push(d);pump();}
 /* step 19: priority – urgent bypasses quiet; morning waits for 08:00 */
@@ -444,7 +451,9 @@ function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.som
 const hourNow=()=>window.__testHour!=null?window.__testHour:new Date().getHours(); /* tests pin the hour */
 const G_OK={ok:true};
 function gate(d){const now=Date.now();if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
-  if(d.release)return G_OK;const p=d.priority||'normal';if(p==='urgent')return G_OK;
+  if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
+  const p=d.priority||'normal';if(p==='urgent')return G_OK;
+  if(catchupUntil>now&&!d.local&&d.kind!=='ask'&&d.kind!=='stuck'&&(d.ts||0)<catchupAt)return {ok:false,reason:'catchup'};
   if(p==='morning'){const h=hourNow();if(h<8||h>=22)return {ok:false,reason:'morning'};}if(quietUntil>now)return {ok:false,reason:'quiet'};return G_OK;}
 const heldSeen=new Set(),silenceDay={};
 function holdNote(d,reason){const k=d.id+'|'+reason;if(heldSeen.has(k))return;heldSeen.add(k);d.heldFor=reason;silenceDay[reason]=(silenceDay[reason]||0)+1;
@@ -455,7 +464,7 @@ const KINDW={ask:'שאלה',stuck:'נתקע',done:'סיים'};
 function speakerOf(d){if(d.speaker)return d.speaker;if(/^arch/i.test(d.id||''))return 'האדריכל';return NAMES[d.from||'liba']||d.from||'ליבה';}
 function prefixOf(d,who){const t=(d.text||'').trim();if(t.startsWith(who)||t.startsWith('כאן '+who))return '';let p=who;if(d.topic)p+=', בנוגע ל'+d.topic;if(KINDW[d.kind])p+=', '+KINDW[d.kind];return p+': ';}
 async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'offline');});return;}if(pumping)return;pumping=true;try{mergeTasks();const rd=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)),n=rd.length;
-  if(n>=2){const asks=rd.filter(d=>d.kind==='ask'||d.kind==='stuck').length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:(rd.some(d=>d.heldFor==='quiet')?'בזמן השקט הצטברו ':rd.some(d=>d.heldFor==='offline')?'כשהייתי מנותקת הצטברו ':'הצטברו ')+n+' הודעות'+byTopic(rd)+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
+  if(n>=2&&!(catchupUntil>Date.now())){const asks=rd.filter(d=>d.kind==='ask'||d.kind==='stuck').length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:(rd.some(d=>d.heldFor==='quiet')?'בזמן השקט הצטברו ':rd.some(d=>d.heldFor==='offline')?'כשהייתי מנותקת הצטברו ':'הצטברו ')+n+' הודעות'+byTopic(rd)+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
   for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(d=>fastLane(d)&&ready(d));if(i<0)i=inboxQ.findIndex(ready);
     if(i<0){if(staleDropped){const k=staleDropped;staleDropped=0;inboxQ.push({id:'stale-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:'say',text:k===1?'הודעה אחת כבר לא הייתה רלוונטית, ולא הקראתי אותה.':k+' הודעות כבר לא היו רלוונטיות, ולא הקראתי אותן.',ts:Date.now()});continue;}break;}const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);spokenMark(d.id);continue;}spokenLocal.add(d.id);
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
@@ -502,7 +511,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
-const HOLD_HE={quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
+const HOLD_HE={catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
 function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));
@@ -533,6 +542,35 @@ async function streamPlay(d){const parts=new Map();let next=1,done=false,wake=nu
   finally{try{unsub&&unsub();}catch(e){}}
   spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),text:all.join(' '),streamDone:done,delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stream');}
   for(const x of parts.values()){P.parts(d.id).doc(x._id).delete().catch(()=>{});}}
+/* days: after a gap of more than six hours, the first hello does not pour the pile - it says a three-sentence briefing
+   (how long, what is stuck, what finished) and offers "הכול". Ordinary messages from before wait for that, or fifteen
+   minutes; questions and urgent ones never wait. */
+const CATCHUP_GAP=6*3600e3,CATCHUP_HOLD=15*60000;let catchupUntil=0,catchupAt=0;
+function catchupCheck(){let last=0;try{last=+localStorage.getItem(LSK('lastHello'))||0;localStorage.setItem(LSK('lastHello'),String(Date.now()));}catch(e){}
+  const now=Date.now();if(!last||now-last<CATCHUP_GAP)return;
+  const waiting=inboxQ.filter(d=>!d.local&&!spokenLocal.has(d.id)&&d.kind!=='cmd'&&!expired(d));if(waiting.length<3)return;
+  catchupAt=now;catchupUntil=now+CATCHUP_HOLD;setTimeout(()=>{catchupUntil=0;pump();},CATCHUP_HOLD+500);
+  const stuck=lastTasks.filter(t=>t.status==='blocked').map(t=>t.title).slice(0,3),done=lastTasks.filter(t=>t.status==='done'&&(+t.updatedAt||0)>last).length;
+  const asks=waiting.filter(d=>d.kind==='ask'||d.kind==='stuck').length;
+  const ag=agoWords(now,last),a='לא דיברנו '+(ag.charAt(0)==='מ'?ag.slice(1):ag)+'. מחכות לך '+waiting.length+' הודעות'+(asks?', '+asks+' מהן שאלות שאקרא מיד':'')+'.';
+  const b=stuck.length?'תקוע: '+stuck.join(', ')+'.':'אין משימה תקועה.';const c=done?'בינתיים נגמרו '+done+' משימות.':'';
+  queueLocal({id:'catchup-'+now,kind:'say',release:true,speaker:'ליבה',topic:'תדרוך',text:[a,b,c,'תגיד "הכול" ואקריא את השאר.'].filter(Boolean).join(' ')});}
+function catchupAll(){if(!catchupUntil)return false;catchupUntil=0;sayLocal('מקריאה את כולן.');setTimeout(pump,300);return true;}
+/* "על מה דיברנו אתמול" / "תחזור לשיחה על X": from the conversation log and its folds */
+async function turnsBetween(from,to){const r=await coldGet(P.turns(),[['ts','>=',from],['ts','<',to]],300);const rows=r.docs.map(x=>x.data()||{});
+  try{const f=await coldGet(P.folds(),[['kind','==','turns']],60);f.docs.forEach(x=>{const it=(x.data()||{}).items||{};Object.values(it).forEach(v=>{if((+v.ts||0)>=from&&(+v.ts||0)<to)rows.push(v);});});}catch(e){}
+  return rows.sort((a,b)=>(a.ts||0)-(b.ts||0));}
+async function daysYesterday(){const d0=new Date();d0.setHours(0,0,0,0);const to=d0.getTime(),from=to-864e5;let rows;
+  try{rows=await turnsBetween(from,to);}catch(e){fail('P_DB_READ',e,'turns');sayLocal('לא הצלחתי לקרוא את השיחה של אתמול.');return true;}
+  if(!rows.length){sayLocal('אתמול לא דיברנו.');return true;}
+  const mine=rows.filter(x=>x.from==='user'),topics={};rows.forEach(x=>{if(x.topic)topics[x.topic]=(topics[x.topic]||0)+1;});
+  const top=Object.entries(topics).sort((a,b)=>b[1]-a[1]).slice(0,4).map(x=>x[0]);
+  sayLocal('אתמול אמרת '+mine.length+' משפטים וקיבלת '+(rows.length-mine.length)+' הודעות.'+(top.length?' הנושאים: '+top.join(', ')+'.':'')+(mine.length?' המשפט האחרון שלך: '+String(mine[mine.length-1].text||'').slice(0,80)+'.':''));return true;}
+async function daysBack(rest){const q=rest.trim();if(!q)return false;let rows;
+  try{rows=await turnsBetween(Date.now()-7*864e5,Date.now()+1);}catch(e){fail('P_DB_READ',e,'turns');sayLocal('לא הצלחתי לקרוא את השיחות.');return true;}
+  const hits=rows.filter(x=>String(x.text||'').includes(q)||String(x.topic||'').includes(q)).slice(-3);
+  if(!hits.length){sayLocal('לא מצאתי שיחה על '+q+' בשבוע האחרון.');return true;}
+  sayLocal('על '+q+', '+agoWords(Date.now(),+hits[0].ts||Date.now())+': '+hits.map(x=>(x.from==='user'?'אמרת: ':'')+String(x.text||'').slice(0,90)).join('. ')+'.');return true;}
 // 12: switch who holds the channel, by voice, without leaving the page
 /* intent-kernel: every handler below is reached through the registry (liba/intents/registry.json). It gets the rest of
    the sentence after the command's prefix (a slot), and returns false only to let the sentence go on to Claude. */
@@ -610,7 +648,7 @@ function taskPriority(rest){{const q=rest.trim();if(!q)return false;const task=l
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
 const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
-  ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+  routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
@@ -627,7 +665,7 @@ let pendingIntent=null;const PENDING_MS=60000;
 function runIntent(m){const it=m.it;
   if((it.requires||[]).indexOf('db')>=0&&!db){sayLocal('אין לי חיבור למסד כרגע, אז את זה אני לא יכולה לעשות.');return true;}
   const h=HANDLERS[it.handler];if(!h){fail('P_MSG_BAD',null,'intent without handler '+it.id);return false;}
-  return h(m.rest,m)!==false;}
+  const r=h(m.rest,m)!==false;if(r)capSeen(it.id);return r;}
 function confirmYes(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;if(!runIntent(p.m))send({text:p.text,noIntent:true});return true;}
 function confirmNo(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;
   if(p.m.how==='fuzzy')send({text:p.text,noIntent:true});else sayLocal('בסדר, לא עשיתי.');return true;}
@@ -643,19 +681,23 @@ async function setOwner(o){await ownerWrite(o,true);
 /* owner-lease: the line is a lease, not a sticky switch. The manager keeps it for OWNER_TTL after the last exchange
    - a sentence to it or a message from it renews - and then the line comes back to ליבה by itself, said once.
    channel/owner is {owner, since, ttl, renewedAt, lastTurnId, byVoice}; every open page arms the same expiry. */
-let OWNER_TTL=20*60000,ownerRenewedAt=0,ownerTimer=null;
-async function ownerWrite(o,byVoice,turn){const now=Date.now();owner=o;ownerSince=now;ownerRenewedAt=now;ownerArm();
-  try{await P.owner().set({owner:o,since:now,ttl:OWNER_TTL,renewedAt:now,lastTurnId:turn||'',byVoice:!!byVoice});}catch(e){fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));}}
+let OWNER_TTL=15*60000,ownerRenewedAt=0,ownerTimer=null;
+/* addressing: every change of hands is a line in channel/owner/log - who, since when, why, and the sentence that did it -
+   so a line that stayed with the manager is visible and explained, never a mystery flag */
+function ownerLog(o,why,by){if(!db)return;P.ownerLog().doc(mintId()).set({owner:o,at:Date.now(),why:String(why||''),byUtterance:String(by||'').slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'owner log'));}
+async function ownerWrite(o,byVoice,turn,why){const now=Date.now();if(o!==owner)ownerLog(o,why||(byVoice?'voice':'auto'),turn);owner=o;ownerSince=now;ownerRenewedAt=now;if(o!=='manager')ownerPinnedUntil=0;ownerArm();
+  try{await P.owner().set({owner:o,since:now,ttl:OWNER_TTL,renewedAt:now,lastTurnId:turn||'',byVoice:!!byVoice,pinnedUntil:o==='manager'?ownerPinnedUntil:0});}catch(e){fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));}}
 function ownerRenew(turn){if(owner!=='manager')return;ownerRenewedAt=Date.now();ownerArm();
   P.owner().update({renewedAt:ownerRenewedAt,lastTurnId:String(turn||'')}).catch(e=>fail('P_DB_WRITE',e,'owner renew'));}
-function ownerArm(){clearTimeout(ownerTimer);if(owner!=='manager')return;ownerTimer=setTimeout(ownerExpire,Math.max(500,ownerRenewedAt+OWNER_TTL-Date.now()+200));}
-async function ownerExpire(){if(owner!=='manager')return;if(Date.now()-ownerRenewedAt<OWNER_TTL){ownerArm();return;}
-  await ownerWrite('liba',false);setSt('על הקו: ליבה','on');
+let ownerPinnedUntil=0;
+function ownerArm(){clearTimeout(ownerTimer);if(owner!=='manager')return;const until=Math.max(ownerRenewedAt+OWNER_TTL,ownerPinnedUntil);ownerTimer=setTimeout(ownerExpire,Math.max(500,until-Date.now()+200));}
+async function ownerExpire(){if(owner!=='manager')return;if(Date.now()-ownerRenewedAt<OWNER_TTL||Date.now()<ownerPinnedUntil){ownerArm();return;}
+  await ownerWrite('liba',false,'','expired');setSt('על הקו: ליבה','on');
   queueLocal({id:'owner-back-'+Date.now(),kind:'say',speaker:'ליבה',topic:'הקו',text:'עברו '+Math.round(OWNER_TTL/60000)+' דקות בלי שיחה עם המנהל, אז חזרתי לקו.'});}
 /* what the database says, from any page: adopt it, and if its lease already ran out, take the line back */
 function ownerFromDb(d){if((d.since||0)<ownerSince)return;ownerSince=d.since||ownerSince;owner=d.owner||'liba';
-  ownerRenewedAt=+d.renewedAt||+d.since||Date.now();if(+d.ttl>0)OWNER_TTL=+d.ttl;ownerArm();
-  if(owner==='manager'&&Date.now()-ownerRenewedAt>=OWNER_TTL)ownerExpire();
+  ownerRenewedAt=+d.renewedAt||+d.since||Date.now();if(+d.ttl>0)OWNER_TTL=+d.ttl;ownerPinnedUntil=owner==='manager'?(+d.pinnedUntil||0):0;ownerArm();
+  if(owner==='manager'&&Date.now()-ownerRenewedAt>=OWNER_TTL&&Date.now()>=ownerPinnedUntil)ownerExpire();
   setSt(owner==='manager'?'על הקו: המנהל':'על הקו: ליבה','on');}
 /* replyTo: an answer goes to whoever asked. Within three minutes of a question, a plain sentence ("כן", "תעשה את
    השני") goes to the side that asked it - even if the other side holds the line. A sentence that opens with an
@@ -666,6 +708,37 @@ function replyTag(text){if(!lastAsk||Date.now()-lastAsk.at>REPLY_WINDOW)return '
   const t=inorm(text);if(ADDRESS.some(p=>t===p||t.startsWith(p+' ')))return '';
   return lastAsk.from==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
 window.__owner={ttl:ms=>{OWNER_TTL=ms;ownerArm();},state:()=>({owner,renewedAt:ownerRenewedAt,ttl:OWNER_TTL})};
+/* addressing: "למי זה הלך" - where the last sentence went and why; "תחזיר לי את זה" - send it again to the other side;
+   "תשאיר את זה אצל המנהל" - a pin that also ends, at the end of the day, so the stuck flag cannot come back by another name.
+   The target is said only when it changes. */
+let lastRoute=null;
+function routeNote(text,tag,why){const to=tag.indexOf('מנהל')>=0?'manager':'liba';const changed=!lastRoute||lastRoute.to!==to;lastRoute={text:text,to:to,why:why,at:Date.now()};return changed;}
+const WHY_HE={reply:'כי זו תשובה לשאלה שלו',address:'כי פתחת בשם שלו',owner:'כי הוא מחזיק בקו'};
+function routeWhere(){if(!lastRoute)return sayLocal('עוד לא שלחתי כלום היום.'),true;
+  sayLocal('"'+lastRoute.text.slice(0,60)+'" הלך '+(lastRoute.to==='manager'?'למנהל':'לליבה')+', '+(WHY_HE[lastRoute.why]||'')+'.');return true;}
+function routeOther(){if(!lastRoute||Date.now()-lastRoute.at>30*60000)return sayLocal('אין משפט אחרון להחזיר.'),true;
+  const to=lastRoute.to==='manager'?'liba':'manager';send({text:lastRoute.text,tag:to==='manager'?'[ליבה→מנהל] ':'[ליבה] ',noIntent:true,resend:true});return true;}
+function ownerPin(){const end=new Date();end.setHours(23,59,0,0);ownerPinnedUntil=end.getTime();if(owner==='manager')ownerLog('manager','pinned','');ownerWrite('manager',true,'','pinned');sayLocal('המנהל על הקו עד סוף היום. תגיד ליבה תחזור כדי לחזור קודם.');return true;}
+/* capability-registry: a command Meir has never used, heard inside a sentence that went to Claude, earns one line -
+   "אגב, 'מה פספסתי' לבד עושה את זה מיד". A whole command phrase inside a longer sentence, or two of its words. Capped hard:
+   one hint in four hours, three per command, none after the command is used once, none while quiet. memory/caps counts. */
+const HINT_GAP=4*3600e3,HINT_MAX=3,STOP=new Set(['מה','את','אתה','לי','של','זה','עם','על','לא','כן','או','גם','אני','הוא','היא','כל','רק','עוד','יש']);
+let caps={},capsLoaded=false;
+async function capsLoad(){if(capsLoaded||!db)return;capsLoaded=true;try{const g=await P.caps().get();caps=(g.exists&&g.data())||{};}catch(e){fail('P_DB_READ',e,'memory/caps');}}
+function capsSave(patch){if(!db)return;P.caps().update(patch).catch(()=>P.caps().set(Object.assign({},caps,patch)).catch(e=>fail('P_DB_WRITE',e,'memory/caps')));}
+function capSeen(id){const c=caps[id]=caps[id]||{};c.seen=(c.seen||0)+1;c.lastUsed=Date.now();capsSave({[id]:c});}
+const words=t=>inorm(t).split(' ').filter(w=>w.length>=3&&!STOP.has(w));
+function capNear(text){const t=inorm(text),tw=new Set(words(text));let best=null;
+  for(const it of INTENTS){if(!intentHere(it)||it.pass||!it.handler||it.confirm)continue;
+    for(const ph of it.exact.concat(it.prefix)){if(ph.length>=6&&t!==ph&&(' '+t+' ').indexOf(' '+ph+' ')>=0){best={it:it,ph:ph,score:3};break;}
+      const pw=words(ph);const hit=pw.filter(w=>tw.has(w)).length;if(pw.length>=2&&hit>=2&&(!best||best.score<2))best={it:it,ph:ph,score:2};}
+    if(best&&best.score===3)break;}
+  return best;}
+async function capHint(text){await capsLoad();if(quietUntil>Date.now())return;const n=capNear(text);if(!n)return;const c=caps[n.it.id]||{};
+  if((c.seen||0)>0||(c.hints||0)>=HINT_MAX||Date.now()-(+caps.lastAnyHint||0)<HINT_GAP)return;
+  c.hints=(c.hints||0)+1;c.lastHint=Date.now();caps[n.it.id]=c;caps.lastAnyHint=Date.now();capsSave({[n.it.id]:c,lastAnyHint:caps.lastAnyHint});
+  sayLocal('אגב, "'+n.ph+'" לבד עושה את זה מיד.');}
+window.__caps={near:t=>{const n=capNear(t);return n?{id:n.it.id,ph:n.ph}:null;},state:()=>JSON.parse(JSON.stringify(caps))};
 const ST={queued:'בתור',running:'רץ',blocked:'תקוע',done:'נגמר'};
 /* step 60: system map – one list: every session, what it does, who is stuck */
 let sessionsList=[],mapOn=false;
@@ -818,15 +891,17 @@ window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(f
 const reqMark=id=>' ⟦#'+id+'⟧';
 const SOURCES=['voice','typed','share','option','offline']; /* offline: said while the page was down, kept on the phone */
 async function send(text,forcedTag,source){
-  let stamps=null,noIntent=false;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;noIntent=!!text.noIntent;text=text.text;}
+  let stamps=null,noIntent=false,resend=false;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;noIntent=!!text.noIntent;resend=!!text.resend;text=text.text;}
   source=SOURCES.indexOf(source)>=0?source:'voice';
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
   if(!forcedTag&&!noIntent&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
-  const tag=forcedTag||replyTag(text)||tagOf();
+  const rt=replyTag(text),tag=forcedTag||rt||tagOf();
   if(tag.indexOf('מנהל')>=0)ownerRenew(lastAsk&&lastAsk.id);
+  /* addressing: the target is said only when it changes, and remembered for "למי זה הלך" */
+  if(routeNote(text,tag,rt?'reply':forcedTag?'address':'owner')&&lastRoute.why==='reply'&&owner!==(tag.indexOf('מנהל')>=0?'manager':'liba'))sayLocal(tag.indexOf('מנהל')>=0?'זה הולך למנהל, כי הוא שאל.':'זה הולך לליבה, כי היא שאלה.');
   if(isBusy()){sendQ.push({text,tag,source,stamps});post(PROTO.toApp.queued,{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
-  if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post(PROTO.toApp.sent,{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
+  if(!resend&&text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post(PROTO.toApp.sent,{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
   const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
@@ -839,7 +914,7 @@ async function send(text,forcedTag,source){
   walPut({req:reqId,text:text+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
   const r=await deliverWithRetry(text+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;
   const reqState=st=>{try{P.req(reqId).update(Object.assign({state:st,at:Date.now()},st==='sent'?{sentAt:Date.now()}:{reason:String(reason||'')})).catch(e=>fail('P_DB_WRITE',e,'req state'));}catch(e){}};
-  if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');bubbleState(reqId,'sent');}
+  if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');bubbleState(reqId,'sent');if(!noIntent&&!forcedTag)capHint(text);}
   else if(RETRYABLE(reason)||reason==='offline'){reqState('queued');walRelease(reqId);bubbleState(reqId,'queued');const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post(PROTO.toApp.outbox,{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
   else{walDone(reqId);reqState('failed');bubbleState(reqId,'failed');th.textContent='לא הצלחתי לשלוח ('+reason+') – נסה שוב';await say('לא הצלחתי לשלוח');}
   post(sent?PROTO.toApp.sent:(outbox.length&&(RETRYABLE(reason)||reason==='offline')?PROTO.toApp.queued:PROTO.toApp.error),{text,reason});
@@ -975,7 +1050,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"f81c564a0e83"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"36e88b3b9351"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;

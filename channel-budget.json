@@ -107,6 +107,12 @@
       "ttlDays": 2,
       "cls": "voice",
       "time": "seq"
+    },
+    "channel/owner/log": {
+      "cap": 100,
+      "ttlDays": 14,
+      "cls": "state",
+      "time": "at"
     }
   }
 }

@@ -78,15 +78,17 @@ window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(f
 const reqMark=id=>' ⟦#'+id+'⟧';
 const SOURCES=['voice','typed','share','option','offline']; /* offline: said while the page was down, kept on the phone */
 async function send(text,forcedTag,source){
-  let stamps=null,noIntent=false;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;noIntent=!!text.noIntent;text=text.text;}
+  let stamps=null,noIntent=false,resend=false;if(text&&typeof text==='object'){forcedTag=text.tag;source=text.source;stamps=text.stamps||null;noIntent=!!text.noIntent;resend=!!text.resend;text=text.text;}
   source=SOURCES.indexOf(source)>=0?source:'voice';
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
   if(!forcedTag&&!noIntent&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
-  const tag=forcedTag||replyTag(text)||tagOf();
+  const rt=replyTag(text),tag=forcedTag||rt||tagOf();
   if(tag.indexOf('מנהל')>=0)ownerRenew(lastAsk&&lastAsk.id);
+  /* addressing: the target is said only when it changes, and remembered for "למי זה הלך" */
+  if(routeNote(text,tag,rt?'reply':forcedTag?'address':'owner')&&lastRoute.why==='reply'&&owner!==(tag.indexOf('מנהל')>=0?'manager':'liba'))sayLocal(tag.indexOf('מנהל')>=0?'זה הולך למנהל, כי הוא שאל.':'זה הולך לליבה, כי היא שאלה.');
   if(isBusy()){sendQ.push({text,tag,source,stamps});post(PROTO.toApp.queued,{text});return;}transition('SENDING','send');const id=cur?cur.id:'free';cur=null;
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
-  if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post(PROTO.toApp.sent,{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
+  if(!resend&&text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post(PROTO.toApp.sent,{text,dup:true});transition('IDLE','duplicate');drainQ();return;}
   const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
@@ -99,7 +101,7 @@ async function send(text,forcedTag,source){
   walPut({req:reqId,text:text+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
   const r=await deliverWithRetry(text+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;
   const reqState=st=>{try{P.req(reqId).update(Object.assign({state:st,at:Date.now()},st==='sent'?{sentAt:Date.now()}:{reason:String(reason||'')})).catch(e=>fail('P_DB_WRITE',e,'req state'));}catch(e){}};
-  if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');bubbleState(reqId,'sent');}
+  if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');bubbleState(reqId,'sent');if(!noIntent&&!forcedTag)capHint(text);}
   else if(RETRYABLE(reason)||reason==='offline'){reqState('queued');walRelease(reqId);bubbleState(reqId,'queued');const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post(PROTO.toApp.outbox,{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
   else{walDone(reqId);reqState('failed');bubbleState(reqId,'failed');th.textContent='לא הצלחתי לשלוח ('+reason+') – נסה שוב';await say('לא הצלחתי לשלוח');}
   post(sent?PROTO.toApp.sent:(outbox.length&&(RETRYABLE(reason)||reason==='offline')?PROTO.toApp.queued:PROTO.toApp.error),{text,reason});

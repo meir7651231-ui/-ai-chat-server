@@ -26,7 +26,8 @@ function agoWords(now,ts){const ms=Math.max(0,now-ts),m=Math.floor(ms/60000);
   const h=Math.floor(m/60);if(h<24){if(h===1)return m>=90?'מלפני שעה וחצי':'מלפני שעה';if(h===2)return 'מלפני שעתיים';return 'מלפני '+h+' שעות';}
   const n=ilDay(now)-ilDay(ts);if(n<=1)return 'מאתמול';if(n===2)return 'משלשום';if(n<7)return 'מלפני '+n+' ימים';if(n<14)return 'מלפני שבוע';return 'מלפני '+Math.floor(n/7)+' שבועות';}
 function heAgo(ms,ts){const now=Date.now();return agoWords(now,ts!=null?ts:now-ms);}
-function expired(d){const lim=EXPIRE[d.kind||'say'];return !!lim&&!d.priority&&ageOf(d)>lim;}
+function expired(d){if(d.priority==='morning'&&d.ts>=CLOCK_MIN){const m8=new Date();m8.setHours(8,0,0,0);if(d.ts<m8.getTime()-864e5)return true;} /* days: meant for an earlier morning */
+  const lim=EXPIRE[d.kind||'say'];return !!lim&&!d.priority&&ageOf(d)>lim;}
 window.__kernel={state:()=>state,illegal:()=>illegalMoves,log:stateLog,forgetLoad:()=>spokenLocal.clear(),spoken:()=>Object.assign({},spokenStore)};
 function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.some(x=>x.id===d.id)&&!spokenLocal.has(d.id))inboxQ.push(d);pump();}
 /* step 19: priority – urgent bypasses quiet; morning waits for 08:00 */
@@ -37,7 +38,9 @@ function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.som
 const hourNow=()=>window.__testHour!=null?window.__testHour:new Date().getHours(); /* tests pin the hour */
 const G_OK={ok:true};
 function gate(d){const now=Date.now();if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
-  if(d.release)return G_OK;const p=d.priority||'normal';if(p==='urgent')return G_OK;
+  if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
+  const p=d.priority||'normal';if(p==='urgent')return G_OK;
+  if(catchupUntil>now&&!d.local&&d.kind!=='ask'&&d.kind!=='stuck'&&(d.ts||0)<catchupAt)return {ok:false,reason:'catchup'};
   if(p==='morning'){const h=hourNow();if(h<8||h>=22)return {ok:false,reason:'morning'};}if(quietUntil>now)return {ok:false,reason:'quiet'};return G_OK;}
 const heldSeen=new Set(),silenceDay={};
 function holdNote(d,reason){const k=d.id+'|'+reason;if(heldSeen.has(k))return;heldSeen.add(k);d.heldFor=reason;silenceDay[reason]=(silenceDay[reason]||0)+1;
@@ -48,7 +51,7 @@ const KINDW={ask:'שאלה',stuck:'נתקע',done:'סיים'};
 function speakerOf(d){if(d.speaker)return d.speaker;if(/^arch/i.test(d.id||''))return 'האדריכל';return NAMES[d.from||'liba']||d.from||'ליבה';}
 function prefixOf(d,who){const t=(d.text||'').trim();if(t.startsWith(who)||t.startsWith('כאן '+who))return '';let p=who;if(d.topic)p+=', בנוגע ל'+d.topic;if(KINDW[d.kind])p+=', '+KINDW[d.kind];return p+': ';}
 async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'offline');});return;}if(pumping)return;pumping=true;try{mergeTasks();const rd=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)),n=rd.length;
-  if(n>=2){const asks=rd.filter(d=>d.kind==='ask'||d.kind==='stuck').length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:(rd.some(d=>d.heldFor==='quiet')?'בזמן השקט הצטברו ':rd.some(d=>d.heldFor==='offline')?'כשהייתי מנותקת הצטברו ':'הצטברו ')+n+' הודעות'+byTopic(rd)+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
+  if(n>=2&&!(catchupUntil>Date.now())){const asks=rd.filter(d=>d.kind==='ask'||d.kind==='stuck').length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:(rd.some(d=>d.heldFor==='quiet')?'בזמן השקט הצטברו ':rd.some(d=>d.heldFor==='offline')?'כשהייתי מנותקת הצטברו ':'הצטברו ')+n+' הודעות'+byTopic(rd)+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
   for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(d=>fastLane(d)&&ready(d));if(i<0)i=inboxQ.findIndex(ready);
     if(i<0){if(staleDropped){const k=staleDropped;staleDropped=0;inboxQ.push({id:'stale-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:'say',text:k===1?'הודעה אחת כבר לא הייתה רלוונטית, ולא הקראתי אותה.':k+' הודעות כבר לא היו רלוונטיות, ולא הקראתי אותן.',ts:Date.now()});continue;}break;}const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);spokenMark(d.id);continue;}spokenLocal.add(d.id);
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
@@ -95,7 +98,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
-const HOLD_HE={quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
+const HOLD_HE={catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
 function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));
@@ -126,3 +129,32 @@ async function streamPlay(d){const parts=new Map();let next=1,done=false,wake=nu
   finally{try{unsub&&unsub();}catch(e){}}
   spokenMark(d.id);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),text:all.join(' '),streamDone:done,delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stream');}
   for(const x of parts.values()){P.parts(d.id).doc(x._id).delete().catch(()=>{});}}
+/* days: after a gap of more than six hours, the first hello does not pour the pile - it says a three-sentence briefing
+   (how long, what is stuck, what finished) and offers "הכול". Ordinary messages from before wait for that, or fifteen
+   minutes; questions and urgent ones never wait. */
+const CATCHUP_GAP=6*3600e3,CATCHUP_HOLD=15*60000;let catchupUntil=0,catchupAt=0;
+function catchupCheck(){let last=0;try{last=+localStorage.getItem(LSK('lastHello'))||0;localStorage.setItem(LSK('lastHello'),String(Date.now()));}catch(e){}
+  const now=Date.now();if(!last||now-last<CATCHUP_GAP)return;
+  const waiting=inboxQ.filter(d=>!d.local&&!spokenLocal.has(d.id)&&d.kind!=='cmd'&&!expired(d));if(waiting.length<3)return;
+  catchupAt=now;catchupUntil=now+CATCHUP_HOLD;setTimeout(()=>{catchupUntil=0;pump();},CATCHUP_HOLD+500);
+  const stuck=lastTasks.filter(t=>t.status==='blocked').map(t=>t.title).slice(0,3),done=lastTasks.filter(t=>t.status==='done'&&(+t.updatedAt||0)>last).length;
+  const asks=waiting.filter(d=>d.kind==='ask'||d.kind==='stuck').length;
+  const ag=agoWords(now,last),a='לא דיברנו '+(ag.charAt(0)==='מ'?ag.slice(1):ag)+'. מחכות לך '+waiting.length+' הודעות'+(asks?', '+asks+' מהן שאלות שאקרא מיד':'')+'.';
+  const b=stuck.length?'תקוע: '+stuck.join(', ')+'.':'אין משימה תקועה.';const c=done?'בינתיים נגמרו '+done+' משימות.':'';
+  queueLocal({id:'catchup-'+now,kind:'say',release:true,speaker:'ליבה',topic:'תדרוך',text:[a,b,c,'תגיד "הכול" ואקריא את השאר.'].filter(Boolean).join(' ')});}
+function catchupAll(){if(!catchupUntil)return false;catchupUntil=0;sayLocal('מקריאה את כולן.');setTimeout(pump,300);return true;}
+/* "על מה דיברנו אתמול" / "תחזור לשיחה על X": from the conversation log and its folds */
+async function turnsBetween(from,to){const r=await coldGet(P.turns(),[['ts','>=',from],['ts','<',to]],300);const rows=r.docs.map(x=>x.data()||{});
+  try{const f=await coldGet(P.folds(),[['kind','==','turns']],60);f.docs.forEach(x=>{const it=(x.data()||{}).items||{};Object.values(it).forEach(v=>{if((+v.ts||0)>=from&&(+v.ts||0)<to)rows.push(v);});});}catch(e){}
+  return rows.sort((a,b)=>(a.ts||0)-(b.ts||0));}
+async function daysYesterday(){const d0=new Date();d0.setHours(0,0,0,0);const to=d0.getTime(),from=to-864e5;let rows;
+  try{rows=await turnsBetween(from,to);}catch(e){fail('P_DB_READ',e,'turns');sayLocal('לא הצלחתי לקרוא את השיחה של אתמול.');return true;}
+  if(!rows.length){sayLocal('אתמול לא דיברנו.');return true;}
+  const mine=rows.filter(x=>x.from==='user'),topics={};rows.forEach(x=>{if(x.topic)topics[x.topic]=(topics[x.topic]||0)+1;});
+  const top=Object.entries(topics).sort((a,b)=>b[1]-a[1]).slice(0,4).map(x=>x[0]);
+  sayLocal('אתמול אמרת '+mine.length+' משפטים וקיבלת '+(rows.length-mine.length)+' הודעות.'+(top.length?' הנושאים: '+top.join(', ')+'.':'')+(mine.length?' המשפט האחרון שלך: '+String(mine[mine.length-1].text||'').slice(0,80)+'.':''));return true;}
+async function daysBack(rest){const q=rest.trim();if(!q)return false;let rows;
+  try{rows=await turnsBetween(Date.now()-7*864e5,Date.now()+1);}catch(e){fail('P_DB_READ',e,'turns');sayLocal('לא הצלחתי לקרוא את השיחות.');return true;}
+  const hits=rows.filter(x=>String(x.text||'').includes(q)||String(x.topic||'').includes(q)).slice(-3);
+  if(!hits.length){sayLocal('לא מצאתי שיחה על '+q+' בשבוע האחרון.');return true;}
+  sayLocal('על '+q+', '+agoWords(Date.now(),+hits[0].ts||Date.now())+': '+hits.map(x=>(x.from==='user'?'אמרת: ':'')+String(x.text||'').slice(0,90)).join('. ')+'.');return true;}
