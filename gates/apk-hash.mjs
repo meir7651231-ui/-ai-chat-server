@@ -20,6 +20,7 @@ const got = createHash('sha256').update(readFileSync(apk)).digest('hex')
 if (got !== j.sha256) { console.error(`apk-hash: הקובץ ${got.slice(0, 16)}… ו-version.json מבטיח ${String(j.sha256).slice(0, 16)}…`); process.exit(1) }
 const APKSIGNER = process.env.APKSIGNER || '/opt/android-sdk/build-tools/34.0.0/apksigner'
 const certs = sh(`${APKSIGNER} verify --print-certs ${JSON.stringify(apk)}`)
+if (certs.startsWith('__ERR__')) { console.error(`apk-hash: apksigner נכשל או חסר (${APKSIGNER}) — ${certs.slice(7, 160).trim()}`); process.exit(1) }
 const pinned = readFileSync(`${repo}/keys/PINNED.sha256`, 'utf8').split('\n').map(s => s.trim()).find(s => /^[0-9a-f]{64}$/.test(s))
 const signer = (certs.match(/SHA-256 digest:\s*([0-9a-f]{64})/i) || [])[1]
 if (signer !== pinned) { console.error(`apk-hash: חותם ${String(signer).slice(0, 16)}… במקום ${pinned.slice(0, 16)}…`); process.exit(1) }

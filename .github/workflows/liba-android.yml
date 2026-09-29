@@ -16,10 +16,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '22' }
+        with: { node-version: '22', cache: npm }
+      - run: npm ci
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: android-actions/setup-android@v3
+      - name: build-tools (apksigner for the apk-hash gate)
+        run: sdkmanager "build-tools;34.0.0" >/dev/null
       - name: Playwright (for the live-page gate)
         run: npm i -g playwright@1.47.2 && npx playwright install --with-deps chromium
       - name: כל השערים
+        env:
+          APKSIGNER: ${{ env.ANDROID_HOME }}/build-tools/34.0.0/apksigner
         run: node gates/run.mjs
 
   build:
@@ -32,20 +40,30 @@ jobs:
       - uses: android-actions/setup-android@v3
 
       - name: Keystore from secrets
+        id: ks
         env:
           KS: ${{ secrets.LIBA_KEYSTORE_B64 }}
           KS_PASS: ${{ secrets.LIBA_KEYSTORE_PASS }}
           KEY_PASS: ${{ secrets.LIBA_KEY_PASS }}
         run: |
           if [ -z "$KS" ]; then
-            echo "::error::אין LIBA_KEYSTORE_B64 ב-secrets — בלעדיו הבנייה תיחתם במפתח debug ולא תתקין על הטלפון"
-            exit 1
+            # no signing secrets on GitHub: the signed build happens on the machine that holds the key
+            # (ship/release.mjs). Here we still prove every commit compiles - that is not skipped.
+            echo "::notice::אין סודות חתימה ב-GitHub. כאן נבדקת קומפילציה בלבד; השילוח החתום נעשה דרך ship/release.mjs"
+            echo "signed=false" >> "$GITHUB_OUTPUT"; exit 0
           fi
           mkdir -p android/keys
           printf '%s' "$KS" | base64 -d > android/keys/liba.jks
           printf 'storeFile=keys/liba.jks\nstorePassword=%s\nkeyAlias=liba\nkeyPassword=%s\n' "$KS_PASS" "$KEY_PASS" > android/keys/keystore.properties
+          echo "signed=true" >> "$GITHUB_OUTPUT"
+
+      - name: קומפילציה (בלי מפתח)
+        if: steps.ks.outputs.signed != 'true'
+        working-directory: android
+        run: ./gradlew assembleDebug -q --console=plain
 
       - name: בנייה ואימות חותם
+        if: steps.ks.outputs.signed == 'true'
         run: |
           echo "$ANDROID_HOME/build-tools/34.0.0" >> $GITHUB_PATH
           APKSIGNER="$ANDROID_HOME/build-tools/34.0.0/apksigner" \
@@ -57,4 +75,5 @@ jobs:
         run: rm -rf android/keys
 
       - uses: actions/upload-artifact@v4
+        if: steps.ks.outputs.signed == 'true'
         with: { name: liba-apk, path: android/app/build/outputs/apk/release/*.apk }
