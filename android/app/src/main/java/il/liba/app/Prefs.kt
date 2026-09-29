@@ -38,18 +38,39 @@ object Prefs {
         p(c).edit().putString("updateUrl", url).putInt("updateCode", code)
             .putString("updateSha", sha).putString("updateName", name).apply()
 
-    @Synchronized fun log(c: Context, who: String, text: String) {
-        val arr = try { JSONArray(p(c).getString("log", "[]")) } catch (e: Exception) { JSONArray() }
-        arr.put(JSONObject().put("who", who).put("text", text).put("ts", System.currentTimeMillis()))
-        while (arr.length() > 200) arr.remove(0)
+    // step blackbox: the conversation ring lives in memory and is persisted on the Trace thread.
+    // Same 200 turns, same text, same screen as before - just no disk on the main thread.
+    private var ring: ArrayDeque<JSONObject>? = null
+    private val hhmm = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault())
+
+    /** Loaded once, on the Trace thread, before anyone asks for it. */
+    fun warm(c: Context) { ring(c) }
+
+    @Synchronized private fun ring(c: Context): ArrayDeque<JSONObject> {
+        ring?.let { return it }
+        val d = ArrayDeque<JSONObject>()
+        try { val arr = JSONArray(p(c).getString("log", "[]")); for (i in 0 until arr.length()) d.addLast(arr.getJSONObject(i)) }
+        catch (e: Exception) { Trace.e(Trace.Code.E_PREFS, "log:" + e.javaClass.simpleName) }
+        ring = d; return d
+    }
+    @Synchronized private fun persist(c: Context) {
+        val arr = JSONArray(); ring?.forEach { arr.put(it) }
         p(c).edit().putString("log", arr.toString()).apply()
     }
+
+    @Synchronized fun log(c: Context, who: String, text: String) {
+        val d = ring(c)
+        d.addLast(JSONObject().put("who", who).put("text", text).put("ts", System.currentTimeMillis()))
+        while (d.size > 200) d.removeFirst()
+        Trace.post { persist(c) }
+    }
     fun logText(c: Context): String {
-        val arr = try { JSONArray(p(c).getString("log", "[]")) } catch (e: Exception) { JSONArray() }
+        val snap = synchronized(this) { ring(c).toList() }
         val sb = StringBuilder()
-        for (i in maxOf(0, arr.length() - 60) until arr.length()) {
-            val o = arr.getJSONObject(i); val t = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date(o.getLong("ts")))
-            sb.append(if (o.getString("who") == "me") "🗣 " else "◉ ").append(t).append("  ").append(o.getString("text")).append("\n\n")
+        for (i in maxOf(0, snap.size - 60) until snap.size) {
+            val o = snap[i]
+            try { sb.append(if (o.getString("who") == "me") "🗣 " else "◉ ").append(hhmm.format(java.util.Date(o.getLong("ts")))).append("  ").append(o.getString("text")).append("\n\n") }
+            catch (e: Exception) { Trace.e(Trace.Code.E_PREFS, "turn:" + e.javaClass.simpleName) }
         }
         return if (sb.isEmpty()) "עוד אין שיחה. לחץ על הבועה ודבר." else sb.toString()
     }

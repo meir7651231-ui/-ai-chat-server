@@ -15,13 +15,13 @@ class VadGate(private val sens: Double = 3.0, private val minRms: Double = 700.0
     val active get() = running
 
     fun start() { if (running) return; running = true; thread = Thread({ run() }, "liba-vad").apply { isDaemon = true; start() } }
-    fun stop() { running = false; try { rec?.stop() } catch (e: Exception) {}; thread?.let { try { it.join(400) } catch (e: Exception) {} }; thread = null }
+    fun stop() { running = false; try { rec?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_READ, "stop:" + e.javaClass.simpleName) }; thread?.let { try { it.join(400) } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_READ, "join:" + e.javaClass.simpleName) } }; thread = null }
 
     private fun run() {
         val rate = 16000; val ch = AudioFormat.CHANNEL_IN_MONO; val fmt = AudioFormat.ENCODING_PCM_16BIT
-        val min = AudioRecord.getMinBufferSize(rate, ch, fmt); if (min <= 0) { running = false; return }
-        val rec = try { AudioRecord(if (comm) MediaRecorder.AudioSource.VOICE_COMMUNICATION else MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, ch, fmt, maxOf(min, 6400)) } catch (e: Exception) { running = false; return }
-        if (rec.state != AudioRecord.STATE_INITIALIZED) { running = false; try { rec.release() } catch (e: Exception) {}; return }
+        val min = AudioRecord.getMinBufferSize(rate, ch, fmt); if (min <= 0) { Trace.e(Trace.Code.E_MIC_INIT, "minBuffer=" + min); running = false; return }
+        val rec = try { AudioRecord(if (comm) MediaRecorder.AudioSource.VOICE_COMMUNICATION else MediaRecorder.AudioSource.VOICE_RECOGNITION, rate, ch, fmt, maxOf(min, 6400)) } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_INIT, "ctor:" + e.javaClass.simpleName); running = false; return }
+        if (rec.state != AudioRecord.STATE_INITIALIZED) { Trace.e(Trace.Code.E_MIC_INIT, "state=" + rec.state); running = false; try { rec.release() } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_READ, "release:" + e.javaClass.simpleName) }; return }
         this.rec = rec
         val buf = ShortArray(320) // 20 ms frames
         var hot = 0; var frames = 0; var fired = false
@@ -39,9 +39,9 @@ class VadGate(private val sens: Double = 3.0, private val minRms: Double = 700.0
                 if (rms > maxOf(floor * sens, minRms)) hot++ else hot = 0
                 if (hot >= (if (warm) 15 else 5)) { fired = true; break } // 100 ms of clear speech, 300 ms for barge-in
             }
-        } catch (e: Exception) {} finally {
-            try { rec.stop() } catch (e: Exception) {}
-            try { rec.release() } catch (e: Exception) {}
+        } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_READ, "loop:" + e.javaClass.simpleName) } finally {
+            try { rec.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_READ, "stop:" + e.javaClass.simpleName) }
+            try { rec.release() } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_READ, "release:" + e.javaClass.simpleName) }
             this.rec = null
         }
         val wasRunning = running; running = false

@@ -29,12 +29,14 @@ object LibaWeb {
     else if(d.liba==='cmd'){LibaBridge.cmd(String(d.cmd||''));}
     else if(d.liba==='crashSaved'){LibaBridge.crashSaved(String(d.id||''));}
     else if(d.liba==='tasks'){LibaBridge.tasks(String(d.summary||''),Number(d.n||0),Number(d.blocked||0));}
+    else if(d.liba==='traceAck'){LibaBridge.traceAck(String(d.batch||''),String(d.ids||'[]'));}
   });
   window.__libaRect=function(){var f=document.querySelector('iframe');if(!f)return '';var r=f.getBoundingClientRect();return JSON.stringify([r.left,r.top,r.width,r.height]);};
   window.__libaHello=function(){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'hello',ver:window.__libaVer||''},'*');}catch(e){}});};
   window.__libaCrash=function(id,ver,t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'crash',id:id,version:ver,text:t},'*');}catch(e){}});};
   window.__libaSpoke=function(id){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'spoke',id:id},'*');}catch(e){}});};
   window.__libaInput=function(t){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'input',text:t},'*');}catch(e){}});};
+  window.__libaTrace=function(b,j){frames().forEach(function(f){try{f.contentWindow.postMessage({liba:'trace',batch:b,events:j},'*');}catch(e){}});};
   setInterval(function(){if(!ready)window.__libaHello();},3000);
 })();
 """
@@ -49,6 +51,7 @@ object LibaWeb {
         fun onTasks(summary: String, n: Int, blocked: Int)
         fun onCrashSaved(id: String)
         fun onCmd(cmd: String)
+        fun onTraceAck(batch: String, ids: List<String>)
     }
 
     private class JsBridge(val b: Bridge) {
@@ -63,6 +66,10 @@ object LibaWeb {
         @JavascriptInterface fun tasks(summary: String, n: Int, blocked: Int) = b.onTasks(summary, n, blocked)
         @JavascriptInterface fun crashSaved(id: String) = b.onCrashSaved(id)
         @JavascriptInterface fun cmd(cmd: String) = b.onCmd(cmd)
+        @JavascriptInterface fun traceAck(batch: String, idsJson: String) {
+            val ids = try { val a = org.json.JSONArray(idsJson); List(a.length()) { a.getString(it) } } catch (e: Exception) { emptyList() }
+            b.onTraceAck(batch, ids)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -112,7 +119,7 @@ object LibaWeb {
                 val j = org.json.JSONArray(raw.trim('"').replace("\\\"", "\"").replace("\\", ""))
                 if (j.length() == 4) { val l = j.getDouble(0).toFloat() * scale; val t = j.getDouble(1).toFloat() * scale; val w = j.getDouble(2).toFloat() * scale; val h = j.getDouble(3).toFloat() * scale
                     if (w > 10 && h > 10) pts = listOf(Pair(l + w / 2, t + h / 2), Pair(l + w / 2, t + h * 0.3f), Pair(l + w / 2, t + h * 0.75f)) }
-            } catch (e: Exception) {}
+            } catch (e: Exception) { Trace.e(Trace.Code.E_PAGE_TAP, e.javaClass.simpleName) }
             pts.forEachIndexed { i, (x, y) -> web.postDelayed({ tapAt(web, x, y) }, i * 140L) }
         }
     }
@@ -125,6 +132,9 @@ object LibaWeb {
     /** 3.14.0: tell the page that the utterance it sent has finished being spoken, so it acks in order. */
     fun sendSpoke(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpoke && window.__libaSpoke(${JSONObject.quote(id)})", null) }
     fun sendCrash(web: WebView, id: String, ver: String, text: String) { web.evaluateJavascript("window.__libaCrash && window.__libaCrash(${JSONObject.quote(id)},${JSONObject.quote(ver)},${JSONObject.quote(text)})", null) }
+    /** step blackbox: one batch of on-disk trace lines, short-key shape unchanged.
+     *  Kotlin does not know the db schema; the page does not know the file format. */
+    fun sendTrace(web: WebView, batch: String, json: String) { web.evaluateJavascript("window.__libaTrace && window.__libaTrace(${JSONObject.quote(batch)},${JSONObject.quote(json)})", null) }
     fun hello(web: WebView) {
         val ver = try { web.context.packageManager.getPackageInfo(web.context.packageName, 0).versionName } catch (e: Exception) { "?" }
         val ver2 = ver + (if (OrbView.shaderOk) "" else if (android.os.Build.VERSION.SDK_INT >= 33) "-canvas:" + OrbView.shaderErr.take(60).replace("'", " ") else "-canvas")

@@ -13,7 +13,7 @@ class TalkTile : TileService() {
         super.onClick()
         val i = Intent(this, BubbleService::class.java).setAction("il.liba.TALK")
         if (BubbleService.running) startService(i)
-        else { try { ContextCompat.startForegroundService(this, Intent(this, BubbleService::class.java)) } catch (e: Exception) {} }
+        else { try { ContextCompat.startForegroundService(this, Intent(this, BubbleService::class.java)) } catch (e: Exception) { Trace.e(Trace.Code.E_FGS_START, "tile:" + e.javaClass.simpleName) } }
         if (isLocked && Build.VERSION.SDK_INT >= 24) unlockAndRun { }
     }
 }

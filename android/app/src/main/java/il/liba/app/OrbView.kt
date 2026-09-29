@@ -98,9 +98,9 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
         }
         clipToOutline = false
         if (Build.VERSION.SDK_INT >= 33) {
-            try { shader = RuntimeShader(AGSL); shaderOk = true } catch (e: Exception) { Log.w("liba", "orb shader: $e"); shaderOk = false; shaderErr = e.message ?: "?" }
-            try { shader2 = RuntimeShader(AGSL_FUSION) } catch (e: Exception) { Log.w("liba", "fusion shader: $e"); shaderErr = "fusion:" + (e.message ?: "?") }
-            try { shader3 = RuntimeShader(AGSL_CREATURE) } catch (e: Exception) { Log.w("liba", "creature shader: $e"); shaderErr = "creature:" + (e.message ?: "?") }
+            try { shader = RuntimeShader(AGSL); shaderOk = true } catch (e: Exception) { Trace.e(Trace.Code.E_SHADER, "orb:" + e.javaClass.simpleName); shaderOk = false; shaderErr = e.message ?: "?" }
+            try { shader2 = RuntimeShader(AGSL_FUSION) } catch (e: Exception) { Trace.e(Trace.Code.E_SHADER, "fusion:" + e.javaClass.simpleName); shaderErr = "fusion:" + (e.message ?: "?") }
+            try { shader3 = RuntimeShader(AGSL_CREATURE) } catch (e: Exception) { Trace.e(Trace.Code.E_SHADER, "creature:" + e.javaClass.simpleName); shaderErr = "creature:" + (e.message ?: "?") }
         }
         // the shader needs a GPU canvas; the fallback is happy either way
         setLayerType(LAYER_TYPE_HARDWARE, null)

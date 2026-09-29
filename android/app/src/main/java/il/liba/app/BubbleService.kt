@@ -14,6 +14,7 @@ import android.media.ToneGenerator
 import android.net.ConnectivityManager
 import android.net.Network
 import android.os.*
+import android.provider.Settings
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -104,15 +105,15 @@ class BubbleService : Service(), LibaWeb.Bridge {
         super.onCreate()
         running = true; instance = this
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {} }
+        val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "boot:" + e.javaClass.simpleName) } }
         if (!startForegroundNotif()) { stopSelf(); return }
-        runCatching { applyPrefs() }
-        runCatching { setupTts() }
-        runCatching { setupWeb() }.onFailure { status = "WebView נכשל: $it" }
-        runCatching { setupBubble() }.onFailure { status = "בועה נכשלה: $it" }
-        runCatching { watchNetwork() }
+        runCatching { applyPrefs() }.onFailure { Trace.e(Trace.Code.E_PREFS, "applyPrefs:" + it.javaClass.simpleName) }
+        runCatching { setupTts() }.onFailure { Trace.e(Trace.Code.E_TTS_INIT, "setup:" + it.javaClass.simpleName) }
+        runCatching { setupWeb() }.onFailure { Trace.e(Trace.Code.E_OVERLAY_DENIED, "web"); status = "WebView נכשל: $it" }
+        runCatching { setupBubble() }.onFailure { Trace.e(Trace.Code.E_OVERLAY_DENIED, "bubble"); status = "בועה נכשלה: $it" }
+        runCatching { watchNetwork() }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "watch:" + it.javaClass.simpleName) }
         main.postDelayed(watchdog, 30000)
-        runCatching { checkUpdate() }
+        runCatching { checkUpdate() }.onFailure { Trace.e(Trace.Code.E_NET, "check:" + it.javaClass.simpleName) }
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) { // step 32: actions from the permanent notification
@@ -141,6 +142,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (Build.VERSION.SDK_INT >= 34) startForeground(1, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
             else if (Build.VERSION.SDK_INT >= 29) startForeground(1, n, ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE) else startForeground(1, n)
         } catch (e: Exception) {
+            Trace.e(Trace.Code.E_FGS_START, e.javaClass.simpleName)
             // Android refused a background (re)start: leave a tappable notification instead of crash-looping.
             val nn = NotificationCompat.Builder(this, CH).setSmallIcon(R.drawable.ic_notif).setContentTitle("הבועה נסגרה").setContentText("לחץ כדי להפעיל מחדש").setContentIntent(pi).setAutoCancel(true).build()
             nm.notify(2, nn); return false
@@ -152,12 +154,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (micFgs || Build.VERSION.SDK_INT < 34) return true
         return try {
             startForeground(1, notif(), ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE); micFgs = true; true
-        } catch (e: Exception) { showLabel("אנדרואיד לא נותן מיקרופון ברקע – פתח את ליבה ולחץ הפעל בועה", 6000); false }
+        } catch (e: Exception) { Trace.e(Trace.Code.E_MIC_FGS, e.javaClass.simpleName); showLabel("אנדרואיד לא נותן מיקרופון ברקע – פתח את ליבה ולחץ הפעל בועה", 6000); false }
     }
 
     // ---------- TTS ----------
     private fun setupTts() {
         tts = TextToSpeech(this) { st ->
+            if (st != TextToSpeech.SUCCESS) Trace.e(Trace.Code.E_TTS_INIT, "status=" + st)
             if (st == TextToSpeech.SUCCESS) {
                 val r = tts?.setLanguage(Locale("he", "IL"))
                 ttsReady = r != TextToSpeech.LANG_MISSING_DATA && r != TextToSpeech.LANG_NOT_SUPPORTED
@@ -168,13 +171,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
                     override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; onSpoken() } }
                     override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
                 })
-                if (!ttsReady) main.post { showLabel("אין קול עברי בטלפון – התקן Google Text-to-Speech עברית", 6000) }
+                if (!ttsReady) { Trace.e(Trace.Code.E_TTS_INIT, "he-IL=" + r); main.post { showLabel("אין קול עברי בטלפון – התקן Google Text-to-Speech עברית", 6000) } }
             }
         }
     }
     /** fix 4: every path that silences the assistant resets the whole speech state. */
     private fun stopSpeaking() {
-        try { tts?.stop() } catch (e: Exception) {}
+        try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "stop:" + e.javaClass.simpleName) }
         chunks.clear(); paused = false; speaking = false; pendingListenAfterSpeech = false
         sayId?.let { id -> sayId = null; web?.let { w -> LibaWeb.sendSpoke(w, id) } } // skipped mid-sentence: don't leave the page waiting
         bargeVad?.stop(); bargeVad = null
@@ -184,7 +187,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (listening && listenMode != "wake") { pendingSay = text; return } // fix 8: don't cut the user off; flush after the recognizer ends
         lastSaid = text
         stopVad()
-        if (listening) { try { sr?.cancel() } catch (e: Exception) {}; listening = false; unmuteSystem() }
+        if (listening) { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "speak:" + e.javaClass.simpleName) }; listening = false; unmuteSystem() }
         if (isNight() && !urgent) { vibrate(longArrayOf(0, 120, 80, 120)); showLabel("🌙 " + text, 25000); onSpoken(); return } // step 26
         if (!ttsReady) { showLabel(text, 8000); onSpoken(); return }
         chunks.clear(); paused = false
@@ -205,7 +208,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val part = chunks.removeFirstOrNull() ?: run { speaking = false; onSpoken(); return }
         unmuteSystem(); setState(State.SPEAKING); speaking = true
         speakSegments(part)
-        if (bargeIn) { bargeVad?.stop(); var me: VadGate? = null; me = VadGate(sens = 6.0, minRms = 1800.0, comm = true, warm = true) { main.post { if (bargeVad !== me) return@post; bargeVad = null; if (speaking) { try { tts?.stop() } catch (e: Exception) {}; speaking = false; speakGuard?.let { main.removeCallbacks(it) }; showLabel("כן?", 3000); startListening("cmd") } } }; bargeVad = me; me.start() }
+        if (bargeIn) { bargeVad?.stop(); var me: VadGate? = null; me = VadGate(sens = 6.0, minRms = 1800.0, comm = true, warm = true) { main.post { if (bargeVad !== me) return@post; bargeVad = null; if (speaking) { try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "barge:" + e.javaClass.simpleName) }; speaking = false; speakGuard?.let { main.removeCallbacks(it) }; showLabel("כן?", 3000); startListening("cmd") } } }; bargeVad = me; me.start() }
         speakGuard?.let { main.removeCallbacks(it) }
         speakGuard = Runnable { if (speaking) { speaking = false; onSpoken() } }.also { main.postDelayed(it, 4000L + part.length * 120L) } // safety net if TTS never reports
     }
@@ -219,16 +222,16 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val clean = segs.filter { it.second.isNotBlank() }
         if (clean.isEmpty()) { t.speak(text, TextToSpeech.QUEUE_FLUSH, null, "liba-" + System.currentTimeMillis()); return }
         clean.forEachIndexed { i, (latin, s) ->
-            try { t.language = if (latin) Locale.US else Locale("he", "IL") } catch (e: Exception) {}
+            try { t.language = if (latin) Locale.US else Locale("he", "IL") } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "segLang:" + e.javaClass.simpleName) }
             t.speak(s, if (i == 0) TextToSpeech.QUEUE_FLUSH else TextToSpeech.QUEUE_ADD, null, (if (i == clean.size - 1) "liba-" else "seg-") + System.currentTimeMillis() + "-" + i)
         }
-        try { t.language = Locale("he", "IL") } catch (e: Exception) {}
+        try { t.language = Locale("he", "IL") } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "langReset:" + e.javaClass.simpleName) }
     }
-    private fun vibrate(pattern: LongArray) { try { val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator; if (Build.VERSION.SDK_INT >= 26) v.vibrate(VibrationEffect.createWaveform(pattern, -1)) else @Suppress("DEPRECATION") v.vibrate(pattern, -1) } catch (e: Exception) {} }
+    private fun vibrate(pattern: LongArray) { try { val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator; if (Build.VERSION.SDK_INT >= 26) v.vibrate(VibrationEffect.createWaveform(pattern, -1)) else @Suppress("DEPRECATION") v.vibrate(pattern, -1) } catch (e: Exception) { Trace.e(Trace.Code.E_HAPTIC, "vibrate:" + e.javaClass.simpleName) } }
     // step 28: short tones – heard / sent / reply arrived
     private fun tone(kind: String) { if (!tones || isNight()) return
         val (t, ms) = when (kind) { "heard" -> ToneGenerator.TONE_PROP_BEEP to 90; "sent" -> ToneGenerator.TONE_PROP_ACK to 120; else -> ToneGenerator.TONE_PROP_PROMPT to 160 }
-        try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 55).let { it.startTone(t, ms); main.postDelayed({ it.release() }, ms + 200L) } } catch (e: Exception) {} }
+        try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 55).let { it.startTone(t, ms); main.postDelayed({ it.release() }, ms + 200L) } } catch (e: Exception) { Trace.e(Trace.Code.E_TONE, "tone:" + kind) } }
     private fun onSpoken() {
         speaking = false
         sayId?.let { id -> sayId = null; web?.let { w -> LibaWeb.sendSpoke(w, id) } } // fix: the page acks only once the phone finished speaking
@@ -250,6 +253,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
 
     // ---------- hidden WebView ----------
     private fun setupWeb() {
+        if (!Settings.canDrawOverlays(this)) { Trace.e(Trace.Code.E_OVERLAY_DENIED, "web"); status = "אין הרשאת הצגה מעל אפליקציות – פתח את ליבה ואשר"; return }
         val host = FrameLayout(this).apply { clipChildren = true; clipToPadding = true }
         val w = WebView(this)
         LibaWeb.setup(w, this)
@@ -284,11 +288,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
             (w.layoutParams as FrameLayout.LayoutParams).let { it.width = dm.widthPixels.coerceAtLeast(720); it.height = dm.heightPixels.coerceAtLeast(1280); w.layoutParams = it }
             revealed = false
         }
-        runCatching { wm.updateViewLayout(host, lp) }
-        bubble?.bringToFront(); bubble?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) } }; handle?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) } }
+        runCatching { wm.updateViewLayout(host, lp) }.onFailure { Trace.e(Trace.Code.E_OVERLAY_UPDATE, "reveal:" + it.javaClass.simpleName) }
+        bubble?.bringToFront()
+        bubble?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "reveal:bubble:" + x.javaClass.simpleName) } }
+        handle?.let { runCatching { wm.removeView(it); wm.addView(it, it.layoutParams) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "reveal:handle:" + x.javaClass.simpleName) } }
     }
     private fun rebuildWeb() {
-        webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy(); web = null; pageReady = false; pageOk = false
+        Trace.e(Trace.Code.E_PAGE_LOAD, "gone")
+        webHost?.let { runCatching { wm.removeView(it) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "rebuild:" + x.javaClass.simpleName) } }; web?.destroy(); web = null; pageReady = false; pageOk = false
         setupWeb(); showLabel("הדף קרס – טוען מחדש", 4000)
     }
     private fun reloadPage(why: String) {
@@ -297,8 +304,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         web?.reload()
     }
     private val watchdog = object : Runnable { override fun run() {
-        if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) reloadPage("אין תגובה מהדף")
-        if (pageReady) web?.let { LibaWeb.hello(it) }
+        if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) { Trace.e(Trace.Code.E_PAGE_LOAD, "timeout"); reloadPage("אין תגובה מהדף") }
+        if (pageReady) web?.let { LibaWeb.hello(it); drainTrace() }
         main.postDelayed(this, 30000)
     } }
     private fun watchNetwork() {
@@ -308,31 +315,39 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 override fun onAvailable(n: Network) { main.post { if (running && !pageReady) reloadPage("רשת חזרה") } }
             }
             cm.registerDefaultNetworkCallback(cb); netCb = cb
-        } catch (e: Exception) { Log.w(LibaWeb.TAG, "network watch: $e") }
+        } catch (e: Exception) { Trace.e(Trace.Code.E_SYS_CB, "net:" + e.javaClass.simpleName) }
         runCatching { // fix: the overlay never gets onVisibilityChanged, so the shader would keep drawing with the screen off
             val sc = object : android.content.BroadcastReceiver() {
                 override fun onReceive(c: Context?, i: Intent?) { main.post { dot?.visibility = if (i?.action == Intent.ACTION_SCREEN_OFF) View.INVISIBLE else View.VISIBLE } }
             }
             registerReceiver(sc, android.content.IntentFilter().apply { addAction(Intent.ACTION_SCREEN_OFF); addAction(Intent.ACTION_SCREEN_ON) }); screenCb = sc
-        }
+        }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "screen:" + it.javaClass.simpleName) }
     }
 
     // ---------- update check ----------
     /** step 92: download the new APK and hand it to the package installer – no browser, no file manager. */
     fun installUpdate() {
         val url = Prefs.updateUrl(this) ?: run { speak("אין עדכון ממתין."); return }
+        if (!packageManager.canRequestPackageInstalls()) { // the installer silently drops our intent without this
+            Trace.e(Trace.Code.E_INSTALL_PERM, "canRequestPackageInstalls")
+            showLabel("צריך הרשאה להתקין אפליקציות – פתח את ליבה ואשר", 8000)
+            speak("אין לי הרשאה להתקין. פתח את ליבה, אשר התקנת אפליקציות ממקור לא ידוע, ותגיד תתקין שוב.")
+            notifyIntent("ליבה – הרשאת התקנה", "לחץ כדי לאשר התקנת אפליקציות", Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, android.net.Uri.parse("package:" + packageName)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            return
+        }
         showLabel("מורידה עדכון…", 20000)
         Thread {
+            var fail = "net" // which stage threw, so the single catch below can name the right code
             try {
                 val dir = java.io.File(cacheDir, "apk").apply { mkdirs() }; val f = java.io.File(dir, "liba.apk")
                 val c = URL(url).openConnection() as HttpURLConnection; c.connectTimeout = 15000; c.readTimeout = 60000; c.instanceFollowRedirects = true
-                if (c.responseCode != 200) throw java.io.IOException("שרת העדכון ענה " + c.responseCode)
+                if (c.responseCode != 200) { fail = "http=" + c.responseCode; throw java.io.IOException("שרת העדכון ענה " + c.responseCode) }
                 val want = c.contentLengthLong
                 val got = c.inputStream.use { i -> f.outputStream().use { o -> i.copyTo(o) } }
                 // a half-downloaded or wrong file installs as "האפליקציה לא הותקנה" with no reason: check it here instead
-                if (want > 0 && got != want) throw java.io.IOException("ההורדה נקטעה (" + got / 1024 + " מתוך " + want / 1024 + " קילובייט)")
+                if (want > 0 && got != want) { fail = "truncated"; throw java.io.IOException("ההורדה נקטעה (" + got / 1024 + " מתוך " + want / 1024 + " קילובייט)") }
                 val head = ByteArray(2); java.io.FileInputStream(f).use { it.read(head) }
-                if (got < 100000 || head[0] != 'P'.code.toByte() || head[1] != 'K'.code.toByte()) throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה")
+                if (got < 100000 || head[0] != 'P'.code.toByte() || head[1] != 'K'.code.toByte()) { fail = "notapk"; throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה") }
                 // step 1: three proofs before the installer ever sees the file.
                 // (a) the bytes are the ones ship/release.mjs measured
                 val want256 = Prefs.updateSha(this)
@@ -340,23 +355,25 @@ class BubbleService : Service(), LibaWeb.Bridge {
                     val md = java.security.MessageDigest.getInstance("SHA-256")
                     java.io.FileInputStream(f).use { i -> val b = ByteArray(65536); while (true) { val n = i.read(b); if (n <= 0) break; md.update(b, 0, n) } }
                     val got256 = md.digest().joinToString("") { "%02x".format(it) }
-                    if (got256 != want256) throw java.io.IOException("הקובץ שהתקבל אינו הגרסה שנשלחה")
+                    if (got256 != want256) { fail = "sha"; throw java.io.IOException("הקובץ שהתקבל אינו הגרסה שנשלחה") }
                 }
                 // (b) it really is an APK, and (c) it is really newer than what is running
                 val info = packageManager.getPackageArchiveInfo(f.absolutePath, 0)
-                    ?: throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה")
-                if (info.packageName != packageName) throw java.io.IOException("הקובץ שהתקבל הוא אפליקציה אחרת")
+                    ?: run { fail = "notapk"; throw java.io.IOException("הקובץ שהתקבל אינו אפליקציה") }
+                if (info.packageName != packageName) { fail = "pkg"; throw java.io.IOException("הקובץ שהתקבל הוא אפליקציה אחרת") }
                 val fileCode = if (Build.VERSION.SDK_INT >= 28) info.longVersionCode.toInt() else @Suppress("DEPRECATION") info.versionCode
                 val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
-                if (fileCode <= mine) throw java.io.IOException("זו אותה גרסה שכבר מותקנת (" + fileCode + ")")
+                if (fileCode <= mine) { fail = "older"; throw java.io.IOException("זו אותה גרסה שכבר מותקנת (" + fileCode + ")") }
                 val newName = info.versionName ?: Prefs.updateName(this)
                 val uri = androidx.core.content.FileProvider.getUriForFile(this, "il.liba.app.files", f)
                 val i = Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 main.post { showLabel("מתקינה $newName… אשר בחלון", 8000); hideBubble(45000)
                     speak("מתקינה גרסה " + newName.replace(".", " נקודה "))
-                    try { startActivity(i) } catch (e: Exception) {}
+                    try { startActivity(i) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "installer:" + e.javaClass.simpleName) }
                     notifyIntent("התקנת ליבה", "לחץ כדי להתקין את הגרסה החדשה", i) } // a background start can be dropped silently: always leave a tappable notification
             } catch (e: Exception) { val why = e.message ?: e.toString()
+                if (fail == "sha" || fail == "notapk" || fail == "pkg" || fail == "older") Trace.e(Trace.Code.E_INSTALL_SIG, fail)
+                else Trace.e(Trace.Code.E_INSTALL_NET, if (fail == "net") e.javaClass.simpleName else fail)
                 main.post { showLabel("הורדה נכשלה: $why", 10000); speak("ההורדה נכשלה. " + why + ". אפשר לנסות שוב מהמסך הראשי.") } }
         }.start()
     }
@@ -370,12 +387,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var updateFailSpoken = false
     private fun checkUpdate(onDone: (() -> Unit)? = null) {
         Thread {
+            var http = 0
             try {
                 val c = URL(getString(R.string.update_json)).openConnection() as HttpURLConnection
                 c.connectTimeout = 8000; c.readTimeout = 8000
                 c.setRequestProperty("Cache-Control", "no-cache")
                 c.setRequestProperty("Pragma", "no-cache")
-                if (c.responseCode != 200) throw java.io.IOException("שרת הגרסאות ענה " + c.responseCode)
+                http = c.responseCode
+                if (http != 200) throw java.io.IOException("שרת הגרסאות ענה " + http)
                 val j = JSONObject(c.inputStream.bufferedReader().readText())
                 val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
                 if (j.getInt("versionCode") > mine) {
@@ -385,7 +404,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 updateFailSpoken = false
             } catch (e: Exception) {
                 val why = e.message ?: e.toString()
-                Log.d(LibaWeb.TAG, "update: $e")
+                Trace.e(Trace.Code.E_NET, if (http != 0 && http != 200) "http=" + http else e.javaClass.simpleName)
                 main.post {
                     showLabel("בדיקת גרסה נכשלה: $why", 6000)
                     // said once per failure streak, so a week offline is not a week of complaining
@@ -424,7 +443,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var rootW = 0
     private fun syncWindows() { val root = bubble ?: return; val h = handle ?: return; val lp = rootLp ?: return; val lpH = bubbleLp ?: return; val d = dot ?: return; if (d.pos.x < 0) return
         lp.x = (d.pos.x - rootW / 2).toInt(); lp.y = (d.pos.y - bigSize / 2).toInt(); lpH.x = (d.pos.x - bubbleSize / 2).toInt(); lpH.y = (d.pos.y - bubbleSize / 2).toInt()
-        runCatching { wm.updateViewLayout(root, lp) }; runCatching { wm.updateViewLayout(h, lpH) } }
+        runCatching { wm.updateViewLayout(root, lp) }.onFailure { Trace.e(Trace.Code.E_OVERLAY_UPDATE, "sync:root:" + it.javaClass.simpleName) }
+        runCatching { wm.updateViewLayout(h, lpH) }.onFailure { Trace.e(Trace.Code.E_OVERLAY_UPDATE, "sync:handle:" + it.javaClass.simpleName) } }
     private fun syncHandle() = syncWindows()
     /** label and menu are laid out by the FrameLayout itself (centred under the body), so nothing needs moving */
     private fun positionAttachments() {}
@@ -435,6 +455,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
     fun hideBubble(ms: Long) { hideToken++; val t = hideToken; bubble?.visibility = View.GONE; handle?.visibility = View.GONE
         main.postDelayed({ if (t == hideToken) { bubble?.visibility = View.VISIBLE; handle?.visibility = View.VISIBLE } }, ms) } // an overlapping hide must not un-hide the newer one
     private fun setupBubble() {
+        if (!Settings.canDrawOverlays(this)) { // without this permission wm.addView throws and the bubble just never appears
+            Trace.e(Trace.Code.E_OVERLAY_DENIED, "bubble"); status = "אין הרשאת הצגה מעל אפליקציות אחרות"
+            notifyIntent("ליבה לא יכולה להופיע", "צריך הרשאה להצגה מעל אפליקציות אחרות – לחץ כדי לאשר", Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            return
+        }
         val root = FrameLayout(this); val sw = resources.configuration.smallestScreenWidthDp; val size = dp(if (sw >= 600) 78f else 62f).toInt() // step 40: bigger on tablets / unfolded
         val big = (size * 2.8f).toInt(); val touchSize = (size * 1.5f).toInt()
         val d = OrbView(this).apply { bodyFrac = size.toFloat() / big; roam = true; boxPx = big.toFloat(); importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
@@ -489,7 +514,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         snapAnim?.cancel()
         val h = handle ?: return
         snapAnim = ValueAnimator.ofInt(lp.x, target).apply { duration = 340; interpolator = android.view.animation.OvershootInterpolator(1.1f)
-            addUpdateListener { lp.x = it.animatedValue as Int; runCatching { wm.updateViewLayout(h, lp) }; syncRoot() }; start() }
+            addUpdateListener { lp.x = it.animatedValue as Int; runCatching { wm.updateViewLayout(h, lp) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "snap:" + x.javaClass.simpleName) }; syncRoot() }; start() }
     }
     private fun schedulePeek() { main.removeCallbacks(peekRun); main.postDelayed(peekRun, 9000) }
     private fun peek() {
@@ -501,14 +526,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun unpeek() { main.removeCallbacks(peekRun); if (!peeked) return; peeked = false; bubble?.animate()?.translationX(0f)?.alpha(1f)?.setDuration(220)?.start() }
     private fun haptic() { try { val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (Build.VERSION.SDK_INT >= 29) v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)) else @Suppress("DEPRECATION") v.vibrate(12) } catch (e: Exception) {} }
+        if (Build.VERSION.SDK_INT >= 29) v.vibrate(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)) else @Suppress("DEPRECATION") v.vibrate(12) } catch (e: Exception) { Trace.e(Trace.Code.E_HAPTIC, "haptic:" + e.javaClass.simpleName) } }
     override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
         super.onConfigurationChanged(newConfig) // fix 9: fold / unfold / rotate – keep the bubble on the visible screen
         val d = dot ?: return; arena(); if (d.roam) { val dm = resources.displayMetrics
             val hx = (bigSize / 2f).coerceAtMost(dm.widthPixels / 2f); val hy = (bigSize / 2f).coerceAtMost(dm.heightPixels / 2f)
             d.setPos(d.pos.x.coerceIn(hx, (dm.widthPixels - hx).coerceAtLeast(hx)), d.pos.y.coerceIn(hy, (dm.heightPixels - hy).coerceAtLeast(hy))); syncWindows(); return }
         val h = handle ?: return; val lp = bubbleLp ?: return
-        clampBubble(lp, bubbleSize); runCatching { wm.updateViewLayout(h, lp) }; syncRoot()
+        clampBubble(lp, bubbleSize); runCatching { wm.updateViewLayout(h, lp) }.onFailure { Trace.e(Trace.Code.E_OVERLAY_UPDATE, "config:" + it.javaClass.simpleName) }; syncRoot()
     }
     private fun openMain() { startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) }
     // step 31: long-press menu on the bubble – no screen to open
@@ -528,10 +553,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
         item("⏻ כבה בועה") { stopSelf() }
         root.addView(m, FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply { gravity = Gravity.TOP or Gravity.CENTER_HORIZONTAL; topMargin = bigSize / 2 + bubbleSize / 2 + dp(8f).toInt() })
         m.visibility = View.VISIBLE
-        rootLp?.let { it.flags = it.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv(); runCatching { wm.updateViewLayout(root, it) } }
+        rootLp?.let { it.flags = it.flags and WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE.inv(); runCatching { wm.updateViewLayout(root, it) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "menu:open:" + x.javaClass.simpleName) } }
         menu = m; main.postDelayed({ if (menu === m) closeMenu(root) }, 8000)
     }
-    private fun closeMenu(root: FrameLayout) { menu?.let { root.removeView(it) }; menu = null; rootLp?.let { it.flags = it.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE; runCatching { wm.updateViewLayout(root, it) } } }
+    private fun closeMenu(root: FrameLayout) { menu?.let { root.removeView(it) }; menu = null; rootLp?.let { it.flags = it.flags or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE; runCatching { wm.updateViewLayout(root, it) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "menu:close:" + x.javaClass.simpleName) } } }
     // step 25: headset / car button = "דבר" (opt-in – would otherwise steal the button from music apps)
     private fun setupMediaSession() {
         if (!headsetBtn) { mediaSession?.let { it.isActive = false; it.release() }; mediaSession = null; return }
@@ -547,7 +572,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             })
             ms.setPlaybackState(android.media.session.PlaybackState.Builder().setActions(android.media.session.PlaybackState.ACTION_PLAY or android.media.session.PlaybackState.ACTION_PAUSE or android.media.session.PlaybackState.ACTION_PLAY_PAUSE).setState(android.media.session.PlaybackState.STATE_PLAYING, 0, 1f).build())
             ms.isActive = true; mediaSession = ms
-        } catch (e: Exception) { Log.w("liba", "media session: $e") }
+        } catch (e: Exception) { Trace.e(Trace.Code.E_MEDIA_SESSION, e.javaClass.simpleName) }
     }
     private var labelHide: Runnable? = null
     private fun showLabel(text: String, ms: Long) {
@@ -566,8 +591,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
 
     // ---------- speech in ----------
     private val muteStreams = intArrayOf(AudioManager.STREAM_SYSTEM)
-    private fun muteSystem() { if (systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; if (am.isMusicActive) return; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_MUTE, 0) } catch (e: Exception) {} }; systemMuted = true }
-    private fun unmuteSystem() { if (!systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) {} }; systemMuted = false }
+    private fun muteSystem() { if (systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; if (am.isMusicActive) return; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_MUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "mute:" + e.javaClass.simpleName) } }; systemMuted = true }
+    private fun unmuteSystem() { if (!systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "unmute:" + e.javaClass.simpleName) } }; systemMuted = false }
     private fun wakeLoop() { if (!running || !heyOn || listening || speaking || tts?.isSpeaking == true) return; startVad() }
     // step 21: hold the mic with a cheap energy gate; only when speech is heard start the real recognizer (no chime loop, no network idle)
     private fun startVad() {
@@ -581,15 +606,15 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun stopVad() { vad?.stop(); vad = null }
     private fun startListening(mode: String) {
         if (!running) return
-        if (listening && listenMode == "wake" && mode == "cmd") { try { sr?.cancel() } catch (e: Exception) {}; listening = false; unmuteSystem() } // fix 7: a tap wins over a noise-triggered wake window
+        if (listening && listenMode == "wake" && mode == "cmd") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "tapWins:" + e.javaClass.simpleName) }; listening = false; unmuteSystem() } // fix 7: a tap wins over a noise-triggered wake window
         else if (listening) return
         if (speaking && mode != "cmd") return
         if (!ensureMicFgs()) return
-        if (!SpeechRecognizer.isRecognitionAvailable(this)) { showLabel("אין זיהוי דיבור בטלפון (צריך את אפליקציית Google)", 5000); return }
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) { Trace.e(Trace.Code.E_SR_NONE, mode); showLabel("אין זיהוי דיבור בטלפון (צריך את אפליקציית Google)", 5000); return }
         if (mode != "wake") tts?.stop()
         stopVad()
         val wantOnDevice = mode == "wake" && !onDeviceFailed && Build.VERSION.SDK_INT >= 31 && runCatching { SpeechRecognizer.isOnDeviceRecognitionAvailable(this) }.getOrDefault(false)
-        if (sr != null && srOnDevice != wantOnDevice) { try { sr?.destroy() } catch (e: Exception) {}; sr = null }
+        if (sr != null && srOnDevice != wantOnDevice) { try { sr?.destroy() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "swap:" + e.javaClass.simpleName) }; sr = null }
         if (sr == null) { sr = (if (wantOnDevice) SpeechRecognizer.createOnDeviceSpeechRecognizer(this) else SpeechRecognizer.createSpeechRecognizer(this)).also { it.setRecognitionListener(recListener) }; srOnDevice = wantOnDevice }
         val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -618,9 +643,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (listenMode == "wake") { if (WAKE.any { t.contains(it) }) { showLabel("כן?", 3000) } } else if (t.isNotBlank()) showLabel(t, 15000)
         }
         override fun onError(e: Int) { listening = false; if (listenMode == "wake") unmuteSystem()
+            Trace.e(Trace.sr(e), listenMode + "|onDevice=" + srOnDevice) // one emit point: no per-branch strings
             pendingSay?.let { t -> pendingSay = null; main.postDelayed({ speak(t) }, 300); return }
             if (listenMode == "wake") { errStreak++; if (e == SpeechRecognizer.ERROR_RECOGNIZER_BUSY || e == SpeechRecognizer.ERROR_CLIENT) { sr?.destroy(); sr = null }
-                if (srOnDevice && (e == 12 || e == 13 || e == SpeechRecognizer.ERROR_SERVER)) { onDeviceFailed = true; try { sr?.destroy() } catch (x: Exception) {}; sr = null; Log.i("liba", "on-device recognizer has no Hebrew – falling back") }
+                if (srOnDevice && (e == 12 || e == 13 || e == SpeechRecognizer.ERROR_SERVER)) { onDeviceFailed = true; try { sr?.destroy() } catch (x: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "onDeviceDestroy:" + x.javaClass.simpleName) }; sr = null; Trace.e(Trace.sr(e), listenMode + "|onDevice=" + srOnDevice + "|fallback") }
                 main.postDelayed({ wakeLoop() }, if (speaking) 1500 else if (errStreak > 5) 5000 else 400); return }
             errStreak = 0
             if (listenMode == "follow" && (e == SpeechRecognizer.ERROR_NO_MATCH || e == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) { idleOrWake(); return }
@@ -689,8 +715,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onPage(url: String) { main.post {
         pageLoadedAt = SystemClock.elapsedRealtime()
         status = when {
-            url.startsWith("error:") -> "הדף לא נטען: " + url.removePrefix("error:")
-            url.contains("/login") || url.contains("auth") -> { val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("צריך להתחבר ל‑claude.ai. לחיצה ארוכה עליי, כבה בועה, התחבר, והפעל שוב.") }; "צריך להתחבר ל‑claude.ai" }
+            url.startsWith("error:") -> { Trace.e(Trace.Code.E_PAGE_LOAD, "error"); "הדף לא נטען: " + url.removePrefix("error:") }
+            url.contains("/login") || url.contains("auth") -> { Trace.e(Trace.Code.E_PAGE_LOGIN, if (url.contains("/login")) "login" else "auth"); val now = SystemClock.elapsedRealtime(); if (now - loginWarnedAt > 3600000) { loginWarnedAt = now; speak("צריך להתחבר ל‑claude.ai. לחיצה ארוכה עליי, כבה בועה, התחבר, והפעל שוב.") }; "צריך להתחבר ל‑claude.ai" }
             url.contains("/artifact/") -> "הדף נטען, מחכה שהוא יתחבר…"
             else -> "נטען: " + url.take(60)
         }
@@ -698,16 +724,23 @@ class BubbleService : Service(), LibaWeb.Bridge {
         web?.let { LibaWeb.hello(it) }
     } }
     override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
-        if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } } } } }
-    fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) {}; listening = false }; unmuteSystem() }
+        if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
+        main.postDelayed({ drainTrace() }, 2000) } } }
+    fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }
     override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
-        else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); try { startActivity(i) } catch (e: Exception) { notifyIntent("ליבה – קישור", u, i) } } } } }
+        else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); try { startActivity(i) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "open:" + e.javaClass.simpleName); notifyIntent("ליבה – קישור", u, i) } } } } }
     /** fix 10: when Android refuses an activity start from the background, hand the intent to the user as a tappable notification. */
     private fun notifyIntent(title: String, text: String, i: Intent) {
         try { val pi = PendingIntent.getActivity(this, (System.currentTimeMillis() % 10000).toInt(), i, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
             getSystemService(NotificationManager::class.java).notify(3, NotificationCompat.Builder(this, CH).setSmallIcon(R.drawable.ic_notif).setContentTitle(title).setContentText(text).setContentIntent(pi).setAutoCancel(true).setPriority(NotificationCompat.PRIORITY_HIGH).build())
-            showLabel("פתח מההתראה למעלה", 6000) } catch (e: Exception) { showLabel("לא הצלחתי לפתוח: $text", 6000) }
+            showLabel("פתח מההתראה למעלה", 6000) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "notify:" + e.javaClass.simpleName); showLabel("לא הצלחתי לפתוח: $text", 6000) }
     }
+    /** step blackbox: hand the page one batch of fault lines. When the page is not connected
+     *  nothing is read and nothing is marked - the lines wait in trace.jsonl for the next drain. */
+    private fun drainTrace() {
+        Trace.drain(pageReady && web != null) { batch, json -> main.post { web?.let { LibaWeb.sendTrace(it, batch, json) } } }
+    }
+    override fun onTraceAck(batch: String, ids: List<String>) { Trace.acked(ids) }
     override fun onCrashSaved(id: String) { main.post { Prefs.clearCrash(this); showLabel("דוח הקריסה נשלח לליבה", 4000) } }
     override fun onTasks(summary: String, n: Int, blocked: Int) { tasksSummary = summary; main.post { taskSummary = summary; taskBlocked = blocked; if (n > 0) status = "מחובר · $n משימות" + (if (blocked > 0) " · $blocked מחכות לך" else "") } }
     override fun onPageTap() { main.post { web?.let { LibaWeb.simulateTap(it) } } }
@@ -727,7 +760,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         curSpeaker = if (speaker.isBlank()) "ליבה" else speaker
         // step 14: a different voice per speaker – ליבה neutral, המנהל lower, האדריכל higher, others slightly low
         val pitch = when { speaker.isBlank() || speaker.contains("ליבה") -> 1.0f; speaker.contains("מנהל") -> 0.8f; speaker.contains("אדריכל") -> 1.2f; else -> 0.9f }
-        try { tts?.setPitch(pitch) } catch (e: Exception) {}
+        try { tts?.setPitch(pitch) } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "setPitch:" + e.javaClass.simpleName) }
         Prefs.log(this, "liba", text)
         val ask = options.isNotEmpty() || kind == "stuck" || kind == "call" || kind == "ask"
         val spoken = text + if (options.isNotEmpty()) ". " + options.joinToString(", או ") + "?" else ""
@@ -737,16 +770,20 @@ class BubbleService : Service(), LibaWeb.Bridge {
     } }
     private fun ring() {
         unmuteSystem()
-        try { val tg = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 90); tg.startTone(ToneGenerator.TONE_SUP_RINGTONE, 1800); main.postDelayed({ tg.release() }, 2000) } catch (e: Exception) {}
+        try { val tg = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 90); tg.startTone(ToneGenerator.TONE_SUP_RINGTONE, 1800); main.postDelayed({ tg.release() }, 2000) } catch (e: Exception) { Trace.e(Trace.Code.E_TONE, "ring:" + e.javaClass.simpleName) }
         val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         v.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 300, 150, 300, 150, 300), -1))
     }
 
     override fun onDestroy() {
-        running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); screenCb?.let { runCatching { unregisterReceiver(it) } }; screenCb = null; netCb?.let { runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) } }; mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
-        try { sr?.destroy() } catch (e: Exception) {}
+        running = false; instance = null; main.removeCallbacksAndMessages(null); stopVad(); bargeVad?.stop(); screenCb?.let { r -> runCatching { unregisterReceiver(r) }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "unScreen:" + it.javaClass.simpleName) } }; screenCb = null; netCb?.let { n -> runCatching { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(n) }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "unNet:" + it.javaClass.simpleName) } }; mediaSession?.let { it.isActive = false; it.release() }; unmuteSystem()
+        try { sr?.destroy() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "destroy:" + e.javaClass.simpleName) }
         tts?.stop(); tts?.shutdown()
-        bubble?.let { runCatching { wm.removeView(it) } }; handle?.let { runCatching { wm.removeView(it) } }; webHost?.let { runCatching { wm.removeView(it) } }; web?.destroy()
+        bubble?.let { v -> runCatching { wm.removeView(v) }.onFailure { Trace.e(Trace.Code.E_OVERLAY_UPDATE, "destroy:bubble:" + it.javaClass.simpleName) } }
+        handle?.let { v -> runCatching { wm.removeView(v) }.onFailure { Trace.e(Trace.Code.E_OVERLAY_UPDATE, "destroy:handle:" + it.javaClass.simpleName) } }
+        webHost?.let { v -> runCatching { wm.removeView(v) }.onFailure { Trace.e(Trace.Code.E_OVERLAY_UPDATE, "destroy:web:" + it.javaClass.simpleName) } }
+        web?.destroy()
+        Trace.flush() // a window cut short by death still writes its drop lines
         super.onDestroy()
     }
 }

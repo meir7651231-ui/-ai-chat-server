@@ -143,6 +143,39 @@ const failed = [];
   await p.evaluate(id => window.app({ liba: 'spoke', id }), say2 && say2.id); await flush(2000);
   sentMid = await H(() => window.__h.sent.slice());
   check(sentMid.some(t => /תוך כדי/.test(t)), 'queued answer is sent once she finished speaking: ' + JSON.stringify(sentMid.slice(-1)));
+  // 14. blackbox: a page failure is an event with a code, and the same code twice in one minute is one row
+  await H(() => { window.__trace.fail('P_WAKELOCK', new Error('boom'), 'e2e'); window.__trace.fail('P_WAKELOCK', new Error('boom'), 'e2e'); });
+  await p.waitForTimeout(4200);
+  const ev = await H(() => window.__h.all('telemetry/events/items').filter(x => x.code === 'P_WAKELOCK' && x.ctx === 'e2e'));
+  check(ev.length === 1, 'same code twice in one minute \u2192 one telemetry row: ' + JSON.stringify(ev.map(e => e.code + ':n' + e.n)));
+  check(ev.length === 1 && ev[0].n === 2 && ev[0].src === 'p' && /^\d{4}-\d{2}-\d{2}$/.test(ev[0].day || ''), 'the row carries the code, the count and the day: ' + JSON.stringify(ev[0]));
+  // 14b. the per-code cap drops, and the drop is itself written
+  await H(() => { for (let i = 0; i < 40; i++) window.__trace.fail('E_SR_7', null, 'burst' + i); });
+  await p.waitForTimeout(3600);
+  const sr = await H(() => window.__h.all('telemetry/events/items').filter(x => x.code === 'E_SR_7' && x.src === 'p'));
+  check(sr.length === 2, 'hot-loop code is capped at 2 rows per minute: ' + sr.length);
+  const kept = await H(() => window.__h.all('telemetry/events/items').filter(x => x.code === 'E_SR_7' && x.src === 'p').reduce((a, x) => a + x.n, 0));
+  check(kept === 2, 'only the capped rows are stored: ' + kept);
+  // 15. a kotlin batch over the bridge lands in the same collection and is acked by id
+  await p.evaluate(() => window.app({ liba: 'trace', batch: 'b17', events: JSON.stringify([
+    { id: 'k1s7f3x-a91', t: Date.now(), c: 'E_SR_7', n: 41, ctx: 'wake|onDevice=true', v: '3.14.2', s: 'k' },
+    { id: 'k1s7f3x-b02', t: Date.now(), c: 'E_TTS_INIT', n: 1, ctx: 'status=-1', v: '3.14.2', s: 'k' }]) }));
+  m = await flush(1200);
+  const kev = await H(() => window.__h.all('telemetry/events/items').filter(x => x.src === 'k'));
+  check(kev.length === 2 && kev.some(x => x.code === 'E_SR_7' && x.n === 41 && x.ctx === 'wake|onDevice=true'), 'kotlin batch expanded into telemetry/events: ' + JSON.stringify(kev.map(x => x.code)));
+  const ack = m.find(x => x.liba === 'traceAck');
+  check(!!ack && ack.batch === 'b17' && JSON.parse(ack.ids).length === 2, 'batch acked back to the bubble with the written ids: ' + JSON.stringify(ack));
+  // 15b. the same event id arriving twice overwrites its row instead of creating a second one
+  await p.evaluate(() => window.app({ liba: 'trace', batch: 'b18', events: JSON.stringify([
+    { id: 'k1s7f3x-a91', t: Date.now(), c: 'E_SR_7', n: 41, ctx: 'wake|onDevice=true', v: '3.14.2', s: 'k' }]) }));
+  await flush(1000);
+  const kev2 = await H(() => window.__h.all('telemetry/events/items').filter(x => x.src === 'k'));
+  check(kev2.length === 2, 'a re-sent event overwrites its row, never duplicates it: ' + kev2.length);
+  // 16. "\u05de\u05d4 \u05e0\u05e9\u05d1\u05e8 \u05d4\u05d9\u05d5\u05dd" answers in Hebrew, with no raw codes in the ear
+  await p.evaluate(() => window.app({ liba: 'input', text: '\u05de\u05d4 \u05e0\u05e9\u05d1\u05e8 \u05d4\u05d9\u05d5\u05dd' })); m = await flush(3200);
+  const brk = m.find(x => x.liba === 'say' && /\u05ea\u05e7\u05dc\u05d5\u05ea/.test(x.text));
+  check(!!brk, 'what broke today is spoken');
+  check(!!brk && !/E_[A-Z]|P_[A-Z]/.test(brk.text), 'spoken in Hebrew, no raw error codes: ' + JSON.stringify(brk && brk.text.slice(0, 160)));
   console.log('\nERRORS:\n' + (errs.join('\n') || 'none'));
   console.log('\nALL SAY TEXTS:\n' + msgs.filter(x => x.liba === 'say').map(x => ' - ' + x.text.slice(0, 90)).join('\n'));
   await b.close();

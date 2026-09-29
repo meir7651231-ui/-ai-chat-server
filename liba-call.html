@@ -79,10 +79,79 @@ const app=$('app'),H=$('h'),SUB=$('sub'),KIND=$('kind'),OPTS=$('opts'),HEARD=$('
 let db=null,comments=null,AC=null,ringTimer=null,cur=null,lastRung=null,wakeLock=null,rec=null,armed=false;
 const log=t=>{LOG.textContent=t;};
 const setSt=(t,c='')=>{$('stt').textContent=t;$('st').className='st '+c;};
-try{lastRung=localStorage.getItem('liba.lastRung');}catch(e){}
+/* ---- black box (step blackbox): one table of codes, one writer ---- */
+const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה'};
+const TRACE_SR_HE={1:'זיהוי הדיבור נכשל ברשת',2:'זיהוי הדיבור נכשל ברשת',3:'ההקלטה נכשלה',4:'שרת הזיהוי סירב',5:'תקלה פנימית בזיהוי',6:'לא שמעתי כלום',7:'לא זוהו מילים',8:'המאזין היה תפוס',9:'אין הרשאת מיקרופון',11:'חסרה שפה לזיהוי',12:'העברית לא מותקנת במכשיר',13:'הזיהוי במכשיר לא זמין'};
+const TRACE_FLUSH=3000,TRACE_RING=200,TRACE_BATCH=200,TRACE_QMAX=1000;
+let trVer='',trBuf=new Map(),trWin=0,trCount={},trDrop={},trQ=[],trRing=[],trTimer=null,trWriting=false,trInTrace=false;
+const trMin=t=>Math.floor(t/60000);
+const trCol=()=>db.doc('telemetry/events').collection('items');
+/* hot loops (syncWindows per frame, wake-mode onError every 400ms) carry the hardest cap */
+const trCap=c=>c==='E_CRASH_SAVE'?1e9:(c==='E_OVERLAY_UPDATE'||/^E_SR_\d+$/.test(c))?2:5;
+function trDay(ts){try{return new Date(ts).toLocaleDateString('sv-SE',{timeZone:'Asia/Jerusalem'});}catch(e){return new Date(ts).toISOString().slice(0,10);}}
+function trId(t,code,ctx){let h=0;const s=code+'|'+(ctx||'');for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return t.toString(36)+'-'+('00'+(h%46656).toString(36)).slice(-3);}
+/* ctx is machine text only – this strip is the privacy boundary: no utterance, no note, no url with a token */
+function trCtx(v){return String(v==null?'':(v&&v.code)||(v&&v.name)||v).replace(/[^A-Za-z0-9_\-./:=|,<>()\[\] ]/g,'').replace(/\s+/g,' ').trim().slice(0,120);}
+function trHe(c){if(TRACE_HE[c])return TRACE_HE[c];const m=/^E_SR_(\d+)$/.exec(c||'');if(m)return TRACE_SR_HE[m[1]]||'זיהוי הדיבור נכשל';return 'תקלה לא מוכרת';}
+function trRingPush(L){trRing.push(L);while(trRing.length>TRACE_RING)trRing.shift();}
+function trQueue(L){if(!L.q){L.q=true;trQ.push(L);while(trQ.length>TRACE_QMAX)trQ.shift();}if(!trTimer)trTimer=setTimeout(trFlush,TRACE_FLUSH);}
+/* window close: every code that was capped writes its own dropped line, so the box cannot lie by omission */
+function trRoll(now){const w=trMin(now);if(w===trWin)return;
+  for(const c in trDrop){if(trDrop[c]>0){const t=trWin*60000,L={id:trId(t,c,'dropped'),t:t,c:c,n:0,ctx:'dropped',v:trVer,s:'p',d:trDrop[c]};trRingPush(L);trQueue(L);}}
+  trBuf=new Map();trCount={};trDrop={};trWin=w;}
+function fail(code,e,ctx){
+  try{const t=Date.now();trRoll(t);
+    const cx=trCtx(ctx!=null?ctx:e);const k=code+'|'+cx;const L=trBuf.get(k);
+    if(L){L.n++;trQueue(L);return;}
+    if((trCount[code]||0)>=trCap(code)){trDrop[code]=(trDrop[code]||0)+1;return;}
+    trCount[code]=(trCount[code]||0)+1;
+    const line={id:trId(t,code,cx),t:t,c:code,n:1,ctx:cx,v:trVer,s:'p'};
+    trBuf.set(k,line);trRingPush(line);trQueue(line);
+  }catch(_){}} /* fail() itself is the one site with no code: it must never throw into the caller */
+function trDoc(L){return {code:L.c,ts:L.t,n:L.n,ctx:L.ctx||'',ver:L.v||'',src:L.s||'p',dropped:L.d||0,day:trDay(L.t),at:Date.now()};}
+/* a telemetry write that fails is re-queued in silence – calling fail() here would feed itself */
+function trFlush(){trTimer=null;if(!db||trWriting||!trQ.length)return;
+  const batch=trQ.splice(0,TRACE_BATCH);batch.forEach(L=>{L.q=false;});trWriting=true;
+  Promise.all(batch.map(L=>{try{return Promise.resolve(trCol().doc(L.id).set(trDoc(L))).catch(()=>trQueue(L));}catch(e){trQueue(L);return Promise.resolve();}}))
+    .then(()=>{trWriting=false;if(trQ.length&&!trTimer)trTimer=setTimeout(trFlush,TRACE_FLUSH);},()=>{trWriting=false;});}
+/* Kotlin -> page: short-key lines in, long-key docs out; the ids that landed are acked back */
+function trBridge(batch,json){
+  let arr=null;
+  if(trInTrace)return;trInTrace=true;
+  try{arr=JSON.parse(json);}catch(e){fail('P_DB_WRITE',e,'telemetry/events parse');}
+  trInTrace=false;
+  if(!Array.isArray(arr)){post('traceAck',{batch:batch,ids:'[]'});return;}
+  const ok=[];
+  Promise.all(arr.slice(0,TRACE_BATCH).map(ev=>{
+    const t=+ev.t||Date.now(),c=String(ev.c||'E_UNKNOWN'),cx=trCtx(ev.ctx);
+    const L={id:String(ev.id||trId(t,c,cx)),t:t,c:c,n:+ev.n||0,ctx:cx,v:String(ev.v||''),s:String(ev.s||'k'),d:+ev.d||0};
+    trRingPush(L);
+    /* a rejected write is simply left out of ids – unacked, so it comes back in the next batch */
+    try{return Promise.resolve(trCol().doc(L.id).set(trDoc(L))).then(()=>{ok.push(L.id);},()=>{});}catch(e){return Promise.resolve();}
+  })).then(()=>post('traceAck',{batch:batch,ids:JSON.stringify(ok)}),()=>post('traceAck',{batch:batch,ids:JSON.stringify(ok)}));}
+/* reading it back: dropped counts inside the total, so the cap changes what is stored, never what is counted */
+async function trTop(day){const byId=new Map();
+  try{const r=await trCol().get();r.docs.forEach(d=>{const x=d.data()||{};const dy=x.day||trDay(x.ts||0);if(dy!==day)return;byId.set(d.id,{code:String(x.code||'?'),total:(+x.n||0)+(+x.dropped||0)});});}
+  catch(e){fail('P_DB_READ',e,'telemetry/events');}
+  trRing.forEach(L=>{if(trDay(L.t)!==day)return;byId.set(L.id,{code:L.c,total:(L.n||0)+(L.d||0)});});
+  const by={};byId.forEach(v=>{by[v.code]=(by[v.code]||0)+v.total;});
+  /* the open window's drops are not written yet – count them anyway, or the answer under-reports */
+  if(trDay(trWin*60000)===day)for(const c in trDrop)if(trDrop[c]>0)by[c]=(by[c]||0)+trDrop[c];
+  return Object.keys(by).map(c=>({code:c,total:by[c]})).sort((a,b)=>b.total-a.total);}
+function traceCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
+  if(!/^(מה נשבר היום|מה נשבר|מה התקלקל היום|מה נפל היום|תקלות|מה התקלות|קופסה שחורה)$/.test(t))return false;
+  const day=trDay(Date.now());
+  trTop(day).then(rows=>{
+    if(!rows.length){sayLocal('היום שום דבר לא נשבר. הכל עבד.');return;}
+    const top=rows.slice(0,10),tot=rows.reduce((a,r)=>a+r.total,0);
+    sayLocal('היום היו '+tot+' תקלות ב'+rows.length+' סוגים. '+top.map(r=>trHe(r.code)+' '+r.total+(r.total===1?' פעם':' פעמים')).join('; ')+'.');
+  });
+  return true;}
+window.__trace={fail:fail,top:trTop,ring:trRing,flush:trFlush};
+try{lastRung=localStorage.getItem('liba.lastRung');}catch(e){fail('P_STORE',e,'get lastRung');}
 
 /* ---- audio ---- */
-function audioInit(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+function audioInit(){if(AC)return;try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){fail('P_AUDIO',e);}}
 function beep(f,d,v=.2,type='sine'){if(!AC)return;const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,AC.currentTime);g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d);}
 function ringOnce(){beep(880,.18,.25);setTimeout(()=>beep(1175,.18,.25),200);setTimeout(()=>beep(880,.18,.25),400);setTimeout(()=>beep(1175,.35,.25),600);if(navigator.vibrate)navigator.vibrate([300,150,300]);}
 function ringStart(){ringStop();ringOnce();ringTimer=setInterval(ringOnce,2200);setTimeout(ringStop,45000);}
@@ -102,27 +171,29 @@ function say(text){return new Promise(res=>{if(appMode){res();return;}if(!('spee
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let listening=false,micErr='',micBlocked=false;
 const ERR={'not-allowed':'המיקרופון חסום בדף הזה. בטלפון: הגדרות ← Safari/Chrome ← מיקרופון ← אפשר.','service-not-allowed':'זיהוי דיבור לא זמין בדפדפן הזה.','audio-capture':'לא נמצא מיקרופון.','network':'זיהוי דיבור צריך אינטרנט.','no-speech':'לא שמעתי כלום.','aborted':''};
-function listen(){return new Promise(res=>{if(!SR){res(null);return;}if(listening){try{rec.stop();}catch(e){}res(null);return;}try{rec=new SR();}catch(e){res(null);return;}rec.lang='he-IL';rec.interimResults=true;rec.continuous=false;let fin='',err='';listening=true;app.classList.add('listen');HEARD.hidden=false;HEARD.textContent='מקשיב…';$('talk').textContent='■ סיימתי לדבר';
+function listen(){return new Promise(res=>{if(!SR){res(null);return;}if(listening){try{rec.stop();}catch(e){fail('P_SR',e,'stop');}res(null);return;}try{rec=new SR();}catch(e){fail('P_SR',e,'new');res(null);return;}rec.lang='he-IL';rec.interimResults=true;rec.continuous=false;let fin='',err='';listening=true;app.classList.add('listen');HEARD.hidden=false;HEARD.textContent='מקשיב…';$('talk').textContent='■ סיימתי לדבר';
   rec.onresult=e=>{let it='';for(let i=e.resultIndex;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)fin+=r[0].transcript;else it+=r[0].transcript;}HEARD.textContent=fin+it;};
-  rec.onerror=e=>{err=e.error;micErr=ERR[err]??('מיקרופון: '+err);if(micErr){log(micErr);if(err==='not-allowed'||err==='service-not-allowed'||err==='audio-capture'){micBlocked=true;dictationMode();}}};
+  rec.onerror=e=>{err=e.error;fail('P_SR',e,e.error);micErr=ERR[err]??('מיקרופון: '+err);if(micErr){log(micErr);if(err==='not-allowed'||err==='service-not-allowed'||err==='audio-capture'){micBlocked=true;dictationMode();}}};
   rec.onend=()=>{listening=false;app.classList.remove('listen');$('talk').textContent='🎙 דבר';const t=(fin||HEARD.textContent||'').trim();res(err&&err!=='no-speech'?null:(t==='מקשיב…'?'':t));};
-  try{rec.start();}catch(e){listening=false;res(null);}setTimeout(()=>{try{rec.stop();}catch(e){}},12000);});}
+  try{rec.start();}catch(e){fail('P_SR',e,'start');listening=false;res(null);}setTimeout(()=>{try{rec.stop();}catch(e){fail('P_SR',e,'stop cap');}},12000);});}
 /* ---- wake lock ---- */
-async function keepAwake(){try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}catch(e){}}
+async function keepAwake(){try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}catch(e){fail('P_WAKELOCK',e);}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&armed&&!wakeLock)keepAwake();});
 
 /* ---- capabilities ---- */
 let handsFree=true,busy=false,seen=null,appMode=false,lastAsk=null;
-function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){}}
+/* fail() never posts – P_BRIDGE would otherwise call the thing that just broke */
+function post(kind,extra){try{window.parent.postMessage(Object.assign({liba:kind},extra||{}),'*');}catch(e){fail('P_BRIDGE',e,kind);}}
 window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d=e.data;if(!d||!d.liba)return;
-  if(d.liba==='hello'){appMode=true;armed=true;appVer=String(d.ver||'');try{if(!window.__devSent){window.__devSent=true;db.doc('channel/device').set({app:d.ver||'',page:37,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(()=>{});}}catch(e){}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+  if(d.liba==='hello'){appMode=true;armed=true;appVer=String(d.ver||'');trVer=appVer;try{if(!window.__devSent){window.__devSent=true;db.doc('channel/device').set({app:d.ver||'',page:38,at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post('ready',{});if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba==='spoke'){const f=sayWait.get(String(d.id||''));if(f)f();}
-  else if(d.liba==='crash'&&d.text&&db){db.doc('crashes/'+(d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post('crashSaved',{id:d.id})).catch(e=>log('crash: '+(e.code||e)));}
+  else if(d.liba==='crash'&&d.text&&db){db.doc('crashes/'+(d.id||Date.now())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post('crashSaved',{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
+  else if(d.liba==='trace'&&d.events&&db){trBridge(String(d.batch||''),String(d.events));}
   else if(d.liba==='input'&&d.text){if(pendingInput){const prev=pendingInput;pendingInput=null;clearTimeout(pendingT);send(prev);}pendingInput=String(d.text);post('tap',{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
 });
 let pendingInput=null,pendingT=null;
 ['pointerdown','click','touchstart'].forEach(ev=>document.addEventListener(ev,()=>{if(pendingInput){const t=pendingInput;pendingInput=null;clearTimeout(pendingT);send(t);}},true));
-try{seen=localStorage.getItem('liba.seen');}catch(e){}
+try{seen=localStorage.getItem('liba.seen');}catch(e){fail('P_STORE',e,'get seen');}
 const TR=$('tr');
 function bubble(cls,text){const d=document.createElement('div');d.className=cls;d.textContent=text;TR.appendChild(d);while(TR.children.length>8)TR.firstChild.remove();TR.scrollTop=TR.scrollHeight;TR.hidden=false;return d;}
 (async()=>{
@@ -131,19 +202,19 @@ function bubble(cls,text){const d=document.createElement('div');d.className=cls;
   db=await c.use('db');comments=await c.use('comments');
   if(!db){setSt('אין מסד','warn');log('db לא זמין בתצוגה הזו');return;}
   setSt('מחובר','on');
-  db.collection('gallery').onSnapshot(q=>{galleryList=q.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.ts||0)-(a.ts||0));},()=>{});
-  db.doc('memory/settings').onSnapshot(s=>{if(s.exists&&s.data())memSettings=Object.assign(memSettings,s.data());},()=>{});
-  db.collection('sessions').onSnapshot(q=>{sessionsList=q.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));renderMap();},()=>{});
+  db.collection('gallery').onSnapshot(q=>{galleryList=q.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.ts||0)-(a.ts||0));},e=>fail('P_DB_READ',e,'gallery'));
+  db.doc('memory/settings').onSnapshot(s=>{if(s.exists&&s.data())memSettings=Object.assign(memSettings,s.data());},e=>fail('P_DB_READ',e,'memory/settings'));
+  db.collection('sessions').onSnapshot(q=>{sessionsList=q.docs.map(d=>Object.assign({id:d.id},d.data())).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));renderMap();},e=>fail('P_DB_READ',e,'sessions'));
   db.collection('tasks').onSnapshot(q=>{const list=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(t=>t.status!=='archived').sort((a,b)=>((b.priority||0)-(a.priority||0))||((b.updatedAt||0)-(a.updatedAt||0)));
     /* step 42: lifecycle in voice – the board itself announces blocked/done, once */
     if(taskSeen){list.forEach(t=>{const prev=taskPrev[t.id];if(prev&&prev!==t.status){if(t.status==='blocked')queueLocal({id:'task-'+t.id+'-blocked-'+(t.updatedAt||0),kind:'stuck',speaker:'הלוח',topic:t.title,text:'המשימה '+t.title+' תקועה ומחכה לך'+(t.question?': '+t.question:'.'),options:t.options||[]});
       else if(t.status==='done')queueLocal({id:'task-'+t.id+'-done-'+(t.updatedAt||0),kind:'done',speaker:'הלוח',topic:t.title,text:'המשימה '+t.title+' נגמרה.'+(t.link?' יש תוצאה – תגיד תפתח.':'')});
       else if(t.status==='running'&&prev==='queued')queueLocal({id:'task-'+t.id+'-run-'+(t.updatedAt||0),kind:'say',speaker:'הלוח',topic:t.title,text:'המשימה '+t.title+' התחילה לרוץ.'});}});}
-    taskPrev={};list.forEach(t=>taskPrev[t.id]=t.status);taskSeen=true;lastTasks=list;renderTasks(list);},e=>log('tasks: '+e.code));
-  db.doc('channel/quiet').onSnapshot(s=>{quietUntil=(s.exists&&s.data()&&s.data().until)||0;if(quietUntil>Date.now())log('שקט עד '+new Date(quietUntil).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));pump();},()=>{});
-  db.doc('channel/owner').onSnapshot(s=>{const d=(s.exists&&s.data())||{};if((d.since||0)<ownerSince)return;ownerSince=d.since||ownerSince;owner=d.owner||'liba';setSt(owner==='manager'?'על הקו: המנהל':'על הקו: ליבה','on');},()=>{});
-  db.collection('inbox').onSnapshot(q=>{const items=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(d=>(d.text||d.kind==='cmd')&&!d.spoken&&!spokenLocal.has(d.id)).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();},e=>log('inbox: '+e.code));
-  db.doc('chat/current').onSnapshot(s=>{if(!s.exists)return;let d=s.data();if(!d||!d.id||d.id===seen||d.spoken)return;d=Object.assign({from:'manager',legacy:true},d);if(!armed){cur=d;H.textContent='יש הודעה';SUB.textContent='לחץ "התחל" כדי לשמוע';return;}incoming(d);},e=>{setSt('שגיאה','warn');log('db: '+e.code);});
+    taskPrev={};list.forEach(t=>taskPrev[t.id]=t.status);taskSeen=true;lastTasks=list;renderTasks(list);},e=>{fail('P_DB_READ',e,'tasks');log('tasks: '+e.code);});
+  db.doc('channel/quiet').onSnapshot(s=>{quietUntil=(s.exists&&s.data()&&s.data().until)||0;if(quietUntil>Date.now())log('שקט עד '+new Date(quietUntil).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));pump();},e=>fail('P_DB_READ',e,'channel/quiet'));
+  db.doc('channel/owner').onSnapshot(s=>{const d=(s.exists&&s.data())||{};if((d.since||0)<ownerSince)return;ownerSince=d.since||ownerSince;owner=d.owner||'liba';setSt(owner==='manager'?'על הקו: המנהל':'על הקו: ליבה','on');},e=>fail('P_DB_READ',e,'channel/owner'));
+  db.collection('inbox').onSnapshot(q=>{const items=q.docs.map(d=>Object.assign({id:d.id},d.data())).filter(d=>(d.text||d.kind==='cmd')&&!d.spoken&&!spokenLocal.has(d.id)).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();},e=>{fail('P_DB_READ',e,'inbox');log('inbox: '+e.code);});
+  db.doc('chat/current').onSnapshot(s=>{if(!s.exists)return;let d=s.data();if(!d||!d.id||d.id===seen||d.spoken)return;d=Object.assign({from:'manager',legacy:true},d);if(!armed){cur=d;H.textContent='יש הודעה';SUB.textContent='לחץ "התחל" כדי לשמוע';return;}incoming(d);},e=>{fail('P_DB_READ',e,'chat/current');setSt('שגיאה','warn');log('db: '+e.code);});
 })();
 
 const inboxQ=[],spokenLocal=new Set(),sendQ=[];let pumping=false,owner='liba',ownerSince=0,quietUntil=0,pumpTimer=null,taskPrev={},taskSeen=false,lastTasks=[],lastRingAt=0;
@@ -159,14 +230,14 @@ function quietCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(בטל|סיים|תפסיק)( את)? (השקט|שקט)$|^תפריע$|^אפשר להפריע$|^שקט נגמר$/.test(t)){setQuiet(0);return true;}
   if(/^אל תפריע|^שקט(?=\s|$)|^תהיה בשקט|^בלי הפרעות/.test(t)){let m=60;const n=t.match(/(\d+)\s*(דקות|דקה)/);if(n)m=+n[1];else if(/חצי שעה/.test(t))m=30;else if(/שעתיים/.test(t))m=120;else if(/שלוש שעות/.test(t))m=180;else if(/עד הערב/.test(t))m=Math.max(1,Math.round((new Date().setHours(19,0,0,0)-Date.now())/60000));else if(/עד מחר|עד הבוקר/.test(t))m=Math.max(1,Math.round((new Date().setHours(32,0,0,0)-Date.now())/60000));setQuiet(m);return true;}
   return false;}
-async function setQuiet(min){const until=min>0?Date.now()+min*60000:0;quietUntil=until;try{await db.doc('channel/quiet').set({until,since:Date.now()});}catch(e){}
+async function setQuiet(min){const until=min>0?Date.now()+min*60000:0;quietUntil=until;try{await db.doc('channel/quiet').set({until,since:Date.now()});}catch(e){fail('P_DB_WRITE',e,'channel/quiet');}
   const msg=min>0?'ליבה: שקט עד '+new Date(until).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})+'. רק דחוף יעבור.':'ליבה: השקט בוטל, אני מדברת שוב.';bubble('li',msg);if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);if(!min)pump();}
 let memSettings={logTurns:true,decisions:true,notes:true};
 function sayLocal(m){bubble('li',m);if(appMode)post('say',{text:'ליבה: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
 /* steps 88, 90: gallery of built things + the generator screen */
 let galleryList=[];
 /* step 98: what ליבה knows – one list, by voice or by reading */
-const HELP=[['דיבור','לחיצה על הבועה, "ליבה" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח "ליבה – דבר" במסך הנעילה'],['משימות','"מה הסטטוס", "קודם את X", "תעצור את X", "תמשיך את X", "תפתח" (תוצאה אחרונה), "מפה" (כל הסשנים), "מה בניתי השבוע"'],['בנייה','"תבנה לי X", "תבדוק X", "תתקן X" – נפתח עובד; "תעלה לאוויר"; "תחזור לגרסה של הבוקר"; "המחולל"'],['אנשים','"תעלה את המנהל", "ליבה תחזור", "מה המנהל עושה עכשיו"'],['שקט','"אל תפריע שעה / עד הערב", "תפריע", "מצב לילה", "בטל מצב לילה", "שקט" (כיבוי מילת הפעלה)'],['קול','"לאט יותר", "מהר יותר", "חזור", "דלג", "רגע", "תמשיך", "בלי צלילים", "תני להפריע"'],['זיכרון','"תזכור ש…", "תשכח את…", "מה אתה זוכר", "אל תשאל אותי על…", "מה נשמר", "אל תשמור שיחות", "תייצא את הזיכרון"'],['חושים','"מה חשוב במייל", "תענה ש…", "תזכיר לי מחר בתשע…", "תחפש…", שיתוף מכל אפליקציה → ליבה'],['בקרה','"מה למדנו היום", "כמה עלה היום", "מה אישרתי היום", סיכום בוקר ב-08:00, סיכום ערב ב-19:00']];
+const HELP=[['דיבור','לחיצה על הבועה, "ליבה" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח "ליבה – דבר" במסך הנעילה'],['משימות','"מה הסטטוס", "קודם את X", "תעצור את X", "תמשיך את X", "תפתח" (תוצאה אחרונה), "מפה" (כל הסשנים), "מה בניתי השבוע"'],['בנייה','"תבנה לי X", "תבדוק X", "תתקן X" – נפתח עובד; "תעלה לאוויר"; "תחזור לגרסה של הבוקר"; "המחולל"'],['אנשים','"תעלה את המנהל", "ליבה תחזור", "מה המנהל עושה עכשיו"'],['שקט','"אל תפריע שעה / עד הערב", "תפריע", "מצב לילה", "בטל מצב לילה", "שקט" (כיבוי מילת הפעלה)'],['קול','"לאט יותר", "מהר יותר", "חזור", "דלג", "רגע", "תמשיך", "בלי צלילים", "תני להפריע"'],['זיכרון','"תזכור ש…", "תשכח את…", "מה אתה זוכר", "אל תשאל אותי על…", "מה נשמר", "אל תשמור שיחות", "תייצא את הזיכרון"'],['חושים','"מה חשוב במייל", "תענה ש…", "תזכיר לי מחר בתשע…", "תחפש…", שיתוף מכל אפליקציה → ליבה'],['בקרה','"מה למדנו היום", "כמה עלה היום", "מה אישרתי היום", סיכום בוקר ב-08:00, סיכום ערב ב-19:00, "מה נשבר היום"']];
 function helpCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מה את יודעת|מה אתה יודע|מה ליבה יודעת|עזרה|מה אפשר להגיד|פקודות)$/.test(t)){const el=$('help');el.hidden=false;el.innerHTML='<div class="t"><b>מה ליבה יודעת</b></div>'+HELP.map(h=>`<div class="t"><i></i><b>${h[0]}</b><small style="white-space:normal;text-align:right">${h[1]}</small></div>`).join('');sayLocal('אני יודעת תשע משפחות של פקודות: '+HELP.map(h=>h[0]).join(', ')+'. תגיד למשל "פקודות משימות" ואקריא אותן. הרשימה גם על המסך.');return true;}
   const m=t.match(/^פקודות\s+(.+)$/);if(m){const h=HELP.find(x=>m[1].includes(x[0]));if(h){sayLocal(h[0]+': '+h[1].replace(/"/g,''));return true;}}
@@ -175,37 +246,37 @@ function galleryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מה בניתי השבוע|מה בנינו השבוע|גלריה|מה בניתי)$/.test(t)){const wk=Date.now()-7*24*3600*1000;const g=galleryList.filter(x=>(x.ts||0)>wk);if(!g.length){sayLocal('השבוע עוד לא נבנה משהו שנרשם בגלריה.');return true;}lastTasks=g.map(x=>({id:x.id,title:x.title,link:x.link,status:'done'})).concat(lastTasks);sayLocal('השבוע נבנו '+g.length+': '+g.map(x=>x.title).join(', ')+'. תגיד תפתח ואפתח את האחרון.');return true;}
   if(/^(המחולל|תפתח את המחולל|פתח את המחולל|מסך המחולל)$/.test(t)){const u='https://claude.ai/artifact/AcTS4zzdMcXFcxFFvr5UVn';sayLocal('פותחת את המחולל.');if(appMode)post('cmd',{cmd:'open '+u});else window.open(u,'_blank');return true;}
   return false;}
-function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd(text))return true;if(helpCmd(text))return true;
+function memoryCmd(text){const t=text.replace(/[?!.,]/g,'').trim();if(galleryCmd(text))return true;if(helpCmd(text))return true;if(traceCmd(text))return true;
   let m=t.match(/^(תזכור|תזכרי|זכור|זכרי)\s+(?:(?:כי|את)\s+)?(.+)$/);
-  if(m){const note=m[2].trim();if(note.length<2)return false;db.doc('memory/notes').collection('items').doc(String(Date.now())).set({text:note,ts:Date.now(),by:'מאיר'}).then(()=>sayLocal('זכרתי: '+note)).catch(()=>sayLocal('לא הצלחתי לשמור'));return true;}
+  if(m){const note=m[2].trim();if(note.length<2)return false;db.doc('memory/notes').collection('items').doc(String(Date.now())).set({text:note,ts:Date.now(),by:'מאיר'}).then(()=>sayLocal('זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/notes/items');sayLocal('לא הצלחתי לשמור');});return true;}
   m=t.match(/^(תשכח|תשכחי|שכח|שכחי)\s+(?:את|ש)\s*(.+)$/);
-  if(m){const q=m[2].trim();db.doc('memory/notes').collection('items').get().then(async r=>{const hits=r.docs.filter(d=>((d.data()||{}).text||'').includes(q));for(const d of hits){try{await d.ref.delete();}catch(e){}}sayLocal(hits.length?'שכחתי '+hits.length+(hits.length===1?' דבר':' דברים')+' על '+q:'לא מצאתי משהו על '+q+' בזיכרון');}).catch(()=>sayLocal('לא הצלחתי'));return true;}
+  if(m){const q=m[2].trim();db.doc('memory/notes').collection('items').get().then(async r=>{const hits=r.docs.filter(d=>((d.data()||{}).text||'').includes(q));for(const d of hits){try{await d.ref.delete();}catch(e){fail('P_DB_WRITE',e,'memory/notes/items');}}sayLocal(hits.length?'שכחתי '+hits.length+(hits.length===1?' דבר':' דברים')+' על '+q:'לא מצאתי משהו על '+q+' בזיכרון');}).catch(e=>{fail('P_DB_READ',e,'memory/notes/items');sayLocal('לא הצלחתי');});return true;}
   m=t.match(/^(אל תשאל(י)? אותי (על|לגבי)|תמיד תזכור|תמיד אל|אף פעם אל)\s+(.+)$/);
-  if(m){db.doc('memory/prefs').collection('items').doc(String(Date.now())).set({text:t,ts:Date.now()}).then(()=>sayLocal('הבנתי, זו העדפה קבועה: '+t)).catch(()=>{});return true;}
-  if(/^(מה אתה זוכר|מה את זוכרת|מה בזיכרון|מה זכרת)$/.test(t)){db.doc('memory/notes').collection('items').get().then(r=>{const n=r.docs.map(d=>(d.data()||{}).text).filter(Boolean);sayLocal(n.length?'אני זוכרת '+n.length+' דברים: '+n.slice(-8).join('; '):'הזיכרון של הערות עוד ריק.');}).catch(()=>{});return true;}
-  if(/^(אל תשמור שיחות|בלי לשמור שיחות|תפסיק לשמור)$/.test(t)){memSettings.logTurns=false;db.doc('memory/settings').set(memSettings).catch(()=>{});sayLocal('בסדר, מעכשיו לא שומרת את השיחות.');return true;}
-  if(/^(תשמור שיחות|תחזור לשמור)$/.test(t)){memSettings.logTurns=true;db.doc('memory/settings').set(memSettings).catch(()=>{});sayLocal('שומרת שיחות שוב.');return true;}
+  if(m){db.doc('memory/prefs').collection('items').doc(String(Date.now())).set({text:t,ts:Date.now()}).then(()=>sayLocal('הבנתי, זו העדפה קבועה: '+t)).catch(e=>fail('P_DB_WRITE',e,'memory/prefs/items'));return true;}
+  if(/^(מה אתה זוכר|מה את זוכרת|מה בזיכרון|מה זכרת)$/.test(t)){db.doc('memory/notes').collection('items').get().then(r=>{const n=r.docs.map(d=>(d.data()||{}).text).filter(Boolean);sayLocal(n.length?'אני זוכרת '+n.length+' דברים: '+n.slice(-8).join('; '):'הזיכרון של הערות עוד ריק.');}).catch(e=>fail('P_DB_READ',e,'memory/notes/items'));return true;}
+  if(/^(אל תשמור שיחות|בלי לשמור שיחות|תפסיק לשמור)$/.test(t)){memSettings.logTurns=false;db.doc('memory/settings').set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('בסדר, מעכשיו לא שומרת את השיחות.');return true;}
+  if(/^(תשמור שיחות|תחזור לשמור)$/.test(t)){memSettings.logTurns=true;db.doc('memory/settings').set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));sayLocal('שומרת שיחות שוב.');return true;}
   if(/^(מה נשמר|פרטיות|מה אתה שומר|מה את שומרת)$/.test(t)){sayLocal('מה נשמר: שיחות '+(memSettings.logTurns?'כן':'לא')+', החלטות '+(memSettings.decisions?'כן':'לא')+', הערות זיכרון '+(memSettings.notes?'כן':'לא')+'. הכל בענן הפרטי של הארטיפקט, לא ברפו הציבורי. תגיד אל תשמור שיחות כדי לעצור.');return true;}
   return false;}
 function taskCmd(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(/^(מפה|מפת המערכת|תראה מפה|מה כל הסשנים עושים|מי תקוע)$/.test(t)){mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post('say',{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   if(/^(תפתח|פתח|תפתח את התוצאה|תראה לי|תפתח תראה לי|פתח תראה לי|תפתח לי|תפתח אותו|תפתח אותה|תראה)$/.test(t)){const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post('cmd',{cmd:'open '+d.link});post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}
-  const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;db.doc('tasks/'+task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(()=>{});const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
+  const pr=t.match(/^(קודם|תעדיף|עדיפות ל|תתחיל עם)\s+(את\s+)?(.+)$/);if(pr){const q=pr[3].trim();const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;db.doc('tasks/'+task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post('say',{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}
   return false;}
 function switchOwner(text){const t=text.replace(/[?!.,]/g,'').trim();
   if(owner!=='manager'){if(quietCmd(text))return true;if(taskCmd(text))return true;if(memoryCmd(text))return true;}
   /* simple rule: a sentence that starts with "ליבה" is for ליבה; one that starts with "מנהל" is for the manager */
   if(/^(היי |הי )?ליב[הא],?\s*(תחזור|תחזרי|חזור|חזרי)\s*$/.test(t)){return setOwner('liba');}
   if(owner==='manager'&&/^(תחזור|תחזרי|חזור|חזרי)$/.test(t)){return setOwner('liba');}
-  if(owner==='manager'&&/^(היי |הי )?ליב[הא](?=\s|$)/.test(t)){owner='liba';ownerSince=Date.now();db.doc('channel/owner').set({owner:'liba',since:ownerSince}).catch(e=>log('owner: '+(e.code||e)));return false;}
+  if(owner==='manager'&&/^(היי |הי )?ליב[הא](?=\s|$)/.test(t)){owner='liba';ownerSince=Date.now();db.doc('channel/owner').set({owner:'liba',since:ownerSince}).catch(e=>{fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));});return false;}
   if(/^(תעלה|העלה|תן ל|תעביר ל)\s*(את\s+)?ה?מנהל$/.test(t)||/^מנהל$/.test(t)){return setOwner('manager');}
-  if(owner==='liba'&&/^(היי |הי )?מנהל(?=\s|$)/.test(t)){owner='manager';ownerSince=Date.now();db.doc('channel/owner').set({owner:'manager',since:ownerSince}).catch(e=>log('owner: '+(e.code||e)));return false;}
+  if(owner==='liba'&&/^(היי |הי )?מנהל(?=\s|$)/.test(t)){owner='manager';ownerSince=Date.now();db.doc('channel/owner').set({owner:'manager',since:ownerSince}).catch(e=>{fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));});return false;}
   return false;}
-async function setOwner(o){owner=o;ownerSince=Date.now();try{await db.doc('channel/owner').set({owner:o,since:ownerSince});}catch(e){log('owner: '+(e.code||e));}
+async function setOwner(o){owner=o;ownerSince=Date.now();try{await db.doc('channel/owner').set({owner:o,since:ownerSince});}catch(e){fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));}
   const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);return true;}
 async function pump(){if(pumping||!armed)return;pumping=true;try{const n=inboxQ.filter(d=>ready(d)&&d.kind!=='cmd'&&!spokenLocal.has(d.id)).length;
   if(n>=2){const asks=inboxQ.filter(d=>ready(d)&&(d.kind==='ask'||d.kind==='stuck')).length;await incoming({id:'batch-'+Date.now(),local:true,from:'liba',speaker:'ליבה',kind:asks?'stuck':'say',noListen:true,text:'הצטברו '+n+' הודעות'+(asks?', '+asks+' מהן שאלות. אקרא אותן ברצף, צלצול אחד.':'. אקרא אותן ברצף.')});}
-  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(ready);if(i<0)break;const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);continue;}spokenLocal.add(d.id);try{await incoming(d);}catch(e){log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){log('ack: '+(e.code||e));}}}finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);pumpTimer=setTimeout(pump,60000);log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
+  for(;;){let i=inboxQ.findIndex(d=>ready(d)&&d.kind==='cmd');if(i<0)i=inboxQ.findIndex(ready);if(i<0)break;const d=inboxQ.splice(i,1)[0];if(spokenLocal.has(d.id))continue;if(d.kind==='cmd'){if(!appMode){spokenLocal.add(d.id);continue;}spokenLocal.add(d.id);await incoming(d);continue;}spokenLocal.add(d.id);try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);pumpTimer=setTimeout(pump,60000);log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
 const ST={queued:'בתור',running:'רץ',blocked:'תקוע',done:'נגמר'};
 /* step 60: system map – one list: every session, what it does, who is stuck */
 let sessionsList=[],mapOn=false;
@@ -224,7 +295,7 @@ function renderTasks(list){const el=$('tasks');if(!list.length){el.hidden=true;p
   post('tasks',{summary:parts.join('. ')||'אין משימות פתוחות',n:list.length,running:c('running'),blocked:c('blocked'),done:c('done')});}
 /* ---- flow ---- */
 $('start').addEventListener('click',async()=>{audioInit();if(AC&&AC.state==='suspended')AC.resume();armed=true;$('start').hidden=true;$('hf').hidden=false;keepAwake();
-  if(!SR){SUB.textContent='אין זיהוי דיבור בדפדפן הזה – אני אדבר, אתה תכתוב.';setSt('בלי מיקרופון','warn');}else{try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());setSt('מיקרופון פועל','on');}catch(e){micBlocked=true;dictationMode();}}
+  if(!SR){SUB.textContent='אין זיהוי דיבור בדפדפן הזה – אני אדבר, אתה תכתוב.';setSt('בלי מיקרופון','warn');}else{try{const s=await navigator.mediaDevices.getUserMedia({audio:true});s.getTracks().forEach(t=>t.stop());setSt('מיקרופון פועל','on');}catch(e){fail('P_MIC_DENIED',e);micBlocked=true;dictationMode();}}
   H.textContent='';
   if(cur){const d=cur;cur=null;incoming(d);}else{await say('אני כאן. דבר.');idleListen();}
   pump();});
@@ -236,11 +307,11 @@ async function idleListen(){app.className='';KIND.textContent='';H.className='';
   if(handsFree&&SR&&!busy){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy&&!listening)setTimeout(idleListen,800);}}
 
 async function incoming(d){
-  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){log('cmd ack: '+(e.code||e));}post('cmd',{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
+  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await db.doc('inbox/'+d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post('cmd',{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
-  cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){}
-  if(rec){try{rec.abort();}catch(e){}}
+  cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem('liba.seen',d.id);}catch(e){fail('P_STORE',e,'set seen');}
+  if(rec){try{rec.abort();}catch(e){fail('P_SR',e,'abort');}}
   busy=true;try{
   TR.querySelectorAll('.think').forEach(x=>x.remove());
   const k=d.kind||'say';let ak=(d.priority==='urgent'&&(k==='say'||k==='ask'))?'call':k;
@@ -250,9 +321,9 @@ async function incoming(d){
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
   bubble('li',prefixOf(d,who)+d.text);HEARD.hidden=true;OPTS.innerHTML='';
   if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,text:d.text,speaker:who,topic:d.topic||'',at:Date.now()};else if(!d.local)lastAsk=null;
-  try{if(memSettings.logTurns)db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:d.text,msg:d.id,ts:Date.now()}).catch(()=>{});}catch(e){}
+  try{if(memSettings.logTurns)db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:d.text,msg:d.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   if(appMode)await sayApp(spokenText,{kind:ak,options:d.options||[],from:d.from||'liba',speaker:who});else await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
-  if(d.legacy){try{await db.doc('chat/current').update({spoken:true,spokenAt:Date.now()});}catch(e){log('legacy ack: '+(e.code||e));}}
+  if(d.legacy){try{await db.doc('chat/current').update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'chat/current');log('legacy ack: '+(e.code||e));}}
   if(d.options&&d.options.length){OPTS.innerHTML=d.options.map(o=>`<button>${o}</button>`).join('');OPTS.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>send(b.textContent)));}
   showTalk();$('ack').hidden=k!=='done';
   }finally{busy=false;drainQ();} /* v36: a sentence said while ליבה was speaking waits in the queue – release it here */
@@ -260,24 +331,24 @@ async function incoming(d){
   if(appMode)return;
   if(SR&&!d.noListen&&(handsFree||(d.options&&d.options.length)||k==='stuck')){const t=await listen();if(t&&!busy)return send(t);if(handsFree&&!busy)idleListen();}
 }
-$('talk').addEventListener('click',async()=>{if(busy)return;if(listening){try{rec.stop();}catch(e){}return;}const t=await listen();if(t)send(t);});
+$('talk').addEventListener('click',async()=>{if(busy)return;if(listening){try{rec.stop();}catch(e){fail('P_SR',e,'stop');}return;}const t=await listen();if(t)send(t);});
 $('sendTyped').addEventListener('click',()=>{const v=$('typed').value.trim();if(v)send(v);});
 $('typed').addEventListener('keydown',e=>{if(e.key==='Enter'){const v=$('typed').value.trim();if(v)send(v);}});
 let autoT=null;$('typed').addEventListener('input',()=>{if(!micBlocked)return;clearTimeout(autoT);const v=$('typed').value.trim();if(v.length<3){log('');return;}log('שולח אוטומטית בעוד 3 שניות… (הקלדה מבטלת)');autoT=setTimeout(()=>{const v2=$('typed').value.trim();if(v2&&v2===v)send(v2);},3000);});
 $('ack').addEventListener('click',()=>send('הבנתי, תמשיך'));
 /* steps 16-18: outbox (offline), auto-retry, duplicate guard */
-let outbox=[];try{outbox=JSON.parse(localStorage.getItem('liba.outbox')||'[]');}catch(e){}
-function saveOutbox(){try{localStorage.setItem('liba.outbox',JSON.stringify(outbox));}catch(e){}}
+let outbox=[];try{outbox=JSON.parse(localStorage.getItem('liba.outbox')||'[]');}catch(e){fail('P_STORE',e,'get outbox');}
+function saveOutbox(){try{localStorage.setItem('liba.outbox',JSON.stringify(outbox));}catch(e){fail('P_STORE',e,'set outbox');}}
 let lastSent={text:'',id:'',ts:0},lastIncomingAt=0;
 function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send(nx.text,nx.tag),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 function tagOf(o){return (o||owner)==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
 async function deliver(text,tag){
   let reason='no_comments';
-  if(!comments)return {sent:false,reason};
-  try{const can=await comments.canSendToClaude();if(can!=='available'){return {sent:false,reason:String(can)};}
+  if(!comments){fail('P_SEND',null,reason);return {sent:false,reason};}
+  try{const can=await comments.canSendToClaude();if(can!=='available'){fail('P_SEND',null,can);return {sent:false,reason:String(can)};}
     const anchor=await comments.anchorFor(H);await comments.sendToClaude({anchor,text:(tag||tagOf())+text});return {sent:true,reason:''};}
-  catch(e){return {sent:false,reason:String(e&&e.code||e)};}
+  catch(e){fail('P_SEND',e,(e&&(e.code||e.name))||'throw');return {sent:false,reason:String(e&&e.code||e)};}
 }
 async function deliverWithRetry(text,tag){
   const waits=[0,2000,5000,10000];let r={sent:false,reason:'offline'};
@@ -308,8 +379,8 @@ async function send(text,forcedTag){
   $('typed').value='';OPTS.innerHTML='';$('ack').hidden=true;HEARD.hidden=true;
   if(text===lastSent.text&&(id==='free'||id===lastSent.id)&&Date.now()-lastSent.ts<5000){log('כפילות – לא נשלח שוב');post('sent',{text,dup:true});busy=false;drainQ();return;}
   bubble('me',text);const th=bubble('li think','ליבה חושבת…');
-  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){db.doc('decisions/log').collection('items').doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(()=>{});lastAsk=null;}}catch(e){}
-  try{if(memSettings.logTurns)db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()}).catch(()=>{});}catch(e){}
+  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){db.doc('decisions/log').collection('items').doc(String(Date.now())).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
+  try{if(memSettings.logTurns)db.doc('chat/log').collection('turns').doc(String(Date.now())).set({from:'user',speaker:'מאיר',to:owner,text,re:id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   const r=await deliverWithRetry(text,tag);const sent=r.sent,reason=r.reason;
   if(sent){lastSent={text,id,ts:Date.now()};}
   else if(RETRYABLE(reason)||reason==='offline'){outbox.push({text,tag,ts:Date.now()});saveOutbox();const off=!navigator.onLine||reason==='offline';th.textContent=off?'אין רשת – שמרתי, אשלח כשתחזור':'השליחה נכשלה ('+reason+') – שמרתי, אנסה שוב';post('outbox',{text,n:outbox.length,reason});const msg=off?'ליבה, בנוגע לרשת: אין רשת. שמרתי את מה שאמרת, ואשלח כשהרשת תחזור.':'ליבה, בנוגע לשליחה: השרת לא קיבל את זה כרגע. שמרתי, ואשלח שוב בעוד רגע.';if(appMode)post('say',{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else await say(msg);}
