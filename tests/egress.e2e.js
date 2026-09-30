@@ -51,6 +51,21 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(after.some(x => x.indexOf('12-345-678901') >= 0) && /נשלח כמו שאמרת/.test(s), 'after a yes: sent as said, once: ' + after.length);
   const led = await f.evaluate(() => window.__agent.ledger.ring().filter(x => x.action === 'egress.bypass').length);
   ok(led === 1, 'the bypass is in the ledger');
+  // kotlin-egress, the page's side: every say carries its sensitivity; a message the phone held stays pending, is not
+  // retried, and a late 'spoke' (after "תקריאי" on the phone) closes it
+  const says = [];
+  const grab = async ms => { const end = Date.now() + ms; while (Date.now() < end) { const m = await p.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; }); for (const x of m) if (x.liba === 'say') says.push(x); await p.waitForTimeout(40); } };
+  await f.evaluate(() => window.__h.set('inbox/pv1', { from: 'manager', kind: 'say', speaker: 'המנהל', topic: 'בחור', text: 'הבחור מהמחזור השני מאושפז בבית חולים', spoken: false, ts: Date.now() }));
+  await grab(1500);
+  const pv = says.find(x => /מאושפז/.test(x.text || ''));
+  ok(pv && pv.sens === 2 && pv.force === 0, 'the say carries its sensitivity: ' + (pv && pv.sens));
+  if (pv) await p.evaluate(id => window.app({ liba: 'spoke', id, cause: 'held' }), pv.id);
+  await grab(2500);
+  let d = await f.evaluate(() => window.__h.get('inbox/pv1'));
+  ok(d && !d.spoken && d.delivery && d.delivery.state === 'held' && !says.slice(1).some(x => /מאושפז/.test(x.text || '')), 'held by the phone: pending, delivery=held, not said again');
+  if (pv) await p.evaluate(id => window.app({ liba: 'spoke', id, cause: 'done' }), pv.id);
+  await p.waitForTimeout(800); d = await f.evaluate(() => window.__h.get('inbox/pv1'));
+  ok(d && d.spoken && d.delivery && d.delivery.late, 'said on the phone later ("תקריאי"): closed by the late spoke');
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

@@ -11,7 +11,7 @@ function quietOn(rest){setQuiet(slotMinutes(rest));return true;}
 async function setQuiet(min){Ledger.record({action:'quiet',cause:'voice',inputs:{min}});const until=min>0?Date.now()+min*60000:0;quietUntil=until;try{await P.quiet().set({until,since:Date.now()});}catch(e){fail('P_DB_WRITE',e,'channel/quiet');}
   const msg=min>0?'ליבה: שקט עד '+new Date(until).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})+'. רק דחוף יעבור.':'ליבה: השקט בוטל, אני מדברת שוב.';bubble('li',msg);if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);if(!min)pump();}
 let memSettings={logTurns:true,decisions:true,notes:true};
-function sayLocal(m){bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
+function sayLocal(m){bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה',sens:classify(m).sens});else say(m);}
 /* steps 88, 90: gallery of built things + the generator screen */
 let galleryList=[];
 /* step 98: what ליבה knows – one list, by voice or by reading. intent-kernel: generated from the registry (INTENT_HELP);

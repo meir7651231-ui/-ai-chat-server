@@ -270,6 +270,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         try { ToneGenerator(AudioManager.STREAM_NOTIFICATION, 55).let { it.startTone(t, ms); main.postDelayed({ it.release() }, ms + 200L) } } catch (e: Exception) { Trace.e(Trace.Code.E_TONE, "tone:" + kind) } }
     private fun onSpoken() {
         speaking = false
+        if (heldSaying.isNotEmpty()) { val done = heldSaying; heldSaying = emptyList(); val t = System.currentTimeMillis()
+            done.forEach { h -> if (h.mid.isNotBlank()) Prefs.addSpokenMid(this, h.mid); if (h.id.isNotBlank()) web?.let { LibaWeb.sendSpoke(it, h.id, t, t, "done") } } }
         releaseSay(spokeCause); spokeCause = "done" // the page acks only once the phone finished speaking
         main.postDelayed({ afterSpeech() }, 600)
     }
@@ -819,6 +821,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val id = LibaIntents.match(t) // intent-kernel: the phrases live in liba/intents/registry.json, not here
         when {
             id == "app.repeat" && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
+            id == "app.readPrivate" -> { readHeld(); return }
+            id == "app.audioMine" -> { val d = AudioRoute.bt(this); val n = d?.productName?.toString() ?: ""; if (n.isBlank()) speak("לא מחוברות עכשיו אוזניות בלוטות'.") else { Prefs.addTrustedAudio(this, n); speak("זכרתי: $n הן האוזניות שלך. דרכן אקריא הכול.") }; return }
             id == "app.status" -> { speak(localStatus()); return }
             id == "app.slower" -> { rate = (rate - 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, לאט יותר."); return }
             id == "app.faster" -> { rate = (rate + 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, מהר יותר."); return }
@@ -907,6 +911,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (sig.isNotEmpty()) runCatching { nonceFile.writeText(seen.joinToString("\n")) } // vault-ok: random nonces, no words
         when (cmd) { "sense_open" -> openSenseAccess(); "cal_on" -> askCalendar(); "cal_off" -> il.liba.app.sense.CalSense.stop(this); "hey_off" -> { heyOff(); speak("מילת ההפעלה כובתה מרחוק."); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            if (!EgressCore.urlClean(u)) { Trace.e(Trace.Code.E_CMD_REFUSED, "url-content"); showLabel("לא פותחת קישור שנושא תוכן", 5000); return@post } // kotlin-egress
             if (!Signed.openHostOk(u)) { notifyIntent("ליבה רוצה לפתוח קישור", u, i); return@post } // signed or not: outside the short list, only by Meir's own tap
             try { startActivity(i) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "open:" + e.javaClass.simpleName); notifyIntent("ליבה – קישור", u, i) } } } } }
     /** fix 10: when Android refuses an activity start from the background, hand the intent to the user as a tappable notification. */
@@ -986,8 +991,18 @@ class BubbleService : Service(), LibaWeb.Bridge {
             reason.contains("rate") -> "יותר מדי מהר. חכה רגע."
             reason.isBlank() -> "" else -> "סיבה: $reason" }
         showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
-    override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String, mid: String) { main.post {
+    // kotlin-egress: what was held because of where the sound would go - said on "תקריאי", each closed with the page then
+    private data class Held(val text: String, val id: String, val mid: String)
+    private val held = ArrayList<Held>(); private var heldSaying: List<Held> = emptyList()
+    private fun readHeld() { if (held.isEmpty()) { speak("אין הודעה אישית שמחכה."); return }
+        heldSaying = held.toList(); held.clear(); speak(heldSaying.joinToString(". ") { it.text }, true) }
+    override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String, mid: String, sens: Int, force: Int) { main.post {
         releaseSay("stop") // a new utterance arrived before the old one reported: release the page
+        val route = AudioRoute.current(this); val v = EgressCore.decide(route, sens, force == 1)
+        if (!v.speak) { val first = held.none { it.mid.isNotBlank() && it.mid == mid }; if (first) held.add(Held(text, id, mid)); while (held.size > 20) held.removeAt(0)
+            Trace.e(Trace.Code.E_CMD_REFUSED, "held:" + route.name + ":" + sens)
+            if (id.isNotBlank()) web?.let { w -> val t = System.currentTimeMillis(); LibaWeb.sendSpoke(w, id, t, t, "held") }
+            if (first) speak(v.hold ?: "יש הודעה אישית."); return@post }
         // a message this phone already said to the end (the page gave up waiting and tried again): report it, never say it twice
         if (mid.isNotBlank() && id.isNotBlank() && Prefs.spokenMids(this).contains(mid)) { web?.let { w -> val t = System.currentTimeMillis(); LibaWeb.sendSpoke(w, id, t, t, "done") }; return@post }
         sayId = id.ifBlank { null }; sayMid = mid

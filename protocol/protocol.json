@@ -30,7 +30,9 @@
         "options": "list",
         "speaker": "str",
         "id": "str",
-        "mid": "str"
+        "mid": "str",
+        "sens": "int",
+        "force": "int"
       }
     },
     "sent": {

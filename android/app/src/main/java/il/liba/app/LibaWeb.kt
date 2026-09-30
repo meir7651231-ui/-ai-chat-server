@@ -33,7 +33,7 @@ object LibaWeb {
     interface Bridge {
         fun onPage(url: String)
         fun onReady()
-        fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String, mid: String)
+        fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String, mid: String, sens: Int, force: Int)
         fun onSent(text: String)
         fun onError(text: String, reason: String)
         fun onPageTap()
@@ -57,7 +57,7 @@ object LibaWeb {
     private class JsBridge(val b: Bridge) : ProtocolBridge {
         private fun list(json: String) = try { val a = org.json.JSONArray(json); List(a.length()) { a.getString(it) } } catch (e: Exception) { emptyList() }
         @JavascriptInterface override fun ready() = b.onReady()
-        @JavascriptInterface override fun say(text: String, kind: String, options: String, speaker: String, id: String, mid: String) = b.onSay(text, kind, list(options), speaker, id, mid)
+        @JavascriptInterface override fun say(text: String, kind: String, options: String, speaker: String, id: String, mid: String, sens: Int, force: Int) = b.onSay(text, kind, list(options), speaker, id, mid, sens, force)
         @JavascriptInterface override fun sent(text: String) = b.onSent(text)
         @JavascriptInterface override fun error(text: String, reason: String) = b.onError(text, reason)
         @JavascriptInterface override fun queued(text: String) = b.onQueued(text)

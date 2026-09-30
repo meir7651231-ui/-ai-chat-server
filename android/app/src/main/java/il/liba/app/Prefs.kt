@@ -41,6 +41,9 @@ object Prefs {
     fun setHeadset(c: Context, v: Boolean) = p(c).edit().putBoolean("headset", v).apply()
     fun pendingShare(c: Context): String? = p(c).getString("share", null)
     fun setPendingShare(c: Context, v: String?) = p(c).edit().putString("share", v).apply()
+    /** kotlin-egress: the Bluetooth audio devices Meir named as his own ("אלה האוזניות שלי") */
+    fun trustedAudio(c: Context): Set<String> = p(c).getStringSet("trustedAudio", emptySet()) ?: emptySet()
+    fun addTrustedAudio(c: Context, name: String) = p(c).edit().putStringSet("trustedAudio", trustedAudio(c) + name).apply()
     fun reports(c: Context) = p(c).getBoolean("reports", true)
     fun setReports(c: Context, v: Boolean) = p(c).edit().putBoolean("reports", v).apply()
     /** keystore-vault: the crash is in the vault; an old plaintext one is moved in and erased the first time it is read */

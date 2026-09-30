@@ -66,7 +66,10 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
       const sh=POLICY.shorten(d);if(sh){lastShort=sh.full;d.shortText=sh.text;}
       d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
       P.inboxDoc(d.id).update({speakingAt:Date.now(),admit:admitOf(d),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
-    sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
+    sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}/* kotlin-egress: the phone held it - a personal message and the sound would go somewhere open. Not delivered, not
+       retried: it stays pending in the channel, the phone keeps it, and "תקריאי" says it and closes it (lateSpoke) */
+    if(sayOutcome==='held'){Ledger.record({action:'hold',cause:'inbox:'+d.id,result:'private'});if(!d.local)P.inboxDoc(d.id).update({delivery:{state:'held',why:'private',by:PAGE_ID,at:Date.now()}}).catch(e=>fail('P_ACK',e,'held'));continue;}
+    if(d.local)continue;
     /* the voice went silent without finishing (no beat, or the ceiling): not delivered - back to pending, three tries */
     if(sayOutcome==='lost'||sayOutcome==='ceiling'){spokenLocal.delete(d.id);await inboxRetry(d,sayOutcome);continue;}
     spokenMark(d.id);Ledger.record({action:'say',cause:'inbox:'+d.id,inputs:{from:d.from||'',kind:d.kind||'say'},decision:d.admit||null,result:sayOutcome});try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}
