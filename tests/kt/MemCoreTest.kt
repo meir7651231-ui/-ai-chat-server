@@ -57,6 +57,7 @@ fun main(args: Array<String>) {
     egressTests()
     nbestTests()
     reflexTests()
+    pulseTests()
     guardTests()
     installTests()
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
