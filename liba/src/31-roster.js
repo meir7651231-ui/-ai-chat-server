@@ -32,5 +32,5 @@ function rosterSay(){const now=Date.now(),all=[...roster.entries()].map(([id,r])
   sayLocal(all.length?(live.length?'ער עכשיו: '+live.map(x=>(x.r.role||'מוח')+' '+String(x.id).slice(-6)).join(', ')+'.':'אף מוח לא ער עכשיו.')+(all.length>live.length?' ועוד '+(all.length-live.length)+' שנרדמו.':''):'עוד אף מוח לא נרשם.');return true;}
 async function rosterContract(){if(!db)return;try{const g=await P.protocol().get();const x=(g.exists&&g.data())||{};if(x.brain)return;
   await P.protocol().set(Object.assign({},x,{brain:{roster:'brain/roster/items/<brainId>',work:'work/<wakeId>',rule:'צור brainId אחד (ULID) בהתעוררות הראשונה ושא אותו בכל כתיבה. לפני שאתה עובד על משפט: work/<wakeId>.claimedBy=<brainId>, state=claimed. בכל כתיבה: brain/roster/items/<brainId>.lastBeat=עכשיו. ענה עם re=<wakeId>. משפט בלי מענה ובלי מוח חי נשלח שוב אחרי שלוש דקות, פעם אחת.',at:Date.now()}}));}catch(e){fail('P_DB_WRITE',e,'channel/protocol');}}
-setInterval(()=>{if(db)reclaim().catch(e=>fail('P_DB_READ',e,'reclaim'));},20000);setTimeout(rosterContract,6000);
+every('roster',20000,()=>{if(db)reclaim().catch(e=>fail('P_DB_READ',e,'reclaim'));});setTimeout(rosterContract,6000);
 window.__roster={reclaim,state:brainState,roster:()=>roster};

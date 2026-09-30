@@ -12,5 +12,5 @@ async function mirrorPush(force){if(!appMode||!hasCap('mirror'))return false;con
   if(!force&&sig===mirrorSig)return false;mirrorSig=sig;post(PROTO.toApp.mirror,{body:JSON.stringify(m)});return true;}
 function tasksStuck(){const b=(lastTasks||[]).filter(t=>t.status==='blocked');
   sayLocal(b.length?(b.length===1?'משימה אחת תקועה: ':b.length+' משימות תקועות: ')+(x=>/[.?!]$/.test(x)?x:x+'.')(b.slice(0,3).map(t=>t.title+(t.question?' - '+t.question:'')).join('; ')):'שום משימה לא תקועה.');return true;}
-setInterval(()=>{mirrorPush().catch(()=>{});},15000);
+every('mirror',15000,()=>{mirrorPush().catch(()=>{});});
 window.__mirror={build:mirrorBuild,push:mirrorPush};

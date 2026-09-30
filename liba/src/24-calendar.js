@@ -54,5 +54,5 @@ async function calBriefings(now){now=now||Date.now();await calLoad();const out=[
       more=' '+ps[0].name+(ps[0].relation?' הוא '+ps[0].relation:'')+(f[0]?'; '+String(f[0].raw||f[0].value):'')+'.';}}catch(e){}
     out.push({id:'pro-cal.'+hash36(i.id),at:i.begin-CAL_BRIEF,until:i.begin,cap:false,text:'אני נזכרת: בעוד עשר דקות '+i.title+(i.where?' ב'+i.where:'')+'.'+more});}
   return out;}
-setInterval(()=>{if(db&&calItems.length)calNow().catch(()=>{});},60000);
+every('calendar',60000,()=>{if(db&&calItems.length)calNow().catch(()=>{});});
 window.__cal={in:calIn,free:calFreeSlots,briefings:calBriefings,now:calNow,items:()=>calItems};

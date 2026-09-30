@@ -149,7 +149,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         runCatching { setupWeb() }.onFailure { Trace.e(Trace.Code.E_OVERLAY_DENIED, "web"); status = "WebView נכשל: $it" }
         runCatching { setupBubble() }.onFailure { Trace.e(Trace.Code.E_OVERLAY_DENIED, "bubble"); status = "בועה נכשלה: $it" }
         runCatching { watchNetwork() }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "watch:" + it.javaClass.simpleName) }
-        main.postDelayed(watchdog, 30000)
+        main.postDelayed(watchdog, 30000) // one-shot: the first beat of the pulse; the pulse re-arms itself from the gear
         runCatching { checkUpdate() }.onFailure { Trace.e(Trace.Code.E_NET, "check:" + it.javaClass.simpleName) }
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -302,7 +302,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     /** Step 7: never leave the user in silence after a send. */
     private fun armWaitReminders() {
         waitTimer?.let { main.removeCallbacks(it) }
-        waitTimer = Runnable { if (sentAt > 0) { speak("עוד רגע, ליבה עובדת על זה."); main.postDelayed({ if (sentAt > 0) showLabel("עדיין מחכה לתשובה של ליבה…", 20000) }, 80000) } }.also { main.postDelayed(it, 40000) }
+        waitTimer = Runnable { if (sentAt > 0) { speak("עוד רגע, ליבה עובדת על זה."); main.postDelayed({ if (sentAt > 0) showLabel("עדיין מחכה לתשובה של ליבה…", 20000) }, 80000) } }.also { main.postDelayed(it, 40000) } // one-shot: once per send, cancelled by the answer
     }
 
     // ---------- hidden WebView ----------
@@ -397,13 +397,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
         web?.reload()
     }
     private val watchdog = object : Runnable { override fun run() {
-        holyCheck(); if (shabbat) { main.postDelayed(this, 30000); return }
+        holyCheck(); if (shabbat) { main.postDelayed(this, SHABBAT_BEAT_MS); return } // Shabbat: the beat only watches the clock
         if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) { Trace.e(Trace.Code.E_PAGE_LOAD, "timeout"); reloadPage("אין תגובה מהדף") }
         if (pageReady) web?.let { LibaWeb.hello(it); drainTrace(); pulse(it) }
         else if (pageDeadSince == 0L) pageDeadSince = System.currentTimeMillis()
         powerSync()
         UrgentPoller.maybe(this@BubbleService, main, pageDeadSince, pageAliveAt) { speak("הודעה דחופה, בלי הדף: " + it.text, true) }
         if (SystemClock.elapsedRealtime() - loginCheckedAt > 10 * 60_000L) { loginCheckedAt = SystemClock.elapsedRealtime(); loginCheck() }
+        if ("update" in pulseJobs.due(System.currentTimeMillis())) { if (il.liba.app.power.Governor.admit(il.liba.app.power.Job("update", 0))) checkUpdate() else pulseJobs.touch("update", System.currentTimeMillis() - 2 * 3600_000L) } // refused by the gear: again in an hour
         main.postDelayed(this, if (pageReady) il.liba.app.power.Governor.tier.beatMs else 30000L) // duty-governor: the pulse from the gear; a dead page is still watched every 30 s
     } }
     private fun watchNetwork() {
@@ -518,8 +519,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         dir.listFiles()?.sortedByDescending { it.lastModified() }?.drop(2)?.forEach { it.delete() } }.onFailure { Trace.e(Trace.Code.E_PREFS, "rollback:" + it.javaClass.simpleName) } }
     private fun rollbackSay() { val prev = java.io.File(filesDir, "rollback").listFiles()?.map { it.name.removePrefix("liba-").removeSuffix(".apk") }?.sortedDescending()?.getOrNull(1)
         speak(UpdateTrust.rollbackWords(prev?.let { "הגרסה הקודמת, מספר $it" })) }
-    private val recheck = Runnable { if (il.liba.app.power.Governor.admit(il.liba.app.power.Job("update", 0))) checkUpdate() else main.postDelayed(this.recheckLater, 3600_000L) }
-    private val recheckLater: Runnable get() = recheck
+    // duty-governor: the 3-hour update check rides the pulse (it used to be its own timer chain, and a refused one re-armed hourly)
+    private val pulseJobs = il.liba.app.power.PulseCore().apply { every("update", 3 * 3600_000L, now = System.currentTimeMillis()) }
+    private val SHABBAT_BEAT_MS = 30_000L
     /**
      * step 1 (one-tree-one-version): a version check that cannot fail quietly.
      * Two things were wrong before. The request went through whatever the CDN had cached, so the
@@ -559,7 +561,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             }
             main.post { onDone?.invoke() }
         }.start()
-        main.removeCallbacks(recheck); main.postDelayed(recheck, 3 * 3600 * 1000L) // always-updatable: every 3 h, and on every start (boot, update, revive)
+        pulseJobs.touch("update", System.currentTimeMillis()) // always-updatable: every 3 h on the pulse, and on every start (boot, update, revive)
     }
 
     // ---------- bubble ----------
@@ -694,7 +696,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         snapAnim = ValueAnimator.ofInt(lp.x, target).apply { duration = 340; interpolator = android.view.animation.OvershootInterpolator(1.1f)
             addUpdateListener { lp.x = it.animatedValue as Int; runCatching { wm.updateViewLayout(h, lp) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "snap:" + x.javaClass.simpleName) }; syncRoot() }; start() }
     }
-    private fun schedulePeek() { main.removeCallbacks(peekRun); if (il.liba.app.power.Governor.admit(il.liba.app.power.Job("peek", 1))) main.postDelayed(peekRun, 9000) }
+    private fun schedulePeek() { main.removeCallbacks(peekRun); if (il.liba.app.power.Governor.admit(il.liba.app.power.Job("peek", 1))) main.postDelayed(peekRun, 9000) } // one-shot: tuck the bubble aside after 9 s untouched; re-armed only by a touch
     private fun peek() {
         if (dot?.roam == true) return
         val root = bubble ?: return; val lp = bubbleLp ?: return

@@ -25,7 +25,7 @@ function stateWatch(now){now=now||Date.now();if(state!==stateSeen){stateSeen=sta
   if(state!=='IDLE'&&state!=='OFFLINE'&&state!=='QUIET'&&now-stateSince>STATE_MAX){const was=state;transition('IDLE','stuck '+was);stateSeen='IDLE';stateSince=now;
     Ledger.record({action:'unstick',cause:'state '+was+' for '+Math.round((now-stateSince+STATE_MAX)/1000)+'s',result:'IDLE'});if(typeof pump==='function')setTimeout(pump,100);return true;}
   return false;}
-setInterval(()=>stateWatch(),10000);
+every('agent',10000,()=>stateWatch());
 /* the mandate */
 const MANDATE_CLASSES={open_worker:'לפתוח עובד',stop_worker:'לעצור עובד',priority:'לשנות עדיפות',ship:'להעלות גרסה',send_email:'לשלוח מייל',spend:'להוציא כסף',
   delete:'למחוק',speak_unprompted:'לדבר ביוזמתה',wake_at_night:'להעיר בלילה'};

@@ -74,7 +74,7 @@ async function flushOutbox(){
   finally{flushing=false;}
   if(delivered&&!walPending().length){const m='ליבה, בנוגע לשליחה: מה שאמרת נשלח עכשיו.';if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
 }
-window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(flushOutbox,8000);
+window.addEventListener('online',()=>setTimeout(flushOutbox,1500));every('outbox',8000,flushOutbox);
 /* req-spine: the id a session puts in inbox.re to say which sentence it answers. It goes at the END of the
    text so the tag at the start stays exactly '[ליבה] ' / '[ליבה→מנהל] ' - other sessions route on it. */
 const reqMark=id=>' ⟦#'+id+'⟧';

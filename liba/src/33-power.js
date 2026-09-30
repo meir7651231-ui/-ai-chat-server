@@ -13,6 +13,7 @@ function pctWords(x){x=Math.round((+x||0)*2)/2;const w=Math.floor(x),h=x-w>0;
 function powerIn(body){let r;try{r=typeof body==='string'?JSON.parse(body):body;}catch(e){fail('P_MSG_BAD',e,'power');return;}if(!r||!r.day)return;
   const prev=powerNow;powerNow=Object.assign({},r,{at:Date.now()});
   /* duty-governor: the gear changed - it is in the day's record, and the phone already said it */
+  if(r.tier)beatGear({FULL:1,ECO:2,SURVIVAL:4,COLD:8}[r.tier]||1); /* the page's periodic jobs slow down with the phone's gear */
   if(prev&&r.tier&&prev.tier&&prev.tier!==r.tier)Ledger.record({action:'power.tier',cause:prev.tier,result:r.tier});if(!db)return;
   if(prev&&prev.day&&prev.day!==r.day)P.powerDay(prev.day).set(Object.assign({},prev,{closedAt:Date.now()})).catch(e=>fail('P_DB_WRITE',e,'memory/power/days'));
   if(Date.now()-powerWrote>60000||!prev||prev.day!==r.day){powerWrote=Date.now();P.power().set(powerNow).catch(e=>fail('P_DB_WRITE',e,'channel/power'));}}

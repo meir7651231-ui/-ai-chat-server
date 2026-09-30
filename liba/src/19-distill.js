@@ -71,5 +71,5 @@ function distillToday(){(async()=>{const r=await distill();const all=(await cold
 /* the nightly run: the first time the page is open after three in the morning, once a day */
 function distillMaybe(){if(!db)return;const day=trDay(Date.now());let last='';try{last=localStorage.getItem(LSK('distillDay'))||'';}catch(e){}
   if(last===day||jHour(Date.now())<3)return;try{localStorage.setItem(LSK('distillDay'),day);}catch(e){}distill().catch(e=>fail('P_DB_WRITE',e,'distill'));memSweep().then(sweepSay).catch(e=>fail('P_DB_WRITE',e,'sweep'));conflictsWeekly().catch(()=>{});}
-setTimeout(distillMaybe,25000);setInterval(distillMaybe,3600e3);
+setTimeout(distillMaybe,25000);every('distill',3600e3,distillMaybe);
 window.__distill={run:distill,answer:distillAnswer,habits:distillHabits,names:distillNames};

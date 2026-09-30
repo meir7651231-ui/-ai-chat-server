@@ -76,5 +76,5 @@ function shabbatSetPlace(rest){const n=inorm(rest);const hit=SHABBAT_PLACES.find
   if(appMode)post(PROTO.toApp.place,{body:JSON.stringify(memSettings.place)});
   sayLocal('זמני השבת לפי '+hit[0]+': כניסה '+hit[3]+' דקות לפני השקיעה, יציאה בצאת הכוכבים. בשבת אני שותקת לגמרי.');return true;}
 function shabbatPlaceSend(){if(appMode&&hasCap('holy'))post(PROTO.toApp.place,{body:JSON.stringify(shabbatPlace())});}
-setInterval(()=>{shabbatTick().catch(()=>{});},60000);setTimeout(()=>{shabbatTick().catch(()=>{});},4000);
+every('shabbat',60000,()=>{shabbatTick().catch(()=>{});});setTimeout(()=>{shabbatTick().catch(()=>{});},4000);
 window.__shabbat={tick:shabbatTick,at:shabbatAt,windows:holyWindows,place:shabbatPlace,zman:ZMAN};

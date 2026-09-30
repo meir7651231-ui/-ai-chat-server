@@ -55,5 +55,5 @@ function policyList(){POLICY.load().then(async rs=>{const a=await fleetAsksOpen(
 function policyDrop(rest){const q=rest.trim();if(!q)return false;POLICY.load().then(async rs=>{const hit=rs.filter(r=>r.text.indexOf(inorm(q))>=0);for(const r of hit)if(r.key)await P.fact(r.key).update({state:'tomb',tombAt:Date.now()});await POLICY.load();
   sayLocal(hit.length?'ביטלתי '+hit.length+(hit.length===1?' כלל':' כללים')+' על '+q+'.':'לא מצאתי כלל על '+q+'.');});return true;}
 function policyFull(){if(!lastShort)return false;sayLocal(lastShort);lastShort=null;return true;}
-setTimeout(()=>{if(db)POLICY.load();},3000);setInterval(()=>{if(db){POLICY.load();digestEvening();}},10*60000);
+setTimeout(()=>{if(db)POLICY.load();},3000);every('policy',10*60000,()=>{if(db){POLICY.load();digestEvening();}});
 window.__policy=POLICY;

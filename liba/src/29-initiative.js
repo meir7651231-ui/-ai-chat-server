@@ -44,5 +44,5 @@ async function initiativeTick(now){now=now||Date.now();const w=initWorld(now),ou
 function agendaToday(){(async()=>{const since=new Date();since.setHours(0,0,0,0);const rs=(await coldGet(P.agenda(),[['at','>=',since.getTime()]],300)).docs.map(d=>d.data()||{});
   const did=rs.filter(r=>r.result!=='refused');sayLocal(rs.length?'היום שמתי לב ל-'+rs.length+' דברים, ועשיתי לבד '+did.length+(did.length?': '+did.slice(0,3).map(r=>r.consequence).join('; '):'')+'.':'היום לא הצעתי כלום לבד.');})()
   .catch(e=>{fail('P_DB_READ',e,'agenda');sayLocal('לא הצלחתי לקרוא את היומן שלי.');});return true;}
-setInterval(()=>{if(db&&isArmed())initiativeTick().catch(e=>fail('P_MSG_BAD',e,'initiative'));},INIT_EVERY);
+every('initiative',INIT_EVERY,()=>{if(db&&isArmed())initiativeTick().catch(e=>fail('P_MSG_BAD',e,'initiative'));});
 window.__init={tick:initiativeTick,rules:RULES,done:initDone};

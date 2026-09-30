@@ -29,5 +29,5 @@ function ctxHold(d){if(ctxNow.call)return 'call';if(ctxNow.meeting)return 'meeti
 function upNow(now){now=now||Date.now();const h=hourNow();if(h>=8&&h<22)return true;const w=+ctxPhone.lastWake||0;return h>=6&&h<8&&w>0&&trDay(w)===trDay(now);}
 /* the decision each spoken message carries */
 function admitOf(d){return {rule:d.release?'release':d.priority==='urgent'?'urgent':'ok',ctx:{meeting:!!ctxNow.meeting,call:!!ctxNow.call,headset:ctxNow.headset,screen:ctxNow.screen},at:Date.now()};}
-setInterval(()=>{fuseContext().catch(()=>{});},30000);
+every('context',30000,()=>{fuseContext().catch(()=>{});});
 window.__ctx={in:ctxIn,fuse:fuseContext,now:()=>ctxNow,phone:()=>ctxPhone,up:upNow};

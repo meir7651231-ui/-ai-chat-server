@@ -63,5 +63,5 @@ function proReturn(rest){const after=rest.trim();if(!after)return false;proLoad(
 function proNot(){if(!lastPro||Date.now()-lastPro.at>PRO_REPLY)return false;const k=lastPro.kind;lastPro=null;proLoad().then(()=>{proState.neg[k]=(+proState.neg[k]||0)+1;proState.negAt[k]=Date.now();proSave();
   sayLocal(proResting(k,Date.now())?'הבנתי. תזכורות מהסוג הזה נחות חודש.':'בסדר.');});return true;}
 function proWelcome(){if(!lastPro||Date.now()-lastPro.at>PRO_REPLY)return;const k=lastPro.kind;lastPro=null;proLoad().then(()=>{proState.pos[k]=(+proState.pos[k]||0)+1;proSave();});}
-setInterval(()=>{if(db)proTick().catch(e=>fail('P_DB_READ',e,'proactive'));},60000);
+every('proactive',60000,()=>{if(db)proTick().catch(e=>fail('P_DB_READ',e,'proactive'));});
 window.__pro={tick:proTick,fire:proFire,heard:proHeard,dates:proDates,schedule:proSchedule,state:()=>proState,reset:()=>{proState=null;lastPro=null;proReturns=[];}};

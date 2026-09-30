@@ -26,7 +26,7 @@ async function ledgerFlush(now){now=now||Date.now();const day=trDay(now);
   if(ledgerDay&&day!==ledgerDay){ledger.req=0;ledger.said=0;ledger.heard=0;for(const k in silenceDay)delete silenceDay[k];}ledgerDay=day;ledgerAt=now;
   const denied=Object.values(chDenied).reduce((a,b)=>a+b,0);const mine={at:now,[janHolder]:{req:ledger.req,said:ledger.said,heard:ledger.heard,denied:denied,silence:Object.assign({},silenceDay),at:now}};
   try{await P.ledger(day).update(mine);}catch(e){if(e&&e.code==='not_found'){try{await P.ledger(day).set(Object.assign({day:day},mine));}catch(x){fail('P_DB_WRITE',x,'ledger');}}else fail('P_DB_WRITE',e,'ledger');}}
-setInterval(()=>{if(db)ledgerFlush();},LEDGER_EVERY);
+every('ledger',LEDGER_EVERY,()=>{if(db)ledgerFlush();});
 /* "why were you silent" / "how are you": from the pulse documents, one sentence per device */
 const ago=ms=>{const w=heAgo(ms);return w.indexOf('מלפני')===0?w.slice(1):w;};
 function pulseSay(p,now,many){const who=many?(p.name||'מכשיר')+': ':'';const age=now-(+p.at||0);

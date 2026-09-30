@@ -278,6 +278,20 @@ const PROTO=Object.freeze({v:1,hash:"40855fafdfa9",caps:Object.freeze(["beat","c
   toApp:Object.freeze({"ready":"ready","say":"say","sent":"sent","error":"error","queued":"queued","outbox":"outbox","tap":"tap","cmd":"cmd","crashSaved":"crashSaved","tasks":"tasks","traceAck":"traceAck","state":"state","memSync":"memSync","memAck":"memAck","remind":"remind","senseAck":"senseAck","senseCfg":"senseCfg","place":"place","mirror":"mirror","powerCfg":"powerCfg"}),
   toPage:Object.freeze({"hello":"hello","crash":"crash","spoke":"spoke","speaking":"speaking","input":"input","trace":"trace","pulse":"pulse","memAsk":"memAsk","sense":"sense","calSync":"calSync","ctx":"ctx","power":"power","reflex":"reflex"}),
   initial:"OFFLINE",moves:Object.freeze({"OFFLINE":["IDLE","WAKE"],"IDLE":["LISTENING","THINKING","SPEAKING","SENDING","RINGING","QUIET","DEGRADED","WAKE","OFFLINE"],"WAKE":["LISTENING","IDLE","SPEAKING","SENDING","RINGING","OFFLINE"],"LISTENING":["THINKING","SENDING","IDLE","SPEAKING","WAKE","OFFLINE"],"THINKING":["SENDING","SPEAKING","IDLE","OFFLINE"],"SENDING":["IDLE","SPEAKING","RINGING","THINKING","DEGRADED","WAKE","LISTENING","OFFLINE"],"SPEAKING":["IDLE","LISTENING","SENDING","WAKE","RINGING","OFFLINE"],"RINGING":["SPEAKING","IDLE","LISTENING","OFFLINE"],"QUIET":["IDLE","SPEAKING","OFFLINE"],"DEGRADED":["IDLE","SPEAKING","SENDING","OFFLINE"]})});
+/* Step duty-governor, page side. Twelve setInterval chains each woke the page on its own schedule. every(name, ms, fn)
+   puts a job in one table; a single timeout sleeps until the earliest job is due, runs what is due, and sleeps again -
+   the periods are the same, the page wakes once where it woke many times. A job that throws or rejects is a P_BEAT
+   fault with its name, and the others still run. beatK stretches every period when the phone asks for a slower gear. */
+const beatRows=[];let beatTimer=null,beatAt=0,beatK=1;
+function every(name,ms,fn){beatRows.push({name:name,ms:ms,fn:fn,last:Date.now()});beatArm();}
+function beatNext(now){let t=Infinity;for(const r of beatRows)t=Math.min(t,r.last+r.ms*beatK);return Math.max(now+250,t);}
+function beatArm(){const now=Date.now(),at=beatNext(now);if(beatTimer&&at>=beatAt)return;if(beatTimer)clearTimeout(beatTimer);beatAt=at;beatTimer=setTimeout(beatRun,at-now);}
+function beatRun(){beatTimer=null;const now=Date.now();
+  for(const r of beatRows){if(now-r.last<r.ms*beatK)continue;r.last=now;
+    try{const p=r.fn();if(p&&typeof p.catch==='function')p.catch(e=>fail('P_BEAT',e,r.name));}catch(e){fail('P_BEAT',e,r.name);}}
+  beatArm();}
+function beatGear(k){beatK=Math.max(1,+k||1);if(beatTimer){clearTimeout(beatTimer);beatTimer=null;}beatArm();}
+window.__beat={rows:()=>beatRows.map(r=>({name:r.name,ms:r.ms})),gear:beatGear};
 const $=id=>document.getElementById(id);
 const app=$('app'),H=$('h'),SUB=$('sub'),KIND=$('kind'),OPTS=$('opts'),HEARD=$('heard'),LOG=$('log');
 let db=null,comments=null,AC=null,ringTimer=null,cur=null,lastRung=null,wakeLock=null,rec=null;
@@ -296,7 +310,7 @@ function transition(to,why){const from=state;if(from===to)return;const ok=canMov
 const isArmed=()=>state!=='OFFLINE',isBusy=()=>state==='SPEAKING'||state==='SENDING';
 const arm=why=>{if(state==='OFFLINE')transition('IDLE',why);};
 /* ---- black box (step blackbox): one table of codes, one writer ---- */
-const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה',P_SPEAK_LOST:'הקול בטלפון השתתק באמצע בלי לדווח',P_PROTO_APP_OLD:'האפליקציה ישנה מהדף',P_PROTO_PAGE_OLD:'הדף ישן מהאפליקציה',P_REQ_UNBOUND:'תשובה שלא מצאה את השאלה שלה',P_CLOCK_SKEW:'השעון של הדף והטלפון לא מסונכרן',P_SPEAK_GUARD:'הקול לא דיווח שסיים ונעצר בכוח',P_STATE_ILLEGAL:'מעבר מצב שלא בטבלה',P_DB_FULL:'המסד מלא',P_INTENT_FUZZY:'פקודה שכמעט הובנה - שאלתי',P_DB_WINDOW:'חלון קריאה צומצם כי המסד עמוס',P_CMD_REFUSED:'פקודה לא חתומה נדחתה',P_SIG:'בדיקת חתימה נכשלה',E_CMD_REFUSED:'הטלפון דחה פקודה לא חתומה',E_STATE_ILLEGAL:'מעבר מצב שלא בטבלה בבועה'};
+const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה',P_SPEAK_LOST:'הקול בטלפון השתתק באמצע בלי לדווח',P_PROTO_APP_OLD:'האפליקציה ישנה מהדף',P_PROTO_PAGE_OLD:'הדף ישן מהאפליקציה',P_REQ_UNBOUND:'תשובה שלא מצאה את השאלה שלה',P_CLOCK_SKEW:'השעון של הדף והטלפון לא מסונכרן',P_SPEAK_GUARD:'הקול לא דיווח שסיים ונעצר בכוח',P_STATE_ILLEGAL:'מעבר מצב שלא בטבלה',P_DB_FULL:'המסד מלא',P_INTENT_FUZZY:'פקודה שכמעט הובנה - שאלתי',P_DB_WINDOW:'חלון קריאה צומצם כי המסד עמוס',P_CMD_REFUSED:'פקודה לא חתומה נדחתה',P_SIG:'בדיקת חתימה נכשלה',P_BEAT:'עבודה מחזורית בדף נכשלה',E_CMD_REFUSED:'הטלפון דחה פקודה לא חתומה',E_STATE_ILLEGAL:'מעבר מצב שלא בטבלה בבועה'};
 const TRACE_SR_HE={1:'זיהוי הדיבור נכשל ברשת',2:'זיהוי הדיבור נכשל ברשת',3:'ההקלטה נכשלה',4:'שרת הזיהוי סירב',5:'תקלה פנימית בזיהוי',6:'לא שמעתי כלום',7:'לא זוהו מילים',8:'המאזין היה תפוס',9:'אין הרשאת מיקרופון',11:'חסרה שפה לזיהוי',12:'העברית לא מותקנת במכשיר',13:'הזיהוי במכשיר לא זמין'};
 const TRACE_FLUSH=3000,TRACE_RING=200,TRACE_BATCH=200,TRACE_QMAX=1000;
 let trVer='',trBuf=new Map(),trWin=0,trCount={},trDrop={},trQ=[],trRing=[],trTimer=null,trWriting=false,trInTrace=false;
@@ -443,7 +457,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:83,pageHash:"ad1a29b60f40",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:83,pageHash:"288b37115e26",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const sid=String(d.id||''),f=sayWait.get(sid);if(f)f(String(d.cause||'done'));else if(sayMid.has(sid)&&String(d.cause||'done')==='done')lateSpoke(sayMid.get(sid));if(String(d.cause||'done')!=='held')sayMid.delete(sid);} /* held: the phone may still say it later */
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:(r=>r.allow?r.payload.text:'[הושמט: רגיש]')(egress('db:crashes',{text:String(d.text).slice(0,4000),meta:{kind:'system'}})),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -1025,7 +1039,7 @@ async function flushOutbox(){
   finally{flushing=false;}
   if(delivered&&!walPending().length){const m='ליבה, בנוגע לשליחה: מה שאמרת נשלח עכשיו.';if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}
 }
-window.addEventListener('online',()=>setTimeout(flushOutbox,1500));setInterval(flushOutbox,8000);
+window.addEventListener('online',()=>setTimeout(flushOutbox,1500));every('outbox',8000,flushOutbox);
 /* req-spine: the id a session puts in inbox.re to say which sentence it answers. It goes at the END of the
    text so the tag at the start stays exactly '[ליבה] ' / '[ליבה→מנהל] ' - other sessions route on it. */
 const reqMark=id=>' ⟦#'+id+'⟧';
@@ -1206,7 +1220,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"ad1a29b60f40"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"288b37115e26"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -1215,7 +1229,7 @@ async function ledgerFlush(now){now=now||Date.now();const day=trDay(now);
   if(ledgerDay&&day!==ledgerDay){ledger.req=0;ledger.said=0;ledger.heard=0;for(const k in silenceDay)delete silenceDay[k];}ledgerDay=day;ledgerAt=now;
   const denied=Object.values(chDenied).reduce((a,b)=>a+b,0);const mine={at:now,[janHolder]:{req:ledger.req,said:ledger.said,heard:ledger.heard,denied:denied,silence:Object.assign({},silenceDay),at:now}};
   try{await P.ledger(day).update(mine);}catch(e){if(e&&e.code==='not_found'){try{await P.ledger(day).set(Object.assign({day:day},mine));}catch(x){fail('P_DB_WRITE',x,'ledger');}}else fail('P_DB_WRITE',e,'ledger');}}
-setInterval(()=>{if(db)ledgerFlush();},LEDGER_EVERY);
+every('ledger',LEDGER_EVERY,()=>{if(db)ledgerFlush();});
 /* "why were you silent" / "how are you": from the pulse documents, one sentence per device */
 const ago=ms=>{const w=heAgo(ms);return w.indexOf('מלפני')===0?w.slice(1):w;};
 function pulseSay(p,now,many){const who=many?(p.name||'מכשיר')+': ':'';const age=now-(+p.at||0);
@@ -1438,7 +1452,7 @@ function policyList(){POLICY.load().then(async rs=>{const a=await fleetAsksOpen(
 function policyDrop(rest){const q=rest.trim();if(!q)return false;POLICY.load().then(async rs=>{const hit=rs.filter(r=>r.text.indexOf(inorm(q))>=0);for(const r of hit)if(r.key)await P.fact(r.key).update({state:'tomb',tombAt:Date.now()});await POLICY.load();
   sayLocal(hit.length?'ביטלתי '+hit.length+(hit.length===1?' כלל':' כללים')+' על '+q+'.':'לא מצאתי כלל על '+q+'.');});return true;}
 function policyFull(){if(!lastShort)return false;sayLocal(lastShort);lastShort=null;return true;}
-setTimeout(()=>{if(db)POLICY.load();},3000);setInterval(()=>{if(db){POLICY.load();digestEvening();}},10*60000);
+setTimeout(()=>{if(db)POLICY.load();},3000);every('policy',10*60000,()=>{if(db){POLICY.load();digestEvening();}});
 window.__policy=POLICY;
 /* Step distill. The turns and decisions the page has written all along (chat/log/turns, decisions/log/items) are read
    back: fourteen days of them, live rows and the janitor's folds. A table of extractors turns repetition into a
@@ -1511,7 +1525,7 @@ function distillToday(){(async()=>{const r=await distill();const all=(await cold
 /* the nightly run: the first time the page is open after three in the morning, once a day */
 function distillMaybe(){if(!db)return;const day=trDay(Date.now());let last='';try{last=localStorage.getItem(LSK('distillDay'))||'';}catch(e){}
   if(last===day||jHour(Date.now())<3)return;try{localStorage.setItem(LSK('distillDay'),day);}catch(e){}distill().catch(e=>fail('P_DB_WRITE',e,'distill'));memSweep().then(sweepSay).catch(e=>fail('P_DB_WRITE',e,'sweep'));conflictsWeekly().catch(()=>{});}
-setTimeout(distillMaybe,25000);setInterval(distillMaybe,3600e3);
+setTimeout(distillMaybe,25000);every('distill',3600e3,distillMaybe);
 window.__distill={run:distill,answer:distillAnswer,habits:distillHabits,names:distillNames};
 /* Step forget. A fact's life: live -> archive (it expired, or it went unused for half a year at low confidence) or
    live -> tomb (Meir said to forget it). A fact with a date in it ("אני בחו"ל עד ה-12") expires the day after that
@@ -1692,7 +1706,7 @@ function proReturn(rest){const after=rest.trim();if(!after)return false;proLoad(
 function proNot(){if(!lastPro||Date.now()-lastPro.at>PRO_REPLY)return false;const k=lastPro.kind;lastPro=null;proLoad().then(()=>{proState.neg[k]=(+proState.neg[k]||0)+1;proState.negAt[k]=Date.now();proSave();
   sayLocal(proResting(k,Date.now())?'הבנתי. תזכורות מהסוג הזה נחות חודש.':'בסדר.');});return true;}
 function proWelcome(){if(!lastPro||Date.now()-lastPro.at>PRO_REPLY)return;const k=lastPro.kind;lastPro=null;proLoad().then(()=>{proState.pos[k]=(+proState.pos[k]||0)+1;proSave();});}
-setInterval(()=>{if(db)proTick().catch(e=>fail('P_DB_READ',e,'proactive'));},60000);
+every('proactive',60000,()=>{if(db)proTick().catch(e=>fail('P_DB_READ',e,'proactive'));});
 window.__pro={tick:proTick,fire:proFire,heard:proHeard,dates:proDates,schedule:proSchedule,state:()=>proState,reset:()=>{proState=null;lastPro=null;proReturns=[];}};
 /* Step sense-bus-ears. The bubble's NotifEars hears a notification, SenseBus keeps it on the phone and hands it over
    (sense) when this page is up; it is written to sense/notif/items/<id> and acked (senseAck) - nothing is lost when the
@@ -1789,7 +1803,7 @@ async function calBriefings(now){now=now||Date.now();await calLoad();const out=[
       more=' '+ps[0].name+(ps[0].relation?' הוא '+ps[0].relation:'')+(f[0]?'; '+String(f[0].raw||f[0].value):'')+'.';}}catch(e){}
     out.push({id:'pro-cal.'+hash36(i.id),at:i.begin-CAL_BRIEF,until:i.begin,cap:false,text:'אני נזכרת: בעוד עשר דקות '+i.title+(i.where?' ב'+i.where:'')+'.'+more});}
   return out;}
-setInterval(()=>{if(db&&calItems.length)calNow().catch(()=>{});},60000);
+every('calendar',60000,()=>{if(db&&calItems.length)calNow().catch(()=>{});});
 window.__cal={in:calIn,free:calFreeSlots,briefings:calBriefings,now:calNow,items:()=>calItems};
 /* Step context-fusion. sense/context holds one picture: the phone's (screen, lock, headset, a call - sent as ctx when it
    changes) and the calendar's (a meeting now = two people or more, not declined). It is rewritten within seconds of any
@@ -1820,7 +1834,7 @@ function ctxHold(d){if(ctxNow.call)return 'call';if(ctxNow.meeting)return 'meeti
 function upNow(now){now=now||Date.now();const h=hourNow();if(h>=8&&h<22)return true;const w=+ctxPhone.lastWake||0;return h>=6&&h<8&&w>0&&trDay(w)===trDay(now);}
 /* the decision each spoken message carries */
 function admitOf(d){return {rule:d.release?'release':d.priority==='urgent'?'urgent':'ok',ctx:{meeting:!!ctxNow.meeting,call:!!ctxNow.call,headset:ctxNow.headset,screen:ctxNow.screen},at:Date.now()};}
-setInterval(()=>{fuseContext().catch(()=>{});},30000);
+every('context',30000,()=>{fuseContext().catch(()=>{});});
 window.__ctx={in:ctxIn,fuse:fuseContext,now:()=>ctxNow,phone:()=>ctxPhone,up:upNow};
 /* Step shabbat-engine. The windows are computed here and on the phone (Holy.kt, the same algorithm, checked for parity)
    from the place Meir set ("זמני שבת לפי בני ברק"; Jerusalem, 40 minutes, until he does) and twenty years of yom tov
@@ -1898,7 +1912,7 @@ function shabbatSetPlace(rest){const n=inorm(rest);const hit=SHABBAT_PLACES.find
   if(appMode)post(PROTO.toApp.place,{body:JSON.stringify(memSettings.place)});
   sayLocal('זמני השבת לפי '+hit[0]+': כניסה '+hit[3]+' דקות לפני השקיעה, יציאה בצאת הכוכבים. בשבת אני שותקת לגמרי.');return true;}
 function shabbatPlaceSend(){if(appMode&&hasCap('holy'))post(PROTO.toApp.place,{body:JSON.stringify(shabbatPlace())});}
-setInterval(()=>{shabbatTick().catch(()=>{});},60000);setTimeout(()=>{shabbatTick().catch(()=>{});},4000);
+every('shabbat',60000,()=>{shabbatTick().catch(()=>{});});setTimeout(()=>{shabbatTick().catch(()=>{});},4000);
 window.__shabbat={tick:shabbatTick,at:shabbatAt,windows:holyWindows,place:shabbatPlace,zman:ZMAN};
 /* Step signed-commands. A cmd document (another session asking the phone to do something) is obeyed only when it carries
    {nonce, exp, sig} signed with the key in tools/cmd.mjs: verified here with WebCrypto, and again on the phone
@@ -1944,7 +1958,7 @@ function stateWatch(now){now=now||Date.now();if(state!==stateSeen){stateSeen=sta
   if(state!=='IDLE'&&state!=='OFFLINE'&&state!=='QUIET'&&now-stateSince>STATE_MAX){const was=state;transition('IDLE','stuck '+was);stateSeen='IDLE';stateSince=now;
     Ledger.record({action:'unstick',cause:'state '+was+' for '+Math.round((now-stateSince+STATE_MAX)/1000)+'s',result:'IDLE'});if(typeof pump==='function')setTimeout(pump,100);return true;}
   return false;}
-setInterval(()=>stateWatch(),10000);
+every('agent',10000,()=>stateWatch());
 /* the mandate */
 const MANDATE_CLASSES={open_worker:'לפתוח עובד',stop_worker:'לעצור עובד',priority:'לשנות עדיפות',ship:'להעלות גרסה',send_email:'לשלוח מייל',spend:'להוציא כסף',
   delete:'למחוק',speak_unprompted:'לדבר ביוזמתה',wake_at_night:'להעיר בלילה'};
@@ -2044,7 +2058,7 @@ async function initiativeTick(now){now=now||Date.now();const w=initWorld(now),ou
 function agendaToday(){(async()=>{const since=new Date();since.setHours(0,0,0,0);const rs=(await coldGet(P.agenda(),[['at','>=',since.getTime()]],300)).docs.map(d=>d.data()||{});
   const did=rs.filter(r=>r.result!=='refused');sayLocal(rs.length?'היום שמתי לב ל-'+rs.length+' דברים, ועשיתי לבד '+did.length+(did.length?': '+did.slice(0,3).map(r=>r.consequence).join('; '):'')+'.':'היום לא הצעתי כלום לבד.');})()
   .catch(e=>{fail('P_DB_READ',e,'agenda');sayLocal('לא הצלחתי לקרוא את היומן שלי.');});return true;}
-setInterval(()=>{if(db&&isArmed())initiativeTick().catch(e=>fail('P_MSG_BAD',e,'initiative'));},INIT_EVERY);
+every('initiative',INIT_EVERY,()=>{if(db&&isArmed())initiativeTick().catch(e=>fail('P_MSG_BAD',e,'initiative'));});
 window.__init={tick:initiativeTick,rules:RULES,done:initDone};
 /* Step brief-handoff. channel/brief {ver, at, sessionId, model, openLoop[], waitingOn, lastAsk, nextAction, doNot[],
    artifacts[]} is written by whichever session is the brain, before it finishes; every version is kept in
@@ -2076,7 +2090,7 @@ async function buildWake(text,wakeId){const b=await readBrief();const parts=[];
   const blocked=(lastTasks||[]).filter(t=>t.status==='blocked').slice(0,3).map(t=>t.title+(t.question?' ('+t.question+')':''));if(blocked.length)parts.push('תקוע: '+blocked.join('; '));
   if(b.lastDecision)parts.push('החלטה אחרונה: '+b.lastDecision);
   try{const since=Date.now()-6*3600e3;const t=(await turnsBetween(since,Date.now()+1,60)).filter(x=>x.from==='user'||x.from==='manager').slice(-4,-1);if(t.length)parts.push('לפני כן: '+t.map(x=>(x.from==='user'?'מאיר: ':'')+String(x.text||'').slice(0,90)).join(' / '));}catch(e){}
-  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"ad1a29b60f40");
+  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"288b37115e26");
   let out='';for(const p of parts){if(out.length+p.length+3>WAKE_MAX)break;out+=(out?'\n':'')+p;}
   if(db)P.wake(wakeId).set({envelope:out,len:out.length,at:Date.now(),brainAt:briefNow&&+briefNow.at||0}).catch(()=>{});
   return out;}
@@ -2127,7 +2141,7 @@ function rosterSay(){const now=Date.now(),all=[...roster.entries()].map(([id,r])
   sayLocal(all.length?(live.length?'ער עכשיו: '+live.map(x=>(x.r.role||'מוח')+' '+String(x.id).slice(-6)).join(', ')+'.':'אף מוח לא ער עכשיו.')+(all.length>live.length?' ועוד '+(all.length-live.length)+' שנרדמו.':''):'עוד אף מוח לא נרשם.');return true;}
 async function rosterContract(){if(!db)return;try{const g=await P.protocol().get();const x=(g.exists&&g.data())||{};if(x.brain)return;
   await P.protocol().set(Object.assign({},x,{brain:{roster:'brain/roster/items/<brainId>',work:'work/<wakeId>',rule:'צור brainId אחד (ULID) בהתעוררות הראשונה ושא אותו בכל כתיבה. לפני שאתה עובד על משפט: work/<wakeId>.claimedBy=<brainId>, state=claimed. בכל כתיבה: brain/roster/items/<brainId>.lastBeat=עכשיו. ענה עם re=<wakeId>. משפט בלי מענה ובלי מוח חי נשלח שוב אחרי שלוש דקות, פעם אחת.',at:Date.now()}}));}catch(e){fail('P_DB_WRITE',e,'channel/protocol');}}
-setInterval(()=>{if(db)reclaim().catch(e=>fail('P_DB_READ',e,'reclaim'));},20000);setTimeout(rosterContract,6000);
+every('roster',20000,()=>{if(db)reclaim().catch(e=>fail('P_DB_READ',e,'reclaim'));});setTimeout(rosterContract,6000);
 window.__roster={reclaim,state:brainState,roster:()=>roster};
 /* Step local-brain. The phone answers "איפה עצרנו", "מה פתוח", "מה תקוע", "מי המוח" by itself when the page is down
    (LocalBrain.kt) - from this mirror: the tasks that matter, the brief, who is awake. Sent only to a bubble that has
@@ -2141,7 +2155,7 @@ async function mirrorPush(force){if(!appMode||!hasCap('mirror'))return false;con
   if(!force&&sig===mirrorSig)return false;mirrorSig=sig;post(PROTO.toApp.mirror,{body:JSON.stringify(m)});return true;}
 function tasksStuck(){const b=(lastTasks||[]).filter(t=>t.status==='blocked');
   sayLocal(b.length?(b.length===1?'משימה אחת תקועה: ':b.length+' משימות תקועות: ')+(x=>/[.?!]$/.test(x)?x:x+'.')(b.slice(0,3).map(t=>t.title+(t.question?' - '+t.question:'')).join('; ')):'שום משימה לא תקועה.');return true;}
-setInterval(()=>{mirrorPush().catch(()=>{});},15000);
+every('mirror',15000,()=>{mirrorPush().catch(()=>{});});
 window.__mirror={build:mirrorBuild,push:mirrorPush};
 /* Step power-ledger. The bubble charges each subsystem by how long it ran times its rate (PowerLedger.kt) and sends the
    day every five minutes; the page keeps it in channel/power, closes each day into memory/power/days, and says it:
@@ -2156,6 +2170,7 @@ function pctWords(x){x=Math.round((+x||0)*2)/2;const w=Math.floor(x),h=x-w>0;
 function powerIn(body){let r;try{r=typeof body==='string'?JSON.parse(body):body;}catch(e){fail('P_MSG_BAD',e,'power');return;}if(!r||!r.day)return;
   const prev=powerNow;powerNow=Object.assign({},r,{at:Date.now()});
   /* duty-governor: the gear changed - it is in the day's record, and the phone already said it */
+  if(r.tier)beatGear({FULL:1,ECO:2,SURVIVAL:4,COLD:8}[r.tier]||1); /* the page's periodic jobs slow down with the phone's gear */
   if(prev&&r.tier&&prev.tier&&prev.tier!==r.tier)Ledger.record({action:'power.tier',cause:prev.tier,result:r.tier});if(!db)return;
   if(prev&&prev.day&&prev.day!==r.day)P.powerDay(prev.day).set(Object.assign({},prev,{closedAt:Date.now()})).catch(e=>fail('P_DB_WRITE',e,'memory/power/days'));
   if(Date.now()-powerWrote>60000||!prev||prev.day!==r.day){powerWrote=Date.now();P.power().set(powerNow).catch(e=>fail('P_DB_WRITE',e,'channel/power'));}}

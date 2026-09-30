@@ -22,6 +22,7 @@ let extra = [
   ['wal-chaos', 'WIPE=1 CHAOS=45 node tests/wal.chaos.js'],
   ['capacity', 'node tests/capacity.sim.js'],
   ['telemetry', 'node tests/telemetry.test.js'],
+  ['beat', 'node tests/beat.test.js'],
   ['budget', 'node tests/budget.gate.js && node tests/budget.gate.js --self-test'],
   ['inbox-chaos', 'node tests/inbox.chaos.js'],
   ['freshness', 'node tests/stale.test.js'],
