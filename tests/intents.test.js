@@ -63,6 +63,17 @@ const TABLE = [
   await f.evaluate(() => { const c = window.__caps.state(); }); await said('מה פספסתי', 2000);
   const st = await f.evaluate(() => window.__caps.state());
   ok(st['missed.list'] && st['missed.list'].seen >= 1 && st['missed.list'].hints === 1, 'hint: using the command counts it as seen, and the hint count is kept: ' + JSON.stringify(st['missed.list']));
+  // nbest, page side: a sentence that was not a command, then "התכוונתי ל…" - it runs, and next time those words are the command
+  await said('מה פספסטי היום בבוקר', 2600);
+  const fx = await said('התכוונתי למה פספסתי', 2600);
+  ok(fx.some(t => /אזכור: כשאני שומעת "מה פספסטי היום בבוקר"/.test(t)), 'fix: the correction is learned and said: ' + fx.join(' | '));
+  const again = await f.evaluate(() => window.__intent.match('מה פספסטי היום בבוקר'));
+  ok(again && again.id === 'missed.list' && again.how === 'fixed', 'fix: next time the same words are the command: ' + JSON.stringify(again));
+  const nf = await f.evaluate(() => window.__intent.match('התכוונתי לבנות אתר גדול'));
+  const b3 = (await sentNow()).length; await said('התכוונתי לבנות אתר גדול', 2600);
+  ok((await sentNow()).slice(b3).some(t => /התכוונתי לבנות אתר גדול$/.test(t)), '"התכוונתי" + something that is not a command goes on to Claude as said');
+  const cl = await said('תשכחי את התיקונים', 2000);
+  ok(cl.some(t => /שכחתי תיקון אחד/.test(t)) && JSON.stringify(await f.evaluate(() => window.__fixes())) === '{}', 'fix: "תשכחי את התיקונים" clears them: ' + cl.join(' | '));
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

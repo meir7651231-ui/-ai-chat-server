@@ -857,6 +857,27 @@
    "help": "\"תשלח שוב\""
   },
   {
+   "id": "fix.meant",
+   "where": "page",
+   "family": "שליחה",
+   "handler": "fixMeant",
+   "prefix": [
+    "התכוונתי"
+   ],
+   "help": "\"התכוונתי ל…\" אחרי משפט שלא הבנתי - עושה ולומד"
+  },
+  {
+   "id": "fix.clear",
+   "where": "page",
+   "family": "שליחה",
+   "handler": "fixClear",
+   "exact": [
+    "תשכחי את התיקונים",
+    "תשכח את התיקונים"
+   ],
+   "help": "\"תשכחי את התיקונים\""
+  },
+  {
    "id": "missed.list",
    "where": "page",
    "when": "liba",

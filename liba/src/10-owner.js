@@ -5,13 +5,20 @@
    for a short sentence one letter off a long command - a guess that is asked, never run: "לא" or silence sends the
    sentence on as it was said. A command marked confirm (it deletes) asks first. Nothing here is a command regex. */
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
-const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
+const HANDLERS={fixMeant,fixClear,quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
   policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,mandateAllowCmd,mandateDenyCmd,mandateListCmd,approvalsToday,agendaToday,brainWhere,brainWho,brainOpen,rosterSay,tasksStuck,powerToday,powerWhere,powerBudget,sendAsSaid,retainUndo,exportAll,fleetBuild,fleetFix,fleetCheck,fleetPause,fleetResume,fleetKill,fleetRetry,fleetDrain,fleetHalt,fleetGo,fleetMap,fleetMuted,fleetRepeats,bookAdd,bookWeek,bookToday,bookCloseCmd,formStart,formResume,formBack,shipCmd,shipStatus,shipNotes,metricsSay,proofWhere,proofBefore,proofWho,proofGrade,proofWhen,proofShow,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
-function matchIntent(text){const t=inorm(text);if(!t)return null;
+/* nbest, page side: a sentence that was not a command, then "התכוונתי ל<command>" within three minutes - the command runs
+   and the page remembers that those words mean it (short sentences only, 50 at most, "תשכחי את התיקונים" clears them).
+   Only whole sentences are mapped, and only onto a command the router already knows - nothing new becomes a command. */
+let FIXES={};try{FIXES=JSON.parse(localStorage.getItem(LSK('fixes'))||'{}')||{};}catch(e){fail('P_STORE',e,'get fixes');}
+let lastMiss=null;const FIX_WINDOW=3*60000,FIX_MAX=50;
+function fixSave(){try{localStorage.setItem(LSK('fixes'),JSON.stringify(FIXES));}catch(e){fail('P_STORE',e,'set fixes');}}
+function matchIntent(text,noFix){const t=inorm(text);if(!t)return null;
+  if(!noFix&&FIXES[t]){const f=matchIntent(FIXES[t],true);if(f&&f.how!=='fuzzy'){f.how='fixed';f.heard=t;return f;}}
   for(const it of INTENTS)if(intentHere(it)&&it.exact.indexOf(t)>=0)return {it:it,rest:'',t:t,how:'exact'};
   let best=null;for(const it of INTENTS){if(!intentHere(it))continue;for(const p of it.prefix)if((t===p||t.startsWith(p+' '))&&(!best||p.length>best.p.length))best={it:it,rest:t.slice(p.length).trim(),t:t,how:'prefix',p:p};}
   if(best){/* the slot's lead words ("תזכור כי…", "תשכח שהרואה…", "קודם את…") are the registry's, not a regex here */
@@ -30,12 +37,21 @@ function runIntent(m){const it=m.it;
 function confirmYes(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;if(!runIntent(p.m))send({text:p.text,noIntent:true});return true;}
 function confirmNo(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;
   if(p.m.how==='fuzzy')send({text:p.text,noIntent:true});else sayLocal('בסדר, לא עשיתי.');return true;}
-function switchOwner(text){const m=matchIntent(text);if(!m)return false;
+function switchOwner(text){const m=matchIntent(text);if(!m){const n=inorm(text);if(n)lastMiss={t:n,at:Date.now()};return false;}
   if(m.how==='fuzzy'){fail('P_INTENT_FUZZY',null,m.it.id);const p={m:m,at:Date.now(),text:text};pendingIntent=p;
     sayLocal('התכוונת ל"'+m.ph+'"? תגיד כן, או לא ואשלח את מה שאמרת כמו שהוא.');
     setTimeout(()=>{if(pendingIntent===p){pendingIntent=null;send({text:text,noIntent:true});}},PENDING_MS);return true;}
   if(m.it.confirm&&m.it.handler!=='confirmYes'){pendingIntent={m:m,at:Date.now(),text:text};sayLocal('לבצע את "'+m.t+'"? תגיד כן או לא.');return true;}
   return runIntent(m);}
+function fixMeant(rest){let x=inorm(rest);let m=matchIntent(x,true);
+  if((!m||m.how==='fuzzy')&&x.length>2&&(x[0]==='ל'||x[0]==='ש')){x=x.slice(1);m=matchIntent(x,true);}
+  if(!m||m.how==='fuzzy'||m.it.handler==='fixMeant')return false; /* not a command: the sentence goes on to Claude */
+  const miss=lastMiss;lastMiss=null;
+  if(miss&&Date.now()-miss.at<FIX_WINDOW&&miss.t.split(' ').length<=5&&miss.t!==x){FIXES[miss.t]=x;const k=Object.keys(FIXES);if(k.length>FIX_MAX)delete FIXES[k[0]];fixSave();
+    Ledger.record({action:'intent',cause:'fix',inputs:{heard:miss.t,meant:x}});sayLocal('אזכור: כשאני שומעת "'+miss.t+'", אתה מתכוון ל"'+x+'".');}
+  return runIntent(m);}
+function fixClear(){const n=Object.keys(FIXES).length;FIXES={};fixSave();sayLocal(n===1?'שכחתי תיקון אחד.':n?'שכחתי '+n+' תיקונים.':'אין תיקונים שמורים.');return true;}
+window.__fixes=()=>Object.assign({},FIXES);
 window.__intent={match:t=>{const m=matchIntent(t);return m?{id:m.it.id,rest:m.rest,how:m.how}:null;}};
 async function setOwner(o){await ownerWrite(o,true);
   const msg=o==='liba'?'ליבה על הקו.':'המנהל על הקו. ליבה שותקת עד שתגיד ליבה תחזור.';bubble('li',msg);if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);return true;}
