@@ -53,4 +53,7 @@ function proofWhen(){const e=evRing[evCursor<0?evRing.length-1:evCursor];if(!e){
 function proofShow(){const e=evRing[evCursor<0?evRing.length-1:evCursor];const ref=e&&e.source&&String(e.source.ref||'');
   if(!ref||!/^https:\/\//.test(ref)){sayLocal('אין לזה קישור להראות.');return true;}if(appMode)post(PROTO.toApp.cmd,{cmd:'open '+ref});else openSafe(ref);sayLocal('פותחת את המקור.');return true;}
 function proofMirror(){return evRing.slice(-5).map(e=>({text:e.text.slice(0,80),speaker:e.speaker,grade:e.grade,src:e.source?String(e.source.kind||'')+' '+String(e.source.ref||'').slice(0,40):'',at:e.at}));}
+async function proofContract(){if(!db)return;try{const g=await P.protocol().get();const x=(g.exists&&g.data())||{};if(x.claim)return;
+  await P.protocol().set(Object.assign({},x,{claim:{doc:'docs/CLAIM-SCHEMA.md',rule:'דיווח עובדתי (עבר/נכשל/מוזג/מוכן/הותקן) נושא claim {grade: measured|quoted|inferred, source:{kind,ref,at,by}, verify?}. בלי claim ליבה לא אומרת אותו כעובדה ומבקשת מקור בתג [ליבה?מקור]. verify מחזיק עד ראיה ב-evidence/log/items/<inbox id> (בודק: tools/liba-auditor.mjs).',at:Date.now()}}));}catch(e){fail('P_DB_WRITE',e,'channel/protocol');}}
+setTimeout(proofContract,8000);
 window.__proof={factual,claimOf,needsProof,gate:proofGate,seal:sealCheck,ring:()=>evRing,say:proofSay};

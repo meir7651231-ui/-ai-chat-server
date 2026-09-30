@@ -1889,6 +1889,64 @@
    ],
    "handler": "proofShow",
    "help": "\"תראה לי את ההוכחה\""
+  },
+  {
+   "id": "ship.go",
+   "where": "page",
+   "when": "liba",
+   "family": "גרסה",
+   "exact": [
+    "תעלי גרסה",
+    "תעלה גרסה",
+    "תשלחי לטלפון",
+    "תשלח לטלפון",
+    "תעלי את התיקון הזה",
+    "תעלה את התיקון הזה"
+   ],
+   "handler": "shipCmd",
+   "help": "\"תעלי גרסה\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "ship.status",
+   "where": "page",
+   "when": "liba",
+   "family": "גרסה",
+   "exact": [
+    "מה מצב הגרסה",
+    "איזו גרסה בטלפון",
+    "איזה גרסה רצה"
+   ],
+   "handler": "shipStatus",
+   "help": "\"מה מצב הגרסה\""
+  },
+  {
+   "id": "ship.notes",
+   "where": "page",
+   "when": "liba",
+   "family": "גרסה",
+   "exact": [
+    "מה השתנה בגרסה",
+    "מה חדש בגרסה"
+   ],
+   "handler": "shipNotes",
+   "help": "\"מה השתנה בגרסה\""
+  },
+  {
+   "id": "measure.say",
+   "where": "page",
+   "when": "liba",
+   "family": "גרסה",
+   "exact": [
+    "השערים",
+    "מה נמדד",
+    "כמה חווט",
+    "מה מצב השערים"
+   ],
+   "handler": "metricsSay",
+   "help": "\"השערים\" / \"מה נמדד\""
   }
  ],
  "families": {

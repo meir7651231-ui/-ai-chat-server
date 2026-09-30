@@ -154,7 +154,7 @@
       "time": "at"
     },
     "sense/cal/items": {
-      "cap": 150,
+      "cap": 120,
       "ttlDays": 8,
       "cls": "record",
       "time": "begin"
@@ -279,6 +279,12 @@
     "verify": {
       "cap": 3,
       "cls": "state",
+      "time": "at"
+    },
+    "metrics/runs/items": {
+      "cap": 30,
+      "ttlDays": 30,
+      "cls": "record",
       "time": "at"
     }
   }

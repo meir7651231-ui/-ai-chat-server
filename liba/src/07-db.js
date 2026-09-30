@@ -31,14 +31,16 @@ function onInbox(){pikuachCheck(inboxMerged());const items=inboxMerged().filter(
   watch('tasks',k=>P.tasks().orderBy('updatedAt','desc').limit(k),WIN.tasks,m=>{const list=[...m.values()].filter(t=>t.status!=='archived').sort((a,b)=>((b.priority||0)-(a.priority||0))||((b.updatedAt||0)-(a.updatedAt||0)));
     /* step 42: lifecycle in voice – the board itself announces blocked/done, once */
     if(taskSeen){list.forEach(t=>{const prev=taskPrev[t.id];if(prev&&prev!==t.status){if(t.status==='blocked')queueLocal({taskId:t.id,id:'task-'+t.id+'-blocked-'+(t.updatedAt||0),kind:'stuck',speaker:'הלוח',topic:t.title,text:'המשימה '+t.title+' תקועה ומחכה לך'+(t.question?': '+t.question:'.'),options:t.options||[]});
-      else if(t.status==='done')queueLocal({taskId:t.id,id:'task-'+t.id+'-done-'+(t.updatedAt||0),kind:'done',speaker:'הלוח',topic:t.title,text:'המשימה '+t.title+' נגמרה.'+(t.link?' יש תוצאה – תגיד תפתח.':'')});
+      else if(t.status==='done'){const mq=measureDone(t);queueLocal(mq?{taskId:t.id,id:'task-'+t.id+'-unmeasured-'+(t.updatedAt||0),kind:'say',speaker:'הלוח',topic:t.title,text:mq}:{taskId:t.id,id:'task-'+t.id+'-done-'+(t.updatedAt||0),kind:'done',speaker:'הלוח',topic:t.title,text:'המשימה '+t.title+' נגמרה.'+(t.link?' יש תוצאה – תגיד תפתח.':'')});}
       else if(t.status==='running'&&prev==='queued')queueLocal({taskId:t.id,id:'task-'+t.id+'-run-'+(t.updatedAt||0),kind:'say',speaker:'הלוח',topic:t.title,text:'המשימה '+t.title+' התחילה לרוץ.'});}});}
+    if(taskSeen)shipStages(list);else list.forEach(t=>{if(t.type==='ship'&&t.stage)shipStageSeen[t.id+'|'+t.stage]=true;}); /* say-ship */
     taskPrev={};list.forEach(t=>taskPrev[t.id]=t.status);taskSeen=true;lastTasks=list;renderTasks(list);},e=>{fail('P_DB_READ',e,'tasks');log('tasks: '+e.code);});
   P.quiet().onSnapshot(s=>{quietUntil=(s.exists&&s.data()&&s.data().until)||0;if(quietUntil>Date.now())log('שקט עד '+new Date(quietUntil).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));pump();},e=>fail('P_DB_READ',e,'channel/quiet'));
   P.brief().onSnapshot(briefIn,e=>fail('P_DB_READ',e,'channel/brief'));
   P.workers().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,Object.assign({id:d.id},d.data()||{})));fleetIn('w',m);},e=>fail('P_DB_READ',e,'workers'));
   P.orders().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,Object.assign({id:d.id},d.data()||{})));fleetIn('o',m);},e=>fail('P_DB_READ',e,'fleet/orders'));
   P.evidence().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));evidenceIn(m);},e=>fail('P_DB_READ',e,'evidence/log'));
+  P.metrics().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,Object.assign({id:d.id},d.data()||{})));metricsIn(m);},e=>fail('P_DB_READ',e,'metrics'));
   P.policy().onSnapshot(s=>fleetIn('p',(s.exists&&s.data())||{}),e=>fail('P_DB_READ',e,'fleet/policy'));
   P.rosterItems().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));rosterIn(m);},e=>fail('P_DB_READ',e,'brain/roster'));
   P.owner().onSnapshot(s=>{ownerFromDb((s.exists&&s.data())||{});},e=>fail('P_DB_READ',e,'channel/owner'));

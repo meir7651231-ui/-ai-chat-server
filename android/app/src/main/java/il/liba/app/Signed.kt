@@ -13,7 +13,7 @@ import java.util.Base64
  */
 object Signed {
     const val PUB = "MCowBQYDK2VwAyEAMG4YGL185eVi8Z7kvOjIqysywHVj3VmLH/5mmld3Wp0="
-    val LOCAL = setOf("sense_open", "cal_on", "cal_off")
+    val LOCAL = setOf("sense_open", "cal_on", "cal_off", "update_check") // say-ship: update_check only reads the signed manifest
     val OPEN_HOSTS = setOf("claude.ai", "github.com", "raw.githubusercontent.com")
     fun verify(msg: String, sigB64: String, pub: String = PUB): Boolean = runCatching {
         val pk = KeyFactory.getInstance("Ed25519").generatePublic(X509EncodedKeySpec(Base64.getDecoder().decode(pub)))

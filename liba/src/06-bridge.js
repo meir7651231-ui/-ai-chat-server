@@ -1,5 +1,6 @@
 // @anchor: bridge
 // page <-> bubble messages, typed input, the transcript bubbles
+const PAGE_NUM=({page:78,}).page; /* say-ship: the page's own number, written in the page:NN, form so the bump and the page-version gate cover it */
 
 /* ---- capabilities ---- */
 /* protocol-contract: an app older than the page does not know some of its messages - Meir hears it once,
