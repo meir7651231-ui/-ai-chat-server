@@ -33,7 +33,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(r0[0] && r0[0][1] === 'dead' && (await sentOf(w0.id)) === 1 && heard.some(t => /עוד מחכה לתשובה, ואף מוח לא נרשם/.test(t)), 'and after six minutes: said once, still sent only once');
   // one sentence; the only brain known went quiet twenty minutes ago
   await f.evaluate(() => window.__h.set('brain/roster/items/b-000', { role: 'מנהל', lastBeat: Date.now() - 20 * 60000 }));
-  await say('תבדוק את החשבונית של החשמל');
+  await say('מה עם החשבונית של החשמל');
   const w1 = await f.evaluate(() => window.__h.all('work').slice(-1)[0]);
   ok(w1 && w1.state === 'new' && w1.tag && w1.attempts === 1, 'a sentence to Claude opens work/<wakeId>: ' + JSON.stringify(w1 && { state: w1.state, attempts: w1.attempts }));
   const now = await f.evaluate(() => Date.now());
@@ -42,7 +42,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   r = await f.evaluate(n => window.__roster.reclaim(n + 200000), now);
   ok(r.length === 1 && r[0][1] === 'resent' && (await sentOf(w1.id)) === 2, 'three minutes, no answer, no live brain: sent once more, the same id');
   heard.length = 0; r = await f.evaluate(n => window.__roster.reclaim(n + 420000), now); await speak(2000);
-  ok(r[0] && r[0][1] === 'dead' && heard.some(t => /שלחתי פעמיים את "תבדוק את החשבונית של החשמל" ואף מוח לא ענה/.test(t)), 'still nothing: dead, and Meir hears it once: ' + heard.join(' | ').slice(0, 120));
+  ok(r[0] && r[0][1] === 'dead' && heard.some(t => /שלחתי פעמיים את "מה עם החשבונית של החשמל" ואף מוח לא ענה/.test(t)), 'still nothing: dead, and Meir hears it once: ' + heard.join(' | ').slice(0, 120));
   r = await f.evaluate(n => window.__roster.reclaim(n + 900000), now); heard.length = 0; await speak(800);
   ok(r.length === 0 && (await sentOf(w1.id)) === 2 && !heard.length, 'and never again - no third send, no second sentence');
   // a live claimer is left alone

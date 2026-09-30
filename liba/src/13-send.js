@@ -56,6 +56,7 @@ async function deliverWithRetry(text,tag){
 }
 let flushing=false;
 async function flushOutbox(){
+  fleetTick(); /* the fleet rides the outbox tick - no timer of its own */
   if(!flushing&&!outbox.length&&db&&Date.now()-walRecAt>60000)await walRecover();
   if(flushing||!walPending().length||!navigator.onLine||!comments)return;
   flushing=true;let items=[];
@@ -86,7 +87,7 @@ async function send(text,forcedTag,source){
   if(!forcedTag&&!noIntent){proWelcome();proHeard(text).catch(e=>fail('P_DB_READ',e,'proactive'));} /* proactive: anything but "לא עכשיו" after a reminder is a welcome */
   if(!forcedTag&&!noIntent&&consentAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* consent: bound to its approval id */
   if(!forcedTag&&!noIntent&&distillAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* distill: the answer to ליבה's own question stays here */
-  const rt=replyTag(text),tag=forcedTag||rt||tagOf();
+  const rt=replyTag(text),tag=forcedTag||rt||fleetTag()||tagOf(); /* fleet-router: an answer to a worker goes to that worker */
   if(tag.indexOf('מנהל')>=0)ownerRenew(lastAsk&&lastAsk.id);
   /* addressing: the target is said only when it changes, and remembered for "למי זה הלך" */
   if(routeNote(text,tag,rt?'reply':forcedTag?'address':'owner')&&lastRoute.why==='reply'&&owner!==(tag.indexOf('מנהל')>=0?'manager':'liba'))sayLocal(tag.indexOf('מנהל')>=0?'זה הולך למנהל, כי הוא שאל.':'זה הולך לליבה, כי היא שאלה.');
@@ -100,7 +101,7 @@ async function send(text,forcedTag,source){
   ledgerBump('req');
   try{P.req(reqId).set({text:dbText(text),askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
-  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:dbText(lastAsk.text),to:lastAsk.speaker,topic:lastAsk.topic||'',answer:dbText(text),cls:classify(text),msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
+  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:dbText(lastAsk.text),to:lastAsk.speaker,topic:lastAsk.topic||'',answer:dbText(text),cls:classify(text),fp:fingerprint(lastAsk.text),workerId:lastAsk.workerId||'',msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
   try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',to:owner,text:dbText(text),cls:classify(text),re:id,req:reqId,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   let ctx='';try{if(!noIntent)ctx=await brief(text);}catch(e){fail('P_DB_READ',e,'brief');}
   try{const w=await buildWake(text,reqId);if(w)ctx+='\n---\n'+w;}catch(e){fail('P_DB_READ',e,'wake');} /* wake-envelope */

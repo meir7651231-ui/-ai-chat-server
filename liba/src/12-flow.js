@@ -44,7 +44,7 @@ async function incoming(d){
   if(!appMode&&(ak==='call'||ak==='stuck')){app.className='ring';KIND.textContent='ליבה מצלצלת';KIND.className='kind stuck';ringStart();await new Promise(r=>setTimeout(r,2400));ringStop();app.className='';}
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
   bubble('li',prefixOf(d,who)+lead+d.text);HEARD.hidden=true;OPTS.innerHTML='';
-  if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,approvalId:d.approvalId||'',text:d.text,speaker:who,topic:d.topic||'',from:d.from||'liba',at:Date.now()};else if(!d.local)lastAsk=null;
+  if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk=(fleetRouteSet(d),{id:d.id,workerId:d.workerId||'',approvalId:d.approvalId||'',text:d.text,speaker:who,topic:d.topic||'',from:d.from||'liba',at:Date.now()});else if(!d.local)lastAsk=null;
   try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:dbText(d.text),cls:classify(d.text),msg:d.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   if(appMode)await sayApp(spokenText,{kind:ak,options:d.options||[],from:d.from||'liba',speaker:who,mid:d.local?'':String(d.id||''),sens:classify(d.text).sens,force:d.force?1:0},d.local?null:d.re);else await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
   if(d.legacy){try{await P.current().update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'chat/current');log('legacy ack: '+(e.code||e));}}

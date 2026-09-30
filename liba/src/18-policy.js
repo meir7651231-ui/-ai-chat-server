@@ -51,7 +51,7 @@ async function digestEvening(now){now=now||Date.now();const h=jHour(now),day=trD
 function policyWhy(){(async()=>{const day=trDay(Date.now());const g=await P.digest(day).get();const x=g.exists?(g.data()||{}):null;const items=Object.values((x&&x.items)||{}).sort((a,b)=>b.at-a.at);
   if(!items.length){sayLocal('היום לא השתקתי כלום.');return;}const i=items[0];const r=POLICY.rules.find(z=>z.id===i.rule);
   sayLocal('לא סיפרתי על '+(i.topic||i.speaker||'זה')+' כי ביקשת "'+i.ruleText+'"'+(r?', '+agoWords(Date.now(),r.at).replace(/^מלפני/,'לפני'):'')+'. זה הכלל '+i.rule+'. ההודעה: '+i.text.slice(0,120)+(items.length>1?'. ועוד '+(items.length-1)+' היום.':'.'));})().catch(e=>{fail('P_DB_READ',e,'digest');sayLocal('לא הצלחתי לקרוא.');});return true;}
-function policyList(){POLICY.load().then(rs=>sayLocal(rs.length?'יש '+rs.length+' כללים: '+rs.map(r=>r.text).join('; ')+'.':'אין כללים. תגיד למשל "אל תעדכן אותי על מייל".'));return true;}
+function policyList(){POLICY.load().then(async rs=>{const a=await fleetAsksOpen();sayLocal((rs.length?'יש '+rs.length+' כללים: '+rs.map(r=>r.text).join('; ')+'.':'אין כללים. תגיד למשל "אל תעדכן אותי על מייל".')+(a.length?' ו-'+a.length+' שאלות של עובדים מחכות לסיכום - תגיד "מה השתקת מהעובדים".':''));});return true;}
 function policyDrop(rest){const q=rest.trim();if(!q)return false;POLICY.load().then(async rs=>{const hit=rs.filter(r=>r.text.indexOf(inorm(q))>=0);for(const r of hit)if(r.key)await P.fact(r.key).update({state:'tomb',tombAt:Date.now()});await POLICY.load();
   sayLocal(hit.length?'ביטלתי '+hit.length+(hit.length===1?' כלל':' כללים')+' על '+q+'.':'לא מצאתי כלל על '+q+'.');});return true;}
 function policyFull(){if(!lastShort)return false;sayLocal(lastShort);lastShort=null;return true;}

@@ -29,7 +29,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(/עצרנו בבניית דוח ההכנסות|עצרנו בסידור הגלריה/.test(s) && /הסקתי מהמשימות/.test(s), '"איפה עצרנו" with no brief: a real task, and said to be derived: ' + s.slice(0, 140));
   // a sentence to Claude carries the envelope
   const before = await f.evaluate(() => window.__h.sentRaw.length);
-  for (const t of ['מה המצב עם הדוח', 'תבדוק את הגלריה בבקשה', 'כמה עלה החודש']) await say(t);
+  for (const t of ['מה המצב עם הדוח', 'מה עם הגלריה בבקשה', 'כמה עלה החודש']) await say(t);
   const sent = await f.evaluate(b => window.__h.sentRaw.slice(b), before);
   const env = sent.map(x => { const i = x.indexOf('[מעטפה#'); const j = x.lastIndexOf(' ⟦#'); return i < 0 ? null : x.slice(i, j); });
   ok(sent.length === 3 && env.every(e => e && e.length <= 1800) && sent.every(x => /^\[ליבה/.test(x) && / ⟦#[0-9a-z]+⟧$/.test(x)), 'every sentence to Claude: the tag first, one packet of at most 1800 characters, the mark last: ' + env.map(e => e && e.length).join(','));
@@ -37,7 +37,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const wakes = await f.evaluate(() => window.__h.all('brain/wakes/items'));
   const ids = sent.map(x => (x.match(/⟦#([0-9a-z]+)⟧$/) || [])[1]);
   ok(ids.every(id => wakes.some(w => w.id === id && w.envelope && w.len <= 1800)), 'each packet is kept in brain/wakes under the wake id (the request id): ' + wakes.length);
-  ok(env[2] && /לפני כן: .*מאיר: תבדוק את הגלריה/.test(env[2]), 'the last sentences are in it: ' + (env[2] || '').split('\n').find(l => /לפני כן/.test(l)));
+  ok(env[2] && /לפני כן: .*מאיר: מה עם הגלריה/.test(env[2]), 'the last sentences are in it: ' + (env[2] || '').split('\n').find(l => /לפני כן/.test(l)));
   // the brain writes its brief
   await f.evaluate(() => window.__h.set('channel/brief', { ver: 1, at: Date.now(), sessionId: 'session_AAA111', model: 'x', openLoop: ['השוואת הצעות מחיר לגג'], waitingOn: 'מאיר: איזה ספק', nextAction: 'לשלוח לספק השני', doNot: ['לא להזמין לפני אישור'] }));
   await p.waitForTimeout(400);

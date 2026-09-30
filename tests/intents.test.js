@@ -12,7 +12,7 @@ const TABLE = [
   ['תשחרר הכל', 'missed.all'], ['מפה', 'map'], ['קודם את הבנייה', 'task.priority', 'הבנייה'], ['ליבה, תחזור', 'owner.liba'], ['ליבא תחזור', 'owner.liba'],
   ['תעלה את המנהל', 'owner.manager'], ['מנהל', 'owner.manager'], ['מנהל מה המצב', 'address.manager', 'מה המצב'],
   // these go to Claude, as sentences
-  ['תעביר למנהל את הקובץ', null], ['תעצור את הבנייה', null], ['תבנה לי אתר', null], ['העיצוב טוב אבל יותר מפלצתי', null], ['מה נשאר לעשות היום', null],
+  ['תעביר למנהל את הקובץ', null], ['תעצור את הבנייה', null], ['תבנה לי אתר', 'fleet.build'], ['העיצוב טוב אבל יותר מפלצתי', null], ['מה נשאר לעשות היום', null],
   // the dangerous neighbours never become each other
   ['תעזור לי עם המייל', null], ['תמשיך', null], ['תמחק', null],
   // punctuation, niqqud and spacing do not matter

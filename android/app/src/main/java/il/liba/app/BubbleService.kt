@@ -686,6 +686,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         item("🎙 דבר") { startListening("cmd") }
         item(if (heyOn) "🔇 שקט (כבה מילת הפעלה)" else "🔔 הפעל מילת הפעלה") { if (heyOn) { tts?.stop(); heyOff() } else { heyOn = true; Prefs.setHey(this, true); wakeLoop() } }
         item("📋 סטטוס") { speak(localStatus()) }
+        item("⏸ עצור את הצי") { if (pageReady) web?.let { LibaWeb.sendInput(it, "תעצור הכול", "menu") } else speak("הדף לא מחובר - אי אפשר לעצור את הצי מכאן כרגע.") } // fleet-control
         item(if (night) "🔊 בטל מצב לילה" else "🌙 מצב לילה") { night = !night; Prefs.setNight(this, night); showLabel(if (night) "🌙 מצב לילה" else "חזרתי לדבר", 2500) }
         item("🕘 יומן והגדרות") { openMain() }
         item("🖥 הצג/הסתר דף") { revealPage(!pageShown) }

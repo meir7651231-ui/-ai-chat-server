@@ -1413,18 +1413,6 @@
    "help": "\"תמשיך את X\""
   },
   {
-   "id": "claude.build",
-   "where": "claude",
-   "rule": "tasks_rules",
-   "family": "בנייה",
-   "prefix": [
-    "תבנה לי",
-    "תבדוק",
-    "תתקן"
-   ],
-   "help": "\"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד"
-  },
-  {
    "id": "claude.deploy",
    "where": "claude",
    "rule": "generator_rules",
@@ -1613,6 +1601,200 @@
    "help": "\"תחזיר מה שמחקת אתמול\"",
    "requires": [
     "db"
+   ]
+  },
+  {
+   "id": "fleet.build",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetBuild",
+   "help": "\"תבנה לי X\" – נפתח עובד",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "תבנה לי",
+    "(תבנה|תבני)"
+   ]
+  },
+  {
+   "id": "fleet.fix",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetFix",
+   "help": "\"תתקן X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תתקן|תתקני)"
+   ]
+  },
+  {
+   "id": "fleet.check",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetCheck",
+   "help": "\"תבדוק X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תבדוק|תבדקי)"
+   ]
+  },
+  {
+   "id": "fleet.pause",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetPause",
+   "help": "\"תשהה את העובד X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תשהה|תשהי|תעצור|תעצרי) את העובד"
+   ]
+  },
+  {
+   "id": "fleet.resume",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetResume",
+   "help": "\"תמשיך את העובד X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תמשיך|תמשיכי|תחזיר לעבודה) את העובד"
+   ]
+  },
+  {
+   "id": "fleet.kill",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetKill",
+   "help": "\"תהרוג את העובד X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תהרוג|תהרגי) את העובד"
+   ]
+  },
+  {
+   "id": "fleet.retry",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetRetry",
+   "help": "\"תריץ שוב את העובד X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תריץ|תריצי) שוב את העובד"
+   ]
+  },
+  {
+   "id": "fleet.drain",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetDrain",
+   "help": "\"תסיים ותעצור את העובד X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תסיים|תסיימי) ו(תעצור|תעצרי) את העובד"
+   ]
+  },
+  {
+   "id": "fleet.halt",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetHalt",
+   "help": "\"תעצור הכול\" (הצי)",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "תעצור הכול",
+    "תעצרי הכול",
+    "תעצור את הצי",
+    "תעצרי את הצי",
+    "עצור את הצי"
+   ]
+  },
+  {
+   "id": "fleet.go",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetGo",
+   "help": "\"תמשיך את הצי\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "תמשיך את הצי",
+    "תמשיכי את הצי",
+    "הצי ממשיך"
+   ]
+  },
+  {
+   "id": "fleet.map",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetMap",
+   "help": "\"מי רץ עכשיו\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "מפת העובדים",
+    "מי רץ עכשיו",
+    "איזה עובדים יש"
+   ]
+  },
+  {
+   "id": "fleet.muted",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetMuted",
+   "help": "\"מה השתקת מהעובדים\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "מה השתקת מהעובדים",
+    "איזה שאלות של עובדים השתקת",
+    "מה העובדים שאלו"
+   ]
+  },
+  {
+   "id": "fleet.repeats",
+   "where": "page",
+   "when": "liba",
+   "family": "בנייה",
+   "handler": "fleetRepeats",
+   "help": "\"מה חוזר על עצמו\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "מה חוזר על עצמו",
+    "איזה כשלים חוזרים"
    ]
   }
  ],

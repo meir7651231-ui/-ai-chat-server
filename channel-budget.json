@@ -27,7 +27,7 @@
       "time": "ts"
     },
     "req": {
-      "cap": 800,
+      "cap": 500,
       "ttlDays": 14,
       "cls": "record",
       "time": "askedAt"
@@ -165,7 +165,7 @@
       "time": "at"
     },
     "actions/log/items": {
-      "cap": 400,
+      "cap": 350,
       "ttlDays": 7,
       "cls": "telemetry",
       "time": "at"
@@ -223,6 +223,30 @@
       "ttlDays": 30,
       "cls": "record",
       "time": "at"
+    },
+    "workers": {
+      "cap": 100,
+      "ttlDays": 30,
+      "cls": "record",
+      "time": "createdAt"
+    },
+    "fleet/orders/items": {
+      "cap": 100,
+      "ttlDays": 30,
+      "cls": "record",
+      "time": "at"
+    },
+    "fleet/asks/items": {
+      "cap": 100,
+      "ttlDays": 14,
+      "cls": "record",
+      "time": "at"
+    },
+    "fleet/failures/items": {
+      "cap": 50,
+      "ttlDays": 60,
+      "cls": "record",
+      "time": "lastAt"
     }
   }
 }

@@ -7,7 +7,7 @@
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
 const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
-  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,mandateAllowCmd,mandateDenyCmd,mandateListCmd,approvalsToday,agendaToday,brainWhere,brainWho,brainOpen,rosterSay,tasksStuck,powerToday,powerWhere,powerBudget,sendAsSaid,retainUndo,exportAll,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,mandateAllowCmd,mandateDenyCmd,mandateListCmd,approvalsToday,agendaToday,brainWhere,brainWho,brainOpen,rosterSay,tasksStuck,powerToday,powerWhere,powerBudget,sendAsSaid,retainUndo,exportAll,fleetBuild,fleetFix,fleetCheck,fleetPause,fleetResume,fleetKill,fleetRetry,fleetDrain,fleetHalt,fleetGo,fleetMap,fleetMuted,fleetRepeats,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
@@ -67,6 +67,7 @@ const REPLY_WINDOW=3*60000;
 const ADDRESS=INTENTS.filter(i=>/^address\./.test(i.id)).flatMap(i=>i.prefix);
 function replyTag(text){if(!lastAsk||Date.now()-lastAsk.at>REPLY_WINDOW)return '';
   const t=inorm(text);if(ADDRESS.some(p=>t===p||t.startsWith(p+' ')))return '';
+  if(lastAsk.workerId)return '[ליבה→עובד:'+lastAsk.workerId+'] '; /* fleet-router: the answer goes to the worker that asked */
   return lastAsk.from==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
 window.__owner={ttl:ms=>{OWNER_TTL=ms;ownerArm();},state:()=>({owner,renewedAt:ownerRenewedAt,ttl:OWNER_TTL})};
 /* addressing: "למי זה הלך" - where the last sentence went and why; "תחזיר לי את זה" - send it again to the other side;
