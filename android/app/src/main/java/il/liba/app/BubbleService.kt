@@ -446,7 +446,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 // step 1: three proofs before the installer ever sees the file.
                 // (a) the bytes are the ones ship/release.mjs measured
                 val want256 = Prefs.updateSha(this)
-                if (!want256.isNullOrBlank()) {
+                if (want256.isNullOrBlank()) { fail = "sha"; throw java.io.IOException("אין טביעה לגרסה, ולכן לא מתקינה") } // update-trust: never without it
+                run {
                     val md = java.security.MessageDigest.getInstance("SHA-256")
                     java.io.FileInputStream(f).use { i -> val b = ByteArray(65536); while (true) { val n = i.read(b); if (n <= 0) break; md.update(b, 0, n) } }
                     val got256 = md.digest().joinToString("") { "%02x".format(it) }
@@ -498,6 +499,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 val j = JSONObject(c.inputStream.bufferedReader().readText())
                 val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
                 if (j.getInt("versionCode") > mine) {
+                    // step update-trust: an unsigned or altered manifest is not an update - nothing is downloaded
+                    UpdateTrust.manifest(j.getInt("versionCode"), j.optString("sha256"), j.optString("url"), j.optString("sig"))?.let { why ->
+                        Trace.e(Trace.Code.E_INSTALL_SIG, "manifest"); Prefs.setUpdate(this, null, mine); main.post { showLabel("לא מתקינה: $why", 8000) }; onDone?.let { main.post(it) }; return@Thread }
                     Prefs.setUpdate(this, j.getString("url"), j.getInt("versionCode"), j.optString("sha256", null), j.optString("versionName"))
                     main.post { showLabel("יש גרסה חדשה (${j.optString("versionName")}) – לחיצה ארוכה עליי להתקנה", 8000) }
                 } else Prefs.setUpdate(this, null, mine)

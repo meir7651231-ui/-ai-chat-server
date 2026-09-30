@@ -43,6 +43,7 @@ const extra = [
   ['zman', 'node tests/zman.test.js'],
   ['shabbat', 'node tests/shabbat.test.js'],
   ['signed', 'node tests/signed.test.js'],
+  ['version-sig', 'node gates/version-sig.mjs'],
 ]
 
 let pass = 0
