@@ -13,3 +13,6 @@ android/keys/
 
 # node
 node_modules/
+
+# gate results, per shard and commit (ship/release.mjs reads them)
+gates/.last/

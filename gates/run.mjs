@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Every gate, one line each, X/N at the end. Exit 1 if any failed — this is what CI runs.
 import { execFileSync } from 'node:child_process'
-import { readdirSync } from 'node:fs'
+import { readdirSync, mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -97,4 +97,12 @@ console.log(`\n${pass}/${total} שערים עברו`)
 // never folded into the count - a phone that is offline is neither a pass nor a code failure.
 try { const out = execFileSync('node', [join(here, 'field.mjs')], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); console.log('שטח:\n' + out.trim().replace(/^/gm, '  ')) }
 catch (e) { console.log('שטח:\n' + String(e.stdout || '').trim().replace(/^/gm, '  ')) }
+// plan-graph-gates: the result is kept per shard and commit - ship/release.mjs refuses to ship code the gates did not pass
+try {
+  const git = a => execFileSync('git', a, { cwd: root, encoding: 'utf8' }).trim()
+  const dirty = git(['status', '--porcelain']).split('\n').filter(l => l && !l.includes('gates/.last/')).length > 0
+  mkdirSync(join(here, '.last'), { recursive: true })
+  writeFileSync(join(here, '.last', `shard-${shI}of${shN}.json`), JSON.stringify({ commit: git(['rev-parse', 'HEAD']), dirty, shard: `${shI}/${shN}`, pass, total,
+    failed: lines.filter(l => l.startsWith('✗')).map(l => l.slice(2, 16).trim()), at: new Date().toISOString() }, null, 1) + '\n')
+} catch (e) { console.log('(תוצאת השערים לא נשמרה: ' + String(e.message || e).split('\n')[0] + ')') }
 process.exit(pass === total ? 0 : 1)

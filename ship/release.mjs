@@ -10,7 +10,7 @@
  * sha256 written into version.json.
  */
 import { execFileSync } from 'node:child_process'
-import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, copyFileSync, existsSync, readdirSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join } from 'node:path'
 import { ROOT, version, writeVersionJson } from './version.mjs'
@@ -29,6 +29,27 @@ const die = (name, why) => { steps.push(`  ✗ ${name} · ${why}`); console.log(
 
 const v = version()
 ok('VERSION נקרא', `${v.versionName} (${v.versionCode})`)
+// plan-graph-gates: no version ships unless every gate passed on this code. The last run of each shard is in gates/.last;
+// all shards of one run must be green, on one clean commit, and only VERSION may have changed since. The one way around
+// it is written down (docs/BREAK-GLASS.md): LIBA_BREAK_GLASS="<why>" - said here, and kept in the version's notes.
+const BREAK = (process.env.LIBA_BREAK_GLASS || '').trim()
+if (!VERIFY_ONLY) {
+  const lastDir = join(ROOT, 'gates', '.last')
+  const recs = existsSync(lastDir) ? readdirSync(lastDir).filter(f => f.endsWith('.json')).map(f => { try { return JSON.parse(readFileSync(join(lastDir, f), 'utf8')) } catch { return null } }).filter(Boolean) : []
+  const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim()
+  const byRun = new Map(); for (const r of recs) { const k = r.commit + '|' + String(r.shard).split('/')[1]; if (!byRun.has(k)) byRun.set(k, []); byRun.get(k).push(r) }
+  let why = 'אין תוצאה של השערים (SHARD=i/3 node gates/run.mjs)'
+  const good = [...byRun.values()].filter(rs => { const n = +String(rs[0].shard).split('/')[1]; const shards = new Set(rs.map(r => r.shard));
+    if (shards.size !== n) { why = `ריצת השערים על ${rs[0].commit.slice(0, 7)} חלקית (${shards.size}/${n})`; return false }
+    if (rs.some(r => r.dirty)) { why = 'השערים רצו על עץ עם שינויים לא מחויבים'; return false }
+    const red = rs.flatMap(r => r.failed || []); if (red.length || rs.some(r => r.pass !== r.total)) { why = 'שער אדום: ' + red.join(', '); return false }
+    let changed = []; try { changed = execFileSync('git', ['diff', '--name-only', rs[0].commit, head], { cwd: ROOT, encoding: 'utf8' }).trim().split('\n').filter(Boolean) } catch { why = 'הקומיט של השערים לא בהיסטוריה'; return false }
+    const extra = changed.filter(f => f !== 'VERSION'); if (extra.length) { why = `מאז השערים השתנו ${extra.length} קבצים (${extra.slice(0, 3).join(', ')})`; return false }
+    return true })
+  if (good.length) ok('שערים', `כל השערים עברו על ${good[0][0].commit.slice(0, 7)}`)
+  else if (BREAK) ok('שערים', `⚠ עקיפת חירום: ${BREAK} (${why})`)
+  else die('שערים', why + ' - לא שולחת גרסה. עקיפה: docs/BREAK-GLASS.md')
+}
 
 // 1. one tree
 const SEARCH = ['/home/user', process.env.HOME || '/root'].filter((v, i, a) => v && a.indexOf(v) === i)
@@ -90,7 +111,7 @@ copyFileSync(apk, join(ROOT, 'dist/liba.apk'))
 sh('git', ['add', 'dist/liba.apk'])
 sh('git', ['commit', '-q', '-m', `build: liba ${v.versionName} (${v.versionCode})`, '--allow-empty'])
 const commit = sh('git', ['rev-parse', 'HEAD']).trim()
-const json = writeVersionJson({ sha256, commit, notes: NOTES })
+const json = writeVersionJson({ sha256, commit, notes: BREAK ? (NOTES ? NOTES + ' · ' : '') + 'עקיפת חירום: ' + BREAK : NOTES })
 sh('git', ['add', 'version.json'])
 sh('git', ['commit', '-q', '-m', `ship: ${v.versionName} → ${commit.slice(0, 7)}`])
 ok('נכתב', `version.json · url נעוץ ל-${commit.slice(0, 7)}`)
