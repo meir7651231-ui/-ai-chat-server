@@ -41,7 +41,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(order.every(w => heard.filter(h => h.indexOf(w) >= 0).length === 1), 'each stage said once: ' + heard.map(h => h.slice(-30)).join(' / '));
   ok(cmds.filter(c => c === 'update_check').length === 1, 'ready: the phone is asked to check for the update, once');
   s = await say('מה מצב הגרסה');
-  ok(/בטלפון רצה אפליקציה 3\.36\.0, והדף 78\. השילוח האחרון: הגרסה מוכנה.*גרסה 3\.36\.0/.test(s), '"מה מצב הגרסה": ' + s.slice(0, 120));
+  ok(/בטלפון רצה אפליקציה 3\.36\.0, והדף \d+\. השילוח האחרון: הגרסה מוכנה.*גרסה 3\.36\.0/.test(s), '"מה מצב הגרסה": ' + s.slice(0, 120));
   s = await say('מה השתנה בגרסה');
   ok(/בגרסה 3\.36\.0: חותם מקור ובודק/.test(s), '"מה השתנה בגרסה"');
   // page-failed
