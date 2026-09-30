@@ -47,6 +47,8 @@ object LibaWeb {
         fun onMemSync(body: String)
         fun onMemAck(ids: List<String>)
         fun onRemind(items: String)
+        fun onSenseAck(ids: List<String>)
+        fun onSenseCfg(apps: List<String>)
     }
 
     private class JsBridge(val b: Bridge) : ProtocolBridge {
@@ -66,6 +68,8 @@ object LibaWeb {
         @JavascriptInterface override fun memSync(body: String) = b.onMemSync(body)
         @JavascriptInterface override fun memAck(ids: String) = b.onMemAck(list(ids))
         @JavascriptInterface override fun remind(items: String) = b.onRemind(items)
+        @JavascriptInterface override fun senseAck(ids: String) = b.onSenseAck(list(ids))
+        @JavascriptInterface override fun senseCfg(apps: String) = b.onSenseCfg(list(apps))
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -130,6 +134,7 @@ object LibaWeb {
     /** step page-kernel: "still speaking" every 2 s, so a page that hears nothing for 6 s knows the voice stopped. */
     /** step fixed-cardinality-telemetry: one edge-triggered sign of life; the page keeps it in pulse/<dev> */
     fun sendPulse(web: WebView, dev: String, name: String, body: String) { web.evaluateJavascript("window.__libaPulse && window.__libaPulse(${JSONObject.quote(dev)},${JSONObject.quote(name)},${JSONObject.quote(body)})", null) }
+    fun sendSense(web: WebView, items: String) { web.evaluateJavascript("window.__libaSense && window.__libaSense(${JSONObject.quote(items)})", null) }
     fun sendMemAsk(web: WebView, items: String) { web.evaluateJavascript("window.__libaMemAsk && window.__libaMemAsk(${JSONObject.quote(items)})", null) }
     fun sendSpeaking(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpeaking && window.__libaSpeaking(${JSONObject.quote(id)})", null) }
     /** step clock: when the phone really started and stopped saying it, and why it stopped (done/error/guard/stop). */

@@ -10,7 +10,8 @@
     "state",
     "trace",
     "mem",
-    "remind"
+    "remind",
+    "sense"
   ],
   "toApp": {
     "ready": {
@@ -101,6 +102,18 @@
         "items": "str"
       },
       "why": "proactive: the date reminders, so the phone's alarm says them even when the page is dead or the phone just restarted"
+    },
+    "senseAck": {
+      "fields": {
+        "ids": "list"
+      },
+      "why": "sense-bus-ears: the page stored them; the phone lets them go"
+    },
+    "senseCfg": {
+      "fields": {
+        "apps": "list"
+      },
+      "why": "sense-bus-ears: which apps Meir said to listen to (memory/settings.senses.apps); empty means none"
     }
   },
   "toPage": {
@@ -172,6 +185,12 @@
         "items": "str"
       },
       "why": "device-mem: what Meir asked the phone to remember while the page was down, sent when it is back"
+    },
+    "sense": {
+      "fields": {
+        "items": "str"
+      },
+      "why": "sense-bus-ears: what the phone heard (notifications from the apps Meir named), kept on the phone until the page acks"
     }
   },
   "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",

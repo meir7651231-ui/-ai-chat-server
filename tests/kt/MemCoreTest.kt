@@ -44,6 +44,7 @@ fun main(args: Array<String>) {
     ok(m.pending.isEmpty() && m.facts.keys.none { it.startsWith("dev.") }, "all 50 reached the page: 100%")
 
     reminderTests()
+    senseTests()
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
     if (fails > 0) System.exit(1)
 }

@@ -99,6 +99,7 @@ async function janSweep(now){now=now||Date.now();const t0=Date.now();let left=JA
     catch(e){skipped.push(kind);fail('P_DB_WRITE',e,'janitor '+kind);}}
   if(left>0){try{const g=await janGallery(now,left);per.gallery=g;left-=g.deleted;}catch(e){skipped.push('gallery');fail('P_DB_WRITE',e,'janitor gallery');}}
   if(left>0){try{const c=await janCaps(now,left);per.caps={trimmed:c.trimmed,over:c.over,offenders:Object.keys(c.offenders)};left-=c.trimmed;}catch(e){skipped.push('caps');fail('P_DB_WRITE',e,'janitor caps');}}
+  if(left>0){try{const s=await senseSweep(now,left);per.sense=s;left-=s.deleted;}catch(e){skipped.push('sense');fail('P_DB_WRITE',e,'janitor sense');}}
   if(left>0){try{const m=await janMonths(now,left);per.months=m;left-=m.deleted;}catch(e){skipped.push('months');fail('P_DB_WRITE',e,'janitor months');}}
   const deleted=JAN_CAP-left;
   const report={at:now,ms:Date.now()-t0,deleted:deleted,per:per,skipped:skipped,holder:janHolder,more:left<=0};

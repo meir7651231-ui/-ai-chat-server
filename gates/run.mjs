@@ -37,6 +37,7 @@ const extra = [
   ['devmem', 'node tests/devmem.test.js'],
   ['kt-memcore', 'node tools/kt-test.mjs'],
   ['proactive', 'node tests/proactive.test.js'],
+  ['sense', 'node tests/sense.e2e.js'],
 ]
 
 let pass = 0

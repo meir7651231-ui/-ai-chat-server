@@ -26,7 +26,7 @@ const POLICY={rules:[],at:0,
   async load(){try{const all=await MEM.all();this.rules=all.filter(f=>f.kind==='pref'&&f.state!=='tomb').map(f=>this.compileOne(f)).filter(Boolean);this.at=Date.now();}catch(e){fail('P_DB_READ',e,'policy');}return this.rules;},
   about(d,topic){const w=memWords(topic);if(!w.length)return false;const hay=memWords([d.topic,d.text].join(' ')).join(' ');return w.every(x=>hay.indexOf(x)>=0);},
   /* which rule holds this message back, if any - urgent, local and commands never */
-  check(d,now){if((d.local&&d.speaker!=='הלוח'&&!d.proactive)||d.kind==='cmd'||d.priority==='urgent')return null;const h=jHour(now||Date.now());
+  check(d,now){if((d.local&&d.speaker!=='הלוח'&&!d.proactive&&!d.sense)||d.kind==='cmd'||d.priority==='urgent')return null;const h=jHour(now||Date.now());
     for(const r of this.rules){
       if(r.type==='never_ask'&&(d.kind==='ask'||d.kind==='stuck')&&this.about(d,r.topic))return r;
       if((r.type==='mute_topic'||r.type==='digest_topic')&&this.about(d,r.topic))return r;

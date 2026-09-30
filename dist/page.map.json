@@ -1,5 +1,5 @@
 {
- "pageHash": "e678d141a800",
+ "pageHash": "2f9df6660686",
  "anchors": {
   "intents": {
    "src": "liba/src/00-intents.js",
@@ -7,983 +7,1023 @@
   },
   "paths": {
    "src": "liba/src/00-paths.js",
-   "line": 149
+   "line": 153
   },
   "paths.mintId": {
    "src": "liba/src/00-paths.js:30",
-   "line": 176
+   "line": 180
   },
   "paths.chAllowed": {
    "src": "liba/src/00-paths.js:55",
-   "line": 201
+   "line": 205
   },
   "paths.chAlarm": {
    "src": "liba/src/00-paths.js:56",
-   "line": 202
+   "line": 206
   },
   "paths.ch": {
    "src": "liba/src/00-paths.js:59",
-   "line": 205
+   "line": 209
   },
   "paths.guardDoc": {
    "src": "liba/src/00-paths.js:65",
-   "line": 211
+   "line": 215
   },
   "paths.guardCol": {
    "src": "liba/src/00-paths.js:68",
-   "line": 214
+   "line": 218
   },
   "paths.esc": {
    "src": "liba/src/00-paths.js:74",
-   "line": 220
+   "line": 224
   },
   "protocol": {
    "src": "liba/src/00-protocol.js",
-   "line": 221
+   "line": 225
   },
   "core": {
    "src": "liba/src/01-core.js",
-   "line": 225
+   "line": 229
   },
   "core.transition": {
    "src": "liba/src/01-core.js:14",
-   "line": 236
+   "line": 240
   },
   "trace": {
    "src": "liba/src/02-trace.js",
-   "line": 242
+   "line": 246
   },
   "trace.jHour": {
    "src": "liba/src/02-trace.js:13",
-   "line": 252
+   "line": 256
   },
   "trace.trDay": {
    "src": "liba/src/02-trace.js:14",
-   "line": 253
+   "line": 257
   },
   "trace.trId": {
    "src": "liba/src/02-trace.js:15",
-   "line": 254
+   "line": 258
   },
   "trace.trCtx": {
    "src": "liba/src/02-trace.js:17",
-   "line": 256
+   "line": 260
   },
   "trace.trHe": {
    "src": "liba/src/02-trace.js:18",
-   "line": 257
+   "line": 261
   },
   "trace.trRingPush": {
    "src": "liba/src/02-trace.js:19",
-   "line": 258
+   "line": 262
   },
   "trace.trQueue": {
    "src": "liba/src/02-trace.js:20",
-   "line": 259
+   "line": 263
   },
   "trace.trRoll": {
    "src": "liba/src/02-trace.js:22",
-   "line": 261
+   "line": 265
   },
   "trace.fail": {
    "src": "liba/src/02-trace.js:25",
-   "line": 264
+   "line": 268
   },
   "trace.trDoc": {
    "src": "liba/src/02-trace.js:34",
-   "line": 273
+   "line": 277
   },
   "trace.trFlush": {
    "src": "liba/src/02-trace.js:36",
-   "line": 275
+   "line": 279
   },
   "trace.trBridge": {
    "src": "liba/src/02-trace.js:41",
-   "line": 280
+   "line": 284
   },
   "trace.trTop": {
    "src": "liba/src/02-trace.js:56",
-   "line": 295
+   "line": 299
   },
   "trace.traceToday": {
    "src": "liba/src/02-trace.js:64",
-   "line": 303
+   "line": 307
   },
   "audio": {
    "src": "liba/src/03-audio.js",
-   "line": 313
+   "line": 317
   },
   "audio.audioInit": {
    "src": "liba/src/03-audio.js:5",
-   "line": 315
+   "line": 319
   },
   "audio.beep": {
    "src": "liba/src/03-audio.js:6",
-   "line": 316
+   "line": 320
   },
   "audio.ringOnce": {
    "src": "liba/src/03-audio.js:7",
-   "line": 317
+   "line": 321
   },
   "audio.ringStart": {
    "src": "liba/src/03-audio.js:8",
-   "line": 318
+   "line": 322
   },
   "audio.ringStop": {
    "src": "liba/src/03-audio.js:9",
-   "line": 319
+   "line": 323
   },
   "speech": {
    "src": "liba/src/04-speech.js",
-   "line": 320
+   "line": 324
   },
   "speech.pickVoice": {
    "src": "liba/src/04-speech.js:6",
-   "line": 323
+   "line": 327
   },
   "speech.appSpeaksBack": {
    "src": "liba/src/04-speech.js:17",
-   "line": 334
+   "line": 338
   },
   "speech.sayApp": {
    "src": "liba/src/04-speech.js:22",
-   "line": 339
+   "line": 343
   },
   "speech.say": {
    "src": "liba/src/04-speech.js:27",
-   "line": 344
+   "line": 348
   },
   "listen": {
    "src": "liba/src/05-listen.js",
-   "line": 345
+   "line": 349
   },
   "listen.listen": {
    "src": "liba/src/05-listen.js:8",
-   "line": 350
+   "line": 354
   },
   "listen.keepAwake": {
    "src": "liba/src/05-listen.js:14",
-   "line": 356
+   "line": 360
   },
   "bridge": {
    "src": "liba/src/06-bridge.js",
-   "line": 358
+   "line": 362
   },
   "bridge.spokeTimed": {
    "src": "liba/src/06-bridge.js:11",
-   "line": 366
+   "line": 370
   },
   "bridge.urgentSeen": {
    "src": "liba/src/06-bridge.js:16",
-   "line": 371
+   "line": 375
   },
   "bridge.protoCheck": {
    "src": "liba/src/06-bridge.js:20",
-   "line": 375
+   "line": 379
   },
   "bridge.post": {
    "src": "liba/src/06-bridge.js:25",
-   "line": 380
+   "line": 384
   },
   "bridge.bubble": {
-   "src": "liba/src/06-bridge.js:45",
-   "line": 400
+   "src": "liba/src/06-bridge.js:46",
+   "line": 405
   },
   "db": {
    "src": "liba/src/07-db.js",
-   "line": 401
+   "line": 406
   },
   "db.watch": {
    "src": "liba/src/07-db.js:8",
-   "line": 406
+   "line": 411
   },
   "db.coldGet": {
    "src": "liba/src/07-db.js:13",
-   "line": 411
+   "line": 416
   },
   "db.inboxMerged": {
    "src": "liba/src/07-db.js:18",
-   "line": 416
+   "line": 421
   },
   "db.onInbox": {
    "src": "liba/src/07-db.js:19",
-   "line": 417
+   "line": 422
   },
   "inbox": {
    "src": "liba/src/08-inbox.js",
-   "line": 441
+   "line": 446
   },
   "inbox.spokenDone": {
    "src": "liba/src/08-inbox.js:10",
-   "line": 448
+   "line": 453
   },
   "inbox.spokenMark": {
    "src": "liba/src/08-inbox.js:11",
-   "line": 449
+   "line": 454
   },
   "inbox.ageOf": {
    "src": "liba/src/08-inbox.js:19",
-   "line": 457
+   "line": 462
   },
   "inbox.agoWords": {
    "src": "liba/src/08-inbox.js:24",
-   "line": 462
+   "line": 467
   },
   "inbox.heAgo": {
    "src": "liba/src/08-inbox.js:28",
-   "line": 466
+   "line": 471
   },
   "inbox.expired": {
    "src": "liba/src/08-inbox.js:29",
-   "line": 467
+   "line": 472
   },
   "inbox.queueLocal": {
    "src": "liba/src/08-inbox.js:32",
-   "line": 470
+   "line": 475
   },
   "inbox.gate": {
    "src": "liba/src/08-inbox.js:40",
-   "line": 478
+   "line": 483
   },
   "inbox.holdNote": {
    "src": "liba/src/08-inbox.js:46",
-   "line": 484
+   "line": 489
   },
   "inbox.ready": {
    "src": "liba/src/08-inbox.js:48",
-   "line": 486
+   "line": 491
   },
   "inbox.speakerOf": {
    "src": "liba/src/08-inbox.js:51",
-   "line": 489
+   "line": 494
   },
   "inbox.prefixOf": {
    "src": "liba/src/08-inbox.js:52",
-   "line": 490
+   "line": 495
   },
   "inbox.pump": {
    "src": "liba/src/08-inbox.js:53",
-   "line": 491
+   "line": 496
   },
   "inbox.fresh": {
    "src": "liba/src/08-inbox.js:79",
-   "line": 517
+   "line": 522
   },
   "inbox.mergeTasks": {
    "src": "liba/src/08-inbox.js:87",
-   "line": 525
+   "line": 530
   },
   "inbox.byTopic": {
    "src": "liba/src/08-inbox.js:91",
-   "line": 529
+   "line": 534
   },
   "inbox.inboxClaim": {
    "src": "liba/src/08-inbox.js:94",
-   "line": 532
+   "line": 537
   },
   "inbox.inboxRetry": {
    "src": "liba/src/08-inbox.js:101",
-   "line": 539
+   "line": 544
   },
   "inbox.missedList": {
    "src": "liba/src/08-inbox.js:111",
-   "line": 549
+   "line": 554
   },
   "inbox.missedAll": {
    "src": "liba/src/08-inbox.js:115",
-   "line": 553
+   "line": 558
   },
   "inbox.missedAsks": {
    "src": "liba/src/08-inbox.js:116",
-   "line": 554
+   "line": 559
   },
   "inbox.missedRelease": {
    "src": "liba/src/08-inbox.js:117",
-   "line": 555
+   "line": 560
   },
   "inbox.fastLane": {
    "src": "liba/src/08-inbox.js:125",
-   "line": 563
+   "line": 568
   },
   "inbox.streamPlay": {
    "src": "liba/src/08-inbox.js:126",
-   "line": 564
+   "line": 569
   },
   "inbox.catchupCheck": {
    "src": "liba/src/08-inbox.js:144",
-   "line": 582
+   "line": 587
   },
   "inbox.catchupAll": {
    "src": "liba/src/08-inbox.js:153",
-   "line": 591
+   "line": 596
   },
   "inbox.logBetween": {
    "src": "liba/src/08-inbox.js:156",
-   "line": 594
+   "line": 599
   },
   "inbox.daysYesterday": {
    "src": "liba/src/08-inbox.js:160",
-   "line": 598
+   "line": 603
   },
   "inbox.daysBack": {
    "src": "liba/src/08-inbox.js:166",
-   "line": 604
+   "line": 609
   },
   "commands": {
    "src": "liba/src/09-commands.js",
-   "line": 609
+   "line": 614
   },
   "commands.quietOff": {
    "src": "liba/src/09-commands.js:6",
-   "line": 612
+   "line": 617
   },
   "commands.slotMinutes": {
    "src": "liba/src/09-commands.js:8",
-   "line": 614
+   "line": 619
   },
   "commands.quietOn": {
    "src": "liba/src/09-commands.js:10",
-   "line": 616
+   "line": 621
   },
   "commands.setQuiet": {
    "src": "liba/src/09-commands.js:11",
-   "line": 617
+   "line": 622
   },
   "commands.sayLocal": {
    "src": "liba/src/09-commands.js:14",
-   "line": 620
+   "line": 625
   },
   "commands.helpAll": {
    "src": "liba/src/09-commands.js:21",
-   "line": 627
+   "line": 632
   },
   "commands.helpFamily": {
    "src": "liba/src/09-commands.js:23",
-   "line": 629
+   "line": 634
   },
   "commands.galleryWeek": {
    "src": "liba/src/09-commands.js:24",
-   "line": 630
+   "line": 635
   },
   "commands.generatorOpen": {
    "src": "liba/src/09-commands.js:25",
-   "line": 631
+   "line": 636
   },
   "commands.memRemember": {
    "src": "liba/src/09-commands.js:27",
-   "line": 633
+   "line": 638
   },
   "commands.memForget": {
    "src": "liba/src/09-commands.js:30",
-   "line": 636
+   "line": 641
   },
   "commands.memPref": {
    "src": "liba/src/09-commands.js:32",
-   "line": 638
+   "line": 643
   },
   "commands.memList": {
    "src": "liba/src/09-commands.js:34",
-   "line": 640
+   "line": 645
   },
   "commands.memNoLog": {
    "src": "liba/src/09-commands.js:35",
-   "line": 641
+   "line": 646
   },
   "commands.memLog": {
    "src": "liba/src/09-commands.js:36",
-   "line": 642
+   "line": 647
   },
   "commands.memPrivacy": {
    "src": "liba/src/09-commands.js:37",
-   "line": 643
+   "line": 648
   },
   "commands.reqToday": {
    "src": "liba/src/09-commands.js:39",
-   "line": 645
+   "line": 650
   },
   "commands.pct": {
    "src": "liba/src/09-commands.js:52",
-   "line": 658
+   "line": 663
   },
   "commands.heDur": {
    "src": "liba/src/09-commands.js:53",
-   "line": 659
+   "line": 664
   },
   "commands.latencyToday": {
    "src": "liba/src/09-commands.js:54",
-   "line": 660
+   "line": 665
   },
   "commands.lineStatus": {
    "src": "liba/src/09-commands.js:68",
-   "line": 674
+   "line": 679
   },
   "commands.phoneWhy": {
    "src": "liba/src/09-commands.js:69",
-   "line": 675
+   "line": 680
   },
   "commands.outboxList": {
    "src": "liba/src/09-commands.js:71",
-   "line": 677
+   "line": 682
   },
   "commands.outboxResend": {
    "src": "liba/src/09-commands.js:73",
-   "line": 679
+   "line": 684
   },
   "commands.mapShow": {
    "src": "liba/src/09-commands.js:75",
-   "line": 681
+   "line": 686
   },
   "commands.openLast": {
    "src": "liba/src/09-commands.js:76",
-   "line": 682
+   "line": 687
   },
   "commands.taskPriority": {
    "src": "liba/src/09-commands.js:77",
-   "line": 683
+   "line": 688
   },
   "owner": {
    "src": "liba/src/10-owner.js",
-   "line": 684
+   "line": 689
   },
   "owner.lev": {
    "src": "liba/src/10-owner.js:12",
-   "line": 693
+   "line": 698
   },
   "owner.matchIntent": {
    "src": "liba/src/10-owner.js:14",
-   "line": 695
+   "line": 700
   },
   "owner.runIntent": {
    "src": "liba/src/10-owner.js:26",
-   "line": 707
+   "line": 712
   },
   "owner.confirmYes": {
    "src": "liba/src/10-owner.js:30",
-   "line": 711
+   "line": 716
   },
   "owner.confirmNo": {
    "src": "liba/src/10-owner.js:31",
-   "line": 712
+   "line": 717
   },
   "owner.switchOwner": {
    "src": "liba/src/10-owner.js:33",
-   "line": 714
+   "line": 719
   },
   "owner.setOwner": {
    "src": "liba/src/10-owner.js:40",
-   "line": 721
+   "line": 726
   },
   "owner.ownerLog": {
    "src": "liba/src/10-owner.js:48",
-   "line": 729
+   "line": 734
   },
   "owner.ownerWrite": {
    "src": "liba/src/10-owner.js:49",
-   "line": 730
+   "line": 735
   },
   "owner.ownerRenew": {
    "src": "liba/src/10-owner.js:51",
-   "line": 732
+   "line": 737
   },
   "owner.ownerArm": {
    "src": "liba/src/10-owner.js:54",
-   "line": 735
+   "line": 740
   },
   "owner.ownerExpire": {
    "src": "liba/src/10-owner.js:55",
-   "line": 736
+   "line": 741
   },
   "owner.ownerFromDb": {
    "src": "liba/src/10-owner.js:59",
-   "line": 740
+   "line": 745
   },
   "owner.replyTag": {
    "src": "liba/src/10-owner.js:68",
-   "line": 749
+   "line": 754
   },
   "owner.routeNote": {
    "src": "liba/src/10-owner.js:76",
-   "line": 757
+   "line": 762
   },
   "owner.routeWhere": {
    "src": "liba/src/10-owner.js:78",
-   "line": 759
+   "line": 764
   },
   "owner.routeOther": {
    "src": "liba/src/10-owner.js:80",
-   "line": 761
+   "line": 766
   },
   "owner.ownerPin": {
    "src": "liba/src/10-owner.js:82",
-   "line": 763
+   "line": 768
   },
   "owner.capsLoad": {
    "src": "liba/src/10-owner.js:88",
-   "line": 769
+   "line": 774
   },
   "owner.capsSave": {
    "src": "liba/src/10-owner.js:89",
-   "line": 770
+   "line": 775
   },
   "owner.capSeen": {
    "src": "liba/src/10-owner.js:90",
-   "line": 771
+   "line": 776
   },
   "owner.capNear": {
    "src": "liba/src/10-owner.js:92",
-   "line": 773
+   "line": 778
   },
   "owner.capHint": {
    "src": "liba/src/10-owner.js:98",
-   "line": 779
+   "line": 784
   },
   "render": {
    "src": "liba/src/11-render.js",
-   "line": 784
+   "line": 789
   },
   "render.renderMap": {
    "src": "liba/src/11-render.js:6",
-   "line": 787
+   "line": 792
   },
   "render.mapSummary": {
    "src": "liba/src/11-render.js:9",
-   "line": 790
+   "line": 795
   },
   "render.renderTasks": {
    "src": "liba/src/11-render.js:10",
-   "line": 791
+   "line": 796
   },
   "flow": {
    "src": "liba/src/12-flow.js",
-   "line": 800
+   "line": 805
   },
   "flow.dictationMode": {
    "src": "liba/src/12-flow.js:11",
-   "line": 808
+   "line": 813
   },
   "flow.showTalk": {
    "src": "liba/src/12-flow.js:12",
-   "line": 809
+   "line": 814
   },
   "flow.idleListen": {
    "src": "liba/src/12-flow.js:13",
-   "line": 810
+   "line": 815
   },
   "flow.bindReply": {
    "src": "liba/src/12-flow.js:18",
-   "line": 815
+   "line": 820
   },
   "flow.incoming": {
    "src": "liba/src/12-flow.js:23",
-   "line": 820
+   "line": 825
   },
   "send": {
    "src": "liba/src/13-send.js",
-   "line": 858
+   "line": 863
   },
   "send.saveOutbox": {
    "src": "liba/src/13-send.js:13",
-   "line": 868
+   "line": 873
   },
   "send.walPut": {
    "src": "liba/src/13-send.js:15",
-   "line": 870
+   "line": 875
   },
   "send.walLease": {
    "src": "liba/src/13-send.js:16",
-   "line": 871
+   "line": 876
   },
   "send.walRelease": {
    "src": "liba/src/13-send.js:17",
-   "line": 872
+   "line": 877
   },
   "send.walDone": {
    "src": "liba/src/13-send.js:18",
-   "line": 873
+   "line": 878
   },
   "send.walRecover": {
    "src": "liba/src/13-send.js:25",
-   "line": 880
+   "line": 885
   },
   "send.bubbleState": {
    "src": "liba/src/13-send.js:33",
-   "line": 888
+   "line": 893
   },
   "send.drainQ": {
    "src": "liba/src/13-send.js:35",
-   "line": 890
+   "line": 895
   },
   "send.tagOf": {
    "src": "liba/src/13-send.js:37",
-   "line": 892
+   "line": 897
   },
   "send.deliver": {
    "src": "liba/src/13-send.js:38",
-   "line": 893
+   "line": 898
   },
   "send.deliverWithRetry": {
    "src": "liba/src/13-send.js:45",
-   "line": 900
+   "line": 905
   },
   "send.flushOutbox": {
    "src": "liba/src/13-send.js:57",
-   "line": 912
+   "line": 917
   },
   "send.send": {
    "src": "liba/src/13-send.js:80",
-   "line": 935
+   "line": 940
   },
   "janitor": {
    "src": "liba/src/14-janitor.js",
-   "line": 971
+   "line": 976
   },
   "janitor.janFold": {
    "src": "liba/src/14-janitor.js:37",
-   "line": 1005
+   "line": 1010
   },
   "janitor.janKind": {
    "src": "liba/src/14-janitor.js:45",
-   "line": 1013
+   "line": 1018
   },
   "janitor.janGallery": {
    "src": "liba/src/14-janitor.js:52",
-   "line": 1020
+   "line": 1025
   },
   "janitor.janMonths": {
    "src": "liba/src/14-janitor.js:61",
-   "line": 1029
+   "line": 1034
   },
   "janitor.janCaps": {
    "src": "liba/src/14-janitor.js:75",
-   "line": 1043
+   "line": 1048
   },
   "janitor.janSweep": {
    "src": "liba/src/14-janitor.js:94",
-   "line": 1062
+   "line": 1067
   },
   "janitor.janMaybe": {
-   "src": "liba/src/14-janitor.js:111",
-   "line": 1079
+   "src": "liba/src/14-janitor.js:112",
+   "line": 1085
   },
   "pulse": {
    "src": "liba/src/15-pulse.js",
-   "line": 1087
+   "line": 1093
   },
   "pulse.pulseClean": {
    "src": "liba/src/15-pulse.js:12",
-   "line": 1096
+   "line": 1102
   },
   "pulse.pulseIn": {
    "src": "liba/src/15-pulse.js:14",
-   "line": 1098
+   "line": 1104
   },
   "pulse.ledgerBump": {
    "src": "liba/src/15-pulse.js:24",
-   "line": 1108
+   "line": 1114
   },
   "pulse.ledgerFlush": {
    "src": "liba/src/15-pulse.js:25",
-   "line": 1109
+   "line": 1115
   },
   "pulse.pulseSay": {
    "src": "liba/src/15-pulse.js:32",
-   "line": 1116
+   "line": 1122
   },
   "pulse.heAt": {
    "src": "liba/src/15-pulse.js:44",
-   "line": 1128
+   "line": 1134
   },
   "pulse.whyCmd": {
    "src": "liba/src/15-pulse.js:46",
-   "line": 1130
+   "line": 1136
   },
   "pulse.gapReason": {
    "src": "liba/src/15-pulse.js:57",
-   "line": 1141
+   "line": 1147
   },
   "pulse.liveReason": {
    "src": "liba/src/15-pulse.js:61",
-   "line": 1145
+   "line": 1151
   },
   "pulse.healthGap": {
    "src": "liba/src/15-pulse.js:63",
-   "line": 1147
+   "line": 1153
   },
   "pulse.lineCmd": {
    "src": "liba/src/15-pulse.js:66",
-   "line": 1150
+   "line": 1156
   },
   "memory": {
    "src": "liba/src/16-memory.js",
-   "line": 1160
+   "line": 1166
   },
   "memory.hash36": {
    "src": "liba/src/16-memory.js:10",
-   "line": 1167
+   "line": 1173
   },
   "memory.memWords": {
    "src": "liba/src/16-memory.js:56",
-   "line": 1213
+   "line": 1219
   },
   "memory.memAbout": {
    "src": "liba/src/16-memory.js:58",
-   "line": 1215
+   "line": 1221
   },
   "memory.memIdf": {
    "src": "liba/src/16-memory.js:66",
-   "line": 1223
+   "line": 1229
   },
   "memory.memScore": {
    "src": "liba/src/16-memory.js:68",
-   "line": 1225
+   "line": 1231
   },
   "memory.brief": {
    "src": "liba/src/16-memory.js:70",
-   "line": 1227
+   "line": 1233
   },
   "memory.memNoBrief": {
    "src": "liba/src/16-memory.js:79",
-   "line": 1236
+   "line": 1242
   },
   "memory.memIdentity": {
    "src": "liba/src/16-memory.js:80",
-   "line": 1237
+   "line": 1243
   },
   "people": {
    "src": "liba/src/17-people.js",
-   "line": 1241
+   "line": 1247
   },
   "people.peopleAdd": {
    "src": "liba/src/17-people.js:19",
-   "line": 1257
+   "line": 1263
   },
   "people.peopleWho": {
    "src": "liba/src/17-people.js:22",
-   "line": 1260
+   "line": 1266
   },
   "people.peopleWhoA": {
    "src": "liba/src/17-people.js:23",
-   "line": 1261
+   "line": 1267
   },
   "people.peopleAlias": {
    "src": "liba/src/17-people.js:28",
-   "line": 1266
+   "line": 1272
   },
   "people.peopleAliasA": {
    "src": "liba/src/17-people.js:29",
-   "line": 1267
+   "line": 1273
   },
   "people.peopleMerge": {
    "src": "liba/src/17-people.js:33",
-   "line": 1271
+   "line": 1277
   },
   "people.peopleMergeA": {
    "src": "liba/src/17-people.js:34",
-   "line": 1272
+   "line": 1278
   },
   "people.peopleFromFact": {
    "src": "liba/src/17-people.js:41",
-   "line": 1279
+   "line": 1285
   },
   "policy": {
    "src": "liba/src/18-policy.js",
-   "line": 1281
+   "line": 1287
   },
   "policy.digestAdd": {
    "src": "liba/src/18-policy.js:42",
-   "line": 1320
+   "line": 1326
   },
   "policy.digestEvening": {
    "src": "liba/src/18-policy.js:46",
-   "line": 1324
+   "line": 1330
   },
   "policy.policyWhy": {
    "src": "liba/src/18-policy.js:51",
-   "line": 1329
+   "line": 1335
   },
   "policy.policyList": {
    "src": "liba/src/18-policy.js:54",
-   "line": 1332
+   "line": 1338
   },
   "policy.policyDrop": {
    "src": "liba/src/18-policy.js:55",
-   "line": 1333
+   "line": 1339
   },
   "policy.policyFull": {
    "src": "liba/src/18-policy.js:57",
-   "line": 1335
+   "line": 1341
   },
   "distill": {
    "src": "liba/src/19-distill.js",
-   "line": 1338
+   "line": 1344
   },
   "distill.distillHabits": {
    "src": "liba/src/19-distill.js:17",
-   "line": 1352
+   "line": 1358
   },
   "distill.distillRules": {
    "src": "liba/src/19-distill.js:20",
-   "line": 1355
+   "line": 1361
   },
   "distill.distillHours": {
    "src": "liba/src/19-distill.js:23",
-   "line": 1358
+   "line": 1364
   },
   "distill.distillNames": {
    "src": "liba/src/19-distill.js:30",
-   "line": 1365
+   "line": 1371
   },
   "distill.distill": {
    "src": "liba/src/19-distill.js:37",
-   "line": 1372
+   "line": 1378
   },
   "distill.distillAsk": {
    "src": "liba/src/19-distill.js:50",
-   "line": 1385
+   "line": 1391
   },
   "distill.distillAnswer": {
    "src": "liba/src/19-distill.js:58",
-   "line": 1393
+   "line": 1399
   },
   "distill.distillToday": {
    "src": "liba/src/19-distill.js:67",
-   "line": 1402
+   "line": 1408
   },
   "distill.distillMaybe": {
    "src": "liba/src/19-distill.js:72",
-   "line": 1407
+   "line": 1413
   },
   "forget": {
    "src": "liba/src/20-forget.js",
-   "line": 1411
+   "line": 1417
   },
   "forget.memExpiry": {
    "src": "liba/src/20-forget.js:13",
-   "line": 1421
+   "line": 1427
   },
   "forget.memLive": {
    "src": "liba/src/20-forget.js:21",
-   "line": 1429
+   "line": 1435
   },
   "forget.forgetScan": {
    "src": "liba/src/20-forget.js:23",
-   "line": 1431
+   "line": 1437
   },
   "forget.forgetApply": {
    "src": "liba/src/20-forget.js:32",
-   "line": 1440
+   "line": 1446
   },
   "forget.forgetUndo": {
    "src": "liba/src/20-forget.js:45",
-   "line": 1453
+   "line": 1459
   },
   "forget.memSweep": {
    "src": "liba/src/20-forget.js:58",
-   "line": 1466
+   "line": 1472
   },
   "forget.sweepSay": {
    "src": "liba/src/20-forget.js:66",
-   "line": 1474
+   "line": 1480
   },
   "forget.forgetSay": {
    "src": "liba/src/20-forget.js:68",
-   "line": 1476
+   "line": 1482
   },
   "forget.memForgetAll": {
    "src": "liba/src/20-forget.js:71",
-   "line": 1479
+   "line": 1485
   },
   "forget.memForgetDo": {
    "src": "liba/src/20-forget.js:76",
-   "line": 1484
+   "line": 1490
   },
   "forget.memForgetDoA": {
    "src": "liba/src/20-forget.js:77",
-   "line": 1485
+   "line": 1491
   },
   "forget.memUndo": {
    "src": "liba/src/20-forget.js:79",
-   "line": 1487
+   "line": 1493
   },
   "devmem": {
    "src": "liba/src/21-devmem.js",
-   "line": 1489
+   "line": 1495
   },
   "devmem.devMemDirty": {
    "src": "liba/src/21-devmem.js:12",
-   "line": 1498
+   "line": 1504
   },
   "devmem.devMemSnapshot": {
    "src": "liba/src/21-devmem.js:13",
-   "line": 1499
+   "line": 1505
   },
   "devmem.devMemSend": {
    "src": "liba/src/21-devmem.js:18",
-   "line": 1504
+   "line": 1510
   },
   "devmem.devMemIn": {
    "src": "liba/src/21-devmem.js:19",
-   "line": 1505
+   "line": 1511
   },
   "devmem.conflictsWeekly": {
    "src": "liba/src/21-devmem.js:30",
-   "line": 1516
+   "line": 1522
   },
   "proactive": {
    "src": "liba/src/22-proactive.js",
-   "line": 1521
+   "line": 1527
   },
   "proactive.proLoad": {
    "src": "liba/src/22-proactive.js:17",
-   "line": 1535
+   "line": 1541
   },
   "proactive.proSave": {
    "src": "liba/src/22-proactive.js:19",
-   "line": 1537
+   "line": 1543
   },
   "proactive.proDay": {
    "src": "liba/src/22-proactive.js:20",
-   "line": 1538
+   "line": 1544
   },
   "proactive.proResting": {
    "src": "liba/src/22-proactive.js:22",
-   "line": 1540
+   "line": 1546
   },
   "proactive.proDates": {
    "src": "liba/src/22-proactive.js:24",
-   "line": 1542
+   "line": 1548
   },
   "proactive.proFire": {
    "src": "liba/src/22-proactive.js:29",
-   "line": 1547
+   "line": 1553
   },
   "proactive.proTick": {
    "src": "liba/src/22-proactive.js:39",
-   "line": 1557
+   "line": 1563
   },
   "proactive.proSchedule": {
    "src": "liba/src/22-proactive.js:42",
-   "line": 1560
+   "line": 1566
   },
   "proactive.proFromPhone": {
    "src": "liba/src/22-proactive.js:46",
-   "line": 1564
+   "line": 1570
   },
   "proactive.proHeard": {
    "src": "liba/src/22-proactive.js:48",
-   "line": 1566
+   "line": 1572
   },
   "proactive.proReturn": {
    "src": "liba/src/22-proactive.js:57",
-   "line": 1575
+   "line": 1581
   },
   "proactive.proNot": {
    "src": "liba/src/22-proactive.js:59",
-   "line": 1577
+   "line": 1583
   },
   "proactive.proWelcome": {
    "src": "liba/src/22-proactive.js:61",
-   "line": 1579
+   "line": 1585
+  },
+  "sense": {
+   "src": "liba/src/23-sense.js",
+   "line": 1588
+  },
+  "sense.senseApps": {
+   "src": "liba/src/23-sense.js:15",
+   "line": 1600
+  },
+  "sense.senseCfgSend": {
+   "src": "liba/src/23-sense.js:16",
+   "line": 1601
+  },
+  "sense.senseSetApps": {
+   "src": "liba/src/23-sense.js:17",
+   "line": 1602
+  },
+  "sense.senseIn": {
+   "src": "liba/src/23-sense.js:19",
+   "line": 1604
+  },
+  "sense.senseAdd": {
+   "src": "liba/src/23-sense.js:29",
+   "line": 1614
+  },
+  "sense.senseRemove": {
+   "src": "liba/src/23-sense.js:33",
+   "line": 1618
+  },
+  "sense.senseList": {
+   "src": "liba/src/23-sense.js:34",
+   "line": 1619
+  },
+  "sense.senseToday": {
+   "src": "liba/src/23-sense.js:35",
+   "line": 1620
+  },
+  "sense.senseSweep": {
+   "src": "liba/src/23-sense.js:41",
+   "line": 1626
   }
  }
 }

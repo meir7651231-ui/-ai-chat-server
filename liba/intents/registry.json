@@ -123,6 +123,64 @@
    ]
   },
   {
+   "id": "sense.add",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "prefix": [
+    "(תקשיבי|תקשיב|תאזיני|תאזין) להתראות של",
+    "(תקשיבי|תקשיב) להתראות מ"
+   ],
+   "handler": "senseAdd",
+   "help": "\"תקשיבי להתראות של וואטסאפ\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "sense.remove",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "prefix": [
+    "(תפסיקי|תפסיק) להקשיב להתראות של",
+    "(תפסיקי|תפסיק) להקשיב להתראות מ"
+   ],
+   "handler": "senseRemove",
+   "help": "\"תפסיקי להקשיב להתראות של…\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "sense.list",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "exact": [
+    "(מאיזה|לאיזה|מאילו|לאילו) אפליקציות את מקשיבה",
+    "למה את מקשיבה"
+   ],
+   "handler": "senseList",
+   "help": "\"לאיזה אפליקציות את מקשיבה\""
+  },
+  {
+   "id": "sense.today",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "exact": [
+    "מה הגיע בהתראות",
+    "מה היה בהתראות",
+    "מה ההתראות של היום"
+   ],
+   "handler": "senseToday",
+   "help": "\"מה הגיע בהתראות\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
    "id": "proactive.return",
    "where": "page",
    "when": "liba",

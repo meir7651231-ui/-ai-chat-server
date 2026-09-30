@@ -34,6 +34,10 @@
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE"/></intent-filter>
             <meta-data android:name="android.service.quicksettings.ACTIVE_TILE" android:value="false"/>
         </service>
+        <!-- sense-bus-ears: the ears; Android asks Meir himself before this is allowed to read anything -->
+        <service android:name=".sense.NotifEars" android:exported="true" android:label="ליבה – התראות" android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter><action android:name="android.service.notification.NotificationListenerService"/></intent-filter>
+        </service>
         <!-- proactive: the one alarm for date reminders -->
         <receiver android:name=".ReminderReceiver" android:exported="false"/>
         <!-- one-life: the one receiver that brings ליבה back after a restart, an update, or the OS killing her -->

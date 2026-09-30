@@ -3,8 +3,8 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "1c9115beac48"
-    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind")
+    const val HASH = "7aaf70b74a0b"
+    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense")
 
     /** page -> app */
     object ToApp {
@@ -23,6 +23,8 @@ object Protocol {
         const val MEM_SYNC = "memSync"
         const val MEM_ACK = "memAck"
         const val REMIND = "remind"
+        const val SENSE_ACK = "senseAck"
+        const val SENSE_CFG = "senseCfg"
     }
     /** app -> page */
     object ToPage {
@@ -34,6 +36,7 @@ object Protocol {
         const val TRACE = "trace"
         const val PULSE = "pulse"
         const val MEM_ASK = "memAsk"
+        const val SENSE = "sense"
     }
 
     /** Relay for the top frame's message listener: page -> LibaBridge. */
@@ -53,11 +56,13 @@ object Protocol {
     else if(d.liba==="memSync"){LibaBridge.memSync(String(d.body||""));}
     else if(d.liba==="memAck"){LibaBridge.memAck(JSON.stringify(d.ids||[]));}
     else if(d.liba==="remind"){LibaBridge.remind(String(d.items||""));}
+    else if(d.liba==="senseAck"){LibaBridge.senseAck(JSON.stringify(d.ids||[]));}
+    else if(d.liba==="senseCfg"){LibaBridge.senseCfg(JSON.stringify(d.apps||[]));}
 """
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"1c9115beac48",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"7aaf70b74a0b",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
@@ -65,6 +70,7 @@ object Protocol {
   window.__libaTrace=function(batch,events){window.__libaSend("trace",{batch:batch,events:events});};
   window.__libaPulse=function(dev,name,body){window.__libaSend("pulse",{dev:dev,name:name,body:body});};
   window.__libaMemAsk=function(items){window.__libaSend("memAsk",{items:items});};
+  window.__libaSense=function(items){window.__libaSend("sense",{items:items});};
 """
 }
 
@@ -105,4 +111,6 @@ interface ProtocolBridge {
     fun memSync(body: String)
     fun memAck(ids: String)
     fun remind(items: String)
+    fun senseAck(ids: String)
+    fun senseCfg(apps: String)
 }
