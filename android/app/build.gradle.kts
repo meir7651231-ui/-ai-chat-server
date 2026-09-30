@@ -41,3 +41,13 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.webkit:webkit:1.11.0")
 }
+
+// update-trust: a release without the real key would be signed with the debug key - the phone refuses it as an update
+// (a different signer), and the refusal comes days later, on Meir's phone. It fails here, now, in words. Compiling is
+// not packaging: compileReleaseKotlin and the tests still run without the key.
+tasks.matching { it.name == "packageRelease" }.configureEach {
+    doFirst {
+        if (!rootProject.file("keys/keystore.properties").exists() && (project.findProperty("liba.debugSign") as String?) != "true")
+            throw GradleException("אין מפתח חתימה (android/keys/keystore.properties): גרסת שחרור בלי המפתח האמיתי לא תותקן כעדכון בטלפון של מאיר. בכוונה? -Pliba.debugSign=true")
+    }
+}
