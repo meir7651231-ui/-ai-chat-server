@@ -37,7 +37,7 @@ function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.som
    is written once per message and reason (inbox/<id>.holds.<reason>) and counted in ledger/<day>.silence. */
 const hourNow=()=>window.__testHour!=null?window.__testHour:new Date().getHours(); /* tests pin the hour */
 const G_OK={ok:true};
-function gate(d){const now=Date.now();if(shabbatOn(now))return {ok:false,reason:'shabbat'}; /* shabbat-engine: before everything, urgent and commands too */
+function gate(d){const now=Date.now();if(shabbatOn(now)&&!d.pikuachOk)return {ok:false,reason:'shabbat'}; /* shabbat-engine: before everything, urgent and commands too */
   if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
   if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
   const p=d.priority||'normal';if(p==='urgent')return G_OK;

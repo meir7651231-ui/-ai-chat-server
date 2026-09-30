@@ -35,7 +35,7 @@ object Trace {
         E_MIC_FGS(5), E_FGS_START(5), E_MIC_INIT(5), E_MIC_READ(5),
         E_HAPTIC(5), E_TONE(5), E_AUDIO_STREAM(5), E_MEDIA_SESSION(5),
         E_NET(5), E_SYS_CB(5),
-        E_INSTALL_PERM(5), E_INSTALL_NET(5), E_INSTALL_SIG(5), E_INTENT_OPEN(5),
+        E_INSTALL_PERM(5), E_INSTALL_NET(5), E_INSTALL_SIG(5), E_INTENT_OPEN(5), E_CMD_REFUSED(5),
         E_PAGE_LOGIN(5), E_PAGE_LOAD(5), E_PAGE_TAP(5),
         E_CRASH_SAVE(Int.MAX_VALUE),           // happens once, as the process dies: never capped
         E_PREFS(5), E_SHADER(5),

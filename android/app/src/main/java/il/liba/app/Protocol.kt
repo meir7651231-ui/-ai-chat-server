@@ -3,7 +3,7 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "1979fdb59afd"
+    const val HASH = "cbbfa2536414"
     val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense", "cal", "ctx", "holy")
 
     /** page -> app */
@@ -51,7 +51,7 @@ object Protocol {
     else if(d.liba==="queued"){LibaBridge.queued(String(d.text||""));}
     else if(d.liba==="outbox"){LibaBridge.outbox(String(d.text||""),Number(d.n||0),String(d.reason||""));}
     else if(d.liba==="tap"){LibaBridge.tap();}
-    else if(d.liba==="cmd"){LibaBridge.cmd(String(d.cmd||""));}
+    else if(d.liba==="cmd"){LibaBridge.cmd(String(d.cmd||""),String(d.nonce||""),Number(d.exp||0),String(d.sig||""));}
     else if(d.liba==="crashSaved"){LibaBridge.crashSaved(String(d.id||""));}
     else if(d.liba==="tasks"){LibaBridge.tasks(String(d.summary||""),Number(d.n||0),Number(d.blocked||0));}
     else if(d.liba==="traceAck"){LibaBridge.traceAck(String(d.batch||""),JSON.stringify(d.ids||[]));}
@@ -66,7 +66,7 @@ object Protocol {
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"1979fdb59afd",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"cbbfa2536414",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
@@ -109,7 +109,7 @@ interface ProtocolBridge {
     fun queued(text: String)
     fun outbox(text: String, n: Int, reason: String)
     fun tap()
-    fun cmd(cmd: String)
+    fun cmd(cmd: String, nonce: String, exp: Int, sig: String)
     fun crashSaved(id: String)
     fun tasks(summary: String, n: Int, blocked: Int)
     fun traceAck(batch: String, ids: String)

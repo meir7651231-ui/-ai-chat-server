@@ -11,8 +11,9 @@ ok(/channel\/owner/.test(html), 'owner protocol present');
 ok(/channel\/quiet/.test(html), 'quiet protocol present');
 // the relay is written through the contract (protocol-contract): PROTO.toApp.cmd, never the literal 'cmd'
 const RELAY_CMD = 'post(PROTO.toApp.cmd';
-const cmdLine = (html.split('\n').find(l => l.includes("if(d.kind==='cmd'){") && l.includes(RELAY_CMD)) || '');
-ok(cmdLine.indexOf("update({spoken:true") > -1 && cmdLine.indexOf("update({spoken:true") < cmdLine.indexOf(RELAY_CMD), 'cmd is acknowledged before it is relayed');
+const cmdAt = html.indexOf("if(d.kind==='cmd'){if(!appMode){log("), cmdLine = cmdAt < 0 ? '' : html.slice(cmdAt, html.indexOf(RELAY_CMD, cmdAt) + RELAY_CMD.length); /* the path from a cmd to its relay (signed-commands spans lines) */
+ok(cmdLine.indexOf("update({spoken:true") > -1 && cmdLine.lastIndexOf("update({spoken:true") < cmdLine.indexOf(RELAY_CMD), 'cmd is acknowledged before it is relayed');
+ok(cmdLine.indexOf("sigOk('cmd',d)") > -1 && cmdLine.indexOf("sigOk('cmd',d)") < cmdLine.indexOf(RELAY_CMD), 'a cmd from the channel is verified before it is relayed');
 ok(!/post\('[a-zA-Z]+'/.test(html) && !/d\.liba==='[a-zA-Z]+'/.test(html), 'no message name typed by hand - every one comes from the contract');
 ok(/prefixOf/.test(html) && /speakerOf/.test(html), 'speaker + topic prefix present');
 ok(/lastRingAt/.test(html), 'one ring per batch');

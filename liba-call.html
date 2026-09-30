@@ -231,7 +231,7 @@ window.__ch={budget:()=>Object.assign({},chBudget),denied:()=>Object.assign({},c
 /* text from the database goes into the DOM through this, never raw: a task title is written by other
    sessions, and "<img onerror=…>" in one would otherwise run inside the page that holds the channel */
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-const PROTO=Object.freeze({v:1,hash:"1979fdb59afd",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy"]),
+const PROTO=Object.freeze({v:1,hash:"cbbfa2536414",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy"]),
   toApp:Object.freeze({"ready":"ready","say":"say","sent":"sent","error":"error","queued":"queued","outbox":"outbox","tap":"tap","cmd":"cmd","crashSaved":"crashSaved","tasks":"tasks","traceAck":"traceAck","state":"state","memSync":"memSync","memAck":"memAck","remind":"remind","senseAck":"senseAck","senseCfg":"senseCfg","place":"place"}),
   toPage:Object.freeze({"hello":"hello","crash":"crash","spoke":"spoke","speaking":"speaking","input":"input","trace":"trace","pulse":"pulse","memAsk":"memAsk","sense":"sense","calSync":"calSync","ctx":"ctx"}),
   initial:"OFFLINE",moves:Object.freeze({"OFFLINE":["IDLE","WAKE"],"IDLE":["LISTENING","THINKING","SPEAKING","SENDING","RINGING","QUIET","DEGRADED","WAKE","OFFLINE"],"WAKE":["LISTENING","IDLE","SPEAKING","SENDING","RINGING","OFFLINE"],"LISTENING":["THINKING","SENDING","IDLE","SPEAKING","WAKE","OFFLINE"],"THINKING":["SENDING","SPEAKING","IDLE","OFFLINE"],"SENDING":["IDLE","SPEAKING","RINGING","THINKING","DEGRADED","WAKE","LISTENING","OFFLINE"],"SPEAKING":["IDLE","LISTENING","SENDING","WAKE","RINGING","OFFLINE"],"RINGING":["SPEAKING","IDLE","LISTENING","OFFLINE"],"QUIET":["IDLE","SPEAKING","OFFLINE"],"DEGRADED":["IDLE","SPEAKING","SENDING","OFFLINE"]})});
@@ -253,7 +253,7 @@ function transition(to,why){const from=state;if(from===to)return;const ok=canMov
 const isArmed=()=>state!=='OFFLINE',isBusy=()=>state==='SPEAKING'||state==='SENDING';
 const arm=why=>{if(state==='OFFLINE')transition('IDLE',why);};
 /* ---- black box (step blackbox): one table of codes, one writer ---- */
-const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה',P_SPEAK_LOST:'הקול בטלפון השתתק באמצע בלי לדווח',P_PROTO_APP_OLD:'האפליקציה ישנה מהדף',P_PROTO_PAGE_OLD:'הדף ישן מהאפליקציה',P_REQ_UNBOUND:'תשובה שלא מצאה את השאלה שלה',P_CLOCK_SKEW:'השעון של הדף והטלפון לא מסונכרן',P_SPEAK_GUARD:'הקול לא דיווח שסיים ונעצר בכוח',P_STATE_ILLEGAL:'מעבר מצב שלא בטבלה',P_DB_FULL:'המסד מלא',P_INTENT_FUZZY:'פקודה שכמעט הובנה - שאלתי',P_DB_WINDOW:'חלון קריאה צומצם כי המסד עמוס',E_STATE_ILLEGAL:'מעבר מצב שלא בטבלה בבועה'};
+const TRACE_HE={E_OVERLAY_DENIED:'אין הרשאה לחלון צף',E_OVERLAY_UPDATE:'החלון הצף לא התעדכן',E_TTS_INIT:'הקול לא עלה',E_TTS_OP:'תקלה בדיבור',E_SR_LIFECYCLE:'סגירת המאזין נכשלה',E_SR_NONE:'אין זיהוי דיבור במכשיר',E_MIC_FGS:'המיקרופון נחסם ברקע',E_FGS_START:'השירות לא הצליח לעלות',E_MIC_INIT:'המיקרופון לא נפתח',E_MIC_READ:'ההקלטה נקטעה',E_HAPTIC:'הרטט נכשל',E_TONE:'הצליל נכשל',E_AUDIO_STREAM:'שינוי עוצמת הקול נכשל',E_MEDIA_SESSION:'כפתור האוזניה לא נרשם',E_NET:'בדיקת עדכון נכשלה ברשת',E_SYS_CB:'חיבור לאירועי המערכת נכשל',E_INSTALL_PERM:'אין הרשאה להתקין עדכון',E_INSTALL_NET:'הורדת העדכון נכשלה',E_INSTALL_SIG:'העדכון לא עבר אימות',E_INTENT_OPEN:'פתיחה של אפליקציה נכשלה',E_PAGE_LOGIN:'הבועה התנתקה מהחשבון',E_PAGE_LOAD:'הדף לא נטען',E_PAGE_TAP:'לחיצה אוטומטית החטיאה',E_CRASH_SAVE:'שמירת קריסה נכשלה',E_PREFS:'קריאת ההגדרות נכשלה',E_SHADER:'האנימציה של הבועה נכשלה',E_TRACE_ROTATE:'יומן תקלות ישן נמחק',P_BRIDGE:'הדף לא הצליח לדבר עם הבועה',P_STORE:'הזיכרון המקומי בדפדפן חסום',P_AUDIO:'הצלילים בדף לא עלו',P_SR:'המיקרופון בדף נתקע',P_MIC_DENIED:'המיקרופון בדף נחסם',P_WAKELOCK:'המסך לא נשאר דלוק',P_DB_WRITE:'כתיבה למסד נכשלה',P_DB_READ:'קריאה מהמסד נכשלה',P_SEND:'ההודעה לא הגיעה לקלוד',P_ACK:'סימון הודעה כנאמרה נכשל',P_MSG_BAD:'הודעה פגומה',P_SPEAK_LOST:'הקול בטלפון השתתק באמצע בלי לדווח',P_PROTO_APP_OLD:'האפליקציה ישנה מהדף',P_PROTO_PAGE_OLD:'הדף ישן מהאפליקציה',P_REQ_UNBOUND:'תשובה שלא מצאה את השאלה שלה',P_CLOCK_SKEW:'השעון של הדף והטלפון לא מסונכרן',P_SPEAK_GUARD:'הקול לא דיווח שסיים ונעצר בכוח',P_STATE_ILLEGAL:'מעבר מצב שלא בטבלה',P_DB_FULL:'המסד מלא',P_INTENT_FUZZY:'פקודה שכמעט הובנה - שאלתי',P_DB_WINDOW:'חלון קריאה צומצם כי המסד עמוס',P_CMD_REFUSED:'פקודה לא חתומה נדחתה',P_SIG:'בדיקת חתימה נכשלה',E_CMD_REFUSED:'הטלפון דחה פקודה לא חתומה',E_STATE_ILLEGAL:'מעבר מצב שלא בטבלה בבועה'};
 const TRACE_SR_HE={1:'זיהוי הדיבור נכשל ברשת',2:'זיהוי הדיבור נכשל ברשת',3:'ההקלטה נכשלה',4:'שרת הזיהוי סירב',5:'תקלה פנימית בזיהוי',6:'לא שמעתי כלום',7:'לא זוהו מילים',8:'המאזין היה תפוס',9:'אין הרשאת מיקרופון',11:'חסרה שפה לזיהוי',12:'העברית לא מותקנת במכשיר',13:'הזיהוי במכשיר לא זמין'};
 const TRACE_FLUSH=3000,TRACE_RING=200,TRACE_BATCH=200,TRACE_QMAX=1000;
 let trVer='',trBuf=new Map(),trWin=0,trCount={},trDrop={},trQ=[],trRing=[],trTimer=null,trWriting=false,trInTrace=false;
@@ -396,7 +396,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:71,pageHash:"469035a774a1",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:72,pageHash:"6d3fcda55619",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -430,7 +430,7 @@ function coldGet(ref,where,n){let q=ref;(where||[]).forEach(w=>{q=q.where(w[0],w
    (the real channel had one: an update command) is still heard. */
 let inboxOpen=new Map(),inboxNew=new Map();
 function inboxMerged(){const m=new Map(inboxNew);inboxOpen.forEach((v,k)=>m.set(k,v));return [...m.values()];}
-function onInbox(){const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||d.failed||!(d.text||d.kind==='cmd'||d.stream))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
+function onInbox(){pikuachCheck(inboxMerged());const items=inboxMerged().filter(d=>{if(d.spoken||d.expired||d.failed||!(d.text||d.kind==='cmd'||d.stream))return false;if(spokenDone(d.id)){P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),repaired:true}).catch(e=>fail('P_ACK',e,'repair'));return false;}return !spokenLocal.has(d.id);}).sort((a,b)=>(a.ts||0)-(b.ts||0));const live=new Set(items.map(d=>d.id));for(let i=inboxQ.length-1;i>=0;i--){if(!inboxQ[i].local&&!live.has(inboxQ[i].id))inboxQ.splice(i,1);}items.forEach(d=>{if(!inboxQ.some(x=>x.id===d.id))inboxQ.push(d);});pump();}
 (async()=>{
   const c=window.claude;
   if(!c||!c.use){setSt('אין חיבור','warn');log('הדף צריך להיפתח מ‑claude.ai');return;}
@@ -491,7 +491,7 @@ function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.som
    is written once per message and reason (inbox/<id>.holds.<reason>) and counted in ledger/<day>.silence. */
 const hourNow=()=>window.__testHour!=null?window.__testHour:new Date().getHours(); /* tests pin the hour */
 const G_OK={ok:true};
-function gate(d){const now=Date.now();if(shabbatOn(now))return {ok:false,reason:'shabbat'}; /* shabbat-engine: before everything, urgent and commands too */
+function gate(d){const now=Date.now();if(shabbatOn(now)&&!d.pikuachOk)return {ok:false,reason:'shabbat'}; /* shabbat-engine: before everything, urgent and commands too */
   if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
   if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
   const p=d.priority||'normal';if(p==='urgent')return G_OK;
@@ -837,7 +837,9 @@ async function bindReply(d){try{const r=await P.req(String(d.re)).get();const no
   catch(e){fail('P_DB_WRITE',e,'req reply');}}
 async function incoming(d){
   if(d.kind!=='cmd')ledgerBump('said');
-  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
+  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}/* signed-commands: from the channel only signed, not expired, never twice - refused ones are marked and never posted */
+    if(!d.local&&!(await sigOk('cmd',d))){fail('P_CMD_REFUSED',null,String(d.cmd||'').split(' ')[0]);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),refused:'unsigned'});}catch(e){fail('P_ACK',e,'cmd refused');}log('פקודה לא חתומה נדחתה');return false;}
+    try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||'',nonce:String(d.nonce||''),exp:+d.exp||0,sig:String(d.sig||'')});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   /* outbox-keys: a reply that quotes the sentence it answers carries its ⟦#id⟧ - never read it aloud */
   d.text=d.text.replace(/\s*⟦#[0-9a-z]+⟧/g,'');
@@ -1120,7 +1122,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"469035a774a1"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"6d3fcda55619"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -1806,4 +1808,23 @@ function shabbatSetPlace(rest){const n=inorm(rest);const hit=SHABBAT_PLACES.find
 function shabbatPlaceSend(){if(appMode&&hasCap('holy'))post(PROTO.toApp.place,{body:JSON.stringify(shabbatPlace())});}
 setInterval(()=>{shabbatTick().catch(()=>{});},60000);setTimeout(()=>{shabbatTick().catch(()=>{});},4000);
 window.__shabbat={tick:shabbatTick,at:shabbatAt,windows:holyWindows,place:shabbatPlace,zman:ZMAN};
+/* Step signed-commands. A cmd document (another session asking the phone to do something) is obeyed only when it carries
+   {nonce, exp, sig} signed with the key in tools/cmd.mjs: verified here with WebCrypto, and again on the phone
+   (Signed.kt) - a page that was broken into still cannot make the phone act. A refused one is marked refused and never
+   posted. A pikuach nefesh message (tools/cmd.mjs --pikuach) is the one thing that passes the Shabbat gate - on a page
+   that is open; the phone itself turns its page off on Shabbat, and whether it should listen for one on its own is
+   Meir's decision. */
+const CMD_PUB='MCowBQYDK2VwAyEAMG4YGL185eVi8Z7kvOjIqysywHVj3VmLH/5mmld3Wp0=';let cmdKey=null;
+const b64bytes=s=>Uint8Array.from(atob(String(s||'')),c=>c.charCodeAt(0));
+async function cmdKeyGet(){if(cmdKey)return cmdKey;if(!(window.crypto&&crypto.subtle))return null;
+  try{cmdKey=await crypto.subtle.importKey('spki',b64bytes(window.__testCmdPub||CMD_PUB),{name:'Ed25519'},false,['verify']);}catch(e){fail('P_SIG',e,'import');return null;}return cmdKey;}
+const nonceSeen=new Set();try{JSON.parse(localStorage.getItem(LSK('nonces'))||'[]').forEach(n=>nonceSeen.add(n));}catch(e){}
+function nonceMark(n){nonceSeen.add(n);try{localStorage.setItem(LSK('nonces'),JSON.stringify([...nonceSeen].slice(-200)));}catch(e){}}
+/* the exact bytes tools/cmd.mjs signed; false on anything missing, expired, replayed or wrong */
+async function sigOk(kind,d){if(!d||!d.sig||!d.nonce||!(+d.exp>Date.now()))return false;if(kind==='cmd'&&nonceSeen.has(String(d.nonce)))return false;
+  const k=await cmdKeyGet();if(!k)return false;const msg=(kind==='cmd'?'cmd|':'pikuach|')+d.nonce+'|'+d.exp+'|'+(kind==='cmd'?d.cmd:d.text);
+  try{const ok=await crypto.subtle.verify({name:'Ed25519'},k,b64bytes(d.sig),new TextEncoder().encode(String(msg)));if(ok&&kind==='cmd')nonceMark(String(d.nonce));return ok;}catch(e){fail('P_SIG',e,'verify');return false;}}
+/* pikuach documents are checked as they arrive; the gate (sync) reads the answer */
+function pikuachCheck(list){list.forEach(d=>{if(d.pikuach&&d.pikuachOk===undefined){d.pikuachOk=false;sigOk('pikuach',d).then(v=>{d.pikuachOk=v;if(v)setTimeout(pump,50);});}});}
+window.__signed={ok:sigOk,pub:CMD_PUB};
 </script>

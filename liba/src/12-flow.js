@@ -22,7 +22,9 @@ async function bindReply(d){try{const r=await P.req(String(d.re)).get();const no
   catch(e){fail('P_DB_WRITE',e,'req reply');}}
 async function incoming(d){
   if(d.kind!=='cmd')ledgerBump('said');
-  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||''});log('cmd: '+(d.cmd||''));return true;}
+  if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}/* signed-commands: from the channel only signed, not expired, never twice - refused ones are marked and never posted */
+    if(!d.local&&!(await sigOk('cmd',d))){fail('P_CMD_REFUSED',null,String(d.cmd||'').split(' ')[0]);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),refused:'unsigned'});}catch(e){fail('P_ACK',e,'cmd refused');}log('פקודה לא חתומה נדחתה');return false;}
+    try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||'',nonce:String(d.nonce||''),exp:+d.exp||0,sig:String(d.sig||'')});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   /* outbox-keys: a reply that quotes the sentence it answers carries its ⟦#id⟧ - never read it aloud */
   d.text=d.text.replace(/\s*⟦#[0-9a-z]+⟧/g,'');

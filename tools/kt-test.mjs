@@ -33,13 +33,24 @@ const tmp = mkdtempSync(join(os.tmpdir(), 'kt-'))
 // the page's holy windows for 2027, for Holy.kt to match
 const sh = src('26-shabbat.js'); const pure = sh.slice(sh.indexOf('/*<pure>*/'), sh.indexOf('/*</pure>*/'))
 const { holyWindows } = new Function(pure + '\nreturn {holyWindows};')(); const MOADIM = new Function(src('00-moadim.js') + '\nreturn MOADIM;')()
+// signed commands: documents made by tools/cmd.mjs with a key made here (the real key never leaves /home/user/keys)
+const { generateKeyPairSync, sign: edSign } = await import('node:crypto')
+const tk = generateKeyPairSync('ed25519'), tk2 = generateKeyPairSync('ed25519'); const keyFile = join(tmp, 'k.pem'); writeFileSync(keyFile, tk.privateKey.export({ type: 'pkcs8', format: 'pem' }))
+const made = c => JSON.parse(execFileSync('node', [join(ROOT, 'tools/cmd.mjs'), c], { env: Object.assign({}, process.env, { LIBA_CMD_KEY: keyFile }), encoding: 'utf8' })).doc
+const row = (d, expect) => [d.cmd, d.nonce || '', d.exp || 0, d.sig || '', expect].join('\t')
+const v1 = made('hey_off'), v2 = made('style 2'), v3 = made('open https://evil.example/a')
+const other = Object.assign({}, v1, { sig: edSign(null, Buffer.from('cmd|' + v1.nonce + '|' + v1.exp + '|hey_off'), tk2.privateKey).toString('base64'), nonce: v1.nonce + 'x' })
+const expired = Object.assign({}, v2, { exp: 1000 })
+const signedFx = join(tmp, 'signed.tsv'); writeFileSync(signedFx, [tk.publicKey.export({ type: 'spki', format: 'der' }).toString('base64'),
+  row(v1, 'ok'), row(v2, 'ok'), row(v3, 'ok'), row(v1, 'no'), row(Object.assign({}, v2, { cmd: 'style 0', nonce: v2.nonce + 'y' }), 'no'), row(other, 'no'), row(expired, 'no'),
+  row({ cmd: 'hey_on' }, 'no'), row({ cmd: 'sense_open' }, 'ok'), row({ cmd: 'cal_on' }, 'ok'), row({ cmd: 'open https://github.com/meir' }, 'ok'), row({ cmd: 'open https://evil.example' }, 'no')].join('\n') + '\n')
 const holyFx = join(tmp, 'holy.tsv'); writeFileSync(holyFx, [['jerusalem', 31.76904, 35.21633, 40], ['bneibrak', 32.08074, 34.8338, 20]].flatMap(([c, lat, lon, b]) =>
   holyWindows(Date.UTC(2027, 0, 2), Date.UTC(2027, 11, 30), { lat, lon, b }, MOADIM).map(w => [c, lat, lon, b, w.from, w.until, w.what].join('\t'))).join('\n') + '\n')
 const fx = join(tmp, 'words.tsv'); writeFileSync(fx, phrases.map(p => p + '\t' + memWords(p).join(' ')).join('\n') + '\n')
 const out = join(tmp, 'out')
 try {
   execFileSync('java', ['-cp', cp.join(':'), 'org.jetbrains.kotlin.cli.jvm.K2JVMCompiler', '-no-stdlib', '-cp', stdlib, '-nowarn',
-    join(ROOT, 'android/app/src/main/java/il/liba/app/MemCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/ReminderCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/SenseCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/CalCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/Fusion.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/Holy.kt'), join(ROOT, 'tests/kt/MemCoreTest.kt'), join(ROOT, 'tests/kt/ReminderCoreTest.kt'), join(ROOT, 'tests/kt/SenseCoreTest.kt'), join(ROOT, 'tests/kt/CalCoreTest.kt'), join(ROOT, 'tests/kt/FusionTest.kt'), join(ROOT, 'tests/kt/HolyTest.kt'), '-d', out], { stdio: ['ignore', 'pipe', 'pipe'] })
+    join(ROOT, 'android/app/src/main/java/il/liba/app/MemCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/ReminderCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/SenseCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/CalCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/Fusion.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/Holy.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/Signed.kt'), join(ROOT, 'tests/kt/MemCoreTest.kt'), join(ROOT, 'tests/kt/ReminderCoreTest.kt'), join(ROOT, 'tests/kt/SenseCoreTest.kt'), join(ROOT, 'tests/kt/CalCoreTest.kt'), join(ROOT, 'tests/kt/FusionTest.kt'), join(ROOT, 'tests/kt/HolyTest.kt'), join(ROOT, 'tests/kt/SignedTest.kt'), '-d', out], { stdio: ['ignore', 'pipe', 'pipe'] })
 } catch (e) { console.log('FAIL kt-test: compile\n' + String(e.stderr || e).split('\n').filter(l => !/JAVA_TOOL_OPTIONS/.test(l)).slice(0, 20).join('\n')); process.exit(1) }
-try { process.stdout.write(execFileSync('java', ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-cp', out + ':' + stdlib, 'MemCoreTestKt', fx, holyFx, join(ROOT, 'android/app/src/main/res/raw/moadim.json')], { stdio: ['ignore', 'pipe', 'pipe'] }).toString()) }
+try { process.stdout.write(execFileSync('java', ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-cp', out + ':' + stdlib, 'MemCoreTestKt', fx, holyFx, join(ROOT, 'android/app/src/main/res/raw/moadim.json'), signedFx], { stdio: ['ignore', 'pipe', 'pipe'] }).toString()) }
 catch (e) { process.stdout.write(String(e.stdout || '')); console.log(String(e.stderr || '').split('\n').filter(l => !/JAVA_TOOL_OPTIONS/.test(l)).join('\n')); process.exit(1) }

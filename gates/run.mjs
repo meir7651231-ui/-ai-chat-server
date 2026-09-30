@@ -42,6 +42,7 @@ const extra = [
   ['context', 'node tests/context.test.js'],
   ['zman', 'node tests/zman.test.js'],
   ['shabbat', 'node tests/shabbat.test.js'],
+  ['signed', 'node tests/signed.test.js'],
 ]
 
 let pass = 0

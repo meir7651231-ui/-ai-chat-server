@@ -1,5 +1,8 @@
 // צעד 99: בדיקת קצה-לקצה של הדף עם אפליקציה ומסד מדומים. הרצה: NODE_PATH=$(npm root -g) node tests/page.e2e.js
 const { chromium } = require('playwright'); const fs = require('fs');
+// signed-commands: a key made for the test signs the one command below; the page is told to trust it (never the real key)
+const TK = require('crypto').generateKeyPairSync('ed25519'), TPUB = TK.publicKey.export({ type: 'spki', format: 'der' }).toString('base64');
+const signCmd = (cmd, exp) => { const nonce = require('crypto').randomBytes(9).toString('base64url'); exp = exp || Date.now() + 1800e3; return { cmd, nonce, exp, sig: require('crypto').sign(null, Buffer.from('cmd|' + nonce + '|' + exp + '|' + cmd), TK.privateKey).toString('base64') }; };
 const STUB = `(()=>{ if (window.top === window) return; // only inside the iframe
 const docs=new Map(), colSubs=new Map(), docSubs=new Map();
 /* windowed-reads: a channel with a long past. __seedN documents across inbox/tasks/sessions/gallery before boot */
@@ -54,7 +57,7 @@ const failed = [];
   const errs = [], msgs = [];
   p.on('console', m => { if (m.type() === 'error') errs.push('console: ' + m.text()); });
   p.on('pageerror', e => errs.push('PAGEERROR: ' + e.message));
-  await p.addInitScript(STUB);
+  await p.addInitScript(STUB); await p.addInitScript(`window.__testCmdPub=${JSON.stringify(TPUB)};`);
   const html = fs.readFileSync(require('path').join(__dirname, '..', 'liba-call.html'), 'utf8');
   const os=require('os');const tmp=fs.mkdtempSync(require('path').join(os.tmpdir(),'liba-e2e-'));fs.writeFileSync(tmp+'/h_inner.html', '<!doctype html><html><head><meta charset="utf-8"></head><body>' + html + '</body></html>');
   fs.writeFileSync(tmp+'/h_host.html', `<!doctype html><html><body><iframe id=f src="h_inner.html" style="width:400px;height:800px"></iframe><script>
@@ -80,12 +83,14 @@ const failed = [];
   // 2. inbox: say + ask + cmd ordering, acks
   await set('inbox/m-1', { from: 'liba', kind: 'say', speaker: 'ליבה', topic: 'בדיקה', text: 'שלום ראשון', spoken: false, ts: 1 });
   await set('inbox/m-2', { from: 'liba', kind: 'ask', speaker: 'ליבה', topic: 'שאלה', text: 'כן או לא', options: ['כן', 'לא'], spoken: false, ts: 2 });
-  await set('inbox/c-3', { from: 'liba', kind: 'cmd', cmd: 'reload', spoken: false, ts: 3 });
+  await set('inbox/c-3', Object.assign({ from: 'liba', kind: 'cmd', spoken: false, ts: 3 }, signCmd('reload')));
+  await set('inbox/c-4', { from: 'liba', kind: 'cmd', cmd: 'hey_off', spoken: false, ts: 4 });   // unsigned: refused
   m = await flush(1500);
   const says = m.filter(x => x.liba === 'say').map(x => x.text);
   check(says.length >= 2 && /ליבה, בנוגע לבדיקה: שלום ראשון/.test(says.find(t => /ראשון/.test(t)) || ''), 'say #1 with speaker+topic prefix: ' + JSON.stringify(says[0]));
   check(says.some(t => /שאלה/.test(t) && /כן או לא/.test(t)), 'ask #2 spoken with kind word');
-  check(m.some(x => x.liba === 'cmd' && x.cmd === 'reload'), 'cmd relayed');
+  check(m.some(x => x.liba === 'cmd' && x.cmd === 'reload' && x.sig), 'a signed cmd is relayed, with its signature');
+  check(!m.some(x => x.liba === 'cmd' && x.cmd === 'hey_off'), 'an unsigned cmd is not relayed');
   check((await get('inbox/m-1') || {}).spoken === true && (await get('inbox/m-2') || {}).spoken === true && (await get('inbox/c-3') || {}).spoken === true, 'all three acked spoken:true');
   const batchIntro = says.some(t => /הצטברו/.test(t)); console.log('  (batch intro spoken: ' + batchIntro + ')');
   // 3. answer the ask → decisions log + sent with tag
