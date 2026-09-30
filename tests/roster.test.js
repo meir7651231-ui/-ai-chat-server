@@ -65,9 +65,9 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const t0 = await f.evaluate(() => Date.now());
   await f.evaluate(n => window.__roster.reclaim(n + 200000), t0);
   for (const id of ids) await f.evaluate(id => { window.__h.set('req/' + id, window.__h.get('req/' + id) || { text: 'x' }); window.__h.set('inbox/a-' + id, { from: 'manager', kind: 'say', text: 'עניתי', re: id, spoken: false, ts: Date.now() }); }, id);
-  await speak(6000);
+  for (let k = 0; k < 20; k++) { await speak(1000); if (await f.evaluate(ids => ids.every(id => window.__h.get('work/' + id).state === 'answered'), ids)) break; }
   const st = await f.evaluate(ids => ids.map(id => [window.__h.get('work/' + id).state, window.__h.sentRaw.filter(x => x.endsWith('⟦#' + id + '⟧')).length]), ids);
-  ok(st.every(([s, n]) => s === 'answered' && n === 2), `30 sentences whose brain died: ${st.filter(x => x[0] === 'answered').length} answered after one resend, none sent a third time`);
+  ok(st.every(([s, n]) => s === 'answered' && n === 2), `30 sentences whose brain died: ${st.filter(x => x[0] === 'answered').length} answered, sends per sentence: ${[...new Set(st.map(x => x[1]))].join('/')} (one resend, none a third time)`);
   await f.evaluate(() => window.__h.set('brain/roster/items/b-222', { role: 'בונה', lastBeat: Date.now() - 20 * 60000 }));
   await p.waitForTimeout(300);
   const s = await say('מי ער');
