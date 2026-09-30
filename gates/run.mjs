@@ -38,6 +38,7 @@ const extra = [
   ['kt-memcore', 'node tools/kt-test.mjs'],
   ['proactive', 'node tests/proactive.test.js'],
   ['sense', 'node tests/sense.e2e.js'],
+  ['cal', 'node tests/cal.test.js'],
 ]
 
 let pass = 0

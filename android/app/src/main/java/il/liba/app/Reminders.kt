@@ -29,7 +29,7 @@ object Reminders {
         runCatching {
             val o = JSONObject(f(c).readText())
             val a = o.optJSONArray("items") ?: JSONArray()
-            core.replace(List(a.length()) { a.getJSONObject(it).let { x -> Reminder(x.optString("id"), x.optLong("at"), x.optLong("until"), x.optString("text")) } })
+            core.replace(List(a.length()) { a.getJSONObject(it).let { x -> Reminder(x.optString("id"), x.optLong("at"), x.optLong("until"), x.optString("text"), x.optBoolean("cap", true)) } })
             val fr = o.optJSONArray("fired") ?: JSONArray(); for (i in 0 until fr.length()) core.fired.add(fr.optString(i))
             core.day = o.optString("day"); core.count = o.optInt("count")
             core.replace(core.items.toList())
@@ -37,7 +37,7 @@ object Reminders {
     }
     @Synchronized private fun save(c: Context) {
         val o = JSONObject().put("day", core.day).put("count", core.count).put("fired", JSONArray(core.fired.toList()))
-            .put("items", JSONArray(core.items.map { JSONObject().put("id", it.id).put("at", it.at).put("until", it.until).put("text", it.text) }))
+            .put("items", JSONArray(core.items.map { JSONObject().put("id", it.id).put("at", it.at).put("until", it.until).put("text", it.text).put("cap", it.cap) }))
         runCatching { val t = File(c.filesDir, "reminders.json.tmp"); t.writeText(o.toString()); t.renameTo(f(c)) }
             .onFailure { Trace.e(Trace.Code.E_PREFS, "remind-save:" + it.javaClass.simpleName) }
     }
@@ -49,7 +49,7 @@ object Reminders {
     /** from the page */
     fun onRemind(c: Context, json: String) = Trace.post {
         load(c); runCatching { val a = JSONArray(json)
-            synchronized(this) { core.replace(List(a.length()) { a.getJSONObject(it).let { x -> Reminder(x.optString("id"), x.optLong("at"), x.optLong("until"), x.optString("text")) } }) }
+            synchronized(this) { core.replace(List(a.length()) { a.getJSONObject(it).let { x -> Reminder(x.optString("id"), x.optLong("at"), x.optLong("until"), x.optString("text"), x.optBoolean("cap", true)) } }) }
             save(c); arm(c) }.onFailure { Trace.e(Trace.Code.E_PREFS, "remind-in:" + it.javaClass.simpleName) }
     }
     /** what to say now; marks them said (spokenMid, so the page counts them) */

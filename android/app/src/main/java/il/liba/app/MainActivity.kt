@@ -44,9 +44,11 @@ class MainActivity : AppCompatActivity() {
         hey.setOnCheckedChangeListener { _, v -> Prefs.setHey(this, v); BubbleService.instance?.applyPrefs() }
         conv.setOnCheckedChangeListener { _, v -> Prefs.setConv(this, v); BubbleService.instance?.applyPrefs() }
         requestRuntimePermissions()
-        handleShare(intent)
+        handleShare(intent); askCal(intent)
     }
-    override fun onNewIntent(intent: Intent?) { super.onNewIntent(intent); handleShare(intent) }
+    override fun onNewIntent(intent: Intent?) { super.onNewIntent(intent); handleShare(intent); askCal(intent) }
+    /** step calendar-sense: Meir said "תקראי את היומן שלי" - Android's own dialog asks him */
+    private fun askCal(i: Intent?) { if (i?.getBooleanExtra("askCal", false) == true && !il.liba.app.sense.CalSense.granted(this)) ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_CALENDAR), 7) }
     // step 63: "שתף" → ליבה. Text or link shared from any app becomes a message to the channel.
     private fun handleShare(i: Intent?) {
         if (i?.action != Intent.ACTION_SEND) return
@@ -147,5 +149,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults); refresh()
+        if (requestCode == 7 && il.liba.app.sense.CalSense.granted(this)) il.liba.app.sense.CalSense.start(this)
     }
 }

@@ -123,6 +123,93 @@
    ]
   },
   {
+   "id": "cal.today",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "exact": [
+    "מה יש לי היום",
+    "מה ביומן היום",
+    "מה יש היום ביומן"
+   ],
+   "handler": "calToday",
+   "help": "\"מה יש לי היום\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "cal.tomorrow",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "exact": [
+    "מה יש לי מחר",
+    "מה ביומן מחר",
+    "מה יש מחר ביומן"
+   ],
+   "handler": "calTomorrow",
+   "help": "\"מה יש לי מחר\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "cal.free",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "exact": [
+    "מתי אני פנוי",
+    "מתי אני פנוי השבוע",
+    "מתי יש לי זמן"
+   ],
+   "handler": "calFree",
+   "help": "\"מתי אני פנוי\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "cal.on",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "exact": [
+    "(תקראי|תקרא) את היומן שלי",
+    "(תסתכלי|תסתכל) ביומן שלי"
+   ],
+   "handler": "calOn",
+   "help": "\"תקראי את היומן שלי\" (קריאה בלבד)"
+  },
+  {
+   "id": "cal.off",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "exact": [
+    "(תפסיקי|תפסיק) לקרוא את היומן"
+   ],
+   "handler": "calOff",
+   "help": "\"תפסיקי לקרוא את היומן\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "cal.write",
+   "where": "page",
+   "when": "liba",
+   "family": "חושים",
+   "prefix": [
+    "(תקבע|תקבעי) פגישה",
+    "(תזיז|תזיזי) את הפגישה",
+    "(תבטל|תבטלי) את הפגישה"
+   ],
+   "handler": "calWrite",
+   "help": "\"תקבע פגישה…\" (מחכה להחלטה שלך)"
+  },
+  {
    "id": "sense.add",
    "where": "page",
    "when": "liba",

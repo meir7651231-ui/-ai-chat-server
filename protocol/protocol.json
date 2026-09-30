@@ -11,7 +11,8 @@
     "trace",
     "mem",
     "remind",
-    "sense"
+    "sense",
+    "cal"
   ],
   "toApp": {
     "ready": {
@@ -191,6 +192,12 @@
         "items": "str"
       },
       "why": "sense-bus-ears: what the phone heard (notifications from the apps Meir named), kept on the phone until the page acks"
+    },
+    "calSync": {
+      "fields": {
+        "snapshot": "str"
+      },
+      "why": "calendar-sense: the calendar window (yesterday to a week ahead) as one snapshot, read only, only after Meir allowed it"
     }
   },
   "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",

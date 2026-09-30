@@ -3,8 +3,8 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "7aaf70b74a0b"
-    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense")
+    const val HASH = "eabaa2ddca93"
+    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense", "cal")
 
     /** page -> app */
     object ToApp {
@@ -37,6 +37,7 @@ object Protocol {
         const val PULSE = "pulse"
         const val MEM_ASK = "memAsk"
         const val SENSE = "sense"
+        const val CAL_SYNC = "calSync"
     }
 
     /** Relay for the top frame's message listener: page -> LibaBridge. */
@@ -62,7 +63,7 @@ object Protocol {
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"7aaf70b74a0b",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"eabaa2ddca93",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
@@ -71,6 +72,7 @@ object Protocol {
   window.__libaPulse=function(dev,name,body){window.__libaSend("pulse",{dev:dev,name:name,body:body});};
   window.__libaMemAsk=function(items){window.__libaSend("memAsk",{items:items});};
   window.__libaSense=function(items){window.__libaSend("sense",{items:items});};
+  window.__libaCalSync=function(snapshot){window.__libaSend("calSync",{snapshot:snapshot});};
 """
 }
 

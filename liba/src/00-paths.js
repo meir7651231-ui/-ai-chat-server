@@ -7,7 +7,7 @@ const P_RAW={
   owner:()=>db.doc('channel/owner'),ownerLog:()=>db.doc('channel/owner').collection('log'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
   current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),digest:day=>db.doc('memory/digest').collection('items').doc(day),identity:()=>db.doc('memory/identity'),caps:()=>db.doc('memory/caps'),memMeta:()=>db.doc('memory/meta'),
   forget:id=>db.doc('memory/forgets').collection('items').doc(id),forgets:()=>db.doc('memory/forgets').collection('items'),
-  proactive:()=>db.doc('memory/proactive'),senseItem:id=>db.doc('sense/notif').collection('items').doc(id),senseItems:()=>db.doc('sense/notif').collection('items'),conflict:id=>db.doc('memory/conflicts').collection('items').doc(id),conflicts:()=>db.doc('memory/conflicts').collection('items'),
+  proactive:()=>db.doc('memory/proactive'),calItem:id=>db.doc('sense/cal').collection('items').doc(id),calItems:()=>db.doc('sense/cal').collection('items'),calState:()=>db.doc('sense/cal'),senseItem:id=>db.doc('sense/notif').collection('items').doc(id),senseItems:()=>db.doc('sense/notif').collection('items'),conflict:id=>db.doc('memory/conflicts').collection('items').doc(id),conflicts:()=>db.doc('memory/conflicts').collection('items'),
   cand:k=>db.doc('memory/candidates').collection('items').doc(k),cands:()=>db.doc('memory/candidates').collection('items'),
   person:k=>db.doc('memory/people').collection('items').doc(k),people:()=>db.doc('memory/people').collection('items'),
   fact:k=>db.doc('memory/facts').collection('items').doc(k),facts:()=>db.doc('memory/facts').collection('items'),
@@ -43,7 +43,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
-  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',digest:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',cand:'record',cands:'record',forget:'record',forgets:'record',conflict:'record',conflicts:'record',proactive:'record',senseItem:'record',senseItems:'record',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
+  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',digest:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',cand:'record',cands:'record',forget:'record',forgets:'record',conflict:'record',conflicts:'record',proactive:'record',senseItem:'record',senseItems:'record',calItem:'record',calItems:'record',calState:'state',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',

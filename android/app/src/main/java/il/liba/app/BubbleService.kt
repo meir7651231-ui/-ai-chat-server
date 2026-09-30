@@ -131,6 +131,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         running = true; instance = this
         // step sense-bus-ears: what the phone heard goes to the page when it is up; until then it waits on disk
         il.liba.app.sense.SenseBus.sink = { j -> main.post { if (pageReady) web?.let { LibaWeb.sendSense(it, j) } } }
+        il.liba.app.sense.CalSense.sink = { j -> main.post { if (pageReady) web?.let { LibaWeb.sendCal(it, j) } } }
+        il.liba.app.sense.CalSense.start(this)
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "boot:" + e.javaClass.simpleName) } }
         if (!startForegroundNotif()) { stopSelf(); return }
@@ -853,9 +855,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
     } }
     override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; loginRestored(); drainWords(); pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
-        main.postDelayed({ drainTrace() }, 2000); main.postDelayed({ drainMem() }, 3000); main.postDelayed({ il.liba.app.sense.SenseBus.flush(this) }, 3500) } } }
+        main.postDelayed({ drainTrace() }, 2000); main.postDelayed({ drainMem() }, 3000); main.postDelayed({ il.liba.app.sense.SenseBus.flush(this); il.liba.app.sense.CalSense.last?.let { j -> web?.let { LibaWeb.sendCal(it, j) } } }, 3500) } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }
-    override fun onCmd(cmd: String) { main.post { when (cmd) { "sense_open" -> openSenseAccess(); "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
+    override fun onCmd(cmd: String) { main.post { when (cmd) { "sense_open" -> openSenseAccess(); "cal_on" -> askCalendar(); "cal_off" -> il.liba.app.sense.CalSense.stop(this); "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); try { startActivity(i) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "open:" + e.javaClass.simpleName); notifyIntent("ליבה – קישור", u, i) } } } } }
     /** fix 10: when Android refuses an activity start from the background, hand the intent to the user as a tappable notification. */
     private fun notifyIntent(title: String, text: String, i: Intent) {
@@ -878,6 +880,12 @@ class BubbleService : Service(), LibaWeb.Bridge {
     override fun onRemind(items: String) { Reminders.onRemind(this, items) }
     override fun onSenseAck(ids: List<String>) { il.liba.app.sense.SenseBus.ack(this, ids) }
     override fun onSenseCfg(apps: List<String>) { il.liba.app.sense.SenseBus.setApps(this, apps) }
+    /** step calendar-sense: the runtime permission needs an activity - MainActivity asks, and starts CalSense when allowed */
+    private fun askCalendar() {
+        if (il.liba.app.sense.CalSense.granted(this)) { il.liba.app.sense.CalSense.start(this); return }
+        val i = Intent(this, MainActivity::class.java).putExtra("askCal", true).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        try { startActivity(i) } catch (e: Exception) { notifyIntent("ליבה מבקשת לקרוא את היומן", "לחץ כדי לאשר", i) }
+    }
     /** Android asks Meir itself before any app reads notifications: open that screen only if the access is not there yet */
     private fun openSenseAccess() {
         if (androidx.core.app.NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) return

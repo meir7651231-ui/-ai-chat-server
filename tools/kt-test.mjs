@@ -34,7 +34,7 @@ const fx = join(tmp, 'words.tsv'); writeFileSync(fx, phrases.map(p => p + '\t' +
 const out = join(tmp, 'out')
 try {
   execFileSync('java', ['-cp', cp.join(':'), 'org.jetbrains.kotlin.cli.jvm.K2JVMCompiler', '-no-stdlib', '-cp', stdlib, '-nowarn',
-    join(ROOT, 'android/app/src/main/java/il/liba/app/MemCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/ReminderCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/SenseCore.kt'), join(ROOT, 'tests/kt/MemCoreTest.kt'), join(ROOT, 'tests/kt/ReminderCoreTest.kt'), join(ROOT, 'tests/kt/SenseCoreTest.kt'), '-d', out], { stdio: ['ignore', 'pipe', 'pipe'] })
+    join(ROOT, 'android/app/src/main/java/il/liba/app/MemCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/ReminderCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/SenseCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/CalCore.kt'), join(ROOT, 'tests/kt/MemCoreTest.kt'), join(ROOT, 'tests/kt/ReminderCoreTest.kt'), join(ROOT, 'tests/kt/SenseCoreTest.kt'), join(ROOT, 'tests/kt/CalCoreTest.kt'), '-d', out], { stdio: ['ignore', 'pipe', 'pipe'] })
 } catch (e) { console.log('FAIL kt-test: compile\n' + String(e.stderr || e).split('\n').filter(l => !/JAVA_TOOL_OPTIONS/.test(l)).slice(0, 20).join('\n')); process.exit(1) }
 try { process.stdout.write(execFileSync('java', ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-cp', out + ':' + stdlib, 'MemCoreTestKt', fx], { stdio: ['ignore', 'pipe', 'pipe'] }).toString()) }
 catch (e) { process.stdout.write(String(e.stdout || '')); console.log(String(e.stderr || '').split('\n').filter(l => !/JAVA_TOOL_OPTIONS/.test(l)).join('\n')); process.exit(1) }

@@ -6,7 +6,8 @@ package il.liba.app
  * hello's spoken list, so it is one budget), never at night (before 8, from 22 - held to 8:00), never in night mode, and
  * never twice. `next` is when the one alarm should ring: the earliest due-or-future item, moved out of the night.
  */
-data class Reminder(val id: String, val at: Long, val until: Long, val text: String)
+/** cap=false: a calendar briefing - not counted in the three, and allowed before eight (a meeting at 7:30 needs one) */
+data class Reminder(val id: String, val at: Long, val until: Long, val text: String, val cap: Boolean = true)
 
 class ReminderCore {
     val items = ArrayList<Reminder>()
@@ -23,9 +24,12 @@ class ReminderCore {
     /** what to say now: due, not said, inside the day, within the budget */
     fun due(now: Long, hour: Int, today: String, night: Boolean): List<Reminder> {
         roll(today)
-        if (night || hour < DAY_START || hour >= DAY_END) return emptyList()
-        val out = items.filter { it.id !in fired && it.at <= now && now <= it.until }.sortedBy { it.at }.take((MAX - count).coerceAtLeast(0))
-        out.forEach { fired.add(it.id) }; count += out.size
+        if (night) return emptyList()
+        val inDay = hour >= DAY_START && hour < DAY_END
+        val ready = items.filter { it.id !in fired && it.at <= now && now <= it.until }.sortedBy { it.at }
+        val capped = if (inDay) ready.filter { it.cap }.take((MAX - count).coerceAtLeast(0)) else emptyList()
+        val out = (ready.filter { !it.cap } + capped).sortedBy { it.at }
+        out.forEach { fired.add(it.id) }; count += capped.size
         items.removeAll { it.id in fired || it.until < now }
         while (fired.size > 200) fired.remove(fired.first())
         return out
@@ -33,8 +37,11 @@ class ReminderCore {
 
     /** when to ring next: the earliest item not said; a time in the night becomes 8:00 (given as the next morning) */
     fun next(now: Long, hour: Int, nextMorning: Long): Long? {
-        val t = items.filter { it.id !in fired && it.until >= now }.minOfOrNull { maxOf(it.at, now) } ?: return null
+        val open = items.filter { it.id !in fired && it.until >= now }
+        val free = open.filter { !it.cap }.minOfOrNull { maxOf(it.at, now) }
+        val t = open.filter { it.cap }.minOfOrNull { maxOf(it.at, now) }
         val nightNow = hour < DAY_START || hour >= DAY_END
-        return if (t <= now && nightNow) nextMorning else t
+        val capped = if (t != null && t <= now && nightNow) nextMorning else t
+        return listOfNotNull(free, capped).minOrNull()
     }
 }

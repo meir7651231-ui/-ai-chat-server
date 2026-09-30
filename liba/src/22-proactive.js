@@ -37,10 +37,13 @@ async function proFire(t,now){now=now||Date.now();await proLoad();proDay(now);
   queueLocal({id:'pro-'+t.id,kind:'say',proactive:true,speaker:'ליבה',topic:'תזכורת',text:'אני נזכרת: '+t.text});return 'said';}
 /* the phone owns the dates when it can; otherwise this page fires them itself */
 async function proTick(now){now=now||Date.now();if(!db)return [];let facts=[];try{facts=await MEM.all();}catch(e){return [];}const out=[];
-  if(!(appMode&&hasCap('remind')))for(const t of proDates(facts,now))if(t.at<=now&&now<=t.until)out.push([t.id,await proFire(t,now)]);
+  if(!(appMode&&hasCap('remind'))){for(const t of proDates(facts,now))if(t.at<=now&&now<=t.until)out.push([t.id,await proFire(t,now)]);
+    /* calendar briefings: outside the budget and the night, but held by "תפסיק להזכיר" and by quiet like any line */
+    await proLoad();for(const b of await calBriefings(now))if(b.at<=now&&now<=b.until&&!proState.fired[b.id.slice(4)]){proState.fired[b.id.slice(4)]=now;proSave();queueLocal({id:b.id,kind:'say',proactive:true,speaker:'ליבה',topic:'יומן',text:b.text});out.push([b.id,'said']);}}
   return out;}
 function proSchedule(){if(!appMode||!hasCap('remind')||!db)return;(async()=>{await proLoad();const now=Date.now();
-  const items=proDates(await MEM.all(),now).filter(t=>!proState.fired[t.id]&&!proResting('date',now)).slice(0,20).map(t=>({id:'pro-'+t.id,at:t.at,until:t.until,text:'אני נזכרת: '+t.text}));
+  const items=proDates(await MEM.all(),now).filter(t=>!proState.fired[t.id]&&!proResting('date',now)).slice(0,20).map(t=>({id:'pro-'+t.id,at:t.at,until:t.until,text:'אני נזכרת: '+t.text}))
+    .concat(POLICY.rules.some(r=>r.type==='no_proactive')?[]:(await calBriefings(now)).filter(b=>!proState.fired[b.id.slice(4)]));
   post(PROTO.toApp.remind,{items:JSON.stringify(items)});})().catch(e=>fail('P_DB_READ',e,'remind'));}
 /* what the phone said by itself counts: the budget is one budget */
 function proFromPhone(id,now){if(!/^pro-/.test(id))return;proLoad().then(()=>{now=now||Date.now();proDay(now);const k=id.slice(4);if(!proState.fired[k]){proState.fired[k]=now;proState.count++;proSave();}}).catch(()=>{});}

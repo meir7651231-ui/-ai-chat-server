@@ -45,6 +45,7 @@ fun main(args: Array<String>) {
 
     reminderTests()
     senseTests()
+    calTests()
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
     if (fails > 0) System.exit(1)
 }

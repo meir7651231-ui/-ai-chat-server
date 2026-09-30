@@ -16,6 +16,12 @@ fun reminderTests() {
     ok(c.next(now + 60_000, 9, 0) == now + 5 * h, "reminders: the next alarm is the later one")
     c.replace(listOf(Reminder("pro-date.k0", now, now + h, "x"), Reminder("pro-date.new", now, now + h, "y")))
     ok(c.items.map { it.id } == listOf("pro-date.new"), "reminders: a new list from the page never brings back what was said")
+    val m = ReminderCore(); m.count = 0
+    m.replace(listOf(Reminder("pro-cal.a", now, now + h, "פגישה", cap = false), Reminder("pro-date.q", now, now + h, "x")))
+    val early = m.due(now, 7, "d9", false)
+    ok(early.map { it.id } == listOf("pro-cal.a"), "reminders: at seven a meeting briefing is said, a memory reminder waits: ${early.map { it.id }}")
+    val m2 = ReminderCore(); m2.count = 3; m2.day = "d9"; m2.replace(listOf(Reminder("pro-cal.b", now, now + h, "פגישה", cap = false)))
+    ok(m2.due(now, 12, "d9", false).size == 1 && m2.count == 3, "reminders: a briefing is outside the three a day")
     val restart = ReminderCore(); restart.fired.addAll(c.fired); restart.replace(listOf(Reminder("pro-date.k1", now, now + h, "x")))
     ok(restart.items.isEmpty(), "reminders: after a restart (fired kept on disk) nothing is said twice")
 }
