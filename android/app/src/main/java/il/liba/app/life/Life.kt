@@ -24,6 +24,7 @@ class LifeReceiver : BroadcastReceiver() {
     override fun onReceive(c: Context, i: Intent) {
         val why = when (i.action) { Intent.ACTION_BOOT_COMPLETED, "android.intent.action.QUICKBOOT_POWERON" -> "boot"; Intent.ACTION_MY_PACKAGE_REPLACED -> "updated"; Life.REVIVE -> "revive"; else -> return }
         Life.arm(c)
+        runCatching { il.liba.app.Reminders.arm(c) } // step proactive: a reminder does not die with a restart
         if (!Prefs.on(c)) return
         if (BubbleService.running) return
         try { ContextCompat.startForegroundService(c, Intent(c, BubbleService::class.java).putExtra("why", why)) }

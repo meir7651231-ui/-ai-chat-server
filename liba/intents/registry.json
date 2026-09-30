@@ -105,6 +105,7 @@
   },
   {
    "id": "memory.remember",
+   "offline": true,
    "where": "page",
    "when": "liba",
    "family": "זיכרון",
@@ -119,6 +120,37 @@
    "lead": [
     "כי",
     "את"
+   ]
+  },
+  {
+   "id": "proactive.return",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "(נחזור|אחזור|נדבר) (לזה|על זה) אחרי"
+   ],
+   "handler": "proReturn",
+   "help": "\"נחזור לזה אחרי הפגישה\" (ליבה תזכיר כשהפגישה תעלה)",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "proactive.not",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "לא עכשיו",
+    "לא מעניין",
+    "לא רלוונטי"
+   ],
+   "handler": "proNot",
+   "pass": true,
+   "help": "\"לא עכשיו\" (אחרי תזכורת - פחות כאלה), \"תפסיק להזכיר\"",
+   "requires": [
+    "db"
    ]
   },
   {
@@ -189,6 +221,7 @@
   },
   {
    "id": "memory.about",
+   "offline": true,
    "where": "page",
    "when": "liba",
    "family": "זיכרון",
@@ -244,6 +277,7 @@
   },
   {
    "id": "people.who",
+   "offline": true,
    "where": "page",
    "when": "liba",
    "family": "אנשים",
@@ -358,7 +392,8 @@
     "רק דחוף",
     "(תאסוף|תאספי) [לי]",
     "(תקצר|תקצרי|בקצרה)",
-    "(תקרא|תקראי) לי"
+    "(תקרא|תקראי) לי",
+    "(תפסיק|תפסיקי) להזכיר"
    ],
    "handler": "memPref",
    "help": "\"אל תעדכן אותי על X\", \"תשתיק X\", \"אל תעיר אותי לפני שש\", \"תקצר\"",

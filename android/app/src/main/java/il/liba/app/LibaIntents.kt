@@ -89,4 +89,34 @@ object LibaIntents {
     )
     fun norm(t: String): String = t.replace(Regex("[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]"), "").replace(Regex("[?!.,:;\"'׳״]"), "").replace(Regex("\\s+"), " ").trim()
     fun match(t: String): String? = EXACT[norm(t)]
+    private val OFFLINE = listOf(
+        Triple("מה אתה זוכרת על", "memory.about", listOf<String>()),
+        Triple("מה אני יודעת על", "memory.about", listOf<String>()),
+        Triple("מה אתה יודעת על", "memory.about", listOf<String>()),
+        Triple("מה אתה זוכר על", "memory.about", listOf<String>()),
+        Triple("מה את זוכרת על", "memory.about", listOf<String>()),
+        Triple("מה אני יודע על", "memory.about", listOf<String>()),
+        Triple("מה את יודעת על", "memory.about", listOf<String>()),
+        Triple("מה אתה יודע על", "memory.about", listOf<String>()),
+        Triple("מה את זוכר על", "memory.about", listOf<String>()),
+        Triple("מה את יודע על", "memory.about", listOf<String>()),
+        Triple("מי זאת", "people.who", listOf<String>()),
+        Triple("תזכור", "memory.remember", listOf<String>("כי", "את")),
+        Triple("תזכרי", "memory.remember", listOf<String>("כי", "את")),
+        Triple("מי זה", "people.who", listOf<String>()),
+        Triple("מי זו", "people.who", listOf<String>()),
+        Triple("זכור", "memory.remember", listOf<String>("כי", "את")),
+        Triple("זכרי", "memory.remember", listOf<String>("כי", "את"))
+    )
+    /** step device-mem: (id, rest) for a memory command the bubble can answer itself; the lead words as the page strips them */
+    fun offline(t: String): Pair<String, String>? {
+        val n = norm(t)
+        for ((p, id, lead) in OFFLINE) {
+            if (n != p && !n.startsWith("$p ")) continue
+            var r = n.removePrefix(p).trim()
+            for (w in lead) { if (r == w || r.startsWith("$w ")) { r = r.removePrefix(w).trim(); break }; if (w == "ש" && r.startsWith("ש") && r.length > 1) { r = r.substring(1); break } }
+            return if (r.isEmpty()) null else id to r
+        }
+        return null
+    }
 }

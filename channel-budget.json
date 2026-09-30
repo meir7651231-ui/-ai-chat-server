@@ -131,13 +131,19 @@
       "time": "day"
     },
     "memory/candidates/items": {
-      "cap": 100,
+      "cap": 60,
       "cls": "record",
       "time": "updatedAt"
     },
     "memory/forgets/items": {
       "cap": 20,
       "ttlDays": 1,
+      "cls": "record",
+      "time": "at"
+    },
+    "memory/conflicts/items": {
+      "cap": 50,
+      "ttlDays": 30,
       "cls": "record",
       "time": "at"
     }

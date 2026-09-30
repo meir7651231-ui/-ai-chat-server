@@ -90,7 +90,7 @@ object Trace {
         if (app == null) return null
         val t = HandlerThread("liba-trace", Process.THREAD_PRIORITY_BACKGROUND).apply { start() }
         thread = t; val hh = Handler(t.looper); h = hh
-        hh.post { app?.let { Prefs.warm(it) } }   // load the conversation ring off the main thread, once
+        hh.post { app?.let { Prefs.warm(it); MemoryStore.warm(it) } }   // load the conversation ring off the main thread, once
         return hh
     }
 

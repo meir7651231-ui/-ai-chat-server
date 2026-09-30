@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <queries><intent><action android:name="android.speech.RecognitionService"/></intent></queries>
     <application
@@ -33,6 +34,8 @@
             <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE"/></intent-filter>
             <meta-data android:name="android.service.quicksettings.ACTIVE_TILE" android:value="false"/>
         </service>
+        <!-- proactive: the one alarm for date reminders -->
+        <receiver android:name=".ReminderReceiver" android:exported="false"/>
         <!-- one-life: the one receiver that brings ליבה back after a restart, an update, or the OS killing her -->
         <receiver android:name=".life.LifeReceiver" android:exported="false">
             <intent-filter>

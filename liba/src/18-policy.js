@@ -3,7 +3,7 @@
 /* Step policy. Every live pref fact (memory/facts, kind pref) is compiled into a typed rule. A message a rule holds
    back is never lost: it is acked into memory/digest/items/<day> and read once in the evening, and "למה לא סיפרת לי"
    answers with the rule, its words and its date. Urgent is never muted, commands never, and Liba's own lines never (the board's lines can be).
-   Rule types: never_ask, mute_topic, mute_person, mute_kind, urgent_only (hours), short, digest_topic, address, short_all. */
+   Rule types: never_ask, mute_topic, mute_person, mute_kind, urgent_only (hours), short, digest_topic, address, short_all, no_proactive. */
 const HOUR_HE={'אחת':1,'שתיים':2,'שלוש':3,'ארבע':4,'חמש':5,'שש':6,'שבע':7,'שמונה':8,'תשע':9,'עשר':10,'אחת עשרה':11,'שתים עשרה':12};
 const hourOf=w=>{w=String(w||'').trim();return /^\d+$/.test(w)?+w:(HOUR_HE[w]!=null?HOUR_HE[w]:null);};
 const POLICY_SHAPES=[
@@ -19,18 +19,20 @@ const POLICY_SHAPES=[
   [/^(תקצר|תקצרי|בקצרה) (על|לגבי) (.+)$/,m=>({type:'short',topic:m[3]})],
   [/^(תמיד )?(תקצר|תקצרי|בקצרה)$/,m=>({type:'short_all'})],
   [/^(תקרא|תקראי) לי (.+)$/,m=>({type:'address',name:m[2]})],
+  [/^(תפסיק|תפסיקי) להזכיר( לי)?( דברים)?$/,m=>({type:'no_proactive'})],
 ];
 const POLICY={rules:[],at:0,
   compileOne(f){const t=inorm(f.value||f.raw||'');for(const [re,mk] of POLICY_SHAPES){const m=t.match(re);if(m){const r=mk(m);if(r.type==='urgent_only'&&(r.from==null||r.to==null))return null;return Object.assign(r,{id:'r-'+hash36(t),text:t,at:+f.updatedAt||+f.ts||Date.now(),key:f.key});}}return null;},
   async load(){try{const all=await MEM.all();this.rules=all.filter(f=>f.kind==='pref'&&f.state!=='tomb').map(f=>this.compileOne(f)).filter(Boolean);this.at=Date.now();}catch(e){fail('P_DB_READ',e,'policy');}return this.rules;},
   about(d,topic){const w=memWords(topic);if(!w.length)return false;const hay=memWords([d.topic,d.text].join(' ')).join(' ');return w.every(x=>hay.indexOf(x)>=0);},
   /* which rule holds this message back, if any - urgent, local and commands never */
-  check(d,now){if((d.local&&d.speaker!=='הלוח')||d.kind==='cmd'||d.priority==='urgent')return null;const h=jHour(now||Date.now());
+  check(d,now){if((d.local&&d.speaker!=='הלוח'&&!d.proactive)||d.kind==='cmd'||d.priority==='urgent')return null;const h=jHour(now||Date.now());
     for(const r of this.rules){
       if(r.type==='never_ask'&&(d.kind==='ask'||d.kind==='stuck')&&this.about(d,r.topic))return r;
       if((r.type==='mute_topic'||r.type==='digest_topic')&&this.about(d,r.topic))return r;
       if(r.type==='mute_person'){const who=memWords(r.person).join(' ');if(who&&(memWords(speakerOf(d)).join(' ').indexOf(who)>=0||memWords(d.from==='manager'?'המנהל':'').join(' ').indexOf(who)>=0))return r;}
       if(r.type==='mute_kind'&&d.kind===r.kind)return r;
+      if(r.type==='no_proactive'&&d.proactive)return r;
       if(r.type==='urgent_only'&&(r.from<=r.to?(h>=r.from&&h<r.to):(h>=r.from||h<r.to)))return r;}
     return null;},
   shorten(d){const r=this.rules.find(x=>(x.type==='short'&&this.about(d,x.topic))||x.type==='short_all');if(!r||d.local)return null;const t=String(d.text||'');const cut=t.search(/[.!?](\s|$)/);

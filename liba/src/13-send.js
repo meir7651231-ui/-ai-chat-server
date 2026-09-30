@@ -82,6 +82,7 @@ async function send(text,forcedTag,source){
   source=SOURCES.indexOf(source)>=0?source:'voice';
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
   if(!forcedTag&&!noIntent&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
+  if(!forcedTag&&!noIntent){proWelcome();proHeard(text).catch(e=>fail('P_DB_READ',e,'proactive'));} /* proactive: anything but "לא עכשיו" after a reminder is a welcome */
   if(!forcedTag&&!noIntent&&distillAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* distill: the answer to ליבה's own question stays here */
   const rt=replyTag(text),tag=forcedTag||rt||tagOf();
   if(tag.indexOf('מנהל')>=0)ownerRenew(lastAsk&&lastAsk.id);

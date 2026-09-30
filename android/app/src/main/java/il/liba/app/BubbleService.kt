@@ -143,7 +143,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         runCatching { checkUpdate() }.onFailure { Trace.e(Trace.Code.E_NET, "check:" + it.javaClass.simpleName) }
     }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        intent?.getStringExtra("why")?.let { if (lifeWhy == "opened") lifeWhy = it }
+        intent?.getStringExtra("why")?.let { if (lifeWhy == "opened") lifeWhy = it; if (it == "remind") main.postDelayed({ sayReminders() }, 1500) }
         when (intent?.action) { // step 32: actions from the permanent notification
             "il.liba.TALK" -> main.post { stopSpeaking(); startListening("cmd") }
             "il.liba.QUIET" -> main.post { stopSpeaking(); heyOff(); setState(LibaState.IDLE); showLabel("שקט.", 2000) }
@@ -799,6 +799,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
             id == "app.stop" -> { stopSpeaking(); sentAt = 0; lastSaid = ""; heyOff(); setState(LibaState.IDLE); showLabel("שקט. מילת ההפעלה כבויה.", 3000); return }
             id == "app.words.list" -> { val w = WordQueue.all(this); speak(if (w.isEmpty()) "אין משפטים שמורים." else "שמרתי ${w.size}: " + w.takeLast(3).joinToString("; ") { it.optString("t") }); return }
             id == "app.words.clear" -> { WordQueue.clear(this); speak("מחקתי את מה ששמרתי."); return }
+            !pageReady && LibaIntents.offline(t) != null -> { val (oid, rest) = LibaIntents.offline(t)!!  // device-mem: the memory answers without the page
+                speak(when (oid) { "people.who" -> MemoryStore.who(rest); "memory.remember" -> MemoryStore.remember(this, rest); else -> MemoryStore.about(rest) }); return }
             !pageReady -> { val dropped = WordQueue.add(this, t, System.currentTimeMillis()); tone("heard")
                 val now = SystemClock.elapsedRealtime(); if (now - wordsSaidAt > 10 * 60_000L) { wordsSaidAt = now; speak("שמרתי, אשלח כשאחזור. אני לא מחוברת כי " + silentWhy() + ".") } else showLabel("נשמר (" + WordQueue.size(this) + ")", 3000)
                 if (dropped > 0) Trace.e(Trace.Code.E_PREFS, "words-cap"); return }
@@ -849,7 +851,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     } }
     override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; loginRestored(); drainWords(); pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
-        main.postDelayed({ drainTrace() }, 2000) } } }
+        main.postDelayed({ drainTrace() }, 2000); main.postDelayed({ drainMem() }, 3000) } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }
     override fun onCmd(cmd: String) { main.post { when (cmd) { "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); try { startActivity(i) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "open:" + e.javaClass.simpleName); notifyIntent("ליבה – קישור", u, i) } } } } }
@@ -866,6 +868,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     override fun onTraceAck(batch: String, ids: List<String>) { Trace.acked(ids) }
     override fun onPageState(state: String) { pageState = state }
+    // step device-mem: the page's memory, kept on the phone; what was remembered offline goes back when the page is up
+    override fun onMemSync(body: String) { MemoryStore.onSync(this, body) }
+    override fun onMemAck(ids: List<String>) { MemoryStore.onAck(this, ids) }
+    /** step proactive: an alarm rang - say what is due, unless night mode or the car say not now (they are held to later) */
+    private fun sayReminders() { val due = Reminders.due(this, night || carMode); if (due.isNotEmpty()) speak(due.joinToString(" ") { it.text }) }
+    override fun onRemind(items: String) { Reminders.onRemind(this, items) }
+    private fun drainMem() { if (MemoryStore.pendingCount() == 0) return; web?.let { LibaWeb.sendMemAsk(it, MemoryStore.pendingJson().toString()) } }
     // step protocol-contract: these two used to be posted by the page and dropped here in silence
     override fun onQueued(text: String) { main.post { showLabel("ממתין שאסיים לדבר…", 4000) } }
     override fun onOutbox(text: String, n: Int, reason: String) { main.post { showLabel(if (n > 1) "אין רשת · $n משפטים שמורים" else "אין רשת · שמרתי, אשלח כשתחזור", 6000) } }

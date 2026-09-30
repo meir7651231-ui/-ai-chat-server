@@ -57,8 +57,8 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
     if(!d.local&&expired(d)){spokenMark(d.id);try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now()});}catch(e){fail('P_ACK',e,'expire');}continue;}
     /* inbox-lease: claim before speaking. Another instance holding the claim is speaking it - try again after the claim
        would have lapsed; a claim left by a page that died lapses by itself, so nothing is lost and nothing is said twice */
-    if(d.local&&d.speaker==='הלוח'){const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);continue;}}
-    if(!d.local){const c=await inboxClaim(d);if(c==='busy'){spokenLocal.delete(d.id);d.retryAt=Date.now()+INBOX_RETRY;d.retryWhy='claim';inboxQ.push(d);continue;}
+    if(d.local&&(d.speaker==='הלוח'||d.proactive)){const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);continue;}}
+    if(!d.local){const c=await inboxClaim(d);if(c==='done'){spokenMark(d.id);continue;}if(c==='busy'){spokenLocal.delete(d.id);d.retryAt=Date.now()+INBOX_RETRY;d.retryWhy='claim';inboxQ.push(d);continue;}
       if(await fresh(d)==='drop'){spokenMark(d.id);staleDropped++;try{await P.inboxDoc(d.id).update({expired:true,expiredAt:Date.now(),stale:true,delivery:{state:'dropped',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'stale');}continue;}
       const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),digested:rule.id,delivery:{state:'digest',by:PAGE_ID,at:Date.now(),rule:rule.id}});}catch(e){fail('P_ACK',e,'digest');}continue;}
       const sh=POLICY.shorten(d);if(sh){lastShort=sh.full;d.shortText=sh.text;}
@@ -91,8 +91,13 @@ function mergeTasks(){const by={};inboxQ.forEach(d=>{const k=d.task||d.taskId;if
 function byTopic(list){const c={};list.forEach(d=>{const t=d.topic||'';if(t)c[t]=(c[t]||0)+1;});const e=Object.entries(c).sort((a,b)=>b[1]-a[1]);if(e.length<2)return '';
   return ': '+e.slice(0,3).map(([t,k])=>(k===1?'אחת':k)+' על '+t).join(', ')+(e.length>3?' ועוד':'');}
 window.__fresh={ago:agoWords,fresh:fresh,merge:mergeTasks};
-async function inboxClaim(d){try{const r=await P.inboxDoc(d.id).acquire({holder:PAGE_ID,ttlMs:INBOX_CLAIM});return r&&r.acquired===false?'busy':'ok';}
-  catch(e){fail('P_ACK',e,'claim');return 'ok';} /* a store without leases: speak anyway - silence is worse than a rare repeat */}
+async function inboxClaim(d){let r;try{r=await P.inboxDoc(d.id).acquire({holder:PAGE_ID,ttlMs:INBOX_CLAIM});}
+  catch(e){fail('P_ACK',e,'claim');return 'ok';} /* a store without leases: speak anyway - silence is worse than a rare repeat */
+  if(r&&r.acquired===false)return 'busy';
+  /* the claim is ours - but the queue it came from may be old: the other device may have said it to the end and acked it
+     while this one waited for its claim to lapse (found by the chaos test, 1-3 in 200). Read it once more, now. */
+  try{const g=await P.inboxDoc(d.id).get();const x=g.exists?(g.data()||{}):null;if(!x||x.spoken||x.expired||x.failed)return 'done';}catch(e){fail('P_DB_READ',e,'claim recheck');}
+  return 'ok';}
 async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
   if(attempts>=INBOX_TRIES){spokenMark(d.id);try{await P.inboxDoc(d.id).update({failed:true,failedAt:Date.now(),delivery:{state:'failed',by:PAGE_ID,at:Date.now(),attempts:attempts,lastError:why}});}catch(e){fail('P_ACK',e,'failed');}
     queueLocal({id:'failed-'+d.id,kind:'say',speaker:'ליבה',topic:'הודעה',text:'יש הודעה שלא הצלחתי להקריא שלוש פעמים'+(d.topic?', בנוגע ל'+d.topic:'')+'. היא נשארת בערוץ.'});return;}

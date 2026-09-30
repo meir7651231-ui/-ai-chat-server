@@ -3,8 +3,8 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "ab52cc1b87ed"
-    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace")
+    const val HASH = "1c9115beac48"
+    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind")
 
     /** page -> app */
     object ToApp {
@@ -20,6 +20,9 @@ object Protocol {
         const val TASKS = "tasks"
         const val TRACE_ACK = "traceAck"
         const val STATE = "state"
+        const val MEM_SYNC = "memSync"
+        const val MEM_ACK = "memAck"
+        const val REMIND = "remind"
     }
     /** app -> page */
     object ToPage {
@@ -30,6 +33,7 @@ object Protocol {
         const val INPUT = "input"
         const val TRACE = "trace"
         const val PULSE = "pulse"
+        const val MEM_ASK = "memAsk"
     }
 
     /** Relay for the top frame's message listener: page -> LibaBridge. */
@@ -46,17 +50,21 @@ object Protocol {
     else if(d.liba==="tasks"){LibaBridge.tasks(String(d.summary||""),Number(d.n||0),Number(d.blocked||0));}
     else if(d.liba==="traceAck"){LibaBridge.traceAck(String(d.batch||""),JSON.stringify(d.ids||[]));}
     else if(d.liba==="state"){LibaBridge.state(String(d.state||""));}
+    else if(d.liba==="memSync"){LibaBridge.memSync(String(d.body||""));}
+    else if(d.liba==="memAck"){LibaBridge.memAck(JSON.stringify(d.ids||[]));}
+    else if(d.liba==="remind"){LibaBridge.remind(String(d.items||""));}
 """
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"ab52cc1b87ed",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"1c9115beac48",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
   window.__libaInput=function(text,source,stamps){window.__libaSend("input",{text:text,source:source,stamps:stamps});};
   window.__libaTrace=function(batch,events){window.__libaSend("trace",{batch:batch,events:events});};
   window.__libaPulse=function(dev,name,body){window.__libaSend("pulse",{dev:dev,name:name,body:body});};
+  window.__libaMemAsk=function(items){window.__libaSend("memAsk",{items:items});};
 """
 }
 
@@ -94,4 +102,7 @@ interface ProtocolBridge {
     fun tasks(summary: String, n: Int, blocked: Int)
     fun traceAck(batch: String, ids: String)
     fun state(state: String)
+    fun memSync(body: String)
+    fun memAck(ids: String)
+    fun remind(items: String)
 }

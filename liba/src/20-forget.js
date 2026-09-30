@@ -40,7 +40,7 @@ async function forgetApply(q,hits){const now=Date.now(),id='f-'+mintId();const k
   const folds={};hits.filter(h=>h.where==='fold').forEach(h=>{(folds[h.id]=folds[h.id]||[]).push(h.item);});
   for(const [fid,items] of Object.entries(folds)){try{const g=await P.fold(fid).get();const x=g.exists?(g.data()||{}):null;if(!x)continue;const it=Object.assign({},x.items||{});items.forEach(k=>delete it[k]);
     await P.fold(fid).set(Object.assign({},x,{items:it}));}catch(e){fail('P_DB_WRITE',e,'forget fold');}}
-  PEOPLE.cache=null;lastForget=id;return id;}
+  PEOPLE.cache=null;lastForget=id;devMemDirty();return id;}
 let lastForget='';
 async function forgetUndo(now){now=now||Date.now();let id=lastForget,b=null;
   try{const r=await coldGet(P.forgets(),[['at','>',now-FORGET_UNDO]],50);const all=r.docs.map(d=>Object.assign({id:d.id},d.data()||{})).filter(x=>!x.undone).sort((a,c)=>c.at-a.at);b=all.find(x=>x.id===id)||all[0]||null;}catch(e){fail('P_DB_READ',e,'forgets');}

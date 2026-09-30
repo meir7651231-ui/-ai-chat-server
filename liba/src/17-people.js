@@ -13,7 +13,7 @@ const PEOPLE={
   async find(name){const n=memWords(name).join(' ');return (await this.all()).find(p=>this.names(p).indexOf(n)>=0)||null;},
   async upsert(name,fields){const ex=await this.find(name);const k=ex?ex.key:slug(name),now=Date.now();
     const doc=Object.assign({name:ex?ex.name:name.trim(),aliases:ex&&ex.aliases||[],sens:1,firstSeen:ex&&ex.firstSeen||now,lastMentioned:now,state:'live'},ex||{},fields||{},{updatedAt:now});delete doc.key;
-    await P.person(k).set(doc);this.cache=null;return Object.assign({key:k},doc);},
+    await P.person(k).set(doc);this.cache=null;devMemDirty();return Object.assign({key:k},doc);},
 };
 let lastPerson=null;
 function peopleAdd(rest,m){const name=rest.trim(),rel=m.rel.replace(/^(הוא|היא) /,'').trim();

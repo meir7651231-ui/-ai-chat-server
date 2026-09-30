@@ -35,7 +35,7 @@ const MEM={
       source:Object.assign({type:'said',at:now},source||{}),ts:cur&&cur.ts||now,updatedAt:now,uses:1,lastUsed:now,state:'live'};
     const ex=memExpiry(doc.raw,now);if(ex)doc.expiresAt=ex;
     if(cur&&cur.state!=='tomb'&&cur.value!==f.value)doc.prev={value:cur.value,at:cur.updatedAt||cur.ts};
-    await ref.set(doc);return {key:k,same:false,replaced:!!doc.prev};},
+    await ref.set(doc);devMemDirty();return {key:k,same:false,replaced:!!doc.prev};},
   async all(){const r=await coldGet(P.facts(),null,1000);return r.docs.map(d=>Object.assign({key:d.id},d.data()||{}));},
   /* query: every word of q (without the Hebrew prefixes ב/ל/כ/ו/ש/ה/מ) found in the fact - live ones only */
   async query(q){const w=memWords(q);const all=(await MEM.all()).filter(f=>memLive(f));if(!w.length)return all;

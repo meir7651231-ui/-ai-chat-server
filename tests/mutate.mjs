@@ -6,6 +6,7 @@
  *
  *   node tests/mutate.mjs          all of them (a few minutes)
  *   node tests/mutate.mjs 3 7      only those
+ *   node tests/mutate.mjs --check  only that every target is still in the code (a gate)
  */
 import { execFileSync, spawnSync } from 'node:child_process'
 import { readFileSync, writeFileSync, existsSync, symlinkSync } from 'node:fs'
@@ -20,12 +21,12 @@ const M = [
   ['הזרקת HTML מכותרת משימה', '11-render.js', '${esc(t.title||t.id)}', '${t.title||t.id}'],
   ['הקראה כפולה אחרי רענון', '07-db.js', 'if(spokenDone(d.id)){', 'if(false){'],
   ['משפט שנאמר תוך כדי דיבור לא יוצא מהתור', '12-flow.js', "}finally{transition('IDLE','spoke');drainQ();}", "}finally{transition('IDLE','spoke');}"],
-  ['ack שלא מסמן spoken', '08-inbox.js', "update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'inbox')", "update({spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'inbox')"],
-  ['שקט שלא נאכף', '08-inbox.js', 'if(quietUntil>Date.now())return false;', ''],
+  ['ack שלא מסמן spoken', '08-inbox.js', "update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'inbox')", "update({spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'inbox')"],
+  ['שקט שלא נאכף', '08-inbox.js', "if(quietUntil>now)return {ok:false,reason:'quiet'};", ''],
   ['משפט למנהל הולך עם התג של ליבה', '13-send.js', "(o||owner)==='manager'?'[ליבה→מנהל] ':'[ליבה] '", "'[ליבה] '"],
   ['שליחה כפולה של אותו משפט', '13-send.js', 'Date.now()-lastSent.ts<5000', 'Date.now()-lastSent.ts<0'],
   ['קול שנפל מחזיק את התור שתי דקות', '04-speech.js', 'if(appBeats()){let w=setTimeout(lost,BEAT_LOST);', 'if(false){let w=setTimeout(lost,BEAT_LOST);'],
-  ['המספר של הבקשה לא נוסע לקלוד', '13-send.js', 'deliverWithRetry(text+reqMark(reqId),tag)', 'deliverWithRetry(text,tag)'],
+  ['המספר של הבקשה לא נוסע לקלוד', '13-send.js', 'deliverWithRetry(text+ctx+reqMark(reqId),tag)', 'deliverWithRetry(text+ctx,tag)'],
   ['טלמטריה בלי דה-דופ', '02-trace.js', 'if(L){L.n++;trQueue(L);return;}', 'if(false){L.n++;trQueue(L);return;}'],
   ['הודעה שפגה נקראת בכל זאת', '08-inbox.js', 'if(!d.local&&expired(d)){', 'if(false&&expired(d)){'],
   ['תשובה לא נקשרת לבקשה', '12-flow.js', 'if(d.re&&!d.local)bindReply(d);', ''],
@@ -39,6 +40,12 @@ const M = [
 const pick = process.argv.slice(2).map(Number).filter(Boolean)
 const todo = M.map((m, i) => [i + 1, m]).filter(([n]) => !pick.length || pick.includes(n))
 
+/* --check: only that every target is still in the code exactly once - a fast gate, so the harness cannot go stale unseen */
+if (process.argv.includes('--check')) {
+  const stale = M.map((m, i) => [i + 1, m]).filter(([, [, file, from]]) => readFileSync(join(ROOT, 'liba/src', file), 'utf8').split(from).length !== 2)
+  stale.forEach(([n, [name, file]]) => console.log(`  ✗ ${n}. ${name} — היעד לא נמצא פעם אחת בדיוק ב-${file}`))
+  console.log(stale.length ? `mutate: ${stale.length} מוטציות התיישנו` : `mutate: כל ${M.length} היעדים קיימים בקוד`); process.exit(stale.length ? 1 : 0)
+}
 const head = git('rev-parse', 'HEAD')
 if (!existsSync(join(WT, '.git'))) git('worktree', 'add', '--detach', WT, head)
 const wt = (...a) => execFileSync('git', a, { cwd: WT, encoding: 'utf8' })

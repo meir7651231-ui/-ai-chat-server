@@ -34,6 +34,9 @@ const extra = [
   ['distill', 'node tests/distill.test.js'],
   ['forget', 'node tests/forget.test.js'],
   ['recall7-sweep', 'SWEEP=1 node tests/recall7.js'],
+  ['devmem', 'node tests/devmem.test.js'],
+  ['kt-memcore', 'node tools/kt-test.mjs'],
+  ['proactive', 'node tests/proactive.test.js'],
 ]
 
 let pass = 0

@@ -8,7 +8,9 @@
     "pulse",
     "spoke",
     "state",
-    "trace"
+    "trace",
+    "mem",
+    "remind"
   ],
   "toApp": {
     "ready": {
@@ -81,6 +83,24 @@
         "state": "str"
       },
       "why": "the page tells the bubble what it is doing, so the two never disagree about who is speaking"
+    },
+    "memSync": {
+      "fields": {
+        "body": "str"
+      },
+      "why": "device-mem: the page sends the phone its memory - the 500 facts used most, the person cards, the rules - so the bubble can answer when the page is down"
+    },
+    "memAck": {
+      "fields": {
+        "ids": "list"
+      },
+      "why": "device-mem: the page stored what the phone kept offline; the phone lets those go"
+    },
+    "remind": {
+      "fields": {
+        "items": "str"
+      },
+      "why": "proactive: the date reminders, so the phone's alarm says them even when the page is dead or the phone just restarted"
     }
   },
   "toPage": {
@@ -146,6 +166,12 @@
         "body": "str"
       },
       "why": "one sign of life per device, edge-triggered (a change, or every five minutes); the page keeps it in one fixed document pulse/<dev>"
+    },
+    "memAsk": {
+      "fields": {
+        "items": "str"
+      },
+      "why": "device-mem: what Meir asked the phone to remember while the page was down, sent when it is back"
     }
   },
   "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",
