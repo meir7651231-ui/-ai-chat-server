@@ -56,7 +56,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const v13 = await said('מה את זוכרת על יוסי');
   ok(/על יוסי אני יודעת: שהשכן החדש הוא יוסי/.test(v13), '"מה את זוכרת על X": ' + v13);
   const v14a = await said('תשכח את יוסי'), v14 = await said('כן');
-  ok(/כן או לא/.test(v14a) && /שכחתי 1 דבר על יוסי/.test(v14) && /שלושים יום/.test(v14), '"תשכח" asks, then says it can still be undone: ' + v14);
+  ok(/כן או לא/.test(v14a) && /שכחתי 1 דבר על יוסי/.test(v14) && /תחזיר את מה ששכחת/.test(v14), '"תשכח" asks, then says it can still be undone: ' + v14);
   const v15 = await said('מה אתה זוכר');
   ok(/אני זוכרת/.test(v15) && /הרופאה של הילדים/.test(v15) && !/יוסי/.test(v15), '"מה אתה זוכר" lists live facts, not the forgotten one: ' + v15.slice(0, 120));
   const v16 = await said('אל תשאל אותי על ארוחת ערב');

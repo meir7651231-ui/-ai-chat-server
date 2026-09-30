@@ -134,6 +134,12 @@
       "cap": 100,
       "cls": "record",
       "time": "updatedAt"
+    },
+    "memory/forgets/items": {
+      "cap": 20,
+      "ttlDays": 1,
+      "cls": "record",
+      "time": "at"
     }
   }
 }

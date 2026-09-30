@@ -28,7 +28,7 @@ function memRemember(rest){const note=rest.trim();if(note.length<2)return false;
   const pf=MEM.parse(note);peopleFromFact(pf);
   MEM.put(pf,{type:'said'}).then(r=>sayLocal(r.same?'כבר זכרתי: '+note:r.replaced?'עדכנתי: '+note:'זכרתי: '+note)).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי לשמור');});return true;}
 function memForget(rest){const q=rest.trim();if(!q)return false;
-  MEM.forget(q).then(h=>sayLocal(h.length?'שכחתי '+h.length+(h.length===1?' דבר':' דברים')+' על '+q+'. אם טעיתי, זה עוד שמור שלושים יום.':'לא מצאתי משהו על '+q+' בזיכרון')).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי');});return true;}
+  MEM.forget(q).then(h=>sayLocal(h.length?'שכחתי '+h.length+(h.length===1?' דבר':' דברים')+' על '+q+'. אם טעיתי, תגיד תחזיר את מה ששכחת - עד מחר.':'לא מצאתי משהו על '+q+' בזיכרון')).catch(e=>{fail('P_DB_WRITE',e,'memory/facts');sayLocal('לא הצלחתי');});return true;}
 function memPref(rest,m){if(!rest&&!POLICY.compileOne({value:m.t}))return false;const f=MEM.parse(m.t);if(f.kind!=='pref')Object.assign(f,{subject:'מאיר',predicate:'העדפה',kind:'pref',conf:0.9});
   MEM.put(f,{type:'said'}).then(()=>POLICY.load()).then(()=>{const r=POLICY.compileOne({value:m.t});sayLocal('הבנתי, זו העדפה קבועה: '+m.t+(r?'. מעכשיו זה כלל, ומה שאשתיק יחכה לסיכום הערב.':''));}).catch(e=>fail('P_DB_WRITE',e,'memory/facts'));return true;}
 function memList(){MEM.recent(8).then(n=>sayLocal(n.length?'אני זוכרת '+n.length+(n.length>=8?' דברים אחרונים':' דברים')+': '+n.map(f=>f.raw||f.value).join('; '):'הזיכרון עוד ריק.')).catch(e=>fail('P_DB_READ',e,'memory/facts'));return true;}

@@ -19,18 +19,21 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   p.on('pageerror', e => errs.push(e.message));
   await p.addInitScript(STUB); await p.goto('file://' + tmp + '/host.html');
   const f = p.frames()[1]; await f.waitForFunction(() => window.__h && window.__mem && window.claude, null, { timeout: 8000 }); await p.waitForTimeout(700);
-  const r = await f.evaluate(async rows => {
+  const r = await f.evaluate(async ([rows, sweep]) => {
     const out = { typable: 0, typed: 0, notes: 0, probes: 0, retrieved: 0, briefed: 0, missR: [], missB: [] };
     for (const x of rows) { const pf = window.__mem.parse(x.seed); if (x.kind !== 'note') { out.typable++; if (pf.kind !== 'note') out.typed++; } else out.notes++;
       await window.__mem.put(pf, { type: 'said' }); }
     // a week passes
-    for (const [k, v] of window.__h.docs) if (k.startsWith('memory/facts/items/')) { v.updatedAt -= 7 * 864e5; v.ts -= 7 * 864e5; }
+    for (const [k, v] of window.__h.docs) if (k.startsWith('memory/facts/items/')) { v.updatedAt -= 7 * 864e5; v.ts -= 7 * 864e5; if (v.lastUsed) v.lastUsed -= 7 * 864e5; }
+    // SWEEP=1: the forget sweep runs on the week-old store first - it must archive nothing that is still true
+    if (sweep) { const s = await window.__forget.sweep(); out.archived = s.expired + s.decayed; }
     for (const x of rows) for (const q of x.probes) { out.probes++;
       const blk = await brief(q); if (blk.indexOf(x.seed.replace(/^ש/, '')) >= 0 || (blk && blk.indexOf(x.key) >= 0 && blk.indexOf(x.seed.split(' ').slice(-1)[0]) >= 0)) out.retrieved++; else { out.missR.push(q); continue; }
       const before = window.__h.sentRaw.length; await send({ text: q, noIntent: false });
       const sent = window.__h.sentRaw.slice(before).join('\n'); if (sent.indexOf('[הקשר#') > 0 && sent.indexOf(x.seed.replace(/^ש/, '')) > 0 && / ⟦#[0-9a-z]+⟧$/.test(sent) && /^\[ליבה/.test(sent)) out.briefed++; else out.missB.push(q); }
-    return out; }, rows);
+    return out; }, [rows, !!process.env.SWEEP]);
   let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++ };
+  if (process.env.SWEEP) ok(r.archived === 0, `sweep on the week-old store archived ${r.archived} live facts (must be 0)`);
   const pct = (a, b) => Math.round(100 * a / Math.max(1, b));
   ok(pct(r.typed, r.typable) >= 80, `typed: ${r.typed}/${r.typable} typable seeds understood (${pct(r.typed, r.typable)}%) · ${r.notes} kept as notes`);
   ok(pct(r.retrieved, r.probes) >= 85, `retrieved: ${r.retrieved}/${r.probes} probes brought their fact back a week later (${pct(r.retrieved, r.probes)}%)` + (r.missR.length ? ' - missed: ' + r.missR.slice(0, 4).join(' / ') : ''));

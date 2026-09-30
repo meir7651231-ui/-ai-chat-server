@@ -32,6 +32,8 @@ const extra = [
   ['people', 'node tests/people.test.js'],
   ['policy', 'node tests/policy.test.js'],
   ['distill', 'node tests/distill.test.js'],
+  ['forget', 'node tests/forget.test.js'],
+  ['recall7-sweep', 'SWEEP=1 node tests/recall7.js'],
 ]
 
 let pass = 0

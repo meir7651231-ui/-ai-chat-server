@@ -122,6 +122,35 @@
    ]
   },
   {
+   "id": "memory.forgetAll",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "(תשכח|תשכחי|שכח|שכחי) (הכול|הכל) על"
+   ],
+   "handler": "memForgetAll",
+   "help": "\"תשכח הכול על X\" (מכל מקום, עם ספירה לפני)",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "memory.undo",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "(תחזיר|תחזירי) את מה ששכחת",
+    "בטל את השכחה"
+   ],
+   "handler": "memUndo",
+   "help": "\"תחזיר את מה ששכחת\" (עד יממה)",
+   "requires": [
+    "db"
+   ]
+  },
+  {
    "id": "memory.forget",
    "where": "page",
    "when": "liba",

@@ -24,21 +24,24 @@ const MEM={
      ("יש לי X", preferences, notes) can hold many values, so the value is part of the key - found by recall7, where
      every "יש לי" overwrote the one before */
   key(f){const one=MEM_ONE.indexOf(f.predicate)>=0||f.kind==='event';return slug(f.subject)+'.'+slug(f.predicate)+(one?'':'.'+hash36(inorm(f.value)));},
-  sens(f){return f.kind==='person'||/(בן|בת|אשתי|בריאות|רופא|כסף|חוב|משכורת|סיסמה)/.test(f.raw||'')?1:0;},
+  /* sensitivity 0-3: 3 never leaves the store (a password, a bank account), 2 never goes into a brief (health, money),
+     1 is personal (family, a person card), 0 is anything else */
+  sens(f){const r=f.raw||f.value||'';return /(סיסמה|סיסמא|קוד|חשבון בנק|כרטיס אשראי)/.test(r)?3:/(אבחנה|מחלה|תרופה|חוב|משכורת|הלוואה)/.test(r)?2:f.kind==='person'||/(בן|בת|אשתי|אמא|אבא|כסף|רופא|בריאות)/.test(r)?1:0;},
   /* put: one document per key; the same fact again only counts a use; a new value for the key replaces it, and the
      old value is kept in prev so a correction is visible */
   async put(f,source){const k=MEM.key(f),ref=P.fact(k),now=Date.now();let cur=null;try{const g=await ref.get();cur=g.exists?(g.data()||{}):null;}catch(e){fail('P_DB_READ',e,'fact');}
     if(cur&&cur.state!=='tomb'&&cur.value===f.value){await ref.update({uses:(+cur.uses||0)+1,lastUsed:now,updatedAt:now});return {key:k,same:true};}
     const doc={subject:f.subject,predicate:f.predicate,value:f.value,raw:f.raw||f.value,kind:f.kind,conf:f.conf,sens:f.sens!=null?f.sens:MEM.sens(f),
       source:Object.assign({type:'said',at:now},source||{}),ts:cur&&cur.ts||now,updatedAt:now,uses:1,lastUsed:now,state:'live'};
+    const ex=memExpiry(doc.raw,now);if(ex)doc.expiresAt=ex;
     if(cur&&cur.state!=='tomb'&&cur.value!==f.value)doc.prev={value:cur.value,at:cur.updatedAt||cur.ts};
     await ref.set(doc);return {key:k,same:false,replaced:!!doc.prev};},
   async all(){const r=await coldGet(P.facts(),null,1000);return r.docs.map(d=>Object.assign({key:d.id},d.data()||{}));},
   /* query: every word of q (without the Hebrew prefixes ב/ל/כ/ו/ש/ה/מ) found in the fact - live ones only */
-  async query(q){const w=memWords(q);const all=(await MEM.all()).filter(f=>f.state!=='tomb');if(!w.length)return all;
+  async query(q){const w=memWords(q);const all=(await MEM.all()).filter(f=>memLive(f));if(!w.length)return all;
     return all.filter(f=>{const hay=memWords([f.subject,f.predicate,f.value,f.raw].join(' ')).join(' ');return w.every(x=>hay.indexOf(x)>=0);});},
-  async recent(n){return (await MEM.all()).filter(f=>f.state!=='tomb').sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).slice(0,n||8);},
-  async forget(q){const hits=await MEM.query(q);for(const f of hits){try{await P.fact(f.key).update({state:'tomb',tombAt:Date.now()});}catch(e){fail('P_DB_WRITE',e,'fact tomb');}}return hits;},
+  async recent(n){return (await MEM.all()).filter(f=>memLive(f)).sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0)).slice(0,n||8);},
+  async forget(q){const hits=(await forgetScan(q)).filter(h=>h.where==='fact');if(hits.length)await forgetApply(q,hits);return hits;},
   /* one time: notes and prefs into facts. Under a lease on memory/meta, so two devices do not both move them */
   async migrate(){if(!db)return null;let meta={};try{const g=await P.memMeta().get();meta=(g.exists&&g.data())||{};}catch(e){return null;}
     if(+meta.schema>=2)return {skipped:true};
@@ -65,7 +68,7 @@ function memIdf(all){const df={},N=all.length||1;for(const f of all)for(const x 
 function memScore(f,w,now,idf){const hay=memWords([f.subject,f.predicate,f.value,f.raw].join(' '));let hit=0;for(const x of w)if(hay.indexOf(x)>=0)hit+=idf?idf(x):1;
   if(!hit)return 0;const age=(now-(+f.updatedAt||+f.ts||now))/864e5;return hit*(+f.conf||0.5)*Math.pow(0.5,age/30)*(f.kind==='pref'?1.2:1);}
 async function brief(text){if(briefSkip){briefSkip=false;return '';}if(!db)return '';const w=memWords(text);if(!w.length)return '';
-  let all=[];try{all=(await MEM.all()).filter(f=>f.state!=='tomb'&&(+f.sens||0)<2);}catch(e){return '';}
+  let all=[];try{all=(await MEM.all()).filter(f=>memLive(f)&&(+f.sens||0)<2);}catch(e){return '';}
   let who=[];try{who=(await PEOPLE.resolve(text)).map(p=>p.name);}catch(e){}
   const now=Date.now(),idf=memIdf(all);const top=all.map(f=>({f,s:memScore(f,w,now,idf)*(who.some(n=>(f.raw||'').indexOf(n)>=0)?1.5:1)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,BRIEF_FACTS).map(x=>x.f);
   if(!top.length)return '';
