@@ -12,7 +12,11 @@ object AudioRoute {
     private val WIRED = setOf(AudioDeviceInfo.TYPE_WIRED_HEADSET, AudioDeviceInfo.TYPE_WIRED_HEADPHONES, AudioDeviceInfo.TYPE_USB_HEADSET)
     fun bt(c: Context): AudioDeviceInfo? = (c.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getDevices(AudioManager.GET_DEVICES_OUTPUTS).firstOrNull { it.type in BT }
     fun current(c: Context): Route = runCatching {
-        val am = c.getSystemService(Context.AUDIO_SERVICE) as AudioManager; val outs = am.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
+        val am = c.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        // where the voice will really go (Android 13+): the device the system routes the assistant's voice to - not
+        // every device that happens to be paired (the phone test: a connected watch or earbud case read as a stranger's speaker)
+        val outs = if (android.os.Build.VERSION.SDK_INT >= 33) runCatching { am.getAudioDevicesForAttributes(android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build()).toTypedArray() }
+            .getOrElse { am.getDevices(AudioManager.GET_DEVICES_OUTPUTS) }.let { if (it.isEmpty()) am.getDevices(AudioManager.GET_DEVICES_OUTPUTS) else it } else am.getDevices(AudioManager.GET_DEVICES_OUTPUTS)
         val mr = c.getSystemService(Context.MEDIA_ROUTER_SERVICE) as MediaRouter; val sel = mr.getSelectedRoute(MediaRouter.ROUTE_TYPE_LIVE_AUDIO)
         if (outs.any { it.type == AudioDeviceInfo.TYPE_HDMI } || (sel != null && sel != mr.defaultRoute && sel.deviceType == MediaRouter.RouteInfo.DEVICE_TYPE_TV)) return@runCatching Route.CAST
         outs.firstOrNull { it.type in BT }?.let { d -> val name = d.productName?.toString() ?: ""

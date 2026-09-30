@@ -92,7 +92,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private val chunks = ArrayDeque<String>() // step 29: long texts read in parts
     private var paused = false
     private var speakGuard: Runnable? = null      // fix 1: one cancellable safety timer
-    private val guardCore = GuardCore(); private var partStart = 0L; private var partLen = 0 // faults: the guard learns this phone's voice
+    private val guardCore = GuardCore(); private var partStart = 0L; private var partLen = 0; @Volatile private var partStarted = false // faults: the guard learns this phone's voice
     private var pendingSayTimer: Runnable? = null  // faults: a reply held while the user talks is never lost
     private var pendingSay: String? = null        // fix 8: reply that arrived while the user was talking
     private var netCb: ConnectivityManager.NetworkCallback? = null
@@ -203,7 +203,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 tts?.setSpeechRate(rate)
                 tts?.setAudioAttributes(android.media.AudioAttributes.Builder().setUsage(android.media.AudioAttributes.USAGE_ASSISTANT).setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH).build())
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-                    override fun onStart(id: String?) { main.post { speakLock(true); if (sayId != null && sayStartAt == 0L) sayStartAt = System.currentTimeMillis() } }
+                    override fun onStart(id: String?) { partStarted = true; main.post { speakLock(true); if (sayId != null && sayStartAt == 0L) sayStartAt = System.currentTimeMillis() } }
                     override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakLock(false); speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; spokeCause = "error"; onSpoken() } }
                     override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakLock(false); speakGuard?.let { main.removeCallbacks(it) }; if (partStart > 0) guardCore.learn(partLen, System.currentTimeMillis() - partStart); partStart = 0; bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
                 })
@@ -249,8 +249,11 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (bargeIn) { bargeVad?.stop(); var me: VadGate? = null; me = VadGate(sens = 6.0, minRms = 1800.0, comm = true, warm = true) { main.post { if (bargeVad !== me) return@post; bargeVad = null; if (speaking) { try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "barge:" + e.javaClass.simpleName) }; speaking = false; speakGuard?.let { main.removeCallbacks(it) }; showLabel("כן?", 3000); startListening("cmd") } } }; bargeVad = me; me.start() }
         speakGuard?.let { main.removeCallbacks(it) }
         // safety net if TTS never reports. step clock: it is no longer the measurement - when it fires, that is a fault
-        partStart = System.currentTimeMillis(); partLen = part.length
-        speakGuard = Runnable { if (speaking) { speaking = false; spokeCause = "guard"; Trace.e(Trace.Code.E_TTS_GUARD, "len:" + part.length + ":ms/c:" + guardCore.msPerChar.toInt()); onSpoken() } }.also { main.postDelayed(it, guardCore.guardMs(part.length)) }
+        partStart = System.currentTimeMillis(); partLen = part.length; partStarted = false
+        // the phone test: a voice that never even started is not "said" - the page tries it again (lost), instead of
+        // counting a message Meir only saw flash on the screen
+        speakGuard = Runnable { if (speaking) { speaking = false; spokeCause = if (partStarted) "guard" else "lost"; chunks.clear()
+            Trace.e(Trace.Code.E_TTS_GUARD, "len:" + part.length + ":ms/c:" + guardCore.msPerChar.toInt() + ":started:" + partStarted); onSpoken() } }.also { main.postDelayed(it, guardCore.guardMs(part.length)) }
     }
     // step 30: Hebrew with English terms – Latin runs are spoken by the English voice
     private fun speakSegments(text: String) {
