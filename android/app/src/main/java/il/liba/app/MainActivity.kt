@@ -69,7 +69,13 @@ class MainActivity : AppCompatActivity() {
     private fun unlocked() = android.os.SystemClock.elapsedRealtime() < unlockedUntil
     override fun onStop() { super.onStop(); unlockedUntil = 0L }
     private fun unlocked5() { unlockedUntil = android.os.SystemClock.elapsedRealtime() + 5 * 60_000L; refresh() }
-    private fun unlock() {
+    /** keystore-vault: never a crash - the system prompt, else the phone's own screen code, else it simply stays locked
+     *  (3.36.0 crashed here on Meir's Fold: BiometricPrompt without USE_BIOMETRIC in the manifest) */
+    private fun unlock() { try { unlockPrompt() } catch (e: Throwable) { Trace.e(Trace.Code.E_INTENT_OPEN, "unlock:" + e.javaClass.simpleName)
+        try { val km = getSystemService(KEYGUARD_SERVICE) as android.app.KeyguardManager; @Suppress("DEPRECATION") val i = km.createConfirmDeviceCredentialIntent("ליבה", "לפתוח את השיחה")
+            if (i != null) @Suppress("DEPRECATION") startActivityForResult(i, 9) else status.text = "לא הצלחתי לבקש טביעת אצבע - השיחה נשארת נעולה." }
+        catch (x: Throwable) { Trace.e(Trace.Code.E_INTENT_OPEN, "unlock2:" + x.javaClass.simpleName); status.text = "לא הצלחתי לבקש טביעת אצבע - השיחה נשארת נעולה." } } }
+    private fun unlockPrompt() {
         val km = getSystemService(KEYGUARD_SERVICE) as android.app.KeyguardManager
         if (!km.isDeviceSecure) { unlocked5(); return } // a phone with no lock at all: there is nothing to ask with
         if (Build.VERSION.SDK_INT >= 29) {

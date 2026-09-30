@@ -14,4 +14,7 @@ for (const f of walk(SRC)) { const rel = relative(SRC, f); const t = readFileSyn
     if (/\.writeText\(|\.appendText\(|FileOutputStream\(|\.writeBytes\(/.test(l) && !ALLOW[rel] && !/\/\/ vault-ok: \S/.test(l)) bad.push(`${rel}:${i + 1} כתיבה לקובץ בלי הכספת`)
     if (/ClipboardManager|setPrimaryClip/.test(l)) bad.push(`${rel}:${i + 1} לוח העתקה`)
     if (/putString\("(log|crash)"/.test(l)) bad.push(`${rel}:${i + 1} יומן או קריסה בגלוי`) }) }
+// keystore-vault: the system fingerprint prompt needs its permission, or the app dies on the first tap (3.36.0 on the Fold)
+const manifest = readFileSync(join(ROOT, 'android/app/src/main/AndroidManifest.xml'), 'utf8')
+if (walk(SRC).some(f => /hardware\.biometrics\.BiometricPrompt/.test(readFileSync(f, 'utf8'))) && !/android\.permission\.USE_BIOMETRIC"/.test(manifest)) bad.push('AndroidManifest.xml: BiometricPrompt בלי USE_BIOMETRIC - קריסה בלחיצה')
 console.log(bad.length ? 'vault-audit: ' + bad.length + ' כתיבות גלויות\n  ' + bad.join('\n  ') : `vault-audit: כל הכתיבות עוברות בכספת (חריגים: ${Object.keys(ALLOW).length}, כולם בלי מילים)`); process.exit(bad.length ? 1 : 0)
