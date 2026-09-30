@@ -49,6 +49,7 @@ object LibaWeb {
         fun onRemind(items: String)
         fun onSenseAck(ids: List<String>)
         fun onSenseCfg(apps: List<String>)
+        fun onPlace(body: String)
     }
 
     private class JsBridge(val b: Bridge) : ProtocolBridge {
@@ -70,6 +71,7 @@ object LibaWeb {
         @JavascriptInterface override fun remind(items: String) = b.onRemind(items)
         @JavascriptInterface override fun senseAck(ids: String) = b.onSenseAck(list(ids))
         @JavascriptInterface override fun senseCfg(apps: String) = b.onSenseCfg(list(apps))
+        @JavascriptInterface override fun place(body: String) = b.onPlace(body)
     }
 
     @SuppressLint("SetJavaScriptEnabled")

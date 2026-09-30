@@ -22,9 +22,11 @@ object SenseFusion {
     val body = BodyCore(); private val fusion = FusionCore()
     @Volatile var sink: ((String) -> Unit)? = null
     @Volatile var last: String? = null
+    @Volatile var emergencyUntil = 0L   // shabbat-engine: Meir's own emergency, told to the page
     private val main = Handler(Looper.getMainLooper())
     private var app: Context? = null
     private var started = false
+    private var sentEmergency = 0L
     private val poll = object : Runnable { override fun run() { app?.let { publish(it) }; main.postDelayed(this, if (Build.VERSION.SDK_INT >= 31) 60_000L else 2_000L) } }
 
     fun start(c: Context) {
@@ -50,9 +52,10 @@ object SenseFusion {
         val am = c.getSystemService(AudioManager::class.java)
         val ctx = Ctx(c.getSystemService(PowerManager::class.java)?.isInteractive == true, c.getSystemService(KeyguardManager::class.java)?.isKeyguardLocked == true,
             headset(am), am?.mode == AudioManager.MODE_IN_CALL || am?.mode == AudioManager.MODE_IN_COMMUNICATION)
-        if (fusion.update(ctx) == null && woke == null && !force) return
+        if (fusion.update(ctx) == null && woke == null && !force && emergencyUntil <= sentEmergency) return
+        sentEmergency = emergencyUntil
         val j = JSONObject().put("screen", ctx.screen).put("locked", ctx.locked).put("headset", ctx.headset).put("call", ctx.call)
-            .put("lastWake", body.lastWake).put("wakeSource", body.wakeSource).put("at", now).toString()
+            .put("lastWake", body.lastWake).put("wakeSource", body.wakeSource).put("emergencyUntil", emergencyUntil).put("at", now).toString()
         last = j; sink?.invoke(j)
     }
 }

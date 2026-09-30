@@ -13,7 +13,8 @@
     "remind",
     "sense",
     "cal",
-    "ctx"
+    "ctx",
+    "holy"
   ],
   "toApp": {
     "ready": {
@@ -116,6 +117,12 @@
         "apps": "list"
       },
       "why": "sense-bus-ears: which apps Meir said to listen to (memory/settings.senses.apps); empty means none"
+    },
+    "place": {
+      "fields": {
+        "body": "str"
+      },
+      "why": "shabbat-engine: the place the Shabbat times are computed for (lat, lon, minutes before sunset) - the phone computes the windows itself, offline"
     }
   },
   "toPage": {

@@ -218,6 +218,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         speakGuard?.let { main.removeCallbacks(it) }; speakGuard = null
     }
     private fun speak(text: String, urgent: Boolean = false) {
+        if (shabbat) return // shabbat-engine: no voice at all
         if (listening && listenMode != "wake") { pendingSay = text; return } // fix 8: don't cut the user off; flush after the recognizer ends
         lastSaid = text
         stopVad()
@@ -372,11 +373,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
     fun repairReload() { lastReloadAt = 0L; reloadPage("תיקון") }
     private fun loginRestored() { if (!loginLost && !loginWall) return; val was = loginLost; loginLost = false; loginWall = false; needsLogin = false; if (was) speak("התחברתי, הערוץ חי.") }
     private fun reloadPage(why: String) {
+        if (shabbat) return
         val now = SystemClock.elapsedRealtime(); if (now - lastReloadAt < 90000) return
         lastReloadAt = now; pageReady = false; pageOk = false; pageLoadedAt = now; status = "טוען מחדש ($why)"
         web?.reload()
     }
     private val watchdog = object : Runnable { override fun run() {
+        holyCheck(); if (shabbat) { main.postDelayed(this, 30000); return }
         if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) { Trace.e(Trace.Code.E_PAGE_LOAD, "timeout"); reloadPage("אין תגובה מהדף") }
         if (pageReady) web?.let { LibaWeb.hello(it); drainTrace(); pulse(it) }
         else if (pageDeadSince == 0L) pageDeadSince = System.currentTimeMillis()
@@ -418,6 +421,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         return mine.isNotEmpty() && file.isNotEmpty() && mine.intersect(file).isNotEmpty()
     }
     fun installUpdate() {
+        if (shabbat) return
         val url = Prefs.updateUrl(this) ?: run { speak("אין עדכון ממתין."); return }
         if (!packageManager.canRequestPackageInstalls()) { // the installer silently drops our intent without this
             Trace.e(Trace.Code.E_INSTALL_PERM, "canRequestPackageInstalls")
@@ -481,6 +485,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
      */
     private var updateFailSpoken = false
     private fun checkUpdate(onDone: (() -> Unit)? = null) {
+        if (shabbat) { onDone?.invoke(); return }
         Thread {
             var http = 0
             try {
@@ -593,13 +598,14 @@ class BubbleService : Service(), LibaWeb.Bridge {
         setState(LibaState.OFFLINE)
         var sx = 0f; var sy = 0f; var ox = 0f; var oy = 0f; var moved = false; var downAt = 0L
         val longPress = Runnable { if (!moved) { moved = true; toggleMenu(root, size) } }
+        val emergencyPress = Runnable { if (!moved) { moved = true; emergencyMode() } }
         h.setOnTouchListener { _, ev ->
             when (ev.actionMasked) {
-                MotionEvent.ACTION_DOWN -> { snapAnim?.cancel(); unpeek(); sx = ev.rawX; sy = ev.rawY; ox = d.pos.x; oy = d.pos.y; moved = false; dragging = true; d.hold(true); downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(longPress, 600); true }
+                MotionEvent.ACTION_DOWN -> { snapAnim?.cancel(); unpeek(); sx = ev.rawX; sy = ev.rawY; ox = d.pos.x; oy = d.pos.y; moved = false; dragging = true; d.hold(true); downAt = SystemClock.uptimeMillis(); d.press(true); main.postDelayed(if (shabbat) emergencyPress else longPress, if (shabbat) 3000L else 600L); true }
                 MotionEvent.ACTION_MOVE -> { val dx = ev.rawX - sx; val dy = ev.rawY - sy
                     if (abs(dx) > dp(6f) || abs(dy) > dp(6f)) { moved = true; main.removeCallbacks(longPress) }
                     d.setPos(ox + dx, oy + dy); true }
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); d.press(false); dragging = false; d.hold(false); if (!moved && SystemClock.uptimeMillis() - downAt < 600) onTap(); true }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> { main.removeCallbacks(longPress); main.removeCallbacks(emergencyPress); d.press(false); dragging = false; d.hold(false); if (!moved && !shabbat && SystemClock.uptimeMillis() - downAt < 600) onTap(); true }
                 else -> false
             }
         }
@@ -699,7 +705,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private val muteStreams = intArrayOf(AudioManager.STREAM_SYSTEM)
     private fun muteSystem() { if (systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; if (am.isMusicActive) return; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_MUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "mute:" + e.javaClass.simpleName) } }; systemMuted = true }
     private fun unmuteSystem() { if (!systemMuted) return; val am = getSystemService(AUDIO_SERVICE) as AudioManager; muteStreams.forEach { try { am.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "unmute:" + e.javaClass.simpleName) } }; systemMuted = false }
-    private fun wakeLoop() { if (!running || !heyOn || listening || speaking || tts?.isSpeaking == true) return; startVad() }
+    private fun wakeLoop() { if (!running || shabbat || !heyOn || listening || speaking || tts?.isSpeaking == true) return; startVad() }
     // step 21: hold the mic with a cheap energy gate; only when speech is heard start the real recognizer (no chime loop, no network idle)
     private fun startVad() {
         if (vad?.active == true || listening) return
@@ -711,7 +717,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun stopVad() { vad?.stop(); vad = null }
     private fun startListening(mode: String) {
-        if (!running) return
+        if (!running || shabbat) return
         if (listening && listenMode == "wake" && mode == "cmd") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "tapWins:" + e.javaClass.simpleName) }; listening = false; unmuteSystem() } // fix 7: a tap wins over a noise-triggered wake window
         else if (listening) return
         if (speaking && mode != "cmd") return
@@ -881,6 +887,32 @@ class BubbleService : Service(), LibaWeb.Bridge {
     /** step proactive: an alarm rang - say what is due, unless night mode or the car say not now (they are held to later) */
     private fun sayReminders() { val due = Reminders.due(this, night || carMode); if (due.isNotEmpty()) speak(due.joinToString(" ") { it.text }) }
     override fun onRemind(items: String) { Reminders.onRemind(this, items) }
+    override fun onPlace(body: String) { runCatching { val o = org.json.JSONObject(body); Prefs.setPlace(this, Place(o.getDouble("lat"), o.getDouble("lon"), o.optInt("b", 20))) }; holyCheck() }
+    // step shabbat-engine: from candle lighting until nightfall - no voice, no microphone, no page, no network
+    @Volatile var shabbat = false
+    private var emergencyUntil = 0L
+    private val moadim: Map<String, String> by lazy { runCatching { val o = org.json.JSONObject(resources.openRawResource(R.raw.moadim).bufferedReader().readText()).getJSONObject("days")
+        o.keys().asSequence().associateWith { o.getString(it) } }.getOrDefault(emptyMap()) }
+    private fun holyCheck() {
+        val now = System.currentTimeMillis(); val w = Holy.now(now, Prefs.place(this), moadim)
+        val holy = w != null && emergencyUntil < now
+        if (holy && !shabbat) enterShabbat() else if (!holy && shabbat) exitShabbat()
+    }
+    private fun enterShabbat() {
+        stopSpeaking(); if (listening) { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "shabbat:" + e.javaClass.simpleName) }; listening = false }
+        stopVad(); shabbat = true; setState(LibaState.IDLE)
+        pageReady = false; pageOk = false; web?.loadUrl("about:blank")
+        showLabel("שבת שלום", 5000)
+    }
+    private fun exitShabbat() {
+        shabbat = false; lastReloadAt = 0L; pageReady = false; pageLoadedAt = SystemClock.elapsedRealtime()
+        web?.loadUrl(getString(R.string.artifact_url)); applyPrefs(); wakeLoop()
+    }
+    /** pikuach nefesh: three seconds on the bubble - half an hour open, said aloud, told to the page */
+    private fun emergencyMode() {
+        emergencyUntil = System.currentTimeMillis() + 30 * 60_000L; il.liba.app.sense.SenseFusion.emergencyUntil = emergencyUntil
+        exitShabbat(); main.postDelayed({ speak("מצב חירום. אני פתוחה לחצי שעה.", true) }, 800)
+    }
     override fun onSenseAck(ids: List<String>) { il.liba.app.sense.SenseBus.ack(this, ids) }
     override fun onSenseCfg(apps: List<String>) { il.liba.app.sense.SenseBus.setApps(this, apps) }
     /** step calendar-sense: the runtime permission needs an activity - MainActivity asks, and starts CalSense when allowed */

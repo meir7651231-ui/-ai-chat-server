@@ -210,6 +210,37 @@
    "help": "\"תקבע פגישה…\" (מחכה להחלטה שלך)"
   },
   {
+   "id": "shabbat.when",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "exact": [
+    "מתי נכנסת שבת",
+    "מתי יוצאת שבת",
+    "מתי שבת",
+    "מתי נכנס החג",
+    "מתי יוצא החג",
+    "זמני שבת"
+   ],
+   "handler": "shabbatWhen",
+   "help": "\"מתי נכנסת שבת\""
+  },
+  {
+   "id": "shabbat.place",
+   "where": "page",
+   "when": "liba",
+   "family": "שקט",
+   "prefix": [
+    "זמני שבת לפי",
+    "(תקבעי|תקבע) זמני שבת לפי"
+   ],
+   "handler": "shabbatSetPlace",
+   "help": "\"זמני שבת לפי בני ברק\" (בשבת ליבה שותקת לגמרי)",
+   "requires": [
+    "db"
+   ]
+  },
+  {
    "id": "sense.add",
    "where": "page",
    "when": "liba",

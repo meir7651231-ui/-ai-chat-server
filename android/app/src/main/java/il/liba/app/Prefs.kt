@@ -18,6 +18,9 @@ object Prefs {
     fun addUrgentDone(c: Context, id: String) = p(c).edit().putString("urgentDone", (urgentDone(c) + id).distinct().takeLast(50).joinToString(",")).apply()
     fun spokenMids(c: Context): List<String> = (p(c).getString("spokenMids", "") ?: "").split(',').filter { it.isNotEmpty() }
     fun addSpokenMid(c: Context, id: String) = p(c).edit().putString("spokenMids", (spokenMids(c) + id).distinct().takeLast(40).joinToString(",")).apply()
+    /** shabbat-engine: the place the windows are computed for (from the page: "זמני שבת לפי …"); Jerusalem until set */
+    fun place(c: Context): Place = Place(p(c).getFloat("placeLat", 31.76904f).toDouble(), p(c).getFloat("placeLon", 35.21633f).toDouble(), p(c).getInt("placeB", 40))
+    fun setPlace(c: Context, pl: Place) = p(c).edit().putFloat("placeLat", pl.lat.toFloat()).putFloat("placeLon", pl.lon.toFloat()).putInt("placeB", pl.b).apply()
     fun batteryAsked(c: Context) = p(c).getBoolean("battAsked", false)
     fun setBatteryAsked(c: Context, v: Boolean) = p(c).edit().putBoolean("battAsked", v).apply()
     fun hey(c: Context) = p(c).getBoolean("hey", false)

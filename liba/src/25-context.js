@@ -10,6 +10,7 @@
 let ctxPhone={screen:null,locked:null,headset:null,call:false,lastWake:0,wakeSource:'',at:0},ctxNow={meeting:false,call:false,headset:null,screen:null,since:0};
 async function ctxIn(raw){let x;try{x=JSON.parse(String(raw||''));}catch(e){fail('P_MSG_BAD',e,'ctx');return null;}if(!x||typeof x!=='object')return null;
   const woke=+x.lastWake||0,wokeBefore=ctxPhone.lastWake;
+  if(+x.emergencyUntil>Date.now()&&+x.emergencyUntil!==shabbatEmergencyUntil){shabbatEmergencyUntil=+x.emergencyUntil;setTimeout(pump,200);} /* Meir's own hand on the bubble */
   ctxPhone={screen:!!x.screen,locked:!!x.locked,headset:!!x.headset,call:!!x.call,lastWake:woke,wakeSource:String(x.wakeSource||'').slice(0,20),at:+x.at||Date.now()};
   if(woke&&woke!==wokeBefore&&db)P.body().set({lastWake:woke,wakeSource:ctxPhone.wakeSource,at:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'sense/body'));
   return fuseContext();}

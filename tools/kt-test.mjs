@@ -30,11 +30,16 @@ const memWords = new Function(inormLine + '\n' + fin + '\n' + mw + '\nreturn mem
 const phrases = ['מה אתה זוכר על דני', 'לדני', 'ודני', 'שדני', 'מהמחסן', 'בבית של אמא', 'המפתח של המחסן אצל השכן', 'אני בחו"ל עד ה-12', 'רואה החשבון הוא משה',
   'מה עם הכסף של הישיבה?', 'ליבא תזכרי', 'השולחן הגדול', 'כשהגענו', 'ומהבית', 'לחם', 'מה', 'דניאל', 'ספר תורה', 'תזכור שיש לי כלב', '  רווחים   כפולים  ', 'שׁ‏לום', 'פגישה ב-3 בנובמבר']
 const tmp = mkdtempSync(join(os.tmpdir(), 'kt-'))
+// the page's holy windows for 2027, for Holy.kt to match
+const sh = src('26-shabbat.js'); const pure = sh.slice(sh.indexOf('/*<pure>*/'), sh.indexOf('/*</pure>*/'))
+const { holyWindows } = new Function(pure + '\nreturn {holyWindows};')(); const MOADIM = new Function(src('00-moadim.js') + '\nreturn MOADIM;')()
+const holyFx = join(tmp, 'holy.tsv'); writeFileSync(holyFx, [['jerusalem', 31.76904, 35.21633, 40], ['bneibrak', 32.08074, 34.8338, 20]].flatMap(([c, lat, lon, b]) =>
+  holyWindows(Date.UTC(2027, 0, 2), Date.UTC(2027, 11, 30), { lat, lon, b }, MOADIM).map(w => [c, lat, lon, b, w.from, w.until, w.what].join('\t'))).join('\n') + '\n')
 const fx = join(tmp, 'words.tsv'); writeFileSync(fx, phrases.map(p => p + '\t' + memWords(p).join(' ')).join('\n') + '\n')
 const out = join(tmp, 'out')
 try {
   execFileSync('java', ['-cp', cp.join(':'), 'org.jetbrains.kotlin.cli.jvm.K2JVMCompiler', '-no-stdlib', '-cp', stdlib, '-nowarn',
-    join(ROOT, 'android/app/src/main/java/il/liba/app/MemCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/ReminderCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/SenseCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/CalCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/Fusion.kt'), join(ROOT, 'tests/kt/MemCoreTest.kt'), join(ROOT, 'tests/kt/ReminderCoreTest.kt'), join(ROOT, 'tests/kt/SenseCoreTest.kt'), join(ROOT, 'tests/kt/CalCoreTest.kt'), join(ROOT, 'tests/kt/FusionTest.kt'), '-d', out], { stdio: ['ignore', 'pipe', 'pipe'] })
+    join(ROOT, 'android/app/src/main/java/il/liba/app/MemCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/ReminderCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/SenseCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/CalCore.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/sense/Fusion.kt'), join(ROOT, 'android/app/src/main/java/il/liba/app/Holy.kt'), join(ROOT, 'tests/kt/MemCoreTest.kt'), join(ROOT, 'tests/kt/ReminderCoreTest.kt'), join(ROOT, 'tests/kt/SenseCoreTest.kt'), join(ROOT, 'tests/kt/CalCoreTest.kt'), join(ROOT, 'tests/kt/FusionTest.kt'), join(ROOT, 'tests/kt/HolyTest.kt'), '-d', out], { stdio: ['ignore', 'pipe', 'pipe'] })
 } catch (e) { console.log('FAIL kt-test: compile\n' + String(e.stderr || e).split('\n').filter(l => !/JAVA_TOOL_OPTIONS/.test(l)).slice(0, 20).join('\n')); process.exit(1) }
-try { process.stdout.write(execFileSync('java', ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-cp', out + ':' + stdlib, 'MemCoreTestKt', fx], { stdio: ['ignore', 'pipe', 'pipe'] }).toString()) }
+try { process.stdout.write(execFileSync('java', ['-Dfile.encoding=UTF-8', '-Dstdout.encoding=UTF-8', '-cp', out + ':' + stdlib, 'MemCoreTestKt', fx, holyFx, join(ROOT, 'android/app/src/main/res/raw/moadim.json')], { stdio: ['ignore', 'pipe', 'pipe'] }).toString()) }
 catch (e) { process.stdout.write(String(e.stdout || '')); console.log(String(e.stderr || '').split('\n').filter(l => !/JAVA_TOOL_OPTIONS/.test(l)).join('\n')); process.exit(1) }

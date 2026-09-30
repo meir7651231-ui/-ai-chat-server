@@ -90,6 +90,8 @@ const INTENTS=Object.freeze([
   {"id":"cal.on","where":"page","when":"liba","exact":["תקראי את היומן שלי","תקרא את היומן שלי","תסתכלי ביומן שלי","תסתכל ביומן שלי"],"prefix":[],"suffix":[],"handler":"calOn","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"cal.off","where":"page","when":"liba","exact":["תפסיקי לקרוא את היומן","תפסיק לקרוא את היומן"],"prefix":[],"suffix":[],"handler":"calOff","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"cal.write","where":"page","when":"liba","exact":[],"prefix":["תקבע פגישה","תקבעי פגישה","תזיז את הפגישה","תזיזי את הפגישה","תבטל את הפגישה","תבטלי את הפגישה"],"suffix":[],"handler":"calWrite","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"shabbat.when","where":"page","when":"liba","exact":["מתי נכנסת שבת","מתי יוצאת שבת","מתי שבת","מתי נכנס החג","מתי יוצא החג","זמני שבת"],"prefix":[],"suffix":[],"handler":"shabbatWhen","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"shabbat.place","where":"page","when":"liba","exact":[],"prefix":["זמני שבת לפי","תקבעי זמני שבת לפי","תקבע זמני שבת לפי"],"suffix":[],"handler":"shabbatSetPlace","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"sense.add","where":"page","when":"liba","exact":[],"prefix":["תקשיבי להתראות של","תקשיב להתראות של","תאזיני להתראות של","תאזין להתראות של","תקשיבי להתראות מ","תקשיב להתראות מ"],"suffix":[],"handler":"senseAdd","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"sense.remove","where":"page","when":"liba","exact":[],"prefix":["תפסיקי להקשיב להתראות של","תפסיק להקשיב להתראות של","תפסיקי להקשיב להתראות מ","תפסיק להקשיב להתראות מ"],"suffix":[],"handler":"senseRemove","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"sense.list","where":"page","when":"liba","exact":["מאיזה אפליקציות את מקשיבה","לאיזה אפליקציות את מקשיבה","מאילו אפליקציות את מקשיבה","לאילו אפליקציות את מקשיבה","למה את מקשיבה"],"prefix":[],"suffix":[],"handler":"senseList","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
@@ -155,7 +157,8 @@ const INTENTS=Object.freeze([
   {"id":"claude.cost","where":"claude","when":"","exact":["כמה עלה היום"],"prefix":[],"suffix":[],"handler":"","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"claude.decisions","where":"claude","when":"","exact":["מה אישרתי היום"],"prefix":[],"suffix":[],"handler":"","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false}
 ]);
-const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"דני הוא הבן שלי\", \"מי זה X\", \"תקרא לו X\", \"תאחד את X עם Y\", \"ליבה תחזור\", \"תעלה את המנהל\", \"למי זה הלך\", \"תחזיר לי את זה\" (לצד השני), \"תשאיר את זה אצל המנהל\" (עד סוף היום), \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"למה לא סיפרת לי\", \"מה הכללים שלי\", \"תבטל את הכלל על X\", \"אל תעדכן אותי על X\", \"תשתיק X\", \"אל תעיר אותי לפני שש\", \"תקצר\", \"מה פספסתי\", \"תשחרר הכול\", \"הכול\" (אחרי תדרוך), \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"נחזור לזה אחרי הפגישה\" (ליבה תזכיר כשהפגישה תעלה), \"לא עכשיו\" (אחרי תזכורת - פחות כאלה), \"תפסיק להזכיר\", \"תשכח הכול על X\" (מכל מקום, עם ספירה לפני), \"תחזיר את מה ששכחת\" (עד יממה), \"תשכח את…\", \"אל תשאל אותי על…\", \"מה את זוכרת על X\", \"בלי הקשר\" (למשפט הבא), \"אני מאיר, …\" (כרטיס הזהות), \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"על מה דיברנו אתמול\", \"תחזור לשיחה על X\", \"תייצא את הזיכרון\", \"מה למדנו היום\" (מה ליבה למדה לבד מהשיחות)"],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה יש לי היום\", \"מה יש לי מחר\", \"מתי אני פנוי\", \"תקראי את היומן שלי\" (קריאה בלבד), \"תפסיקי לקרוא את היומן\", \"תקבע פגישה…\" (מחכה להחלטה שלך), \"תקשיבי להתראות של וואטסאפ\", \"תפסיקי להקשיב להתראות של…\", \"לאיזה אפליקציות את מקשיבה\", \"מה הגיע בהתראות\", \"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"כמה עלה היום\", \"מה אישרתי היום\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
+const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"דני הוא הבן שלי\", \"מי זה X\", \"תקרא לו X\", \"תאחד את X עם Y\", \"ליבה תחזור\", \"תעלה את המנהל\", \"למי זה הלך\", \"תחזיר לי את זה\" (לצד השני), \"תשאיר את זה אצל המנהל\" (עד סוף היום), \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"מתי נכנסת שבת\", \"זמני שבת לפי בני ברק\" (בשבת ליבה שותקת לגמרי), \"למה לא סיפרת לי\", \"מה הכללים שלי\", \"תבטל את הכלל על X\", \"אל תעדכן אותי על X\", \"תשתיק X\", \"אל תעיר אותי לפני שש\", \"תקצר\", \"מה פספסתי\", \"תשחרר הכול\", \"הכול\" (אחרי תדרוך), \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"נחזור לזה אחרי הפגישה\" (ליבה תזכיר כשהפגישה תעלה), \"לא עכשיו\" (אחרי תזכורת - פחות כאלה), \"תפסיק להזכיר\", \"תשכח הכול על X\" (מכל מקום, עם ספירה לפני), \"תחזיר את מה ששכחת\" (עד יממה), \"תשכח את…\", \"אל תשאל אותי על…\", \"מה את זוכרת על X\", \"בלי הקשר\" (למשפט הבא), \"אני מאיר, …\" (כרטיס הזהות), \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"על מה דיברנו אתמול\", \"תחזור לשיחה על X\", \"תייצא את הזיכרון\", \"מה למדנו היום\" (מה ליבה למדה לבד מהשיחות)"],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה יש לי היום\", \"מה יש לי מחר\", \"מתי אני פנוי\", \"תקראי את היומן שלי\" (קריאה בלבד), \"תפסיקי לקרוא את היומן\", \"תקבע פגישה…\" (מחכה להחלטה שלך), \"תקשיבי להתראות של וואטסאפ\", \"תפסיקי להקשיב להתראות של…\", \"לאיזה אפליקציות את מקשיבה\", \"מה הגיע בהתראות\", \"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"כמה עלה היום\", \"מה אישרתי היום\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
+const MOADIM=Object.freeze({"2026-04-02":"פסח","2026-04-08":"שביעי של פסח","2026-05-22":"שבועות","2026-09-12":"ראש השנה","2026-09-13":"ראש השנה","2026-09-21":"יום כיפור","2026-09-26":"סוכות","2026-10-03":"שמיני עצרת","2027-04-22":"פסח","2027-04-28":"שביעי של פסח","2027-06-11":"שבועות","2027-10-02":"ראש השנה","2027-10-03":"ראש השנה","2027-10-11":"יום כיפור","2027-10-16":"סוכות","2027-10-23":"שמיני עצרת","2028-04-11":"פסח","2028-04-17":"שביעי של פסח","2028-05-31":"שבועות","2028-09-21":"ראש השנה","2028-09-22":"ראש השנה","2028-09-30":"יום כיפור","2028-10-05":"סוכות","2028-10-12":"שמיני עצרת","2029-03-31":"פסח","2029-04-06":"שביעי של פסח","2029-05-20":"שבועות","2029-09-10":"ראש השנה","2029-09-11":"ראש השנה","2029-09-19":"יום כיפור","2029-09-24":"סוכות","2029-10-01":"שמיני עצרת","2030-04-18":"פסח","2030-04-24":"שביעי של פסח","2030-06-07":"שבועות","2030-09-28":"ראש השנה","2030-09-29":"ראש השנה","2030-10-07":"יום כיפור","2030-10-12":"סוכות","2030-10-19":"שמיני עצרת","2031-04-08":"פסח","2031-04-14":"שביעי של פסח","2031-05-28":"שבועות","2031-09-18":"ראש השנה","2031-09-19":"ראש השנה","2031-09-27":"יום כיפור","2031-10-02":"סוכות","2031-10-09":"שמיני עצרת","2032-03-27":"פסח","2032-04-02":"שביעי של פסח","2032-05-16":"שבועות","2032-09-06":"ראש השנה","2032-09-07":"ראש השנה","2032-09-15":"יום כיפור","2032-09-20":"סוכות","2032-09-27":"שמיני עצרת","2033-04-14":"פסח","2033-04-20":"שביעי של פסח","2033-06-03":"שבועות","2033-09-24":"ראש השנה","2033-09-25":"ראש השנה","2033-10-03":"יום כיפור","2033-10-08":"סוכות","2033-10-15":"שמיני עצרת","2034-04-04":"פסח","2034-04-10":"שביעי של פסח","2034-05-24":"שבועות","2034-09-14":"ראש השנה","2034-09-15":"ראש השנה","2034-09-23":"יום כיפור","2034-09-28":"סוכות","2034-10-05":"שמיני עצרת","2035-04-24":"פסח","2035-04-30":"שביעי של פסח","2035-06-13":"שבועות","2035-10-04":"ראש השנה","2035-10-05":"ראש השנה","2035-10-13":"יום כיפור","2035-10-18":"סוכות","2035-10-25":"שמיני עצרת","2036-04-12":"פסח","2036-04-18":"שביעי של פסח","2036-06-01":"שבועות","2036-09-22":"ראש השנה","2036-09-23":"ראש השנה","2036-10-01":"יום כיפור","2036-10-06":"סוכות","2036-10-13":"שמיני עצרת","2037-03-31":"פסח","2037-04-06":"שביעי של פסח","2037-05-20":"שבועות","2037-09-10":"ראש השנה","2037-09-11":"ראש השנה","2037-09-19":"יום כיפור","2037-09-24":"סוכות","2037-10-01":"שמיני עצרת","2038-04-20":"פסח","2038-04-26":"שביעי של פסח","2038-06-09":"שבועות","2038-09-30":"ראש השנה","2038-10-01":"ראש השנה","2038-10-09":"יום כיפור","2038-10-14":"סוכות","2038-10-21":"שמיני עצרת","2039-04-09":"פסח","2039-04-15":"שביעי של פסח","2039-05-29":"שבועות","2039-09-19":"ראש השנה","2039-09-20":"ראש השנה","2039-09-28":"יום כיפור","2039-10-03":"סוכות","2039-10-10":"שמיני עצרת","2040-03-29":"פסח","2040-04-04":"שביעי של פסח","2040-05-18":"שבועות","2040-09-08":"ראש השנה","2040-09-09":"ראש השנה","2040-09-17":"יום כיפור","2040-09-22":"סוכות","2040-09-29":"שמיני עצרת","2041-04-16":"פסח","2041-04-22":"שביעי של פסח","2041-06-05":"שבועות","2041-09-26":"ראש השנה","2041-09-27":"ראש השנה","2041-10-05":"יום כיפור","2041-10-10":"סוכות","2041-10-17":"שמיני עצרת","2042-04-05":"פסח","2042-04-11":"שביעי של פסח","2042-05-25":"שבועות","2042-09-15":"ראש השנה","2042-09-16":"ראש השנה","2042-09-24":"יום כיפור","2042-09-29":"סוכות","2042-10-06":"שמיני עצרת","2043-04-25":"פסח","2043-05-01":"שביעי של פסח","2043-06-14":"שבועות","2043-10-05":"ראש השנה","2043-10-06":"ראש השנה","2043-10-14":"יום כיפור","2043-10-19":"סוכות","2043-10-26":"שמיני עצרת","2044-04-12":"פסח","2044-04-18":"שביעי של פסח","2044-06-01":"שבועות","2044-09-22":"ראש השנה","2044-09-23":"ראש השנה","2044-10-01":"יום כיפור","2044-10-06":"סוכות","2044-10-13":"שמיני עצרת","2045-04-02":"פסח","2045-04-08":"שביעי של פסח","2045-05-22":"שבועות","2045-09-12":"ראש השנה","2045-09-13":"ראש השנה","2045-09-21":"יום כיפור","2045-09-26":"סוכות","2045-10-03":"שמיני עצרת","2046-04-21":"פסח","2046-04-27":"שביעי של פסח","2046-06-10":"שבועות","2046-10-01":"ראש השנה","2046-10-02":"ראש השנה","2046-10-10":"יום כיפור","2046-10-15":"סוכות","2046-10-22":"שמיני עצרת"});
 const P_RAW={
   inbox:()=>db.collection('inbox'),inboxDoc:id=>db.doc('inbox/'+id),
   tasks:()=>db.collection('tasks'),task:id=>db.doc('tasks/'+id),
@@ -163,7 +166,7 @@ const P_RAW={
   owner:()=>db.doc('channel/owner'),ownerLog:()=>db.doc('channel/owner').collection('log'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
   current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),digest:day=>db.doc('memory/digest').collection('items').doc(day),identity:()=>db.doc('memory/identity'),caps:()=>db.doc('memory/caps'),memMeta:()=>db.doc('memory/meta'),
   forget:id=>db.doc('memory/forgets').collection('items').doc(id),forgets:()=>db.doc('memory/forgets').collection('items'),
-  proactive:()=>db.doc('memory/proactive'),calItem:id=>db.doc('sense/cal').collection('items').doc(id),calItems:()=>db.doc('sense/cal').collection('items'),calState:()=>db.doc('sense/cal'),context:()=>db.doc('sense/context'),body:()=>db.doc('sense/body'),senseItem:id=>db.doc('sense/notif').collection('items').doc(id),senseItems:()=>db.doc('sense/notif').collection('items'),conflict:id=>db.doc('memory/conflicts').collection('items').doc(id),conflicts:()=>db.doc('memory/conflicts').collection('items'),
+  proactive:()=>db.doc('memory/proactive'),shabbat:()=>db.doc('channel/shabbat'),calItem:id=>db.doc('sense/cal').collection('items').doc(id),calItems:()=>db.doc('sense/cal').collection('items'),calState:()=>db.doc('sense/cal'),context:()=>db.doc('sense/context'),body:()=>db.doc('sense/body'),senseItem:id=>db.doc('sense/notif').collection('items').doc(id),senseItems:()=>db.doc('sense/notif').collection('items'),conflict:id=>db.doc('memory/conflicts').collection('items').doc(id),conflicts:()=>db.doc('memory/conflicts').collection('items'),
   cand:k=>db.doc('memory/candidates').collection('items').doc(k),cands:()=>db.doc('memory/candidates').collection('items'),
   person:k=>db.doc('memory/people').collection('items').doc(k),people:()=>db.doc('memory/people').collection('items'),
   fact:k=>db.doc('memory/facts').collection('items').doc(k),facts:()=>db.doc('memory/facts').collection('items'),
@@ -199,7 +202,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
-  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',digest:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',cand:'record',cands:'record',forget:'record',forgets:'record',conflict:'record',conflicts:'record',proactive:'record',senseItem:'record',senseItems:'record',calItem:'record',calItems:'record',calState:'state',context:'fixed',body:'fixed',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
+  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',digest:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',cand:'record',cands:'record',forget:'record',forgets:'record',conflict:'record',conflicts:'record',proactive:'record',shabbat:'state',senseItem:'record',senseItems:'record',calItem:'record',calItems:'record',calState:'state',context:'fixed',body:'fixed',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',
@@ -228,8 +231,8 @@ window.__ch={budget:()=>Object.assign({},chBudget),denied:()=>Object.assign({},c
 /* text from the database goes into the DOM through this, never raw: a task title is written by other
    sessions, and "<img onerror=…>" in one would otherwise run inside the page that holds the channel */
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-const PROTO=Object.freeze({v:1,hash:"02425b9a2eb9",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx"]),
-  toApp:Object.freeze({"ready":"ready","say":"say","sent":"sent","error":"error","queued":"queued","outbox":"outbox","tap":"tap","cmd":"cmd","crashSaved":"crashSaved","tasks":"tasks","traceAck":"traceAck","state":"state","memSync":"memSync","memAck":"memAck","remind":"remind","senseAck":"senseAck","senseCfg":"senseCfg"}),
+const PROTO=Object.freeze({v:1,hash:"1979fdb59afd",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy"]),
+  toApp:Object.freeze({"ready":"ready","say":"say","sent":"sent","error":"error","queued":"queued","outbox":"outbox","tap":"tap","cmd":"cmd","crashSaved":"crashSaved","tasks":"tasks","traceAck":"traceAck","state":"state","memSync":"memSync","memAck":"memAck","remind":"remind","senseAck":"senseAck","senseCfg":"senseCfg","place":"place"}),
   toPage:Object.freeze({"hello":"hello","crash":"crash","spoke":"spoke","speaking":"speaking","input":"input","trace":"trace","pulse":"pulse","memAsk":"memAsk","sense":"sense","calSync":"calSync","ctx":"ctx"}),
   initial:"OFFLINE",moves:Object.freeze({"OFFLINE":["IDLE","WAKE"],"IDLE":["LISTENING","THINKING","SPEAKING","SENDING","RINGING","QUIET","DEGRADED","WAKE","OFFLINE"],"WAKE":["LISTENING","IDLE","SPEAKING","SENDING","RINGING","OFFLINE"],"LISTENING":["THINKING","SENDING","IDLE","SPEAKING","WAKE","OFFLINE"],"THINKING":["SENDING","SPEAKING","IDLE","OFFLINE"],"SENDING":["IDLE","SPEAKING","RINGING","THINKING","DEGRADED","WAKE","LISTENING","OFFLINE"],"SPEAKING":["IDLE","LISTENING","SENDING","WAKE","RINGING","OFFLINE"],"RINGING":["SPEAKING","IDLE","LISTENING","OFFLINE"],"QUIET":["IDLE","SPEAKING","OFFLINE"],"DEGRADED":["IDLE","SPEAKING","SENDING","OFFLINE"]})});
 const $=id=>document.getElementById(id);
@@ -393,7 +396,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:70,pageHash:"58e6259079b5",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:71,pageHash:"469035a774a1",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -488,7 +491,8 @@ function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.som
    is written once per message and reason (inbox/<id>.holds.<reason>) and counted in ledger/<day>.silence. */
 const hourNow=()=>window.__testHour!=null?window.__testHour:new Date().getHours(); /* tests pin the hour */
 const G_OK={ok:true};
-function gate(d){const now=Date.now();if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
+function gate(d){const now=Date.now();if(shabbatOn(now))return {ok:false,reason:'shabbat'}; /* shabbat-engine: before everything, urgent and commands too */
+  if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
   if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
   const p=d.priority||'normal';if(p==='urgent')return G_OK;
   if(catchupUntil>now&&!d.local&&d.kind!=='ask'&&d.kind!=='stuck'&&(d.ts||0)<catchupAt)return {ok:false,reason:'catchup'};
@@ -558,7 +562,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
-const HOLD_HE={call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
+const HOLD_HE={shabbat:'כי שבת',call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
 function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));
@@ -702,7 +706,7 @@ function taskPriority(rest){{const q=rest.trim();if(!q)return false;const task=l
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
 const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
-  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
@@ -1116,7 +1120,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"58e6259079b5"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"469035a774a1"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -1703,6 +1707,7 @@ window.__cal={in:calIn,free:calFreeSlots,briefings:calBriefings,now:calNow,items
 let ctxPhone={screen:null,locked:null,headset:null,call:false,lastWake:0,wakeSource:'',at:0},ctxNow={meeting:false,call:false,headset:null,screen:null,since:0};
 async function ctxIn(raw){let x;try{x=JSON.parse(String(raw||''));}catch(e){fail('P_MSG_BAD',e,'ctx');return null;}if(!x||typeof x!=='object')return null;
   const woke=+x.lastWake||0,wokeBefore=ctxPhone.lastWake;
+  if(+x.emergencyUntil>Date.now()&&+x.emergencyUntil!==shabbatEmergencyUntil){shabbatEmergencyUntil=+x.emergencyUntil;setTimeout(pump,200);} /* Meir's own hand on the bubble */
   ctxPhone={screen:!!x.screen,locked:!!x.locked,headset:!!x.headset,call:!!x.call,lastWake:woke,wakeSource:String(x.wakeSource||'').slice(0,20),at:+x.at||Date.now()};
   if(woke&&woke!==wokeBefore&&db)P.body().set({lastWake:woke,wakeSource:ctxPhone.wakeSource,at:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'sense/body'));
   return fuseContext();}
@@ -1723,4 +1728,82 @@ function upNow(now){now=now||Date.now();const h=hourNow();if(h>=8&&h<22)return t
 function admitOf(d){return {rule:d.release?'release':d.priority==='urgent'?'urgent':'ok',ctx:{meeting:!!ctxNow.meeting,call:!!ctxNow.call,headset:ctxNow.headset,screen:ctxNow.screen},at:Date.now()};}
 setInterval(()=>{fuseContext().catch(()=>{});},30000);
 window.__ctx={in:ctxIn,fuse:fuseContext,now:()=>ctxNow,phone:()=>ctxPhone,up:upNow};
+/* Step shabbat-engine. The windows are computed here and on the phone (Holy.kt, the same algorithm, checked for parity)
+   from the place Meir set ("זמני שבת לפי בני ברק"; Jerusalem, 40 minutes, until he does) and twenty years of yom tov
+   (00-moadim.js, generated). Inside a window nothing passes the gate - not a question, not a task, not urgent: the phone
+   itself turns the page off, stops the voice and the microphone, and makes no network request at all; this page (on
+   any other device) holds everything the same way. The only way through is Meir's own hand - three seconds on the
+   bubble opens half an hour of emergency (pikuach nefesh). A signed pikuach message from outside waits for
+   signed-commands. After the window: "שבוע טוב" and one ordered reading - how many waited, how many are questions, how
+   many are very old (over 18 hours) - questions first, the rest on "הכול". */
+/*<pure>*/
+const ZMAN={
+  rad:d=>d*Math.PI/180,deg:r=>r*180/Math.PI,
+  /* minutes after UTC midnight of the given UTC date when the sun is `angle` degrees below the horizon, going down
+     (rising=false) or up; one refinement at the event time */
+  event(y,m,d,lat,lon,angle,rising){const R=ZMAN.rad,D=ZMAN.deg;let min=720;
+    for(let k=0;k<2;k++){const jd=Date.UTC(y,m-1,d)/864e5+2440587.5+min/1440,t=(jd-2451545)/36525;
+      const L0=((280.46646+t*(36000.76983+t*0.0003032))%360+360)%360,M=357.52911+t*(35999.05029-0.0001537*t),e=0.016708634-t*(0.000042037+0.0000001267*t);
+      const C=Math.sin(R(M))*(1.914602-t*(0.004817+0.000014*t))+Math.sin(R(2*M))*(0.019993-0.000101*t)+Math.sin(R(3*M))*0.000289;
+      const om=125.04-1934.136*t,lam=L0+C-0.00569-0.00478*Math.sin(R(om));
+      const eps=23+(26+(21.448-t*(46.815+t*(0.00059-t*0.001813)))/60)/60+0.00256*Math.cos(R(om));
+      const dec=Math.asin(Math.sin(R(eps))*Math.sin(R(lam))),yy=Math.pow(Math.tan(R(eps/2)),2);
+      const eqt=4*D(yy*Math.sin(2*R(L0))-2*e*Math.sin(R(M))+4*e*yy*Math.sin(R(M))*Math.cos(2*R(L0))-0.5*yy*yy*Math.sin(4*R(L0))-1.25*e*e*Math.sin(2*R(M)));
+      const cosH=(Math.cos(R(90+angle))/(Math.cos(R(lat))*Math.cos(dec)))-Math.tan(R(lat))*Math.tan(dec);if(cosH<-1||cosH>1)return null;
+      const ha=D(Math.acos(cosH));min=720-4*lon-eqt+(rising?-4*ha:4*ha);}
+    return min;},
+  at(y,m,d,min){return Date.UTC(y,m-1,d)+Math.round(min*60000);},
+  sunset(y,m,d,p){const x=ZMAN.event(y,m,d,p.lat,p.lon,0.833,false);return x==null?null:ZMAN.at(y,m,d,x);},
+  tzeit(y,m,d,p){const x=ZMAN.event(y,m,d,p.lat,p.lon,8.5,false);return x==null?null:ZMAN.at(y,m,d,x);},
+};
+/* the holy windows: every run of consecutive holy days (Saturdays and the listed yom tov) from candle lighting the evening
+   before (sunset minus the place's minutes - 40 in Jerusalem) until nightfall (8.5°) of the last day */
+function holyWindows(fromMs,toMs,place,moadim){const out=[];const ymd=t=>new Date(t).toISOString().slice(0,10);
+  const isHoly=t=>new Date(t).getUTCDay()===6||!!moadim[ymd(t)];
+  let d=Date.UTC(new Date(fromMs).getUTCFullYear(),new Date(fromMs).getUTCMonth(),new Date(fromMs).getUTCDate())-864e5;
+  for(;d<=toMs+864e5;d+=864e5){if(!isHoly(d)||isHoly(d-864e5))continue;let e=d;while(isHoly(e+864e5))e+=864e5;
+    const pd=new Date(d-864e5),ld=new Date(e);
+    const from=ZMAN.sunset(pd.getUTCFullYear(),pd.getUTCMonth()+1,pd.getUTCDate(),place)-(+place.b||40)*60000;
+    const until=ZMAN.tzeit(ld.getUTCFullYear(),ld.getUTCMonth()+1,ld.getUTCDate(),place);
+    const names=[];for(let x=d;x<=e;x+=864e5)names.push(moadim[ymd(x)]||'שבת');
+    if(until>fromMs&&from<toMs)out.push({from,until,what:[...new Set(names)].join(' ו')});d=e;}
+  return out;}
+/*</pure>*/
+const SHABBAT_PLACES=[['ירושלים',31.76904,35.21633,40],['בני ברק',32.08074,34.8338,20],['תל אביב',32.08088,34.78057,20],['חיפה',32.81841,34.9885,30],['פתח תקווה',32.08707,34.88747,20],
+  ['בית שמש',31.73072,34.99293,20],['מודיעין עילית',31.93221,35.04416,20],['ביתר עילית',31.69903,35.12013,40],['אלעד',32.05207,34.95135,20],['אשדוד',31.79213,34.64966,20],
+  ['נתניה',32.33291,34.85992,20],['רחובות',31.89421,34.81199,20],['צפת',32.96465,35.496,20],['טבריה',32.79221,35.53124,20],['באר שבע',31.25181,34.7913,20],['רמת גן',32.08227,34.81065,20],
+  ['חולון',32.01034,34.77918,20],['קרית גת',31.60998,34.76422,20],['עמנואל',32.16,35.1352,20],['קרית ספר',31.93221,35.04416,20]];
+const SHABBAT_DEFAULT={name:'ירושלים',lat:31.76904,lon:35.21633,b:40};
+let shabbatWin=null,shabbatEmergencyUntil=0;
+function shabbatPlace(){const p=memSettings.place;return p&&isFinite(+p.lat)&&isFinite(+p.lon)?{name:String(p.name||''),lat:+p.lat,lon:+p.lon,b:+p.b||20}:SHABBAT_DEFAULT;}
+function shabbatAt(now){return holyWindows(now-3*864e5,now+864e5,shabbatPlace(),MOADIM).find(w=>w.from<=now&&now<w.until)||null;}
+/* the gate asks this first: inside a window nothing passes but Meir's own emergency */
+function shabbatOn(now){now=now||Date.now();if(shabbatEmergencyUntil>now)return false;if(window.__testShabbat!=null)return !!window.__testShabbat;return !!shabbatAt(now);}
+/* entering and leaving, once a minute: channel/shabbat says where things stand; after it, one ordered reading */
+async function shabbatTick(now){now=now||Date.now();const w=window.__testShabbat!=null?(window.__testShabbat?{from:now-3600e3,until:now+3600e3,what:'שבת'}:null):shabbatAt(now);
+  if(w&&!shabbatWin){shabbatWin=w;if(db)P.shabbat().set({from:w.from,until:w.until,what:w.what,mode:'on',place:shabbatPlace().name,at:now}).catch(e=>fail('P_DB_WRITE',e,'channel/shabbat'));return 'in';}
+  if(!w&&shabbatWin){const was=shabbatWin;shabbatWin=null;if(db)P.shabbat().set({from:was.from,until:was.until,what:was.what,mode:'off',place:shabbatPlace().name,at:now}).catch(e=>fail('P_DB_WRITE',e,'channel/shabbat'));
+    await motzash(was,now);return 'out';}
+  return w?'on':'off';}
+async function motzash(was,now){now=now||Date.now();const waiting=inboxQ.filter(d=>!d.local&&!spokenLocal.has(d.id)&&d.kind!=='cmd'&&!d.failed);
+  const asks=waiting.filter(d=>d.kind==='ask'||d.kind==='stuck').length,stale=waiting.filter(d=>(+d.ts||0)>=CLOCK_MIN&&now-(+d.ts)>18*3600e3);
+  for(const d of stale){if(db)P.inboxDoc(d.id).update({stale:true}).catch(()=>{});}
+  if(!waiting.length){queueLocal({id:'motzash-'+was.until,kind:'say',release:true,speaker:'ליבה',topic:'מוצאי '+was.what,text:(was.what==='שבת'?'שבוע טוב':'חג שמח')+'. לא חיכה לך כלום.'});return;}
+  catchupAt=now;catchupUntil=now+CATCHUP_HOLD;setTimeout(()=>{catchupUntil=0;pump();},CATCHUP_HOLD+500);
+  queueLocal({id:'motzash-'+was.until,kind:'say',release:true,speaker:'ליבה',topic:'מוצאי '+was.what,text:(was.what==='שבת'?'שבוע טוב':'חג שמח')+'. בזמן ה'+was.what+' חיכו '+waiting.length+' הודעות'+(asks?', '+asks+' מהן שאלות':'')+(stale.length?', ו-'+stale.length+' ישנות מאוד':'')+'. '+(asks?'אקריא קודם את השאלות. ':'')+'תגיד "הכול" ואקריא את השאר.'});}
+/* the commands */
+const shabbatFmt=t=>new Date(t).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
+const shabbatDayName=t=>new Date(t).toLocaleDateString('he-IL',{weekday:'long',timeZone:'Asia/Jerusalem'});
+function shabbatWhen(){const now=Date.now(),p=shabbatPlace();const w=holyWindows(now-864e5,now+14*864e5,p,MOADIM).find(x=>x.until>now);
+  if(!w){sayLocal('לא מצאתי שבת או חג בשבועיים הקרובים.');return true;}
+  const sh=w.what==='שבת';const on=w.from<=now;
+  sayLocal((on?(sh?'עכשיו שבת. היא יוצאת':'עכשיו '+w.what+'. החג יוצא'):(sh?'השבת הבאה נכנסת ב'+shabbatDayName(w.from)+' ב-'+shabbatFmt(w.from)+' ויוצאת':'החג הבא, '+w.what+', נכנס ב'+shabbatDayName(w.from)+' ב-'+shabbatFmt(w.from)+' ויוצא'))+' ב'+shabbatDayName(w.until)+' ב-'+shabbatFmt(w.until)+', לפי '+(p.name||'המקום ששמרתי')+'.');return true;}
+function shabbatSetPlace(rest){const n=inorm(rest);const hit=SHABBAT_PLACES.find(x=>x[0]===n||'ב'+x[0]===n);
+  if(!hit){sayLocal('אני לא מכירה את '+rest.trim()+'. אפשר למשל: ירושלים, בני ברק, בית שמש, מודיעין עילית, ביתר עילית, אלעד, חיפה.');return true;}
+  memSettings.place={name:hit[0],lat:hit[1],lon:hit[2],b:hit[3]};P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));
+  if(appMode)post(PROTO.toApp.place,{body:JSON.stringify(memSettings.place)});
+  sayLocal('זמני השבת לפי '+hit[0]+': כניסה '+hit[3]+' דקות לפני השקיעה, יציאה בצאת הכוכבים. בשבת אני שותקת לגמרי.');return true;}
+function shabbatPlaceSend(){if(appMode&&hasCap('holy'))post(PROTO.toApp.place,{body:JSON.stringify(shabbatPlace())});}
+setInterval(()=>{shabbatTick().catch(()=>{});},60000);setTimeout(()=>{shabbatTick().catch(()=>{});},4000);
+window.__shabbat={tick:shabbatTick,at:shabbatAt,windows:holyWindows,place:shabbatPlace,zman:ZMAN};
 </script>

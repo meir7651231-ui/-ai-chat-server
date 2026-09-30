@@ -3,8 +3,8 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "02425b9a2eb9"
-    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense", "cal", "ctx")
+    const val HASH = "1979fdb59afd"
+    val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense", "cal", "ctx", "holy")
 
     /** page -> app */
     object ToApp {
@@ -25,6 +25,7 @@ object Protocol {
         const val REMIND = "remind"
         const val SENSE_ACK = "senseAck"
         const val SENSE_CFG = "senseCfg"
+        const val PLACE = "place"
     }
     /** app -> page */
     object ToPage {
@@ -60,11 +61,12 @@ object Protocol {
     else if(d.liba==="remind"){LibaBridge.remind(String(d.items||""));}
     else if(d.liba==="senseAck"){LibaBridge.senseAck(JSON.stringify(d.ids||[]));}
     else if(d.liba==="senseCfg"){LibaBridge.senseCfg(JSON.stringify(d.apps||[]));}
+    else if(d.liba==="place"){LibaBridge.place(String(d.body||""));}
 """
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"02425b9a2eb9",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"1979fdb59afd",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
@@ -117,4 +119,5 @@ interface ProtocolBridge {
     fun remind(items: String)
     fun senseAck(ids: String)
     fun senseCfg(apps: String)
+    fun place(body: String)
 }

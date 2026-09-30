@@ -47,6 +47,7 @@ fun main(args: Array<String>) {
     senseTests()
     calTests()
     fusionTests()
+    holyTests(args[1], args[2])
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
     if (fails > 0) System.exit(1)
 }
