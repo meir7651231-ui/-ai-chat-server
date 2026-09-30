@@ -803,7 +803,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (sr == null) { sr = (if (wantOnDevice) SpeechRecognizer.createOnDeviceSpeechRecognizer(this) else SpeechRecognizer.createSpeechRecognizer(this)).also { it.setRecognitionListener(recListener) }; srOnDevice = wantOnDevice }
         val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "he-IL"); putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "he-IL"); putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true); putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, if (mode == "wake") 1200L else 1500L)
             if (mode == "wake") { putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 4000L); putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2000L); putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true) }
             else if (offline) putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
@@ -848,7 +848,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
         override fun onResults(r: Bundle?) { heardAt = System.currentTimeMillis(); listening = false; errStreak = 0; if (listenMode == "wake") unmuteSystem()
             val flush = pendingSay; pendingSay = null
             if (flush != null) main.postDelayed({ speak(flush) }, 1200)
-            var t = r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.firstOrNull()?.trim().orEmpty()
+            val alts = r?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).orEmpty()
+            var t = alts.firstOrNull()?.trim().orEmpty()
+            // nbest: after the wake word the first guess is kept as heard; a command among the top three wins over noise
+            if (listenMode != "wake" && alts.size > 1) { val p = NBest.pick(alts, LibaIntents::known); if (p.index > 0) t = p.text }
             if (listenMode == "wake") {
                 val (hit, rest) = stripWake(t)
                 val words = t.split(Regex("\\s+")).filter { it.isNotBlank() }

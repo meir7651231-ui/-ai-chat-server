@@ -55,6 +55,7 @@ fun main(args: Array<String>) {
     governorTests()
     vaultTests()
     egressTests()
+    nbestTests()
     guardTests()
     installTests()
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
