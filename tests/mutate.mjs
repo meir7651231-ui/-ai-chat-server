@@ -29,7 +29,7 @@ const M = [
   ['המספר של הבקשה לא נוסע לקלוד', '13-send.js', 'deliverWithRetry(text+ctx+reqMark(reqId),tag)', 'deliverWithRetry(text+ctx,tag)'],
   ['טלמטריה בלי דה-דופ', '02-trace.js', 'if(L){L.n++;trQueue(L);return;}', 'if(false){L.n++;trQueue(L);return;}'],
   ['הודעה שפגה נקראת בכל זאת', '08-inbox.js', 'if(!d.local&&expired(d)){', 'if(false&&expired(d)){'],
-  ['תשובה לא נקשרת לבקשה', '12-flow.js', 'if(d.re&&!d.local)bindReply(d);', ''],
+  ['תשובה לא נקשרת לבקשה', '12-flow.js', 'if(d.re&&!d.local){bindReply(d);workAnswered(d.re,d);}', 'if(d.re&&!d.local){workAnswered(d.re,d);}'],
   ['שגיאת מכסה נבלעת בשקט', '00-paths.js', 'if(/quota|resource.?exhausted/i.test(c))chAlarm(c);', ''],
   ['משפט לא נכתב לפני שליחה', '13-send.js', "walPut({req:reqId,", "({req:reqId,"],
   ['קיפול דורס במקום להוסיף', '14-janitor.js', 'if(cur)await ref.update({items:rows,at:Date.now()});', 'if(cur)await ref.set({items:rows,at:Date.now()});'],

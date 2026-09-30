@@ -1,5 +1,5 @@
 {
- "pageHash": "981c51c34a20",
+ "pageHash": "62ce339a3082",
  "anchors": {
   "intents": {
    "src": "liba/src/00-intents.js",
@@ -1314,12 +1314,12 @@
    "line": 2038
   },
   "roster.rosterSay": {
-   "src": "liba/src/31-roster.js:27",
-   "line": 2050
+   "src": "liba/src/31-roster.js:31",
+   "line": 2054
   },
   "roster.rosterContract": {
-   "src": "liba/src/31-roster.js:29",
-   "line": 2052
+   "src": "liba/src/31-roster.js:33",
+   "line": 2056
   }
  }
 }

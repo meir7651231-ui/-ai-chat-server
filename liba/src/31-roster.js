@@ -17,6 +17,10 @@ async function reclaim(now){now=now||Date.now();if(!db)return [];const out=[];le
   for(const w of rows){if(w.state==='answered'||w.state==='dead')continue;const age=now-(+w.lastSentAt||+w.at||now);
     const claimer=w.claimedBy&&roster.get(String(w.claimedBy));const alive=claimer&&brainState(claimer,now)==='live';
     if(alive)continue;
+    /* no brain ever registered: nobody died mid-work, so a second copy helps no one (and an old brain that never
+       beats would get every sentence twice) - it waits, and is said to be dead once, never resent */
+    if(!roster.size){if(now-(+w.at||now)>WORK_DEAD){await P.work(w.id).update({state:'dead',deadAt:now}).catch(()=>{});out.push([w.id,'dead']);Ledger.record({action:'reclaim',cause:'work:'+w.id,result:'dead, no brain'});
+      if(!workSaid.has(w.id)){workSaid.add(w.id);queueLocal({id:'dead-'+w.id,kind:'say',speaker:'ליבה',topic:'מוח',text:'"'+String(w.text).slice(0,50)+'" עוד מחכה לתשובה, ואף מוח לא נרשם. כנראה שאף סשן לא ער עכשיו.'});}}continue;}
     if(age>WORK_RESEND&&(+w.attempts||1)<2){const r=await deliver(String(w.text)+reqMark(w.id),w.tag||tagOf());
       await P.work(w.id).update({attempts:2,lastSentAt:now,state:'new',claimedBy:'',resent:r.sent}).catch(()=>{});
       Ledger.record({action:'reclaim',cause:'work:'+w.id,inputs:{claimedBy:w.claimedBy||'',age:Math.round(age/1000)},result:r.sent?'resent':'failed'});out.push([w.id,'resent']);continue;}

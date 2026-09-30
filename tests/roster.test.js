@@ -23,7 +23,16 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
       for (const x of m) if (x.liba === 'say') { heard.push(x.text); if (x.id) await p.evaluate(id => window.app({ liba: 'spoke', id }), x.id); } await p.waitForTimeout(40); } };
   const say = async t => { heard.length = 0; await p.evaluate(t => window.app({ liba: 'input', text: t }), t); await speak(1800); return heard.join(' | '); };
   const sentOf = id => f.evaluate(id => window.__h.sentRaw.filter(x => x.endsWith('⟦#' + id + '⟧')).length, id);
-  // one sentence, no brain
+  // no brain ever registered: never resent, said once to be waiting
+  await say('מה עם הביטוח של הרכב');
+  const w0 = await f.evaluate(() => window.__h.all('work').slice(-1)[0]);
+  const n0 = await f.evaluate(() => Date.now());
+  let r0 = await f.evaluate(n => window.__roster.reclaim(n + 200000), n0);
+  ok(r0.length === 0 && (await sentOf(w0.id)) === 1, 'no brain ever registered: three minutes of silence - not sent again');
+  heard.length = 0; r0 = await f.evaluate(n => window.__roster.reclaim(n + 420000), n0); await speak(2000);
+  ok(r0[0] && r0[0][1] === 'dead' && (await sentOf(w0.id)) === 1 && heard.some(t => /עוד מחכה לתשובה, ואף מוח לא נרשם/.test(t)), 'and after six minutes: said once, still sent only once');
+  // one sentence; the only brain known went quiet twenty minutes ago
+  await f.evaluate(() => window.__h.set('brain/roster/items/b-000', { role: 'מנהל', lastBeat: Date.now() - 20 * 60000 }));
   await say('תבדוק את החשבונית של החשמל');
   const w1 = await f.evaluate(() => window.__h.all('work').slice(-1)[0]);
   ok(w1 && w1.state === 'new' && w1.tag && w1.attempts === 1, 'a sentence to Claude opens work/<wakeId>: ' + JSON.stringify(w1 && { state: w1.state, attempts: w1.attempts }));
@@ -62,7 +71,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   await f.evaluate(() => window.__h.set('brain/roster/items/b-222', { role: 'בונה', lastBeat: Date.now() - 20 * 60000 }));
   await p.waitForTimeout(300);
   const s = await say('מי ער');
-  ok(/ער עכשיו: מנהל .*111/.test(s) && /ועוד 1 שנרדמו/.test(s), '"מי ער": ' + s.slice(0, 120));
+  ok(/ער עכשיו: מנהל .*111/.test(s) && /ועוד 2 שנרדמו/.test(s), '"מי ער": ' + s.slice(0, 120));
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });
