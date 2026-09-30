@@ -26,4 +26,29 @@ object UpdateTrust {
         g.code <= mine -> "זו לא גרסה חדשה יותר"
         else -> null
     }
+    /** step verified-install: before a byte is written - the permission, the server's answer, what it sent, the room */
+    fun before(canInstall: Boolean, http: Int, contentType: String, expected: Long, freeBytes: Long): String? = when {
+        !canInstall -> "אין לי הרשאה להתקין אפליקציות"
+        http == 404 -> "הגרסה לא נמצאה בשרת"
+        http != 200 -> "שרת העדכון ענה $http"
+        contentType.startsWith("text/html") -> "קיבלתי דף שגיאה במקום אפליקציה"
+        freeBytes < maxOf(expected, 20_000_000L) * 3 -> "אין מספיק מקום בטלפון"
+        else -> null
+    }
+    /** what Android's installer answered, in words (PackageInstaller.STATUS_*); null = installed */
+    fun installed(status: Int, msg: String?): String? = when (status) {
+        0 -> null
+        -1 -> "מחכה לאישור שלך בחלון ההתקנה"
+        2 -> "המערכת חסמה את ההתקנה"
+        3 -> "ההתקנה בוטלה"
+        4 -> "הקובץ פגום"
+        5 -> "יש התנגשות עם הגרסה המותקנת"
+        6 -> "אין מספיק מקום להתקנה"
+        7 -> "הגרסה לא מתאימה לטלפון הזה"
+        else -> "ההתקנה נכשלה" + (if (!msg.isNullOrBlank()) " (" + msg.take(60) + ")" else "")
+    }
+    /** a rollback: Android never installs an older version over a newer one (only an uninstall, which erases everything) -
+     *  so going back means the previous code shipped again under a new version number */
+    fun rollbackWords(prevName: String?): String = if (prevName == null) "אין לי גרסה קודמת שמורה."
+        else "אנדרואיד לא מרשה להתקין גרסה ישנה מעל חדשה בלי למחוק הכול. שמרתי את $prevName; הדרך הנכונה היא להעלות אותה שוב כגרסה חדשה - תגיד למנהל \"תעלה שוב את הגרסה הקודמת\"."
 }

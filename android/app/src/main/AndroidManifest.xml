@@ -41,6 +41,7 @@
         </service>
         <!-- proactive: the one alarm for date reminders -->
         <receiver android:name=".ReminderReceiver" android:exported="false"/>
+        <receiver android:name=".InstallResultReceiver" android:exported="false"/>
         <!-- one-life: the one receiver that brings ליבה back after a restart, an update, or the OS killing her -->
         <receiver android:name=".life.LifeReceiver" android:exported="false">
             <intent-filter>

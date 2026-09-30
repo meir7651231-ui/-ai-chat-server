@@ -56,6 +56,7 @@ fun main(args: Array<String>) {
     vaultTests()
     egressTests()
     guardTests()
+    installTests()
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
     if (fails > 0) System.exit(1)
 }

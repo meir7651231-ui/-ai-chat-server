@@ -222,7 +222,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun speak(text: String, urgent: Boolean = false) {
         if (shabbat) return // shabbat-engine: no voice at all
         if (listening && listenMode != "wake") { pendingSay = text // fix 8: don't cut the user off; flush after the recognizer ends
-            pendingSayTimer?.let { main.removeCallbacks(it) }; pendingSayTimer = Runnable { pendingSay?.let { t -> pendingSay = null; Trace.e(Trace.Code.E_SR_LIFECYCLE, "pendingSay-timeout"); if (listening) { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "cancel:" + e.javaClass.simpleName) }; listening = false }; speak(t) } }.also { main.postDelayed(it, 12_000L) }; return }
+            pendingSayTimer?.let { main.removeCallbacks(it) }; pendingSayTimer = Runnable { pendingSay?.let { t -> pendingSay = null; Trace.e(Trace.Code.E_SR_LIFECYCLE, "pendingSay-timeout"); if (listening) { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "cancel:" + e.javaClass.simpleName) }; listening = false }; speak(t) } }.also { main.postDelayed(it, 12_000L) }; return } // one-shot: a held reply is released once if the recognizer never returns
         lastSaid = text
         stopVad()
         if (listening) { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "speak:" + e.javaClass.simpleName) }; listening = false; unmuteSystem() }
@@ -443,7 +443,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
             try {
                 val dir = java.io.File(cacheDir, "apk").apply { mkdirs() }; val f = java.io.File(dir, "liba.apk")
                 val c = URL(url).openConnection() as HttpURLConnection; c.connectTimeout = 15000; c.readTimeout = 60000; c.instanceFollowRedirects = true
-                if (c.responseCode != 200) { fail = "http=" + c.responseCode; throw java.io.IOException("שרת העדכון ענה " + c.responseCode) }
+                // step verified-install: 404, an error page, no room - each with its own sentence, before a byte is written
+                UpdateTrust.before(true, c.responseCode, c.contentType ?: "", c.contentLengthLong, dir.usableSpace)?.let { why -> fail = "pre:" + c.responseCode; throw java.io.IOException(why) }
                 val want = c.contentLengthLong
                 val got = c.inputStream.use { i -> f.outputStream().use { o -> i.copyTo(o) } }
                 // a half-downloaded or wrong file installs as "האפליקציה לא הותקנה" with no reason: check it here instead
@@ -472,6 +473,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 val mine = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
                 if (fileCode <= mine) { fail = "older"; throw java.io.IOException("זו אותה גרסה שכבר מותקנת (" + fileCode + ")") }
                 val newName = info.versionName ?: Prefs.updateName(this)
+                keepRollback() // verified-install: the running version is kept before it is replaced
+                val viaSession = runCatching { installSession(f) }.onFailure { Trace.e(Trace.Code.E_INTENT_OPEN, "session:" + it.javaClass.simpleName) }.isSuccess
+                if (viaSession) { main.post { showLabel("מתקינה $newName… אשר בחלון", 8000); hideBubble(45000); speak("מתקינה גרסה " + newName.replace(".", " נקודה ")) }; return@Thread }
                 val uri = androidx.core.content.FileProvider.getUriForFile(this, "il.liba.app.files", f)
                 val i = Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 main.post { showLabel("מתקינה $newName… אשר בחלון", 8000); hideBubble(45000)
@@ -484,6 +488,24 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 main.post { showLabel("הורדה נכשלה: $why", 10000); speak("ההורדה נכשלה. " + why + ". אפשר לנסות שוב מהמסך הראשי.") } }
         }.start()
     }
+    /** verified-install: the PackageInstaller session - Android's answer comes back to InstallResultReceiver */
+    private fun installSession(f: java.io.File) {
+        val pi = packageManager.packageInstaller
+        val sid = pi.createSession(android.content.pm.PackageInstaller.SessionParams(android.content.pm.PackageInstaller.SessionParams.MODE_FULL_INSTALL))
+        pi.openSession(sid).use { s ->
+            s.openWrite("liba.apk", 0, f.length()).use { o -> f.inputStream().use { it.copyTo(o) }; s.fsync(o) }
+            val flags = PendingIntent.FLAG_UPDATE_CURRENT or (if (Build.VERSION.SDK_INT >= 31) PendingIntent.FLAG_MUTABLE else 0)
+            s.commit(PendingIntent.getBroadcast(this, sid, Intent(this, InstallResultReceiver::class.java), flags).intentSender) }
+    }
+    fun installSaid(t: String) { main.post { showLabel(t, 10000); speak(t) } }
+    /** keep the APK that is running now (filesDir/rollback), the last two */
+    private fun keepRollback() { runCatching {
+        val code = packageManager.getPackageInfo(packageName, 0).let { if (Build.VERSION.SDK_INT >= 28) it.longVersionCode.toInt() else @Suppress("DEPRECATION") it.versionCode }
+        val dir = java.io.File(filesDir, "rollback").apply { mkdirs() }; val out = java.io.File(dir, "liba-$code.apk")
+        if (!out.exists()) java.io.File(applicationInfo.sourceDir).copyTo(out) // vault-ok: the app's own public APK, no words
+        dir.listFiles()?.sortedByDescending { it.lastModified() }?.drop(2)?.forEach { it.delete() } }.onFailure { Trace.e(Trace.Code.E_PREFS, "rollback:" + it.javaClass.simpleName) } }
+    private fun rollbackSay() { val prev = java.io.File(filesDir, "rollback").listFiles()?.map { it.name.removePrefix("liba-").removeSuffix(".apk") }?.sortedDescending()?.getOrNull(1)
+        speak(UpdateTrust.rollbackWords(prev?.let { "הגרסה הקודמת, מספר $it" })) }
     private val recheck = Runnable { if (il.liba.app.power.Governor.admit(il.liba.app.power.Job("update", 0))) checkUpdate() else main.postDelayed(this.recheckLater, 3600_000L) }
     private val recheckLater: Runnable get() = recheck
     /**
@@ -827,6 +849,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         when {
             id == "app.repeat" && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
             id == "app.readPrivate" -> { readHeld(); return }
+            id == "app.rollback" -> { rollbackSay(); return }
             id == "app.audioMine" -> { val d = AudioRoute.bt(this); val n = d?.productName?.toString() ?: ""; if (n.isBlank()) speak("לא מחוברות עכשיו אוזניות בלוטות'.") else { Prefs.addTrustedAudio(this, n); speak("זכרתי: $n הן האוזניות שלך. דרכן אקריא הכול.") }; return }
             id == "app.status" -> { speak(localStatus()); return }
             id == "app.slower" -> { rate = (rate - 0.15f).coerceIn(0.6f, 2.2f); Prefs.setRate(this, rate); tts?.setSpeechRate(rate); speak("ככה, לאט יותר."); return }
