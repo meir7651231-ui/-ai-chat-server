@@ -148,7 +148,7 @@
       "time": "at"
     },
     "sense/notif/items": {
-      "cap": 300,
+      "cap": 200,
       "ttlDays": 2,
       "cls": "record",
       "time": "at"
@@ -177,7 +177,7 @@
       "time": "askedAt"
     },
     "agenda": {
-      "cap": 300,
+      "cap": 200,
       "ttlDays": 14,
       "cls": "telemetry",
       "time": "at"
@@ -211,6 +211,18 @@
       "ttlDays": 45,
       "cls": "record",
       "time": "closedAt"
+    },
+    "memory/trash/items": {
+      "cap": 150,
+      "ttlDays": 7,
+      "cls": "janitor",
+      "time": "at"
+    },
+    "memory/exports/items": {
+      "cap": 10,
+      "ttlDays": 30,
+      "cls": "record",
+      "time": "at"
     }
   }
 }

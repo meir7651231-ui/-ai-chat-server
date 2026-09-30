@@ -17,6 +17,7 @@ const JAN_KINDS=[
   ['turns',()=>P.turns(),now=>[['ts','<',now-TTL('chat/log/turns')]],'ts'],
   ['decisions',()=>P.decisions(),now=>[['ts','<',now-TTL('decisions/log/items')]],'ts'],
   ['crashes',()=>P.crashes(),now=>[['ts','<',now-TTL('crashes')]],'ts'],
+  ['trash',()=>P.trash(),now=>[['at','<',now-TTL('memory/trash/items')]],'at'],
   ['req',()=>P.reqs(),now=>[['askedAt','<',now-TTL('req')]],'askedAt'],
   /* the board already announced it; a finished task has no reason to sit on the live board for a month */
   ['tasks',()=>P.tasks(),now=>[['status','in',['archived','done']],['updatedAt','<',now-TTL('tasks')]],'updatedAt'],
@@ -114,6 +115,6 @@ async function janMaybe(){clearTimeout(janTimer);janTimer=setTimeout(janMaybe,JA
   if(last&&!last.more&&Date.now()-(+last.at||0)<JAN_EVERY)return null;
   let lease;try{lease=await P.janitor().acquire({holder:janHolder,ttlMs:JAN_LEASE});}catch(e){fail('P_DB_WRITE',e,'janitor lease');return null;}
   if(!lease||!lease.acquired)return null;
-  return janSweep(Date.now());}
+  return janSweep(Date.now()).then(r=>{retainSweep().catch(e=>fail('P_DB_WRITE',e,'retain'));return r;});} /* retention-erasure: the classes, after the ceilings */
 window.__janitor={sweep:janSweep,maybe:janMaybe,holder:()=>janHolder};
 setTimeout(janMaybe,20000);

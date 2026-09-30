@@ -1455,16 +1455,6 @@
    "help": "\"מה המנהל עושה עכשיו\""
   },
   {
-   "id": "claude.memory.export",
-   "where": "claude",
-   "rule": "memory_rules",
-   "family": "זיכרון",
-   "exact": [
-    "תייצא את הזיכרון"
-   ],
-   "help": "\"תייצא את הזיכרון\""
-  },
-  {
    "id": "claude.mail",
    "where": "claude",
    "rule": "senses_rules",
@@ -1594,6 +1584,36 @@
    ],
    "handler": "sendAsSaid",
    "help": "\"תשלח כמו שאמרתי\""
+  },
+  {
+   "id": "memory.export",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "prefix": [
+    "(תייצא|תייצאי|ייצא) את הזיכרון"
+   ],
+   "handler": "exportAll",
+   "help": "\"תייצא את הזיכרון על הגג בסיסמה ...\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "retain.undo",
+   "where": "page",
+   "when": "liba",
+   "family": "זיכרון",
+   "exact": [
+    "תחזיר מה שמחקת אתמול",
+    "תחזירי מה שמחקת אתמול",
+    "תחזיר את מה שמחקת אתמול"
+   ],
+   "handler": "retainUndo",
+   "help": "\"תחזיר מה שמחקת אתמול\"",
+   "requires": [
+    "db"
+   ]
   }
  ],
  "families": {

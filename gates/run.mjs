@@ -55,6 +55,7 @@ let extra = [
   ['power', 'node tests/power.test.js'],
   ['class', 'node tests/class.corpus.js'],
   ['egress', 'node tests/egress.e2e.js'],
+  ['retain', 'node tests/retain.test.js'],
 ]
 { const all = gates.map(g => ['g', g]).concat(extra.map(e => ['e', e])).filter(inShard); gates = all.filter(x => x[0] === 'g').map(x => x[1]); extra = all.filter(x => x[0] === 'e').map(x => x[1]) }
 
