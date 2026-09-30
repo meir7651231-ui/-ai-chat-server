@@ -36,6 +36,7 @@ function onInbox(){pikuachCheck(inboxMerged());const items=inboxMerged().filter(
     taskPrev={};list.forEach(t=>taskPrev[t.id]=t.status);taskSeen=true;lastTasks=list;renderTasks(list);},e=>{fail('P_DB_READ',e,'tasks');log('tasks: '+e.code);});
   P.quiet().onSnapshot(s=>{quietUntil=(s.exists&&s.data()&&s.data().until)||0;if(quietUntil>Date.now())log('שקט עד '+new Date(quietUntil).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));pump();},e=>fail('P_DB_READ',e,'channel/quiet'));
   P.brief().onSnapshot(briefIn,e=>fail('P_DB_READ',e,'channel/brief'));
+  P.rosterItems().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));rosterIn(m);},e=>fail('P_DB_READ',e,'brain/roster'));
   P.owner().onSnapshot(s=>{ownerFromDb((s.exists&&s.data())||{});},e=>fail('P_DB_READ',e,'channel/owner'));
   watch('inbox-open',k=>P.inbox().where('spoken','==',false).orderBy('ts','asc').limit(k),WIN.inboxOpen,m=>{inboxOpen=m;onInbox();},e=>{fail('P_DB_READ',e,'inbox');log('inbox: '+e.code);});
   watch('inbox-new',k=>P.inbox().orderBy('ts','desc').limit(k),WIN.inboxNew,m=>{inboxNew=m;onInbox();},e=>{fail('P_DB_READ',e,'inbox');log('inbox: '+e.code);});

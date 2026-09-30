@@ -29,7 +29,7 @@ async function incoming(d){
   /* outbox-keys: a reply that quotes the sentence it answers carries its ⟦#id⟧ - never read it aloud */
   d.text=d.text.replace(/\s*⟦#[0-9a-z]+⟧/g,'');
   d.options=Array.isArray(d.options)?d.options.map(o=>String(o)).filter(o=>o.length):[];
-  if(d.re&&!d.local)bindReply(d);
+  if(d.re&&!d.local){bindReply(d);workAnswered(d.re,d);}
   if(d.from==='manager'&&!d.local)ownerRenew(d.id); /* owner-lease: the manager talking keeps its line */
   cur=d;seen=d.id;lastIncomingAt=Date.now();try{localStorage.setItem(LSK('seen'),d.id);}catch(e){fail('P_STORE',e,'set seen');}
   if(rec){try{rec.abort();}catch(e){fail('P_SR',e,'abort');}}

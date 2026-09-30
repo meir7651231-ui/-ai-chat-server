@@ -342,6 +342,19 @@
    ]
   },
   {
+   "id": "brain.roster",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "מי ער",
+    "מי ער עכשיו",
+    "איזה מוחות ערים"
+   ],
+   "handler": "rosterSay",
+   "help": "\"מי ער\""
+  },
+  {
    "id": "sense.add",
    "where": "page",
    "when": "liba",

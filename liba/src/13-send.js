@@ -104,6 +104,7 @@ async function send(text,forcedTag,source){
   let ctx='';try{if(!noIntent)ctx=await brief(text);}catch(e){fail('P_DB_READ',e,'brief');}
   try{const w=await buildWake(text,reqId);if(w)ctx+='\n---\n'+w;}catch(e){fail('P_DB_READ',e,'wake');} /* wake-envelope */
   if(ctx)try{P.req(reqId).update({brief:ctx.trim().slice(0,40)}).catch(()=>{});}catch(e){}
+  workOpen(reqId,text,tag); /* brain-roster-lease */
   walPut({req:reqId,text:text+ctx+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
   const r=await deliverWithRetry(text+ctx+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;
   const reqState=st=>{try{P.req(reqId).update(Object.assign({state:st,at:Date.now()},st==='sent'?{sentAt:Date.now()}:{reason:String(reason||'')})).catch(e=>fail('P_DB_WRITE',e,'req state'));}catch(e){}};

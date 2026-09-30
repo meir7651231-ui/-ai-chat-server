@@ -193,6 +193,18 @@
       "ttlDays": 14,
       "cls": "record",
       "time": "at"
+    },
+    "work": {
+      "cap": 100,
+      "ttlDays": 7,
+      "cls": "record",
+      "time": "at"
+    },
+    "brain/roster/items": {
+      "cap": 20,
+      "ttlDays": 30,
+      "cls": "state",
+      "time": "lastBeat"
     }
   }
 }
