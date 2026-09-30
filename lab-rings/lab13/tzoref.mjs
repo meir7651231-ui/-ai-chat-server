@@ -6,7 +6,7 @@
 //  בדיקה סופית: מכונה נפרדת (machine3s, הקריאה האיטית) — כדי שטעות במכונה המהירה לא תעבור בשקט.
 //  הלומד והרשת: יושבים מעל הכל, רושמים כל ניסיון, ומסדרים «מה לנסות קודם». הם רק מסדרים — לא זורקים אף אפשרות,
 //  ולכן לא יכולים לגרום לתוצאה גרועה יותר; רק למהירה יותר (או לא).
-import fs from 'fs'; import { rankParts, loadUsed, noteUsed } from './tzoref-pick.mjs';
+import fs from 'fs'; import * as TR from './tzoref-tricks.mjs'; import { rankParts, loadUsed, noteUsed } from './tzoref-pick.mjs';
 import { run as runSlow } from './machine3s.mjs';
 import { encode, runCode, MEM } from './machine3f.mjs';
 import { add4 } from './lifted-add.mjs'; import { shr4 } from './lifted-shr.mjs';
@@ -189,7 +189,8 @@ export function shorten(p0,gen,{minutes=10,window=24,quiet=2,tag=''}={}){
   const fast=makeChecker(gen,40), full=makeChecker(gen,300), fresh=makeChecker(gen,3000), hard=makeHard(gen);
   const ok=(p)=>fast(p)&&full(p); const T0=clock(), END=T0+minutes*60000; let best=p0.slice(), tries=0, firstWinAt=null;
   if(!(fresh(best)&&hard(best))) throw new Error('נקודת ההתחלה לא עוברת את הבודק');
-  const accept=(p,why)=>{ if(p.length<best.length&&fresh(p)&&hard(p)){ say(`  ✓ ${why}: ${best.length} → ${p.length}  (${((clock()-T0)/60000).toFixed(1)} דק')`); best=p; if(firstWinAt==null) firstWinAt=tries; return true; } return false; };
+  if(process.env.NOTRICKS!=='1'){ const t=TR.applyTricks(best,(q)=>ok(q)&&fresh(q)); if(t.used&&t.prog.length<best.length&&hard(t.prog)){ say(`  ✓ מחברת-הטריקים (${t.used}): ${best.length} → ${t.prog.length}`); best=t.prog; } }
+  const accept=(p,why)=>{ if(p.length<best.length&&fresh(p)&&hard(p)){ try{ TR.record(best,p,tag||why); }catch{} say(`  ✓ ${why}: ${best.length} → ${p.length}  (${((clock()-T0)/60000).toFixed(1)} דק')`); best=p; if(firstWinAt==null) firstWinAt=tries; return true; } return false; };
   // זוג שינויים, בסדר שהלומד מציע; כל ניסיון נרשם ללמידה
   function pairs(a,b){ const firsts=[]; const sigs=new Set();
     for(const e of edits(best,a,b)){ tries++; const good=e.p.length<best.length&&ok(e.p); note(e.f,good); if(good){ learn(e.feats,1); if(accept(e.p,'שינוי אחד')) return true; }
@@ -302,6 +303,9 @@ export async function work({names=NEW_GOALS,baseMs=30000,minutes=2}={}){ const {
     // קודם «בונה-הערכים» (מחפש צירוף חלקים לפי מה שהם נותנים) — מהיר מאוד במשימות של כמה חלקים; אם לא — 4 הליבות
     let r=null; if(CFG.VALUE!==false&&g.ins){ const { valueBuild, show }=await import('./tzoref-value.mjs'); const v=valueBuild(gen,{name,ins:g.ins,out:g.out??2,ms:CFG.VALUE_MS||20000});
       if(v.prog){ r={prog:v.prog,tries:v.made,used:[],how:'בונה-ערכים: '+show(v.expr)}; say(`  בונה-הערכים מצא: ${show(v.expr)} (${(v.ms/1000).toFixed(1)} שנ׳)`); } }
+    // משימה על רשימה: קודם «בונה-לולאות» (צובר אחד), ואם לא — «שני צוברים»
+    if(!r&&!g.ins){ const L=await import('./tzoref-loop.mjs'); const v=L.loopBuild(gen,{name}); if(v.prog){ r={prog:v.prog,tries:v.made,used:[]}; say(`  בונה-הלולאות מצא: התחל מ-${v.init}, בכל איבר: ${L.showL(v.step)} (${(v.ms/1000).toFixed(1)} שנ׳)`); }
+      else { const L2=await import('./tzoref-loop2.mjs'); const w=L2.loop2Build(gen,{name}); if(w.prog){ r={prog:w.prog,tries:w.folds,used:[]}; say(`  שני-צוברים מצא: ${w.found.f1.init.name}/${w.found.f2.init.name} · בסוף ${w.found.comb} (${(w.ms/1000).toFixed(1)} שנ׳)`); } } }
     if(!r) r=await P.build(name,{ms,ngram:brain.ngram,N:8,tables,ins:insG,lab:CFG.LAB,rules:CFG.RULES,sw:CFG.SW||null,maxLen:CFG.MAXLEN||128,jobs:(CFG.MIX||[['A',1],['S',10],['Z',100],['A',40]]).map(([k,m,l,K],i)=>({pieces:k==='A'?pieces:k==='S'?small:k==='T'?ranked.slice(0,K||600):k==='B'?[...small,...ranked.filter(q=>!smallSet.has(q)).slice(0,K||300)]:[],width:CFG.W0*m,lab:l,slice:i===0?(CFG.SLICE||0):0}))});
     if(!r.prog){ q[name]={tries:((q[name]?.tries)||0)+1,last:new Date().toISOString()}; fs.writeFileSync(QUEUE,JSON.stringify(q));
       say(`✗ ${name}: לא נמצא (${(r.tries/1e6).toFixed(1)} מיליון ניסיונות, ${((clock()-T0)/1000).toFixed(0)} שנ׳) ⇒ לרשימת «לנסות שוב», בפעם הבאה ${ms*2/1000} שנ׳`); rows.push({name,ok:false}); continue; }

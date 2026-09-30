@@ -1,0 +1,1 @@
+[{"k":"|WHERE $0=>","ctx":[],"from":[["WHERE",{"v":0}]],"to":[],"n":1,"kind":"adead","saves":1},{"k":"WHERE $0;GO;PUT|WHERE $0;GO=>","ctx":[["WHERE",{"v":0}],["GO"],["PUT"]],"from":[["WHERE",{"v":0}],["GO"]],"to":[],"n":1,"kind":"full","saves":2}]
