@@ -43,7 +43,7 @@ function trBridge(batch,json){
   if(trInTrace)return;trInTrace=true;
   try{arr=JSON.parse(json);}catch(e){fail('P_DB_WRITE',e,'telemetry/events parse');}
   trInTrace=false;
-  if(!Array.isArray(arr)){post(PROTO.toApp.traceAck,{batch:batch,ids:'[]'});return;}
+  if(!Array.isArray(arr)){post(PROTO.toApp.traceAck,{batch:batch,ids:[]});return;}
   const ok=[];
   Promise.all(arr.slice(0,TRACE_BATCH).map(ev=>{
     const t=+ev.t||Date.now(),c=String(ev.c||'E_UNKNOWN'),cx=trCtx(ev.ctx);
@@ -51,7 +51,9 @@ function trBridge(batch,json){
     trRingPush(L);if(typeof faultSeen==='function')faultSeen(L); /* faults: three in a day opens a repair worker */
     /* a rejected write is simply left out of ids – unacked, so it comes back in the next batch */
     try{return Promise.resolve(trCol().doc(L.id).set(trDoc(L))).then(()=>{ok.push(L.id);},()=>{});}catch(e){return Promise.resolve();}
-  })).then(()=>post(PROTO.toApp.traceAck,{batch:batch,ids:JSON.stringify(ok)}),()=>post(PROTO.toApp.traceAck,{batch:batch,ids:JSON.stringify(ok)}));}
+  })).then(()=>post(PROTO.toApp.traceAck,{batch:batch,ids:ok}),()=>post(PROTO.toApp.traceAck,{batch:batch,ids:ok}));}
+/* ids go as a list: the bridge stringifies it once for Kotlin's JSONArray. A string here was stringified twice, the phone
+   parsed nothing, acked nothing, and re-sent every event on every batch (a phone-test day: rows rewritten 150 times) */
 /* reading it back: dropped counts inside the total, so the cap changes what is stored, never what is counted */
 async function trTop(day){const byId=new Map();
   try{const r=await coldGet(trCol(),[['ts','>=',Date.now()-26*3600e3]],1000);r.docs.forEach(d=>{const x=d.data()||{};const dy=x.day||trDay(x.ts||0);if(dy!==day)return;byId.set(d.id,{code:String(x.code||'?'),total:(+x.n||0)+(+x.dropped||0)});});}

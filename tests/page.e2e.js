@@ -201,7 +201,7 @@ const failed = [];
   const kev = await H(() => window.__h.all('telemetry/events/items').filter(x => x.src === 'k'));
   check(kev.length === 2 && kev.some(x => x.code === 'E_SR_7' && x.n === 41 && x.ctx === 'wake|onDevice=true'), 'kotlin batch expanded into telemetry/events: ' + JSON.stringify(kev.map(x => x.code)));
   const ack = m.find(x => x.liba === 'traceAck');
-  check(!!ack && ack.batch === 'b17' && JSON.parse(ack.ids).length === 2, 'batch acked back to the bubble with the written ids: ' + JSON.stringify(ack));
+  check(!!ack && ack.batch === 'b17' && Array.isArray(ack.ids) && ack.ids.length === 2 && Array.isArray(JSON.parse(JSON.stringify(ack.ids))) && typeof JSON.parse(JSON.stringify(ack.ids))[0] === 'string', 'batch acked back to the bubble with the written ids: ' + JSON.stringify(ack));
   // 15b. the same event id arriving twice overwrites its row instead of creating a second one
   await p.evaluate(() => window.app({ liba: 'trace', batch: 'b18', events: JSON.stringify([
     { id: 'k1s7f3x-a91', t: Date.now(), c: 'E_SR_7', n: 41, ctx: 'wake|onDevice=true', v: '3.14.2', s: 'k' }]) }));
