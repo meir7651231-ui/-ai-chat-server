@@ -16,10 +16,10 @@ export function loop3Build(gen,{name='',maxF=2,maxG=1,N=64,ms=120000,tries=60}={
     else for(let sa=0;sa<=s-1;sa++) for(const a of by[sa]||[]) for(const b of by[s-1-sa]||[]){ if(a===b) continue; const v=new Uint8Array(D); for(let i=0;i<D;i++) v[i]=F[a.v[i]*16+b.v[i]]; add(v,{f:tb.name,k:2,a:a.e,b:b.e},s); } }
   // בדיקה על 2,000 דוגמאות חדשות — רשימות ממוינות נדירות, אז «עובד במקרה» קל מאוד כאן
   const V=Array.from({length:2000},()=>gen()); const VL=V.map(e=>walk(e.mem));
-  const verify=(f,g,ia,ib,out)=>V.every((e,i)=>{ let a=ia,b=ib; for(const x of VL[i]){ const k=idx(a,b,x); const na=f.v[k], nb=g.v[k]; a=na; b=nb; } return (out===A?a:b)===(e.want&15); });
-  const Fs=by.slice(0,maxF+1).flat(), Gs=by.slice(0,maxG+1).flat(); const INIT=[0,15]; let found=null, sims=0;
+  const verify=(f,g,ia,ib,out)=>V.every((e,i)=>{ let a=ia==='first'?e.mem[1]:ia,b=ib==='first'?e.mem[1]:ib; for(const x of VL[i]){ const k=idx(a,b,x); const na=f.v[k], nb=g.v[k]; a=na; b=nb; } return (out===A?a:b)===(e.want&15); });
+  const Fs=by.slice(0,maxF+1).flat(), Gs=by.slice(0,maxG+1).flat(); const INIT=[0,15,'first']; let found=null, sims=0;
   outer: for(const g of Gs) for(const f of Fs){ if(Date.now()-t0>ms) break outer; for(const ia of INIT) for(const ib of INIT) for(const out of [A,B]){ sims++; let ok=true;
-        for(let i=0;i<ex.length&&ok;i++){ let a=ia,b=ib; for(const x of lists[i]){ const k=idx(a,b,x); const na=f.v[k], nb=g.v[k]; a=na; b=nb; } if((out===A?a:b)!==want[i]) ok=false; }
+        for(let i=0;i<ex.length&&ok;i++){ let a=ia==='first'?ex[i].mem[1]:ia,b=ib==='first'?ex[i].mem[1]:ib; for(const x of lists[i]){ const k=idx(a,b,x); const na=f.v[k], nb=g.v[k]; a=na; b=nb; } if((out===A?a:b)!==want[i]) ok=false; }
         if(ok&&verify(f,g,ia,ib,out)){ found={f:f.e,g:g.e,ia,ib,out}; break outer; } } }
   if(!found) return {prog:null,sims,ms:Date.now()-t0};
   // תוכנית: התחלה (א, ב) · ראש⇒תא3 · קפוץ לבדיקה · גוף: F⇒זמני1, G⇒זמני2, העתק ⇒ א, ב · הבא · בדיקה · בסוף: התשובה לתא 2
@@ -35,7 +35,7 @@ export function loop3Build(gen,{name='',maxF=2,maxG=1,N=64,ms=120000,tries=60}={
       const ok=C.filter(p=>p.out===tgt&&p.ins.join()===cells.join()&&[...used(p.prog)].every(c=>c===tgt||cells.includes(c)||(!live.has(c)&&!keep.includes(c))));
       if(!ok.length) return null; const p=ok[R(ok.length)]; prog.push(...shift(p.prog,prog.length)); for(const c of cells) live.delete(c); return tgt; };
     const t=emit(expr); return t==null?null:{prog,cell:t}; }
-  const initP=(v,cell)=>P(`WHERE ${cell}; GO; TAKE; TAKE; CALC; TAKE; CALC; PUT`+(v===0?'; TAKE; TAKE; CALC; PUT':''));
+  const initP=(v,cell)=>v==='first'?P(`WHERE 1; GO; TAKE; WHERE ${cell}; GO; PUT`):P(`WHERE ${cell}; GO; TAKE; TAKE; CALC; TAKE; CALC; PUT`+(v===0?'; TAKE; TAKE; CALC; PUT':''));
   const cp=(from,to)=>from===to?[]:P(`WHERE ${from}; GO; TAKE; WHERE ${to}; GO; PUT`); const chk=makeChecker(gen,300);
   const KG=keepOf(name,{}); const SCR=[4,6,7,...[0,1].filter(c=>!KG.includes(c))];
   for(let t=0;t<tries;t++){ const r=t>0; const keep=[...[0,1].filter(c=>KG.includes(c)),A,B,X];
@@ -52,7 +52,7 @@ export function loop3Build(gen,{name='',maxF=2,maxG=1,N=64,ms=120000,tries=60}={
     if(chk(prog)) return {prog,found,sims,ms:Date.now()-t0}; }
   return {prog:null,found,sims,ms:Date.now()-t0,why:'נמצא, אבל התוכנית לא עברה'}; }
 const S=e=>e.cell!=null?(e.cell===A?'א':e.cell===B?'ב':'איבר'):`${e.f}(${S(e.a)}${e.b?', '+S(e.b):''})`;
-export const show3=f=>`התחל א=${f.ia}, ב=${f.ib} · בכל איבר: א ⇐ ${S(f.f)} · ב ⇐ ${S(f.g)} · התשובה: ${f.out===A?'א':'ב'}`;
+export const show3=f=>`התחל א=${f.ia==='first'?'הראשון':f.ia}, ב=${f.ib==='first'?'הראשון':f.ib} · בכל איבר: א ⇐ ${S(f.f)} · ב ⇐ ${S(f.g)} · התשובה: ${f.out===A?'א':'ב'}`;
 if(import.meta.url==='file://'+process.argv[1]){ const { goals, goalFor }=await import('./tzoref-goals.mjs'); const G=goals();
   for(const name of process.argv.slice(2)){ const r=loop3Build(goalFor(name,{ins:G[name].ins},G),{name});
     console.log(`${r.prog?'✓':'✗'} ${name}: ${r.found?show3(r.found):'-'} · ${r.prog?r.prog.length+' פקודות':(r.why||'לא נמצא')} · ${r.sims.toLocaleString()} ניסיונות · ${(r.ms/1000).toFixed(1)} שנ׳`); } process.exit(0); }

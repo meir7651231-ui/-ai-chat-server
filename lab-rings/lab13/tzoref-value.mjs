@@ -15,7 +15,7 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
   const add=(vec,expr,s)=>{ const k=Buffer.from(vec).toString('latin1'); if(seen.has(k)) return; seen.set(k,expr); (bySize[s]||(bySize[s]=[])).push({vec,expr}); made++; if(k===wkey) found=expr; };
   bySize[0]=[]; ins.forEach((c,i)=>add(Uint8Array.from(ex.map(e=>e.mem[c]&15)),{cell:c},0));
   const close=v=>{ let eq=0; const joint=new Map(); for(let e=0;e<NN;e++){ if(v[e]===want[e]) eq++; const k=v[e]*16+want[e]; joint.set(k,(joint.get(k)||0)+1); } return eq+0.5*(NN-joint.size); };   // «קרוב»: שווה לתשובה, או קובע אותה
-  for(let s=1;s<=maxSize&&!found;s++){ if(s>=3&&bySize[s-1]&&bySize[s-1].length>keep){ bySize[s-1]=bySize[s-1].map(x=>[close(x.vec),x]).sort((a,b)=>b[0]-a[0]).slice(0,keep).map(x=>x[1]); }
+  for(let s=1;s<=maxSize&&!found;s++){ if(s>=3&&bySize[s-1]&&bySize[s-1].length>keep){ { const isConst=v=>v.every(x=>x===v[0]); const C=bySize[s-1].filter(x=>isConst(x.vec)); bySize[s-1]=[...C,...bySize[s-1].filter(x=>!isConst(x.vec)).map(x=>[close(x.vec),x]).sort((a,b)=>b[0]-a[0]).slice(0,keep).map(x=>x[1])]; } }
     for(const tb of TB){ if(found||seen.size>maxBank||Date.now()-t0>ms) break; const F=tb.T;
       if(tb.k===1){ for(const x of bySize[s-1]||[]){ const v=new Uint8Array(NN); for(let e=0;e<NN;e++) v[e]=F[x.vec[e]]; add(v,{f:tb.name,k:1,a:x.expr},s); if(found) break; } }
       else if(tb.k===3){ for(let sa=0;sa<=s-1&&!found;sa++) for(let sb=0;sa+sb<=s-1&&!found;sb++){ const sc=s-1-sa-sb; const A=bySize[sa]||[], B=bySize[sb]||[], C=bySize[sc]||[]; if(A.length*B.length*C.length>2e6) continue;

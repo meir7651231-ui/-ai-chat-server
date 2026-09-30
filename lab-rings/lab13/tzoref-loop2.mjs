@@ -17,7 +17,7 @@ export function loop2Build(gen,{name='',maxSize=2,ms=60000,N=64,tries=60}={}){ c
     if(tb.k===1){ for(const a of by[s-1]||[]){ const v=new Uint8Array(D); for(let i=0;i<D;i++) v[i]=F[a.v[i]]; add(v,{f:tb.name,k:1,a:a.expr},s); } }
     else for(let sa=0;sa<=s-1;sa++) for(const a of by[sa]||[]) for(const b of by[s-1-sa]||[]){ if(a===b) continue; const v=new Uint8Array(D); for(let i=0;i<D;i++) v[i]=F[a.v[i]*16+b.v[i]]; add(v,{f:tb.name,k:2,a:a.expr,b:b.expr},s); } }
   // 2) כל צעד × כל התחלה ⇒ התוצאה בסוף הלולאה בכל דוגמה
-  const INITS=[{c:0,name:'0'},{c:15,name:'15'},{cell:KEY,name:'המפתח'}]; const folds=[], fseen=new Set();
+  const INITS=[{c:0,name:'0'},{c:15,name:'15'},{cell:KEY,name:'המפתח'},{cell:1,name:'הראשון'}]; const folds=[], fseen=new Set();
   for(const st of steps) for(const I of INITS){ const r=new Uint8Array(ex.length); for(let i=0;i<ex.length;i++){ let acc=I.cell!=null?ex[i].mem[I.cell]:I.c; for(const x of lists[i]) acc=st.v[idx(acc,x,keys[i])]; r[i]=acc; }
     const k=r.join(','); if(fseen.has(k)) continue; fseen.add(k); folds.push({r,step:st.expr,stepV:st.v,init:I}); }
   // 3) חלק-חיבור: T(צבירה1, צבירה2) = התשובה
