@@ -14,5 +14,8 @@ fun localBrainTests() {
     ok(LocalBrain.answer("brain.who", m, now)!!.startsWith("המוח: n_AAA111, 1 ערים"), "local brain: who")
     ok(LocalBrain.answer("brain.where", null, now)!!.startsWith("אין לי עדיין תמונה"), "local brain: no mirror yet - says so, invents nothing")
     ok(LocalBrain.answer("memory.about", m, now) == null, "local brain: not a state question - not its to answer")
+    val mp = m.copy(proofs = listOf(MProof("הבדיקות עברו", "המנהל", "נמדד", "cmd node tests/zman.test.js", now - 60_000L)))
+    ok(LocalBrain.answer("proof.where", mp, now)!!.startsWith("\"הבדיקות עברו\" - נמדד, אמר המנהל. המקור: cmd node tests/zman.test.js (לפי מה שידעתי"), "local brain: where it came from, with the page down: " + LocalBrain.answer("proof.where", mp, now))
+    ok(LocalBrain.answer("proof.where", m, now)!!.startsWith("עוד לא אמרתי שום דבר שיש לו מקור"), "local brain: nothing sourced yet - says so")
     ok(LocalBrain.age(now, now - 3 * 3600_000L) == "מלפני 3 שעות" && LocalBrain.age(now, now - 30_000L) == "מלפני רגע", "local brain: ages in words")
 }

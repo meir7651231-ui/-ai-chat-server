@@ -1808,6 +1808,87 @@
     "מה חוזר על עצמו",
     "איזה כשלים חוזרים"
    ]
+  },
+  {
+   "id": "proof.where",
+   "where": "page",
+   "when": "liba",
+   "family": "מקור",
+   "exact": [
+    "מאיפה את יודעת",
+    "מאיפה את יודעת את זה",
+    "מה המקור",
+    "מה המקור של זה"
+   ],
+   "handler": "proofWhere",
+   "help": "\"מאיפה את יודעת\"",
+   "offline": true
+  },
+  {
+   "id": "proof.before",
+   "where": "page",
+   "when": "liba",
+   "family": "מקור",
+   "exact": [
+    "ומה לפני זה",
+    "מה לפני זה",
+    "והקודם"
+   ],
+   "handler": "proofBefore",
+   "help": "\"ומה לפני זה\""
+  },
+  {
+   "id": "proof.who",
+   "where": "page",
+   "when": "liba",
+   "family": "מקור",
+   "exact": [
+    "מי אמר את זה",
+    "מי אמר"
+   ],
+   "handler": "proofWho",
+   "help": "\"מי אמר את זה\""
+  },
+  {
+   "id": "proof.grade",
+   "where": "page",
+   "when": "liba",
+   "family": "מקור",
+   "exact": [
+    "זה נמדד או צוטט",
+    "זה נמדד",
+    "זה צוטט",
+    "נמדד או צוטט"
+   ],
+   "handler": "proofGrade",
+   "help": "\"זה נמדד או צוטט\""
+  },
+  {
+   "id": "proof.when",
+   "where": "page",
+   "when": "liba",
+   "family": "מקור",
+   "exact": [
+    "מתי זה נבדק",
+    "מתי נמדד",
+    "מתי בדקת"
+   ],
+   "handler": "proofWhen",
+   "help": "\"מתי זה נבדק\""
+  },
+  {
+   "id": "proof.show",
+   "where": "page",
+   "when": "liba",
+   "family": "מקור",
+   "exact": [
+    "תראה לי את ההוכחה",
+    "תראי לי את ההוכחה",
+    "תראה לי את המקור",
+    "תראי לי את המקור"
+   ],
+   "handler": "proofShow",
+   "help": "\"תראה לי את ההוכחה\""
   }
  ],
  "families": {

@@ -38,6 +38,7 @@ function onInbox(){pikuachCheck(inboxMerged());const items=inboxMerged().filter(
   P.brief().onSnapshot(briefIn,e=>fail('P_DB_READ',e,'channel/brief'));
   P.workers().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,Object.assign({id:d.id},d.data()||{})));fleetIn('w',m);},e=>fail('P_DB_READ',e,'workers'));
   P.orders().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,Object.assign({id:d.id},d.data()||{})));fleetIn('o',m);},e=>fail('P_DB_READ',e,'fleet/orders'));
+  P.evidence().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));evidenceIn(m);},e=>fail('P_DB_READ',e,'evidence/log'));
   P.policy().onSnapshot(s=>fleetIn('p',(s.exists&&s.data())||{}),e=>fail('P_DB_READ',e,'fleet/policy'));
   P.rosterItems().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));rosterIn(m);},e=>fail('P_DB_READ',e,'brain/roster'));
   P.owner().onSnapshot(s=>{ownerFromDb((s.exists&&s.data())||{});},e=>fail('P_DB_READ',e,'channel/owner'));

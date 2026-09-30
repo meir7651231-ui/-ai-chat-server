@@ -51,7 +51,7 @@
       "time": "ts"
     },
     "telemetry/events/items": {
-      "cap": 400,
+      "cap": 300,
       "ttlDays": 7,
       "cls": "telemetry",
       "time": "ts"
@@ -177,13 +177,13 @@
       "time": "askedAt"
     },
     "agenda": {
-      "cap": 200,
+      "cap": 150,
       "ttlDays": 14,
       "cls": "telemetry",
       "time": "at"
     },
     "brain/wakes/items": {
-      "cap": 300,
+      "cap": 200,
       "ttlDays": 3,
       "cls": "telemetry",
       "time": "at"
@@ -250,6 +250,34 @@
     },
     "fleet": {
       "cap": 5,
+      "cls": "state",
+      "time": "at"
+    },
+    "evidence/missing/items": {
+      "cap": 100,
+      "ttlDays": 14,
+      "cls": "record",
+      "time": "at"
+    },
+    "evidence/log/items": {
+      "cap": 100,
+      "ttlDays": 14,
+      "cls": "record",
+      "time": "at"
+    },
+    "verify/queue/items": {
+      "cap": 50,
+      "ttlDays": 3,
+      "cls": "record",
+      "time": "askedAt"
+    },
+    "evidence": {
+      "cap": 3,
+      "cls": "state",
+      "time": "at"
+    },
+    "verify": {
+      "cap": 3,
       "cls": "state",
       "time": "at"
     }

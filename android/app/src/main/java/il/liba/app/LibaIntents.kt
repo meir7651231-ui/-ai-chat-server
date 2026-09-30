@@ -114,7 +114,11 @@ object LibaIntents {
         "מה פתוח" to "brain.open",
         "מה תקוע" to "tasks.stuck",
         "מה תקוע עכשיו" to "tasks.stuck",
-        "איזה משימות תקועות" to "tasks.stuck"
+        "איזה משימות תקועות" to "tasks.stuck",
+        "מאיפה את יודעת" to "proof.where",
+        "מאיפה את יודעת את זה" to "proof.where",
+        "מה המקור" to "proof.where",
+        "מה המקור של זה" to "proof.where"
     )
     private val OFFLINE = listOf(
         Triple("מה אתה זוכרת על", "memory.about", listOf<String>()),
