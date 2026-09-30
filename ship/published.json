@@ -1,11 +1,11 @@
 {
- "page": 77,
+ "page": 78,
  "versionCode": 53,
  "versionName": "3.15.0",
  "note": "מה שבאמת רץ אצל מאיר עכשיו. מתעדכן רק על ידי ship/release.mjs ועל ידי מי שמפרסם את הדף — לא ביד.",
- "pageHash": "fb38217b0b41",
- "pageCommit": "94e52160b66aba7f33fbcd2b5d525f006f851b1b",
- "pageAt": "2026-09-30T10:21:06.661Z",
+ "pageHash": "159aa6d63e8d",
+ "pageCommit": "858f1b35a36b646a4b72ea902608f4e7a8c39aba",
+ "pageAt": "2026-09-30T11:44:17.105Z",
  "pageBy": "ליבה",
  "appSeenAt": "2026-09-29T15:18:06Z",
  "appSeenBy": "channel/device"
