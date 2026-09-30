@@ -44,7 +44,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   await p.evaluate(() => window.__libaInput('בדיקת-קלט')); await p.waitForTimeout(2600); c = await calls();
   check(c.some(x => x.m === 'tap'), 'window.__libaInput → the page asks the app for a tap (user activation)');
   // 4b. a share from the app arrives as a request whose source is 'share'
-  await p.evaluate(() => window.__libaInput('שיתוף-בדיקה', 'share')); await p.waitForTimeout(2600);
+  await p.evaluate(() => window.__libaInput('שיתוף-בדיקה', 'share')); await p.waitForTimeout(6000);
   const reqs = await fr.evaluate(() => window.__h.all('req'));
   check(reqs.some(r => r.text === 'שיתוף-בדיקה' && r.source === 'share'), 'window.__libaInput(text, "share") → a request with source share');
   // 5. every page -> app message in the contract has a relay line, and nothing outside the contract is relayed

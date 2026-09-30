@@ -42,7 +42,9 @@ function bookAdd(rest){const o=bookParse(rest);if(!o||(o.dow==null&&o.dom==null)
 function bookPerson(text){const parts=inorm(text).split(/[,،]/).map(x=>x.trim()).filter(Boolean);if(parts.length<2)return null;const slug='r-'+fleetHash(parts[0]);
   const r={name:parts[0],role:parts[1]||'',feeds:parts.slice(2),at:Date.now()};bookRoles.set(slug,r);if(db)P.role(slug).set(r).catch(e=>fail('P_DB_WRITE',e,'book/roles'));return r;}
 /* the intake: one question a day, only into silence */
-async function bookIntake(now){if(!db)return;let st={};try{const g=await P.intake().get();st=g.exists?(g.data()||{}):{};}catch(e){return;}
+const BOOK_BOOT=Date.now();
+/* never the first thing after the page comes up, never on top of a conversation: ten quiet minutes first */
+async function bookIntake(now,force){if(!db)return;if(!force&&now-Math.max(BOOK_BOOT,lastIncomingAt||0,lastReqAt||0)<10*60000)return;let st={};try{const g=await P.intake().get();st=g.exists?(g.data()||{}):{};}catch(e){return;}
   if(st.done||(+st.step||0)>=BOOK_Q.length||st.lastAskDay===trDay(now))return;if(inboxQ.length||quietUntil>now||state!=='IDLE')return;
   const q=BOOK_Q[+st.step||0],id='book-q-'+(+st.step||0)+'-'+trDay(now);bookAsks.set(id,{id,kind:'intake',step:+st.step||0,at:now});
   await P.intake().set(Object.assign({},st,{lastAskDay:trDay(now)})).catch(()=>{});queueLocal({id,kind:'ask',priority:'morning',speaker:'ליבה',topic:'ספר העבודה',text:q});}
@@ -74,7 +76,11 @@ function bookCloseCmd(rest){const w=memWords(rest);const o=bookCycle.obligations
   if(!o){sayLocal('לא מצאתי חובה בשם '+rest+'.');return true;}bookClose(o.x.id,'done').then(()=>sayLocal('סגרתי: '+o.x.title+'.'));return true;}
 /* the answers to ליבה's own questions stay here: intake, close, and the form (41-form) */
 function bookAnswer(text){if(!lastAsk||Date.now()-lastAsk.at>REPLY_WINDOW)return false;const a=bookAsks.get(lastAsk.id);if(!a)return false;const t=inorm(text);
-  if(a.kind==='intake'){lastAsk=null;bookAsks.delete(a.id);bookIntakeAnswer(a,text);return true;}
+  /* the intake takes only what reads as an answer - an obligation with a day, a person with a role, or "זהו"; any other
+     sentence is Meir talking about something else and goes on as usual (the question comes again another day) */
+  if(a.kind==='intake'){const person=/אדם|אחראי|מזין/.test(BOOK_Q[a.step]||''),o=!person&&bookParse(text);
+    const fits=['זהו','זה הכל','זה הכול','אין עוד','לא זהו'].indexOf(t.replace(/[,،]/g,''))>=0||(person?String(text).split(/[,،]/).filter(x=>x.trim()).length>=2:!!(o&&(o.dow!=null||o.dom!=null)));
+    if(!fits)return false;lastAsk=null;bookAsks.delete(a.id);bookIntakeAnswer(a,text);return true;}
   if(a.kind==='close'){const v=/נסגר|עשיתי|סגרתי|בוצע|כן/.test(t)?'done':/לא רלוונטי|לא צריך|בוטל/.test(t)?'na':/עוד לא|לא עדיין|אחר כך/.test(t)?'later':null;if(!v)return false;
     lastAsk=null;if(v==='later'){sayLocal('בסדר, אשאל שוב מחר אם זה עדיין פתוח.');return true;}bookClose(a.obligationId,v).then(o=>sayLocal(o?(v==='done'?'סגרתי: ':'סימנתי כלא רלוונטי: ')+o.title+'.':'לא מצאתי את החובה.'));return true;}
   if(a.kind.indexOf('form')===0)return formAnswer(a,text);return false;}
@@ -104,4 +110,4 @@ async function bookTick(){const now=Date.now();if(!db||now-bookTickAt<5*60000)re
 /* a snapshot older than this page's own last write is the echo of an earlier write - taking it would drop what was just
    added, and the next add would save the shorter list */
 function bookIn(kind,v){if(kind==='cycle'){if(v&&v.at&&+v.at<bookLocalAt)return; /* a write from outside without at is taken as it is */bookCycle=Object.assign({obligations:[]},v||{});}else if(kind==='roles')bookRoles=v;}
-window.__book={parse:bookParse,add:bookAddObligation,due:bookDueLoop,close:bookClose,weekClose,presence:bookPresence,intake:bookIntake,weekId,jNow,state:()=>({cycle:bookCycle,roles:[...bookRoles.values()]}),asks:bookAsks,tick:()=>{bookTickAt=0;return bookTick();}};
+window.__book={parse:bookParse,add:bookAddObligation,due:bookDueLoop,close:bookClose,weekClose,presence:bookPresence,intake:n=>bookIntake(n,true),weekId,jNow,state:()=>({cycle:bookCycle,roles:[...bookRoles.values()]}),asks:bookAsks,tick:()=>{bookTickAt=0;return bookTick();}};

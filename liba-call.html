@@ -441,7 +441,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:78,pageHash:"a5a260fe26a4",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:78,pageHash:"159aa6d63e8d",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const sid=String(d.id||''),f=sayWait.get(sid);if(f)f(String(d.cause||'done'));else if(sayMid.has(sid)&&String(d.cause||'done')==='done')lateSpoke(sayMid.get(sid));if(String(d.cause||'done')!=='held')sayMid.delete(sid);} /* held: the phone may still say it later */
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:(r=>r.allow?r.payload.text:'[הושמט: רגיש]')(egress('db:crashes',{text:String(d.text).slice(0,4000),meta:{kind:'system'}})),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -1139,7 +1139,7 @@ const janCol=path=>({'inbox':P.inbox,'tasks':P.tasks,'sessions':P.sessions,'gall
 async function janCaps(now,budget){const out={trimmed:0,over:{},writers:{},atLeast:false};const since=now-864e5;
   for(const [path,c] of Object.entries(BUDGET.c)){const colF=janCol(path);if(!colF||!c.cap)continue;
     const lim=Math.min(1000,c.cap*2+50);let r;try{r=await coldGet(colF(),null,lim);}catch(e){fail('P_DB_READ',e,'janitor caps '+path);continue;}
-    if(r.docs.length>=lim)out.atLeast=true; /* a full page is a lower bound, and is said as one */
+    if(r.docs.length>=lim){out.atLeast=true;if(c.cls==='telemetry')out.again=true;} /* a full page is a lower bound, and is said as one - and a trimmed telemetry page means there may be more behind it */
     r.docs.forEach(d=>{const x=d.data()||{};if((+x[c.time]||0)>=since){const by=String(x.by||'?').slice(0,40);const w=out.writers[by]=out.writers[by]||{};w[path]=(w[path]||0)+1;}});
     const n=r.docs.length;if(n<=c.cap)continue;out.over[path]=n-c.cap;
     if(c.cls!=='telemetry'||budget<=0)continue;
@@ -1162,11 +1162,11 @@ async function janSweep(now){now=now||Date.now();const t0=Date.now();let left=JA
       while(got.deleted>0&&got.seen>=JAN_PAGE&&left>0);}
     catch(e){skipped.push(kind);fail('P_DB_WRITE',e,'janitor '+kind);}}
   if(left>0){try{const g=await janGallery(now,left);per.gallery=g;left-=g.deleted;}catch(e){skipped.push('gallery');fail('P_DB_WRITE',e,'janitor gallery');}}
-  if(left>0){try{const c=await janCaps(now,left);per.caps={trimmed:c.trimmed,over:c.over,offenders:Object.keys(c.offenders)};left-=c.trimmed;}catch(e){skipped.push('caps');fail('P_DB_WRITE',e,'janitor caps');}}
+  if(left>0){try{const c=await janCaps(now,left);per.caps={trimmed:c.trimmed,over:c.over,offenders:Object.keys(c.offenders)};left-=c.trimmed;if(c.again&&c.trimmed>0)per.capsAgain=true;}catch(e){skipped.push('caps');fail('P_DB_WRITE',e,'janitor caps');}}
   if(left>0){try{const s=await senseSweep(now,left);per.sense=s;left-=s.deleted;}catch(e){skipped.push('sense');fail('P_DB_WRITE',e,'janitor sense');}}
   if(left>0){try{const m=await janMonths(now,left);per.months=m;left-=m.deleted;}catch(e){skipped.push('months');fail('P_DB_WRITE',e,'janitor months');}}
   const deleted=JAN_CAP-left;
-  const report={at:now,ms:Date.now()-t0,deleted:deleted,per:per,skipped:skipped,holder:janHolder,more:left<=0};
+  const report={at:now,ms:Date.now()-t0,deleted:deleted,per:per,skipped:skipped,holder:janHolder,more:left<=0||!!per.capsAgain};
   try{await P.janitor().update(report);}catch(e){try{await P.janitor().set(report);}catch(x){fail('P_DB_WRITE',x,'channel/janitor');}}
   /* the budget knows what the janitor freed right away, without waiting for the next count */
   if(deleted>0&&chBudget.docs>0){try{await P.budget().update({docs:Math.max(0,chBudget.docs-deleted),janitorAt:now});}catch(e){fail('P_DB_WRITE',e,'budget after janitor');}}
@@ -1198,7 +1198,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"a5a260fe26a4"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"159aa6d63e8d"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -1749,7 +1749,7 @@ async function calLoad(){if(calItems.length||!db)return calItems;try{calItems=(a
 function calLine(i){return (i.allDay?'כל היום: ':calTime(i.begin)+' ')+i.title+(i.where?' ב'+i.where:'')+(+i.self===2?' (דחית)':'');}
 function calDay(offset){(async()=>{await calLoad();const day=trDay(Date.now()+offset*864e5);const list=calItems.filter(i=>calDayOf(i)===day).sort((a,b)=>(b.allDay-a.allDay)||(a.begin-b.begin));
   const bk=bookDayLine(offset); /* work-book: the day's obligations with the calendar */
-  if(!calItems.length&&!(await calAllowed())){sayLocal((bk?bk.trim()+' ':'')+'את היומן אני עוד לא קוראת. תגיד תקראי את היומן שלי.');return;}
+  if(!calItems.length&&!(await calAllowed())){sayLocal('אני עוד לא קוראת את היומן. תגיד תקראי את היומן שלי.'+bk);return;}
   sayLocal((list.length?(offset?'מחר':'היום')+' יש לך '+(list.length===1?'דבר אחד':list.length+' דברים')+': '+list.map(calLine).join('; ')+'.':(offset?'מחר':'היום')+' היומן ריק.')+bk);})()
   .catch(e=>{fail('P_DB_READ',e,'calendar');sayLocal('לא הצלחתי לקרוא את היומן.');});return true;}
 function calToday(){return calDay(0);}
@@ -2062,7 +2062,7 @@ async function buildWake(text,wakeId){const b=await readBrief();const parts=[];
   const blocked=(lastTasks||[]).filter(t=>t.status==='blocked').slice(0,3).map(t=>t.title+(t.question?' ('+t.question+')':''));if(blocked.length)parts.push('תקוע: '+blocked.join('; '));
   if(b.lastDecision)parts.push('החלטה אחרונה: '+b.lastDecision);
   try{const since=Date.now()-6*3600e3;const t=(await turnsBetween(since,Date.now()+1,60)).filter(x=>x.from==='user'||x.from==='manager').slice(-4,-1);if(t.length)parts.push('לפני כן: '+t.map(x=>(x.from==='user'?'מאיר: ':'')+String(x.text||'').slice(0,90)).join(' / '));}catch(e){}
-  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"a5a260fe26a4");
+  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"159aa6d63e8d");
   let out='';for(const p of parts){if(out.length+p.length+3>WAKE_MAX)break;out+=(out?'\n':'')+p;}
   if(db)P.wake(wakeId).set({envelope:out,len:out.length,at:Date.now(),brainAt:briefNow&&+briefNow.at||0}).catch(()=>{});
   return out;}
@@ -2579,7 +2579,9 @@ function bookAdd(rest){const o=bookParse(rest);if(!o||(o.dow==null&&o.dom==null)
 function bookPerson(text){const parts=inorm(text).split(/[,،]/).map(x=>x.trim()).filter(Boolean);if(parts.length<2)return null;const slug='r-'+fleetHash(parts[0]);
   const r={name:parts[0],role:parts[1]||'',feeds:parts.slice(2),at:Date.now()};bookRoles.set(slug,r);if(db)P.role(slug).set(r).catch(e=>fail('P_DB_WRITE',e,'book/roles'));return r;}
 /* the intake: one question a day, only into silence */
-async function bookIntake(now){if(!db)return;let st={};try{const g=await P.intake().get();st=g.exists?(g.data()||{}):{};}catch(e){return;}
+const BOOK_BOOT=Date.now();
+/* never the first thing after the page comes up, never on top of a conversation: ten quiet minutes first */
+async function bookIntake(now,force){if(!db)return;if(!force&&now-Math.max(BOOK_BOOT,lastIncomingAt||0,lastReqAt||0)<10*60000)return;let st={};try{const g=await P.intake().get();st=g.exists?(g.data()||{}):{};}catch(e){return;}
   if(st.done||(+st.step||0)>=BOOK_Q.length||st.lastAskDay===trDay(now))return;if(inboxQ.length||quietUntil>now||state!=='IDLE')return;
   const q=BOOK_Q[+st.step||0],id='book-q-'+(+st.step||0)+'-'+trDay(now);bookAsks.set(id,{id,kind:'intake',step:+st.step||0,at:now});
   await P.intake().set(Object.assign({},st,{lastAskDay:trDay(now)})).catch(()=>{});queueLocal({id,kind:'ask',priority:'morning',speaker:'ליבה',topic:'ספר העבודה',text:q});}
@@ -2611,7 +2613,11 @@ function bookCloseCmd(rest){const w=memWords(rest);const o=bookCycle.obligations
   if(!o){sayLocal('לא מצאתי חובה בשם '+rest+'.');return true;}bookClose(o.x.id,'done').then(()=>sayLocal('סגרתי: '+o.x.title+'.'));return true;}
 /* the answers to ליבה's own questions stay here: intake, close, and the form (41-form) */
 function bookAnswer(text){if(!lastAsk||Date.now()-lastAsk.at>REPLY_WINDOW)return false;const a=bookAsks.get(lastAsk.id);if(!a)return false;const t=inorm(text);
-  if(a.kind==='intake'){lastAsk=null;bookAsks.delete(a.id);bookIntakeAnswer(a,text);return true;}
+  /* the intake takes only what reads as an answer - an obligation with a day, a person with a role, or "זהו"; any other
+     sentence is Meir talking about something else and goes on as usual (the question comes again another day) */
+  if(a.kind==='intake'){const person=/אדם|אחראי|מזין/.test(BOOK_Q[a.step]||''),o=!person&&bookParse(text);
+    const fits=['זהו','זה הכל','זה הכול','אין עוד','לא זהו'].indexOf(t.replace(/[,،]/g,''))>=0||(person?String(text).split(/[,،]/).filter(x=>x.trim()).length>=2:!!(o&&(o.dow!=null||o.dom!=null)));
+    if(!fits)return false;lastAsk=null;bookAsks.delete(a.id);bookIntakeAnswer(a,text);return true;}
   if(a.kind==='close'){const v=/נסגר|עשיתי|סגרתי|בוצע|כן/.test(t)?'done':/לא רלוונטי|לא צריך|בוטל/.test(t)?'na':/עוד לא|לא עדיין|אחר כך/.test(t)?'later':null;if(!v)return false;
     lastAsk=null;if(v==='later'){sayLocal('בסדר, אשאל שוב מחר אם זה עדיין פתוח.');return true;}bookClose(a.obligationId,v).then(o=>sayLocal(o?(v==='done'?'סגרתי: ':'סימנתי כלא רלוונטי: ')+o.title+'.':'לא מצאתי את החובה.'));return true;}
   if(a.kind.indexOf('form')===0)return formAnswer(a,text);return false;}
@@ -2641,7 +2647,7 @@ async function bookTick(){const now=Date.now();if(!db||now-bookTickAt<5*60000)re
 /* a snapshot older than this page's own last write is the echo of an earlier write - taking it would drop what was just
    added, and the next add would save the shorter list */
 function bookIn(kind,v){if(kind==='cycle'){if(v&&v.at&&+v.at<bookLocalAt)return; /* a write from outside without at is taken as it is */bookCycle=Object.assign({obligations:[]},v||{});}else if(kind==='roles')bookRoles=v;}
-window.__book={parse:bookParse,add:bookAddObligation,due:bookDueLoop,close:bookClose,weekClose,presence:bookPresence,intake:bookIntake,weekId,jNow,state:()=>({cycle:bookCycle,roles:[...bookRoles.values()]}),asks:bookAsks,tick:()=>{bookTickAt=0;return bookTick();}};
+window.__book={parse:bookParse,add:bookAddObligation,due:bookDueLoop,close:bookClose,weekClose,presence:bookPresence,intake:n=>bookIntake(n,true),weekId,jNow,state:()=>({cycle:bookCycle,roles:[...bookRoles.values()]}),asks:bookAsks,tick:()=>{bookTickAt=0;return bookTick();}};
 // every number and name read back before it closes
 /* Step voice-form. book/forms/items/<formId> {title, feeds[], fields: [{key, label, type: number|text|choice|date|
    person, required, unit, options, lastValue, readback}]}. "תמלאי את <form>" opens book/runs/items/<runId> {formId,

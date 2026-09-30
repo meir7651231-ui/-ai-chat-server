@@ -1,5 +1,5 @@
 {
- "pageHash": "a5a260fe26a4",
+ "pageHash": "159aa6d63e8d",
  "anchors": {
   "intents": {
    "src": "liba/src/00-intents.js",
@@ -1738,112 +1738,112 @@
    "line": 2579
   },
   "book.bookIntake": {
-   "src": "liba/src/40-book.js:45",
-   "line": 2582
+   "src": "liba/src/40-book.js:47",
+   "line": 2584
   },
   "book.bookIntakeAnswer": {
-   "src": "liba/src/40-book.js:49",
-   "line": 2586
+   "src": "liba/src/40-book.js:51",
+   "line": 2588
   },
   "book.bookDueToday": {
-   "src": "liba/src/40-book.js:56",
-   "line": 2593
-  },
-  "book.bookDayLine": {
-   "src": "liba/src/40-book.js:57",
-   "line": 2594
-  },
-  "book.bookToday": {
    "src": "liba/src/40-book.js:58",
    "line": 2595
   },
-  "book.bookWeek": {
+  "book.bookDayLine": {
    "src": "liba/src/40-book.js:59",
    "line": 2596
   },
+  "book.bookToday": {
+   "src": "liba/src/40-book.js:60",
+   "line": 2597
+  },
+  "book.bookWeek": {
+   "src": "liba/src/40-book.js:61",
+   "line": 2598
+  },
   "book.bookDueLoop": {
-   "src": "liba/src/40-book.js:62",
-   "line": 2599
+   "src": "liba/src/40-book.js:64",
+   "line": 2601
   },
   "book.bookPresence": {
-   "src": "liba/src/40-book.js:68",
-   "line": 2605
-  },
-  "book.bookClose": {
    "src": "liba/src/40-book.js:70",
    "line": 2607
   },
+  "book.bookClose": {
+   "src": "liba/src/40-book.js:72",
+   "line": 2609
+  },
   "book.bookCloseCmd": {
-   "src": "liba/src/40-book.js:73",
-   "line": 2610
+   "src": "liba/src/40-book.js:75",
+   "line": 2612
   },
   "book.bookAnswer": {
-   "src": "liba/src/40-book.js:76",
-   "line": 2613
+   "src": "liba/src/40-book.js:78",
+   "line": 2615
   },
   "book.bookDocs": {
-   "src": "liba/src/40-book.js:82",
-   "line": 2619
+   "src": "liba/src/40-book.js:88",
+   "line": 2625
   },
   "book.weekClose": {
-   "src": "liba/src/40-book.js:83",
-   "line": 2620
+   "src": "liba/src/40-book.js:89",
+   "line": 2626
   },
   "book.bookTick": {
-   "src": "liba/src/40-book.js:103",
-   "line": 2640
+   "src": "liba/src/40-book.js:109",
+   "line": 2646
   },
   "book.bookIn": {
-   "src": "liba/src/40-book.js:106",
-   "line": 2643
+   "src": "liba/src/40-book.js:112",
+   "line": 2649
   },
   "form": {
    "src": "liba/src/41-form.js",
-   "line": 2645
+   "line": 2651
   },
   "form.hebNum": {
    "src": "liba/src/41-form.js:14",
-   "line": 2656
+   "line": 2662
   },
   "form.formDate": {
    "src": "liba/src/41-form.js:21",
-   "line": 2663
+   "line": 2669
   },
   "form.formLoad": {
    "src": "liba/src/41-form.js:24",
-   "line": 2666
+   "line": 2672
   },
   "form.formSaveRun": {
    "src": "liba/src/41-form.js:26",
-   "line": 2668
+   "line": 2674
   },
   "form.formAskField": {
    "src": "liba/src/41-form.js:27",
-   "line": 2669
+   "line": 2675
   },
   "form.formReadback": {
    "src": "liba/src/41-form.js:29",
-   "line": 2671
+   "line": 2677
   },
   "form.formNext": {
    "src": "liba/src/41-form.js:31",
-   "line": 2673
+   "line": 2679
   },
   "form.formStart": {
    "src": "liba/src/41-form.js:32",
-   "line": 2674
+   "line": 2680
   },
   "form.formResume": {
    "src": "liba/src/41-form.js:35",
-   "line": 2677
+   "line": 2683
   },
   "form.formBack": {
    "src": "liba/src/41-form.js:39",
-   "line": 2681
+   "line": 2687
   },
   "form.formAnswer": {
    "src": "liba/src/41-form.js:40",
-   "line": 2682
+   "line": 2688
   }
  }
 }

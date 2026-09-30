@@ -76,7 +76,7 @@ const janCol=path=>({'inbox':P.inbox,'tasks':P.tasks,'sessions':P.sessions,'gall
 async function janCaps(now,budget){const out={trimmed:0,over:{},writers:{},atLeast:false};const since=now-864e5;
   for(const [path,c] of Object.entries(BUDGET.c)){const colF=janCol(path);if(!colF||!c.cap)continue;
     const lim=Math.min(1000,c.cap*2+50);let r;try{r=await coldGet(colF(),null,lim);}catch(e){fail('P_DB_READ',e,'janitor caps '+path);continue;}
-    if(r.docs.length>=lim)out.atLeast=true; /* a full page is a lower bound, and is said as one */
+    if(r.docs.length>=lim){out.atLeast=true;if(c.cls==='telemetry')out.again=true;} /* a full page is a lower bound, and is said as one - and a trimmed telemetry page means there may be more behind it */
     r.docs.forEach(d=>{const x=d.data()||{};if((+x[c.time]||0)>=since){const by=String(x.by||'?').slice(0,40);const w=out.writers[by]=out.writers[by]||{};w[path]=(w[path]||0)+1;}});
     const n=r.docs.length;if(n<=c.cap)continue;out.over[path]=n-c.cap;
     if(c.cls!=='telemetry'||budget<=0)continue;
@@ -99,11 +99,11 @@ async function janSweep(now){now=now||Date.now();const t0=Date.now();let left=JA
       while(got.deleted>0&&got.seen>=JAN_PAGE&&left>0);}
     catch(e){skipped.push(kind);fail('P_DB_WRITE',e,'janitor '+kind);}}
   if(left>0){try{const g=await janGallery(now,left);per.gallery=g;left-=g.deleted;}catch(e){skipped.push('gallery');fail('P_DB_WRITE',e,'janitor gallery');}}
-  if(left>0){try{const c=await janCaps(now,left);per.caps={trimmed:c.trimmed,over:c.over,offenders:Object.keys(c.offenders)};left-=c.trimmed;}catch(e){skipped.push('caps');fail('P_DB_WRITE',e,'janitor caps');}}
+  if(left>0){try{const c=await janCaps(now,left);per.caps={trimmed:c.trimmed,over:c.over,offenders:Object.keys(c.offenders)};left-=c.trimmed;if(c.again&&c.trimmed>0)per.capsAgain=true;}catch(e){skipped.push('caps');fail('P_DB_WRITE',e,'janitor caps');}}
   if(left>0){try{const s=await senseSweep(now,left);per.sense=s;left-=s.deleted;}catch(e){skipped.push('sense');fail('P_DB_WRITE',e,'janitor sense');}}
   if(left>0){try{const m=await janMonths(now,left);per.months=m;left-=m.deleted;}catch(e){skipped.push('months');fail('P_DB_WRITE',e,'janitor months');}}
   const deleted=JAN_CAP-left;
-  const report={at:now,ms:Date.now()-t0,deleted:deleted,per:per,skipped:skipped,holder:janHolder,more:left<=0};
+  const report={at:now,ms:Date.now()-t0,deleted:deleted,per:per,skipped:skipped,holder:janHolder,more:left<=0||!!per.capsAgain};
   try{await P.janitor().update(report);}catch(e){try{await P.janitor().set(report);}catch(x){fail('P_DB_WRITE',x,'channel/janitor');}}
   /* the budget knows what the janitor freed right away, without waiting for the next count */
   if(deleted>0&&chBudget.docs>0){try{await P.budget().update({docs:Math.max(0,chBudget.docs-deleted),janitorAt:now});}catch(e){fail('P_DB_WRITE',e,'budget after janitor');}}
