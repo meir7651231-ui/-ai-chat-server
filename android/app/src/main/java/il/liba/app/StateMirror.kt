@@ -15,7 +15,7 @@ object StateMirror {
         Mirror(o.optLong("at"), List(t.length()) { i -> t.getJSONObject(i).let { x -> MTask(x.optString("title"), x.optString("status"), x.optString("question")) } },
             List(l.length()) { l.optString(it) }, o.optString("waitingOn"), o.optString("nextAction"), o.optString("brain"), o.optInt("live")) }
     /** the mirror as last kept - read from disk the first time (a few hundred bytes), so the first answer after a restart is not empty */
-    @Synchronized fun get(c: Context): Mirror? { if (!loaded) { loaded = true; if (now == null) runCatching { now = parse(f(c).readText()) } }; return now }
-    fun onMirror(c: Context, body: String) = Trace.post { runCatching { now = parse(body); val t = File(c.filesDir, "mirror.json.tmp"); t.writeText(body); t.renameTo(f(c)) }
+    @Synchronized fun get(c: Context): Mirror? { if (!loaded) { loaded = true; if (now == null) runCatching { now = parse(Vault.load(c, "mirror", f(c)) ?: return@runCatching) } }; return now }
+    fun onMirror(c: Context, body: String) = Trace.post { runCatching { now = parse(body); Vault.put(c, "mirror", body) }
         .onFailure { Trace.e(Trace.Code.E_PREFS, "mirror:" + it.javaClass.simpleName) } }
 }

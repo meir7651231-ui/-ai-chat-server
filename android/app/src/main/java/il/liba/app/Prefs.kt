@@ -43,8 +43,11 @@ object Prefs {
     fun setPendingShare(c: Context, v: String?) = p(c).edit().putString("share", v).apply()
     fun reports(c: Context) = p(c).getBoolean("reports", true)
     fun setReports(c: Context, v: Boolean) = p(c).edit().putBoolean("reports", v).apply()
-    fun crash(c: Context): String? = p(c).getString("crash", null)
-    fun clearCrash(c: Context) = p(c).edit().remove("crash").apply()
+    /** keystore-vault: the crash is in the vault; an old plaintext one is moved in and erased the first time it is read */
+    fun crash(c: Context): String? {
+        p(c).getString("crash", null)?.let { old -> runCatching { Vault.put(c, "crash", old) }; p(c).edit().remove("crash").apply() }
+        return Vault.get(c, "crash") ?: p(c).getString("crash_min", null) }
+    fun clearCrash(c: Context) { Vault.remove(c, "crash"); p(c).edit().remove("crash").remove("crash_min").apply() }
     fun updateUrl(c: Context): String? = p(c).getString("updateUrl", null)
     /** step 1: the hash and the name travel with the url, so the download can be proven before it installs. */
     fun updateSha(c: Context): String? = p(c).getString("updateSha", null)
@@ -65,13 +68,16 @@ object Prefs {
     @Synchronized private fun ring(c: Context): ArrayDeque<JSONObject> {
         ring?.let { return it }
         val d = ArrayDeque<JSONObject>()
-        try { val arr = JSONArray(p(c).getString("log", "[]")); for (i in 0 until arr.length()) d.addLast(arr.getJSONObject(i)) }
+        // keystore-vault: the log is sealed in the vault; the old plaintext one is moved in, then erased
+        val old = p(c).getString("log", null)
+        try { val arr = JSONArray(old ?: Vault.get(c, "log") ?: "[]"); for (i in 0 until arr.length()) d.addLast(arr.getJSONObject(i)) }
         catch (e: Exception) { Trace.e(Trace.Code.E_PREFS, "log:" + e.javaClass.simpleName) }
-        ring = d; return d
+        ring = d; if (old != null) runCatching { Vault.put(c, "log", JSONArray(d.toList()).toString()); p(c).edit().remove("log").commit() }.onFailure { Trace.e(Trace.Code.E_PREFS, "vault-migrate:" + it.javaClass.simpleName) }
+        return d
     }
     @Synchronized private fun persist(c: Context) {
         val arr = JSONArray(); ring?.forEach { arr.put(it) }
-        p(c).edit().putString("log", arr.toString()).apply()
+        runCatching { Vault.put(c, "log", arr.toString()) }.onFailure { Trace.e(Trace.Code.E_PREFS, "vault:" + it.javaClass.simpleName) }
     }
 
     @Synchronized fun log(c: Context, who: String, text: String) {

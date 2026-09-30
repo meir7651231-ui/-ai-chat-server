@@ -15,10 +15,10 @@ object WordQueue {
     const val CAP = 50
     private fun f(c: Context) = File(c.filesDir, "words.json")
     @Synchronized fun all(c: Context): MutableList<JSONObject> = runCatching {
-        val a = JSONArray(f(c).readText()); MutableList(a.length()) { a.getJSONObject(it) }
+        val a = JSONArray(Vault.load(c, "words", f(c)) ?: "[]"); MutableList(a.length()) { a.getJSONObject(it) }
     }.getOrDefault(mutableListOf())
     @Synchronized private fun save(c: Context, l: List<JSONObject>) {
-        runCatching { val t = File(c.filesDir, "words.json.tmp"); t.writeText(JSONArray(l).toString()); t.renameTo(f(c)) }
+        runCatching { Vault.put(c, "words", JSONArray(l).toString()) }
             .onFailure { Trace.e(Trace.Code.E_PREFS, "words:" + it.javaClass.simpleName) }
     }
     /** returns how many were dropped to make room (0 almost always) */

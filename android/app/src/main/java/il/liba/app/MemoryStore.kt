@@ -21,7 +21,7 @@ object MemoryStore {
     @Synchronized private fun load(c: Context) {
         if (loaded) return; loaded = true
         runCatching {
-            val o = JSONObject(f(c).readText())
+            val o = JSONObject(Vault.load(c, "mem", f(c)) ?: return@runCatching)
             applyJson(o, keepPending = false)
             val p = o.optJSONArray("pending") ?: JSONArray()
             for (i in 0 until p.length()) p.getJSONObject(i).let { x -> core.remember(x.optString("text"), x.optLong("at")) }
@@ -39,7 +39,7 @@ object MemoryStore {
             .put("facts", JSONArray(core.facts.values.filter { !it.local }.map { JSONObject().put("key", it.key).put("raw", it.raw).put("kind", it.kind).put("uses", it.uses).put("updatedAt", it.updatedAt).put("expiresAt", it.expiresAt) }))
             .put("people", JSONArray(core.people.values.map { JSONObject().put("key", it.key).put("name", it.name).put("aliases", JSONArray(it.aliases)).put("relation", it.relation).put("updatedAt", it.updatedAt) }))
             .put("rules", JSONArray(core.rules)).put("pending", pendingJson())
-        runCatching { val t = File(c.filesDir, "mem.json.tmp"); t.writeText(o.toString()); t.renameTo(f(c)) }
+        runCatching { Vault.put(c, "mem", o.toString()) }
             .onFailure { Trace.e(Trace.Code.E_PREFS, "mem-save:" + it.javaClass.simpleName) }
     }
     @Synchronized fun pendingJson(): JSONArray = JSONArray(core.pending.map { JSONObject().put("id", it.id).put("text", it.text).put("at", it.at) })

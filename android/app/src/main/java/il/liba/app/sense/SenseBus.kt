@@ -21,14 +21,14 @@ object SenseBus {
     @Synchronized fun load(c: Context) {
         if (loaded) return; loaded = true
         runCatching { val a = JSONArray(apps(c).readText()); for (i in 0 until a.length()) core.apps.add(a.getString(i)) }
-        runCatching { core.restore(f(c).readLines().filter { it.isNotBlank() }.map { JSONObject(it).let { x ->
+        runCatching { core.restore((il.liba.app.Vault.load(c, "sense", f(c)) ?: "").lines().filter { it.isNotBlank() }.map { JSONObject(it).let { x ->
             SenseItem(x.optString("id"), x.optString("kind"), x.optString("key"), x.optString("app"), x.optString("title"), x.optString("text"), x.optLong("at"), x.optInt("importance"), x.optLong("ttl")) } }) }
-            .onFailure { if (f(c).exists()) Trace.e(Trace.Code.E_PREFS, "sense:" + it.javaClass.simpleName) }
+            .onFailure { Trace.e(Trace.Code.E_PREFS, "sense:" + it.javaClass.simpleName) }
     }
     private fun json(it: SenseItem) = JSONObject().put("id", it.id).put("kind", it.kind).put("key", it.key).put("app", it.app).put("title", it.title)
         .put("text", it.text).put("at", it.at).put("importance", it.importance).put("ttl", it.ttl)
     @Synchronized private fun save(c: Context) {
-        runCatching { val t = File(c.filesDir, "sense.jsonl.tmp"); t.writeText(core.ring.joinToString("\n") { json(it).toString() }); t.renameTo(f(c)) }
+        runCatching { il.liba.app.Vault.put(c, "sense", core.ring.joinToString("\n") { json(it).toString() }) }
             .onFailure { Trace.e(Trace.Code.E_PREFS, "sense-save:" + it.javaClass.simpleName) }
     }
     fun emit(c: Context, kind: String, key: String, app: String, title: String, text: String) = Trace.post {

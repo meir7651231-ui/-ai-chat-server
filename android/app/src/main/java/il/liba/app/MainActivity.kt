@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
+private const val LOCKED = "השיחה נעולה. לחץ כאן כדי לפתוח - טביעת אצבע או קוד המסך."
+
 class MainActivity : AppCompatActivity() {
     private lateinit var web: WebView
     private lateinit var status: TextView
@@ -62,6 +64,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() { super.onResume(); h.post(tick) }
+    // keystore-vault: the conversation on the screen asks for Meir's finger or code; five minutes, and gone when he leaves
+    private var unlockedUntil = 0L
+    private fun unlocked() = android.os.SystemClock.elapsedRealtime() < unlockedUntil
+    override fun onStop() { super.onStop(); unlockedUntil = 0L }
+    private fun unlocked5() { unlockedUntil = android.os.SystemClock.elapsedRealtime() + 5 * 60_000L; refresh() }
+    private fun unlock() {
+        val km = getSystemService(KEYGUARD_SERVICE) as android.app.KeyguardManager
+        if (!km.isDeviceSecure) { unlocked5(); return } // a phone with no lock at all: there is nothing to ask with
+        if (Build.VERSION.SDK_INT >= 29) {
+            val b = android.hardware.biometrics.BiometricPrompt.Builder(this).setTitle("לפתוח את השיחה").setSubtitle("מה שנאמר לליבה נעול")
+            if (Build.VERSION.SDK_INT >= 30) b.setAllowedAuthenticators(android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG or android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL)
+            else @Suppress("DEPRECATION") b.setDeviceCredentialAllowed(true)
+            b.build().authenticate(android.os.CancellationSignal(), mainExecutor, object : android.hardware.biometrics.BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(r: android.hardware.biometrics.BiometricPrompt.AuthenticationResult?) { unlocked5() } })
+        } else { @Suppress("DEPRECATION") val i = km.createConfirmDeviceCredentialIntent("ליבה", "לפתוח את השיחה"); if (i == null) unlocked5() else @Suppress("DEPRECATION") startActivityForResult(i, 9) }
+    }
     override fun onPause() { super.onPause(); h.removeCallbacks(tick) }
 
     private fun micOk() = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
@@ -78,12 +96,14 @@ class MainActivity : AppCompatActivity() {
         val running = BubbleService.running
         findViewById<View>(R.id.webWrap).visibility = if (running) View.GONE else View.VISIBLE
         logWrap.visibility = if (running) View.VISIBLE else View.GONE
-        if (running) { val t = Prefs.logText(this); if (logView.text.toString() != t) { logView.text = t; logWrap.post { logWrap.fullScroll(View.FOCUS_DOWN) } }
+        if (running) { val t = if (unlocked()) Prefs.logText(this) else LOCKED; if (logView.text.toString() != t) { logView.text = t; logWrap.post { logWrap.fullScroll(View.FOCUS_DOWN) } }
+            logView.setOnClickListener { if (!unlocked()) unlock() }
             findViewById<TextView>(R.id.tasks).text = BubbleService.tasksSummary.ifBlank { "אין משימות פתוחות" } }
         findViewById<OrbView>(R.id.orb).set(if (running && BubbleService.pageOk) OrbView.Mode.IDLE else if (running) OrbView.Mode.WAKE else OrbView.Mode.OFFLINE, OrbView.CYAN)
         findViewById<TextView>(R.id.dot).apply { text = if (running && BubbleService.pageOk) "● מחובר" else if (running) "● מתחבר" else "● כבוי"; setTextColor(android.graphics.Color.parseColor(if (running && BubbleService.pageOk) "#5CFFB0" else "#5B6478")) }
         val crash = Prefs.crash(this)
-        if (crash != null && !running) { logWrap.visibility = View.VISIBLE; findViewById<View>(R.id.webWrap).visibility = View.GONE; logView.text = "קריסה אחרונה (לחיצה ארוכה = העתק, ואז שלח לליבה):\n\n" + crash; logView.setOnLongClickListener { (getSystemService(CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("crash", crash)); Prefs.clearCrash(this); true } }
+        if (crash != null && !running) { logWrap.visibility = View.VISIBLE; findViewById<View>(R.id.webWrap).visibility = View.GONE; logView.text = if (unlocked()) "קריסה אחרונה (היא נשלחת לליבה כשהבועה עולה; לחיצה ארוכה = למחוק):\n\n" + crash else "האפליקציה קרסה. הפרטים נעולים - לחץ כאן כדי לראות (טביעת אצבע או קוד). הם נשלחים לליבה בכל מקרה."
+            logView.setOnClickListener { if (!unlocked()) unlock() }; logView.setOnLongClickListener { if (unlocked()) { Prefs.clearCrash(this); refresh() }; true } } // keystore-vault: no clipboard
         status.text = when {
             crash != null && !running -> "האפליקציה קרסה. הפרטים למעלה. לחץ 'הפעל בועה' כדי לנסות שוב."
             !micOk() -> "צריך הרשאת מיקרופון"
@@ -147,6 +167,8 @@ class MainActivity : AppCompatActivity() {
         refresh()
     }
 
+    @Deprecated("the platform keyguard path, API 26-28") override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION") super.onActivityResult(requestCode, resultCode, data); if (requestCode == 9 && resultCode == RESULT_OK) unlocked5() }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults); refresh()
         if (requestCode == 7 && il.liba.app.sense.CalSense.granted(this)) il.liba.app.sense.CalSense.start(this)

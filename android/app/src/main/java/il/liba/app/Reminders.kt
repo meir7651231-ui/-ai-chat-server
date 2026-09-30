@@ -27,7 +27,7 @@ object Reminders {
     @Synchronized fun load(c: Context) {
         if (loaded) return; loaded = true
         runCatching {
-            val o = JSONObject(f(c).readText())
+            val o = JSONObject(Vault.load(c, "reminders", f(c)) ?: return@runCatching)
             val a = o.optJSONArray("items") ?: JSONArray()
             core.replace(List(a.length()) { a.getJSONObject(it).let { x -> Reminder(x.optString("id"), x.optLong("at"), x.optLong("until"), x.optString("text"), x.optBoolean("cap", true)) } })
             val fr = o.optJSONArray("fired") ?: JSONArray(); for (i in 0 until fr.length()) core.fired.add(fr.optString(i))
@@ -38,7 +38,7 @@ object Reminders {
     @Synchronized private fun save(c: Context) {
         val o = JSONObject().put("day", core.day).put("count", core.count).put("fired", JSONArray(core.fired.toList()))
             .put("items", JSONArray(core.items.map { JSONObject().put("id", it.id).put("at", it.at).put("until", it.until).put("text", it.text).put("cap", it.cap) }))
-        runCatching { val t = File(c.filesDir, "reminders.json.tmp"); t.writeText(o.toString()); t.renameTo(f(c)) }
+        runCatching { Vault.put(c, "reminders", o.toString()) }
             .onFailure { Trace.e(Trace.Code.E_PREFS, "remind-save:" + it.javaClass.simpleName) }
     }
     private fun hour(t: Long) = java.util.Calendar.getInstance().apply { timeInMillis = t }.get(java.util.Calendar.HOUR_OF_DAY)
