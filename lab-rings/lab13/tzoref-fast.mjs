@@ -77,19 +77,29 @@ import { Worker } from 'worker_threads';
 export function parallelBuild(name,{pieces=[],widths=[500,5000,50000,400000],ms=60000,ngram=null,jobs=null,N=14}={}){ const t0=Date.now();
   const J=jobs||widths.map(width=>({pieces,width}));
   return new Promise((resolve)=>{ let left=J.length, tries=0, done=false; const ws=[];
-    for(const {pieces,width} of J){ const w=new Worker(new URL('./tzoref-worker.mjs',import.meta.url),{workerData:{name,pieces,width,ms,ngram,N},resourceLimits:{maxOldGenerationSizeMb:1400}}); ws.push(w);
+    for(const {pieces,width} of J){ const w=new Worker(new URL('./tzoref-worker.mjs',import.meta.url),{workerData:{name,pieces,width,ms,ngram,N},resourceLimits:{maxOldGenerationSizeMb:2600}}); ws.push(w);
       w.online=false; w.on('online',()=>{ w.online=true; if(done) w.terminate(); });
-      w.on('message',(r)=>{ tries+=r.tries||0; if(done) return; if(r.prog){ done=true; for(const x of ws) if(x.online) x.terminate(); resolve({...r,tries,ms:Date.now()-t0,width}); } else if(--left===0){ done=true; resolve({prog:null,tries,ms:Date.now()-t0}); } });
+      w.on('message',(r)=>{ tries+=r.tries||0; if(done) return; if(r.prog){ done=true; for(const x of ws) if(x.online) x.terminate(); resolve({...r,tries,ms:Date.now()-t0,width}); } else if(--left===0){ done=true; clearTimeout(dog); resolve({prog:null,tries,ms:Date.now()-t0}); } });
       w.on('error',()=>{ if(!done&&--left===0){ done=true; resolve({prog:null,tries,ms:Date.now()-t0}); } }); } }); }
 
 // בריכת ליבות שנשארות דלוקות (נדלקות פעם אחת). build = כמה עבודות במקביל, הראשונה שמוצאת — מנצחת, והשאר עוצרות בדגל
 let POOL=null;
-export function pool(n=4){ if(POOL) return POOL; const ws=Array.from({length:n},()=>new Worker(new URL('./tzoref-worker.mjs',import.meta.url),{resourceLimits:{maxOldGenerationSizeMb:1400}}));
-  let seq=0; const wait=new Map(); ws.forEach(w=>w.on('message',(r)=>{ const f=wait.get(r.id); if(f){ wait.delete(r.id); f(r); } }));
-  POOL={ build(name,{jobs,ms=60000,ngram=null,N=14,tables=null,ins=null}){ const t0=Date.now(); const stopBuf=new SharedArrayBuffer(4); const stop=new Int32Array(stopBuf);
+export function pool(n=4){ if(POOL) return POOL; let seq=0; const wait=new Map(); const busy=new Array(n).fill(null);
+  // שומר-זמן: עובד שנתקע אחרי שנגמר הזמן — מוחלף בעובד חדש (לא מחכים לו)
+  const mk=(i)=>{ const w=new Worker(new URL('./tzoref-worker.mjs',import.meta.url),{resourceLimits:{maxOldGenerationSizeMb:2600}}); w.on('message',(r)=>{ if(busy[i]===r.id) busy[i]=null; const f=wait.get(r.id); if(f){ wait.delete(r.id); f(r); } }); w.on('error',()=>{}); return w; };
+  const ws=Array.from({length:n},(_,i)=>mk(i)); const since=new Array(n).fill(0);
+  const heal=(limit)=>{ for(let i=0;i<n;i++) if(busy[i]!=null&&Date.now()-since[i]>limit){ const old=ws[i]; wait.delete(busy[i]); busy[i]=null; ws[i]=mk(i); old.terminate(); } };
+  const RESTART=process.env.NORESTART!=='1';
+  POOL={ build(name,{jobs,ms=60000,ngram=null,N=14,tables=null,ins=null,lab=5,rules=true,sw=null,maxLen=128}){ const t0=Date.now(); const stopBuf=new SharedArrayBuffer(4); const stop=new Int32Array(stopBuf);
+      heal(5000);
       return new Promise((resolve)=>{ let left=jobs.length, tries=0, done=false;
-        jobs.forEach((j,i)=>{ const id=++seq; wait.set(id,(r)=>{ tries+=r.tries||0; if(done){ if(--left===0){} return; }
-            if(r.prog){ done=true; Atomics.store(stop,0,1); resolve({...r,tries,ms:Date.now()-t0,width:j.width}); } else if(--left===0){ done=true; resolve({prog:null,tries,ms:Date.now()-t0}); } });
-          ws[i%ws.length].postMessage({id,name,pieces:j.pieces||[],width:j.width,ms,ngram,N,stopBuf,tables,ins}); }); }); },
+        const dog=setTimeout(()=>{ if(!done){ done=true; Atomics.store(stop,0,1); heal(0); resolve({prog:null,tries,ms:Date.now()-t0,stuck:true}); } },ms+3000);
+        // «נסה שוב»: עובד שסיים בלי תוצאה ונשאר זמן — מתחיל מחדש עם דוגמאות אקראיות חדשות (חיפוש צר הוא עניין של מזל)
+        const send=(j,i,restarts)=>{ const id=++seq; const left_ms=ms-(Date.now()-t0); wait.set(id,(r)=>{ tries+=r.tries||0; if(done){ return; }
+            if(r.prog){ done=true; clearTimeout(dog); Atomics.store(stop,0,1); resolve({...r,tries,ms:Date.now()-t0,width:j.width,restarts}); return; }
+            if(RESTART&&!Atomics.load(stop,0)&&ms-(Date.now()-t0)>200){ send(j,i,restarts+1); return; }
+            if(--left===0){ done=true; clearTimeout(dog); resolve({prog:null,tries,ms:Date.now()-t0}); } });
+          const wi=i%ws.length; busy[wi]=id; since[wi]=Date.now(); ws[wi].postMessage({id,name,pieces:j.pieces||[],width:j.width,ms:j.slice?Math.min(left_ms,j.slice):left_ms,ngram,N,stopBuf,tables,ins,lab:j.lab??lab,rules,sw:j.sw??sw,maxLen}); };
+        jobs.forEach((j,i)=>send(j,i,0)); }); },
     close(){ ws.forEach(w=>w.terminate()); POOL=null; } };
   return POOL; }

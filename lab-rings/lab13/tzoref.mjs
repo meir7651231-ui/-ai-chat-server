@@ -6,7 +6,7 @@
 //  בדיקה סופית: מכונה נפרדת (machine3s, הקריאה האיטית) — כדי שטעות במכונה המהירה לא תעבור בשקט.
 //  הלומד והרשת: יושבים מעל הכל, רושמים כל ניסיון, ומסדרים «מה לנסות קודם». הם רק מסדרים — לא זורקים אף אפשרות,
 //  ולכן לא יכולים לגרום לתוצאה גרועה יותר; רק למהירה יותר (או לא).
-import fs from 'fs';
+import fs from 'fs'; import { rankParts, loadUsed, noteUsed } from './tzoref-pick.mjs';
 import { run as runSlow } from './machine3s.mjs';
 import { encode, runCode, MEM } from './machine3f.mjs';
 import { add4 } from './lifted-add.mjs'; import { shr4 } from './lifted-shr.mjs';
@@ -88,13 +88,14 @@ export function exec(prog,s,maxSteps=4000,scramble=0){ // מריץ קטע (גם 
   return {mem,st,A,P}; }
 // חלק שנלמד — בכל שיבוץ תאים אפשרי (כמו במנוע העיגולים): הכניסות לכל צירוף תאים, התשובה לכל תא אחר, תאי-עבודה לתאים פנויים
 function* orderings(pool,k,pre=[]){ if(pre.length===k){ yield pre; return; } for(const c of pool) if(!pre.includes(c)) yield* orderings(pool,k,[...pre,c]); }
+const CFG=(()=>{ try{ return {W0:500,LAB:5,BIG:200,RULES:true,...JSON.parse(fs.readFileSync('tzoref-config.json','utf8'))}; }catch{ return {W0:500,LAB:5,BIG:200,RULES:true}; } })();   // ההגדרות שהצורף בחר לעצמו (tzoref-tune.mjs)
 export function placements(b,cap=80,pref=null){ const all=[0,1,2,3,4,5,6,7]; const ins=(b.ins||[]).filter(c=>c<8), o=b.out??2; const data=dataOf(b.prog).filter(c=>c<8);
   const inPlace=ins.includes(o); const cand=[];
   for(const I of orderings(all,ins.length)) for(const O of (inPlace?[I[ins.indexOf(o)]]:all.filter(c=>!I.includes(c)))){ const map={}; ins.forEach((a,i)=>{ map[a]=I[i]; }); map[o]=O;
     const scratch=data.filter(a=>map[a]==null); const free=all.filter(c=>!Object.values(map).includes(c)).reverse(); if(free.length<scratch.length) continue; scratch.forEach((a,i)=>{ map[a]=free[i]; });
     // דירוג: כמה «טבעי» השיבוץ — כניסות מתאי-המטרה/תאי-עבודה, תשובה לתא-עבודה או לתא 2 (בלי העדפה = הסדר הרגיל)
     const rank=pref?I.reduce((a,c)=>a+(pref.includes(c)?pref.indexOf(c):20),0)+(pref.includes(O)?pref.indexOf(O):20):cand.length;
-    cand.push({rank,p:{name:b.name,prog:b.prog.map(([op,k,c])=>op==='WHERE'&&!c?['WHERE',map[k]??k]:(c?[op,k,c]:(k==null?[op]:[op,k])))}}); }
+    cand.push({rank,p:{name:b.name,out:map[o],ins:I.slice(),prog:b.prog.map(([op,k,c])=>op==='WHERE'&&!c?['WHERE',map[k]??k]:(c?[op,k,c]:(k==null?[op]:[op,k])))}}); }
   cand.sort((x,y)=>x.rank-y.rank); return cand.slice(0,cap).map(x=>x.p); }
 export function build(gen,{pieces=[],maxLen=24,widths=[500,5000,50000,400000],N=14,ms=120000,zeroStart=false}={}){
   // חיפוש שמתרחב: בכל שלב נשארים W הכי קרובים; אם לא נמצא — מתחילים שוב עם W גדול יותר. קל ⇒ נמצא מהר; קשה ⇒ מקבל יותר מקום.
@@ -292,11 +293,16 @@ export async function work({names=NEW_GOALS,baseMs=30000,minutes=2}={}){ const {
     const LISTC=[0,1,8,9,10,11,12,13,14,15]; const insG=g.ins??LISTC; const pref=[...(g.ins||[0,1]),4,5,6,7,2].filter((c,i,a)=>a.indexOf(c)===i);
     const small=[], big=[]; for(const b of sh.named){ if(b.name===name||b.bad||!(b.ins||[]).length||/רשימה|ספור|בלי|אמצע|וקטן/.test(b.name)||b.prog.length>60) continue;
       const bg=goalFor(b.name,b,G); const mv=b.movable??(bg?movable(b.prog,bg):false); if(b.movable==null) b.movable=mv;
-      const P=mv?placements(b,b.prog.length<=20?400:200,pref):[{name:b.name,prog:b.prog}]; (b.prog.length<=20?small:big).push(...P); }
+      const P=mv?placements(b,b.prog.length<=20?400:CFG.BIG,pref):[{name:b.name,prog:b.prog,out:b.out??2}]; (b.prog.length<=20?small:big).push(...P); }
     const pieces=[...small,...big]; const tables=partTables(sh.named).filter(t=>t.name!==name);
+    // «נבחרים»: הצורף מדרג את החלקים לפי כמה התוצאה שלהם קשורה לתשובה + מה עזר בעבר (tzoref-pick.mjs)
+    const smallSet=new Set(small); const ranked=(CFG.MIX||[]).some(x=>x[0]==='T'||x[0]==='B')?rankParts(gen,pieces,{used:loadUsed()}).map(x=>x.p):null;
     brain.ngram=brain.ngram||{};
     // 4 ליבות: כל החלקים (צר) · רק הקטנים · 5 הפעולות לבד · כל החלקים (רחב) — הראשונה שמוצאת מנצחת
-    const r=await P.build(name,{ms,ngram:brain.ngram,N:8,tables,ins:insG,jobs:[{pieces,width:500},{pieces:small,width:5000},{pieces:[],width:50000},{pieces,width:20000}]});
+    // קודם «בונה-הערכים» (מחפש צירוף חלקים לפי מה שהם נותנים) — מהיר מאוד במשימות של כמה חלקים; אם לא — 4 הליבות
+    let r=null; if(CFG.VALUE!==false&&g.ins){ const { valueBuild, show }=await import('./tzoref-value.mjs'); const v=valueBuild(gen,{name,ins:g.ins,out:g.out??2,ms:CFG.VALUE_MS||20000});
+      if(v.prog){ r={prog:v.prog,tries:v.made,used:[],how:'בונה-ערכים: '+show(v.expr)}; say(`  בונה-הערכים מצא: ${show(v.expr)} (${(v.ms/1000).toFixed(1)} שנ׳)`); } }
+    if(!r) r=await P.build(name,{ms,ngram:brain.ngram,N:8,tables,ins:insG,lab:CFG.LAB,rules:CFG.RULES,sw:CFG.SW||null,maxLen:CFG.MAXLEN||128,jobs:(CFG.MIX||[['A',1],['S',10],['Z',100],['A',40]]).map(([k,m,l,K],i)=>({pieces:k==='A'?pieces:k==='S'?small:k==='T'?ranked.slice(0,K||600):k==='B'?[...small,...ranked.filter(q=>!smallSet.has(q)).slice(0,K||300)]:[],width:CFG.W0*m,lab:l,slice:i===0?(CFG.SLICE||0):0}))});
     if(!r.prog){ q[name]={tries:((q[name]?.tries)||0)+1,last:new Date().toISOString()}; fs.writeFileSync(QUEUE,JSON.stringify(q));
       say(`✗ ${name}: לא נמצא (${(r.tries/1e6).toFixed(1)} מיליון ניסיונות, ${((clock()-T0)/1000).toFixed(0)} שנ׳) ⇒ לרשימת «לנסות שוב», בפעם הבאה ${ms*2/1000} שנ׳`); rows.push({name,ok:false}); continue; }
     if(r.path){ const P=['^','^',...r.path]; for(let i=2;i<P.length;i++){ const k2=P[i-2]+'|'+P[i-1], k3=k2+'|'+P[i]; brain.ngram[k2]=(brain.ngram[k2]||0)+1; brain.ngram[k3]=(brain.ngram[k3]||0)+1; } }
@@ -307,6 +313,7 @@ export async function work({names=NEW_GOALS,baseMs=30000,minutes=2}={}){ const {
     const mov=movable(s2.prog,gen); const sh2=loadShelf(); const old=sh2.named.find(b=>b.name===name); const entry={name,prog:s2.prog,ins:g.ins||[],out:g.out??2,movable:mov,by:'הצורף · נבנה לבד'}; if(old){ delete old.bad; Object.assign(old,entry); } else sh2.named.push(entry); saveShelf(sh2);
     delete q[name]; fs.writeFileSync(QUEUE,JSON.stringify(q));
     const used=[...new Set(r.used||[])];
+    noteUsed(name,used);
     say(`✓ ${name}: נבנה ב-${buildSec} שנ׳ (${built} פקודות${used.length?', מחלקים: '+used.join(' + '):', מ-5 הפעולות'}) ⇒ קוצר ל-${s2.prog.length} ⇒ ${fc.n-fc.bad}/${fc.n} ⇒ במדף · ${mov?'ניידת':'מוברגת'}`);
     rows.push({name,ok:true,len:s2.prog.length,sec:+buildSec}); logTask({t:new Date().toISOString(),name,how:'work',from:built,to:s2.prog.length,tries:r.tries,ms:clock()-T0}); }
   saveBrain(); P.close(); return rows; }
