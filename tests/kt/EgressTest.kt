@@ -11,5 +11,6 @@ fun egressTests() {
         "egress: 'תקריאי' opens the loudspeaker and the car, never a stranger's speaker or a cast")
     ok(EgressCore.decide(Route.BT_OTHER, 2).hold!!.contains("נתק את רמקול בלוטות' זר"), "egress: the held sentence says how to hear it")
     ok(EgressCore.notifText(2, "הילד של משה מאושפז") == ("יש הודעה מליבה" to true) && EgressCore.notifText(0, "הדוח מוכן") == ("הדוח מוכן" to false), "egress: the lock screen shows only that there is a message")
+    ok(SrOffline.say(13, true).contains("זיהוי עברית מקומי") && SrOffline.say(2, false).startsWith("אין אינטרנט") && SrOffline.say(12, false).startsWith("אין אינטרנט"), "offline speech: the bubble says why it did not understand, and what to do")
     ok(EgressCore.urlClean("https://github.com/meir/x") && !EgressCore.urlClean("https://github.com/x?q=secret") && !EgressCore.urlClean("https://claude.ai/code#החוב"), "egress: a link with content in its address is not opened")
 }

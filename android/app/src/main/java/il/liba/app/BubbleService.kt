@@ -85,6 +85,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var sr: SpeechRecognizer? = null
     private var srOnDevice = false          // step 21: which recognizer `sr` currently is
     private var onDeviceFailed = false      // on-device model has no Hebrew → fall back
+    private var forceOnDevice = false       // the next listen goes to the on-device recognizer (a command lost to the network)
+    private fun netValidated(): Boolean = runCatching { val cm = getSystemService(ConnectivityManager::class.java); cm.getNetworkCapabilities(cm.activeNetwork)?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true }.getOrDefault(true)
     private var vad: VadGate? = null        // step 21: voice gate before the recognizer
     private var rate = 1.25f                 // step 23: speech rate, remembered
     private var night = false                // step 26: whisper mode – vibrate + text, no voice
@@ -786,7 +788,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!SpeechRecognizer.isRecognitionAvailable(this)) { Trace.e(Trace.Code.E_SR_NONE, mode); showLabel("אין זיהוי דיבור בטלפון (צריך את אפליקציית Google)", 5000); return }
         if (mode != "wake") tts?.stop()
         stopVad()
-        val wantOnDevice = mode == "wake" && !onDeviceFailed && Build.VERSION.SDK_INT >= 31 && runCatching { SpeechRecognizer.isOnDeviceRecognitionAvailable(this) }.getOrDefault(false)
+        // offline (airplane mode, no signal): the network recognizer can only answer "no internet", so a command goes to the on-device one
+        val offline = !netValidated()
+        val wantOnDevice = (mode == "wake" || offline || forceOnDevice) && !onDeviceFailed && Build.VERSION.SDK_INT >= 31 && runCatching { SpeechRecognizer.isOnDeviceRecognitionAvailable(this) }.getOrDefault(false)
+        forceOnDevice = false
         if (sr != null && srOnDevice != wantOnDevice) { try { sr?.destroy() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "swap:" + e.javaClass.simpleName) }; sr = null }
         if (sr == null) { sr = (if (wantOnDevice) SpeechRecognizer.createOnDeviceSpeechRecognizer(this) else SpeechRecognizer.createSpeechRecognizer(this)).also { it.setRecognitionListener(recListener) }; srOnDevice = wantOnDevice }
         val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
@@ -794,6 +799,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "he-IL"); putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, if (mode == "wake") 1200L else 1500L)
             if (mode == "wake") { putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, 4000L); putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2000L); putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true) }
+            else if (offline) putExtra(RecognizerIntent.EXTRA_PREFER_OFFLINE, true)
         }
         listening = true; listenMode = mode
         if (mode == "wake") { muteSystem(); setState(LibaState.WAKE); main.postDelayed({ if (listenMode == "wake") unmuteSystem() }, 6000) } else { unmuteSystem(); setState(LibaState.LISTENING); showLabel(if (mode == "follow") "…" else "מקשיב…", 15000) }
@@ -823,6 +829,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 main.postDelayed({ wakeLoop() }, if (speaking) 1500 else if (errStreak > 5) 5000 else 400); return }
             errStreak = 0
             if (listenMode == "follow" && (e == SpeechRecognizer.ERROR_NO_MATCH || e == SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) { idleOrWake(); return }
+            // a command that failed for want of a network: once more on the phone's own recognizer, if it has one
+            if (!srOnDevice && (e == SpeechRecognizer.ERROR_NETWORK || e == SpeechRecognizer.ERROR_NETWORK_TIMEOUT) && !onDeviceFailed && Build.VERSION.SDK_INT >= 31 && runCatching { SpeechRecognizer.isOnDeviceRecognitionAvailable(this@BubbleService) }.getOrDefault(false)) {
+                val m = listenMode; forceOnDevice = true; main.postDelayed({ startListening(m) }, 300); return }
+            if (srOnDevice && (e == 12 || e == 13 || e == SpeechRecognizer.ERROR_SERVER)) { onDeviceFailed = true; try { sr?.destroy() } catch (x: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "onDeviceDestroy:" + x.javaClass.simpleName) }; sr = null }
+            // no network and nothing on the phone that understands Hebrew: say it, a label for a second is not an answer
+            if (e == SpeechRecognizer.ERROR_NETWORK || e == SpeechRecognizer.ERROR_NETWORK_TIMEOUT || (srOnDevice && (e == 12 || e == 13)) || (!netValidated() && e != SpeechRecognizer.ERROR_NO_MATCH && e != SpeechRecognizer.ERROR_SPEECH_TIMEOUT)) {
+                showLabel("אין אינטרנט לזיהוי", 5000); speak(SrOffline.say(e, srOnDevice)); idleOrWake(); return }
             showLabel(when (e) { SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> "לא שמעתי כלום"; SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "אין הרשאת מיקרופון"; SpeechRecognizer.ERROR_NETWORK -> "אין אינטרנט לזיהוי"; else -> "שגיאת מיקרופון ($e)" }, 3000)
             idleOrWake() }
         override fun onResults(r: Bundle?) { heardAt = System.currentTimeMillis(); listening = false; errStreak = 0; if (listenMode == "wake") unmuteSystem()
