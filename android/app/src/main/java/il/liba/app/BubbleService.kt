@@ -886,7 +886,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         val n = t.replace("?", "").trim()
         val id = LibaIntents.match(t) // intent-kernel: the phrases live in liba/intents/registry.json, not here
         when {
-            id != null && id.startsWith("reflex.") -> { reflexSay(id, t); return } // reflex-core: the phone knows this itself
+            id == "reflex.time" || id == "reflex.date" || id == "reflex.battery" || id == "reflex.net" -> { reflexSay(id, t); return } // reflex-core: the phone knows this itself
             id == "app.repeat" && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
             id == "app.readPrivate" -> { readHeld(); return }
             id == "app.rollback" -> { rollbackSay(); return }
