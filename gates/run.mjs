@@ -52,6 +52,7 @@ let extra = [
   ['brain', 'node tests/brain.test.js'],
   ['roster', 'node tests/roster.test.js'],
   ['mirror', 'node tests/mirror.test.js'],
+  ['power', 'node tests/power.test.js'],
 ]
 { const all = gates.map(g => ['g', g]).concat(extra.map(e => ['e', e])).filter(inShard); gates = all.filter(x => x[0] === 'g').map(x => x[1]); extra = all.filter(x => x[0] === 'e').map(x => x[1]) }
 

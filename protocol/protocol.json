@@ -15,7 +15,8 @@
     "cal",
     "ctx",
     "holy",
-    "mirror"
+    "mirror",
+    "power"
   ],
   "toApp": {
     "ready": {
@@ -223,6 +224,12 @@
         "body": "str"
       },
       "why": "context-fusion: what the phone knows now - screen, lock, headset, call, when Meir woke - sent when it changes"
+    },
+    "power": {
+      "fields": {
+        "body": "str"
+      },
+      "why": "power-ledger: the day's energy - mAh and percent by subsystem, the projection for a whole day, the phone's own drain beside it - every five minutes"
     }
   },
   "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",

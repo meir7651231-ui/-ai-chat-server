@@ -1517,6 +1517,44 @@
    "exact": [],
    "help": "סיכום בוקר ב-08:00, סיכום ערב ב-19:00",
    "why": "needs a scheduled routine; creating one was refused (unauthorized persistence) - not promised until Meir sets it up"
+  },
+  {
+   "id": "power.today",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "כמה סוללה אכלת היום",
+    "כמה סוללה אכלת",
+    "כמה סוללה הלכה היום",
+    "כמה את עולה בסוללה"
+   ],
+   "handler": "powerToday",
+   "help": "\"כמה סוללה אכלת היום\""
+  },
+  {
+   "id": "power.where",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "על מה הלכה הסוללה",
+    "על מה הלך",
+    "על מה הלכה הסוללה היום"
+   ],
+   "handler": "powerWhere",
+   "help": "\"על מה הלכה הסוללה\""
+  },
+  {
+   "id": "power.budget",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "prefix": [
+    "תקציב סוללה"
+   ],
+   "handler": "powerBudget",
+   "help": "\"תקציב סוללה עשרה אחוז\""
   }
  ],
  "families": {

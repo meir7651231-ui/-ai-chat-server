@@ -38,6 +38,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   else if(d.liba===PROTO.toPage.sense&&db){senseIn(d.items);}
   else if(d.liba===PROTO.toPage.calSync&&db){calIn(d.snapshot);}
   else if(d.liba===PROTO.toPage.ctx){ctxIn(d.body);}
+  else if(d.liba===PROTO.toPage.power){powerIn(d.body);}
   else if(d.liba===PROTO.toPage.input&&d.text){ledgerBump('heard');if(pendingInput){const prev=pendingInput;pendingInput=null;clearTimeout(pendingT);send(prev);}let st=null;try{st=d.stamps?JSON.parse(String(d.stamps)):null;}catch(e){fail('P_MSG_BAD',e,'stamps');}
     pendingInput={text:String(d.text),source:String(d.source||'voice'),stamps:st};post(PROTO.toApp.tap,{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
 });

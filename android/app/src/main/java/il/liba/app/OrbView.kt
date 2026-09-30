@@ -131,6 +131,7 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
             start()
         }
     }
+    val animating get() = anim != null
     private fun stopAnim() { anim?.cancel(); anim = null; shown = 0f; target = 0f }
     override fun onDetachedFromWindow() { super.onDetachedFromWindow(); stopAnim() }
     override fun onAttachedToWindow() { super.onAttachedToWindow(); startAnim() }

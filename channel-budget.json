@@ -205,6 +205,12 @@
       "ttlDays": 30,
       "cls": "state",
       "time": "lastBeat"
+    },
+    "memory/power/days": {
+      "cap": 40,
+      "ttlDays": 45,
+      "cls": "record",
+      "time": "closedAt"
     }
   }
 }

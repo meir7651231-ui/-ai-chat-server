@@ -51,6 +51,8 @@ fun main(args: Array<String>) {
     signedTests(args[3])
     updateTests(args[4])
     localBrainTests()
+    powerTests()
+    governorTests()
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
     if (fails > 0) System.exit(1)
 }

@@ -383,6 +383,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!pageReady && SystemClock.elapsedRealtime() - pageLoadedAt > 90000) { Trace.e(Trace.Code.E_PAGE_LOAD, "timeout"); reloadPage("אין תגובה מהדף") }
         if (pageReady) web?.let { LibaWeb.hello(it); drainTrace(); pulse(it) }
         else if (pageDeadSince == 0L) pageDeadSince = System.currentTimeMillis()
+        powerSync()
         UrgentPoller.maybe(this@BubbleService, main, pageDeadSince, pageAliveAt) { speak("הודעה דחופה, בלי הדף: " + it.text, true) }
         if (SystemClock.elapsedRealtime() - loginCheckedAt > 10 * 60_000L) { loginCheckedAt = SystemClock.elapsedRealtime(); loginCheck() }
         main.postDelayed(this, 30000)
@@ -431,7 +432,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             return
         }
         showLabel("מורידה עדכון…", 20000)
-        Thread {
+        Thread { il.liba.app.power.PowerLedger.pulse(this, "net.update", 60_000L)
             var fail = "net" // which stage threw, so the single catch below can name the right code
             try {
                 val dir = java.io.File(cacheDir, "apk").apply { mkdirs() }; val f = java.io.File(dir, "liba.apk")
@@ -487,7 +488,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private var updateFailSpoken = false
     private fun checkUpdate(onDone: (() -> Unit)? = null) {
         if (shabbat) { onDone?.invoke(); return }
-        Thread {
+        Thread { il.liba.app.power.PowerLedger.pulse(this, "net.update", 60_000L)
             var http = 0
             try {
                 val c = URL(getString(R.string.update_json)).openConnection() as HttpURLConnection
@@ -525,7 +526,18 @@ class BubbleService : Service(), LibaWeb.Bridge {
     // page. A move the table does not allow is recorded as a fault and still applied - never break the bubble.
     private var appState = LibaState.INITIAL
     private var pageState = ""
+    // power-ledger: which subsystems are on right now - called on every state change and by the watchdog
+    private var powerSentAt = 0L
+    private fun powerSync() { runCatching {
+        val on = HashSet<String>()
+        if (vad != null) on.add("mic.vad"); if (listening) on.add(if (srOnDevice) "asr.ondevice" else "asr.cloud"); if (speaking) on.add("tts")
+        if (dot?.animating == true) on.add("ui.shader"); if (web != null) on.add(if (pageReady) "web.idle" else "web.load")
+        il.liba.app.power.PowerLedger.sync(this, on)
+        val now = SystemClock.elapsedRealtime()
+        if (pageReady && now - powerSentAt > 5 * 60_000L) { powerSentAt = now; val j = il.liba.app.power.PowerLedger.report(this); web?.let { LibaWeb.sendPower(it, j) } }
+    }.onFailure { Trace.e(Trace.Code.E_PREFS, "power:" + it.javaClass.simpleName) } }
     private fun setState(s: LibaState) {
+        powerSync()
         if (!LibaState.canMove(appState, s)) Trace.e(Trace.Code.E_STATE_ILLEGAL, appState.name + ">" + s.name)
         appState = s
         web?.evaluateJavascript("window.__libaState='" + s.name + "'", null)
