@@ -35,8 +35,8 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   await p.waitForTimeout(1500); c = await calls();
   const say = c.find(x => x.m === 'say' && /גשר-בדיקה/.test(x.a[0]));
   check(!!say, 'inbox message → LibaBridge.say()');
-  check(say && say.a.length === 6 && typeof say.a[2] === 'string' && JSON.parse(say.a[2]).join() === 'כן,לא' && say.a[1] === 'ask' && say.a[4].length > 0 && say.a[5] === 'b1',
-    'say arrives with 6 args, options as a JSON string, kind and id intact, and mid = the inbox id: ' + JSON.stringify(say && say.a.slice(1)));
+  check(say && say.a.length === 8 && typeof say.a[2] === 'string' && JSON.parse(say.a[2]).join() === 'כן,לא' && say.a[1] === 'ask' && say.a[4].length > 0 && say.a[5] === 'b1' && typeof say.a[6] === 'number' && say.a[7] === 0,
+    'say arrives with 8 args, options as a JSON string, kind and id intact, mid = the inbox id, then sens and force (kotlin-egress): ' + JSON.stringify(say && say.a.slice(1)));
   // 3. app → page: the generated sender for 'spoke' releases the page, which then acks the message
   await p.evaluate(id => window.__libaSpoke(id), say && say.a[4]); await p.waitForTimeout(1200);
   check((await fr.evaluate(() => window.__h.get('inbox/b1')) || {}).spoken === true, 'window.__libaSpoke (generated) → page acks the message');

@@ -1,5 +1,5 @@
 {
- "pageHash": "fbbf8dc1179d",
+ "pageHash": "ed6b7ee858ab",
  "anchors": {
   "intents": {
    "src": "liba/src/00-intents.js",
@@ -1374,76 +1374,76 @@
    "line": 2121
   },
   "class.clsThird": {
-   "src": "liba/src/34-class.js:41",
-   "line": 2159
+   "src": "liba/src/34-class.js:42",
+   "line": 2160
   },
   "class.redact": {
-   "src": "liba/src/34-class.js:43",
-   "line": 2161
+   "src": "liba/src/34-class.js:44",
+   "line": 2162
   },
   "class.classify": {
-   "src": "liba/src/34-class.js:46",
-   "line": 2164
+   "src": "liba/src/34-class.js:47",
+   "line": 2165
   },
   "class.egressDecide": {
-   "src": "liba/src/34-class.js:63",
-   "line": 2181
+   "src": "liba/src/34-class.js:64",
+   "line": 2182
   },
   "class.egress": {
-   "src": "liba/src/34-class.js:73",
-   "line": 2191
+   "src": "liba/src/34-class.js:74",
+   "line": 2192
   },
   "class.dbText": {
-   "src": "liba/src/34-class.js:76",
-   "line": 2194
+   "src": "liba/src/34-class.js:77",
+   "line": 2195
   },
   "class.openSafe": {
-   "src": "liba/src/34-class.js:78",
-   "line": 2196
+   "src": "liba/src/34-class.js:79",
+   "line": 2197
   },
   "class.relayNote": {
-   "src": "liba/src/34-class.js:80",
-   "line": 2198
+   "src": "liba/src/34-class.js:81",
+   "line": 2199
   },
   "class.sendAsSaid": {
-   "src": "liba/src/34-class.js:83",
-   "line": 2201
+   "src": "liba/src/34-class.js:84",
+   "line": 2202
   },
   "retain": {
    "src": "liba/src/35-retain.js",
-   "line": 2205
+   "line": 2206
   },
   "retain.retainClass": {
    "src": "liba/src/35-retain.js:14",
-   "line": 2216
+   "line": 2217
   },
   "retain.retainDays": {
    "src": "liba/src/35-retain.js:15",
-   "line": 2217
+   "line": 2218
   },
   "retain.retainSweep": {
    "src": "liba/src/35-retain.js:16",
-   "line": 2218
+   "line": 2219
   },
   "retain.retainRestore": {
    "src": "liba/src/35-retain.js:21",
-   "line": 2223
+   "line": 2224
   },
   "retain.retainUndo": {
    "src": "liba/src/35-retain.js:25",
-   "line": 2227
+   "line": 2228
   },
   "retain.exportGather": {
    "src": "liba/src/35-retain.js:28",
-   "line": 2230
+   "line": 2231
   },
   "retain.exportSeal": {
    "src": "liba/src/35-retain.js:35",
-   "line": 2237
+   "line": 2238
   },
   "retain.exportAll": {
    "src": "liba/src/35-retain.js:40",
-   "line": 2242
+   "line": 2243
   }
  }
 }
