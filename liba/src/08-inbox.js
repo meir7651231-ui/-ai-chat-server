@@ -72,7 +72,12 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
     spokenMark(d.id);Ledger.record({action:'say',cause:'inbox:'+d.id,inputs:{from:d.from||'',kind:d.kind||'say'},decision:d.admit||null,result:sayOutcome});try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now()}});}catch(e){fail('P_ACK',e,'inbox');log('ack: '+(e.code||e));}}}
   finally{pumping=false;if(inboxQ.length){clearTimeout(pumpTimer);const now=Date.now(),soon=inboxQ.filter(x=>x.retryAt>now).map(x=>x.retryAt).sort((a,b)=>a-b)[0];
     pumpTimer=setTimeout(pump,soon?Math.max(500,soon-now+50):60000);if(!soon)log(inboxQ.length+' הודעות מחכות (שקט/בוקר)');}}}
-const INBOX_CLAIM=90000,INBOX_RETRY=15000,INBOX_TRIES=3;
+const INBOX_CLAIM=90000,INBOX_RETRY=15000,INBOX_TRIES=3,INBOX_RETRY_LOST=8000;
+/* the phone said "spoke" after the page had already given up on it (no beat for six seconds on a loaded phone): the
+   message was delivered after all - close it and cancel the retry, instead of saying it a second time (found by the
+   chaos test under load: 1 in 200) */
+function lateSpoke(mid){if(!mid||spokenDone(mid))return;spokenMark(mid);spokenLocal.add(mid);for(let i=inboxQ.length-1;i>=0;i--)if(inboxQ[i].id===mid)inboxQ.splice(i,1);
+  Ledger.record({action:'say',cause:'inbox:'+mid,result:'late'});if(db)P.inboxDoc(mid).update({spoken:true,spokenAt:Date.now(),delivery:{state:'spoken',by:PAGE_ID,at:Date.now(),late:true}}).catch(e=>fail('P_ACK',e,'late'));}
 /* freshness-ttl: a message may say how long it means anything (validUntil) and what happens after: drop it, say it
    with its age (the default), or restate - read its source again (restate:'tasks/<id>') and say what is true now.
    restate has a hard 1.5 s ceiling and falls back to age, so a slow read never holds a message back. */
@@ -104,7 +109,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;Ledger.record(
   if(attempts>=INBOX_TRIES){spokenMark(d.id);try{await P.inboxDoc(d.id).update({failed:true,failedAt:Date.now(),delivery:{state:'failed',by:PAGE_ID,at:Date.now(),attempts:attempts,lastError:why}});}catch(e){fail('P_ACK',e,'failed');}
     queueLocal({id:'failed-'+d.id,kind:'say',speaker:'ליבה',topic:'הודעה',text:'יש הודעה שלא הצלחתי להקריא שלוש פעמים'+(d.topic?', בנוגע ל'+d.topic:'')+'. היא נשארת בערוץ.'});return;}
   try{await P.inboxDoc(d.id).update({delivery:{state:'pending',by:PAGE_ID,at:Date.now(),attempts:attempts,lastError:why}});}catch(e){fail('P_ACK',e,'retry');}
-  d.attempts=attempts;d.delivery={attempts:attempts};d.retryAt=Date.now()+2000;d.retryWhy='retry';inboxQ.push(d);}
+  d.attempts=attempts;d.delivery={attempts:attempts};d.retryAt=Date.now()+INBOX_RETRY_LOST;d.retryWhy='retry';inboxQ.push(d);}
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */

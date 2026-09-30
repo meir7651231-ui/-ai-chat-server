@@ -77,7 +77,8 @@ const ROUNDS = +process.env.CHAOS || 60;
   const lost = inbox.filter(x => !x.v.spoken && !x.v.expired).map(x => x.k);
   const doubles = Object.entries(completed).filter(([t, c]) => /הודעת-כאוס/.test(t) && c > 1).map(([t, c]) => t.slice(-20) + '×' + c);
   const accepted = sentInputs.filter(t => reqs.some(r => r.text === t));
-  const count = t => claude.filter(c => c.includes(t + ' ⟦')).length;
+  /* the sentence right after the tag, then its memory/envelope or its mark - not a prefix of a longer one */
+  const count = t => claude.filter(c => { const i = c.indexOf('] ' + t); if (i < 0) return false; const after = c.charAt(i + 2 + t.length); return after === '\n' || after === ' '; }).length;
   const dupSends = accepted.filter(t => count(t) > 1).map(t => t + '×' + count(t));
   const undelivered = accepted.filter(t => count(t) === 0);
   let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++ };

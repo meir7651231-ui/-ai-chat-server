@@ -27,7 +27,7 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
   await p.goto('http://liba.test/host.html');
   const frame = who => p.frames().find(f => f.name() === who);
   // the phone of each instance remembers what it finished speaking (by message id) and says so in hello - like the bubble
-  let phoneReady = false; const spokeBy = {};
+  let phoneReady = false; const spokeBy = {}, trail = {}; let t0 = Date.now();
   const load = { a: 0, b: 0 }, completed = {}, phoneDone = { a: [], b: [] }, inflight = { a: 0, b: 0 };
   /* the phone keeps answering while a dead instance comes back - a real bubble never stops beating because the other
      device reloaded; before, a slow reload starved the live instance of 'spoke' past its six-second beat limit, it
@@ -37,23 +37,28 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
         await p.waitForTimeout(120); if (await f.evaluate(() => window.__kernel.state() !== 'OFFLINE')) return; } } catch {} } throw new Error('instance ' + who + ' never took hello'); };
   await hello('a'); await hello('b');
   // the phone: every say is spoken for 100-600 ms and reported, unless that instance died first
+  const cur = { a: null, b: null };
   const answer = async ms => { const end = Date.now() + ms;
     while (Date.now() < end) { const m = await p.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; });
       for (const x of m) if (x.liba === 'say' && x.id && (x.src === 'a' || x.src === 'b')) { const who = x.src, my = load[who], id = x.id, t = x.text || '', mid = x.mid || '';
         /* the real bubble says "still speaking" every two seconds; without it a slow CI runner hit the page's six-second
            limit, the page retried (correctly) and the late answer counted the message twice */
+        /* like the real bubble: one voice - a new say stops the one still playing (it reports 'stop', never 'done'), and a
+           message id it already finished is not said again, only reported */
+        const was = cur[who]; if (was) { clearInterval(was.beat); clearTimeout(was.timer); cur[who] = null; p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id, cause: 'stop' }), [who, was.id]).catch(() => {}); }
+        if (mid && phoneDone[who].indexOf(mid) >= 0) { p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id, cause: 'done' }), [who, id]).catch(() => {}); continue; }
         const beat = setInterval(() => { if (my !== load[who]) { clearInterval(beat); return; } p.evaluate(([w, id]) => window.app(w, { liba: 'speaking', id }), [who, id]).catch(() => {}); }, 1000);
-        setTimeout(async () => { clearInterval(beat); if (my !== load[who]) return; inflight[who]++; if (mid) phoneDone[who].push(mid); try { await p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id }), [who, id]); const k = (/חדש-(\d+)/.exec(t) || [])[1]; if (k) { completed[k] = (completed[k] || 0) + 1; spokeBy[who] = (spokeBy[who] || 0) + 1; } } catch {} finally { inflight[who]-- } }, 100 + Math.random() * 500); }
+        const me = { id, beat }; cur[who] = me; me.timer = setTimeout(async () => { clearInterval(beat); if (cur[who] === me) cur[who] = null; if (my !== load[who]) return; inflight[who]++; if (mid) phoneDone[who].push(mid); try { await p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id }), [who, id]); const k = (/חדש-(\d+)/.exec(t) || [])[1]; if (k) { completed[k] = (completed[k] || 0) + 1; spokeBy[who] = (spokeBy[who] || 0) + 1; (trail[k] = trail[k] || []).push(who + '@' + my + ' ' + id + ' +' + (Date.now() - t0) + 'ms'); } } catch {} finally { inflight[who]-- } }, 100 + Math.random() * 500); }
       await p.waitForTimeout(80); } };
   // writes go through a live frame's stub so subscriptions fire
   const write = async i => { for (const who of ['a', 'b']) { try { await frame(who).evaluate(i => window.__h.set('inbox/n' + i, { from: 'liba', kind: 'say', speaker: 'ליבה', text: 'חדש-' + i, spoken: false, ts: Date.now() }), i); return; } catch {} } };
   phoneReady = true;
   const killAt = new Set(); while (killAt.size < KILLS) killAt.add(Math.floor(Math.random() * N));
-  const t0 = Date.now(); let kills = 0;
+  t0 = Date.now(); let kills = 0; const killLog = [];
   for (let i = 0; i < N; i++) {
     await write(i);
     await answer(120 + Math.random() * 300);
-    if (killAt.has(i)) { const who = Math.random() < 0.5 ? 'a' : 'b'; while (inflight[who] > 0) await p.waitForTimeout(20); load[who]++; kills++; await p.evaluate(w => window.kill(w), who); await hello(who); }
+    if (killAt.has(i)) { const who = Math.random() < 0.5 ? 'a' : 'b'; while (inflight[who] > 0) await p.waitForTimeout(20); load[who]++; kills++; killLog.push(who + '→' + load[who] + ' +' + (Date.now() - t0) + 'ms'); await p.evaluate(w => window.kill(w), who); await hello(who); }
   }
   // drain: no more deaths - wait until every message is acked (or 5 minutes)
   for (let i = 0; i < 150; i++) { await answer(2000); const left = await frame('a').evaluate(() => [...window.__h.docs.entries()].filter(([k, v]) => /^inbox\/n\d+$/.test(k) && !v.spoken && !v.failed).length); if (!left) break; }
@@ -66,6 +71,7 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
   ok(lost.length === 0, 'no message lost - every one acked spoken: ' + lost.slice(0, 8).join(','));
   ok(never.length === 0, 'every message was spoken to the end at least once: ' + never.slice(0, 8).join(','));
   ok(twice.length === 0, 'no message spoken to the end twice: ' + twice.slice(0, 8).join(','));
+  if (twice.length) for (const t of twice.slice(0, 3)) { const k = t.split('×')[0]; const d = docs.find(x => x.k === 'inbox/n' + k); console.log('  trail n' + k + ': ' + (trail[k] || []).join(' | ') + ' · kills near: ' + killLog.join(' ').slice(0, 400)); const full = await frame('a').evaluate(k => JSON.stringify(window.__h.docs.get('inbox/n' + k)), k); console.log('  doc: ' + String(full).slice(0, 400)); }
   /* who really spoke them, counted at the phone - the final delivery.by is only the last writer, and a hello from the other
      device can overwrite it, so it said 1 when both had worked */
   ok(spokeBy.a > 0 && spokeBy.b > 0, 'both instances spoke messages (the work was really shared): a ' + (spokeBy.a || 0) + ', b ' + (spokeBy.b || 0));

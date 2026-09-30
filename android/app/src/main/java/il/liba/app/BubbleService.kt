@@ -961,6 +961,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         showLabel("לא נשלח" + (if (reason.isNotBlank()) " · $reason" else ""), 8000); speak("לא הצלחתי לשלוח. $why") } }
     override fun onSay(text: String, kind: String, options: List<String>, speaker: String, id: String, mid: String) { main.post {
         releaseSay("stop") // a new utterance arrived before the old one reported: release the page
+        // a message this phone already said to the end (the page gave up waiting and tried again): report it, never say it twice
+        if (mid.isNotBlank() && id.isNotBlank() && Prefs.spokenMids(this).contains(mid)) { web?.let { w -> val t = System.currentTimeMillis(); LibaWeb.sendSpoke(w, id, t, t, "done") }; return@post }
         sayId = id.ifBlank { null }; sayMid = mid
         main.removeCallbacks(speakingBeat); if (sayId != null) main.postDelayed(speakingBeat, 2000)
         sentAt = 0; status = "מחובר."; waitTimer?.let { main.removeCallbacks(it) }

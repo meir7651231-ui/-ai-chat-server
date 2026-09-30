@@ -282,6 +282,66 @@
    "help": "\"מה את רשאית לעשות\""
   },
   {
+   "id": "initiative.today",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "מה עשית לבד היום",
+    "מה עשית היום לבד",
+    "מה הצעת היום"
+   ],
+   "handler": "agendaToday",
+   "help": "\"מה עשית לבד היום\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "brain.where",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "איפה עצרנו",
+    "איפה עצרנו אתמול",
+    "מאיפה ממשיכים"
+   ],
+   "handler": "brainWhere",
+   "help": "\"איפה עצרנו\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "brain.who",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "מי המוח",
+    "מי המוח עכשיו",
+    "איזה מוח מדבר איתי"
+   ],
+   "handler": "brainWho",
+   "help": "\"מי המוח\""
+  },
+  {
+   "id": "brain.open",
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "מה פתוח עכשיו",
+    "מה פתוח"
+   ],
+   "handler": "brainOpen",
+   "help": "\"מה פתוח עכשיו\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
    "id": "sense.add",
    "where": "page",
    "when": "liba",

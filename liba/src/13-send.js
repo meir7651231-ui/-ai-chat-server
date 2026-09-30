@@ -102,6 +102,7 @@ async function send(text,forcedTag,source){
   try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
   try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',to:owner,text,re:id,req:reqId,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   let ctx='';try{if(!noIntent)ctx=await brief(text);}catch(e){fail('P_DB_READ',e,'brief');}
+  try{const w=await buildWake(text,reqId);if(w)ctx+='\n---\n'+w;}catch(e){fail('P_DB_READ',e,'wake');} /* wake-envelope */
   if(ctx)try{P.req(reqId).update({brief:ctx.trim().slice(0,40)}).catch(()=>{});}catch(e){}
   walPut({req:reqId,text:text+ctx+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
   const r=await deliverWithRetry(text+ctx+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;

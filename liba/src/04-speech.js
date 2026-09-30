@@ -19,7 +19,8 @@ function appSpeaksBack(){const h=hasCap('spoke');return h!==null?h:verAtLeast(3,
    inbox-lease: it resolves with how the speech ended - done/guard from the phone, lost (no beat), ceiling, or sent
    (an app that never reports) - and the last outcome is kept for the mailbox to decide delivered or not. */
 let sayOutcome='done';
-function sayApp(text,extra,re){return new Promise(res=>{const id='s'+(++sayTok);if(re)sayReq.set(id,String(re));const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);sayOutcome='sent';res('sent');return;}let done=false;const fin=c=>{if(done)return;done=true;sayOutcome=c||'done';sayWait.delete(id);beatWait.delete(id);res(sayOutcome);};sayWait.set(id,fin);post(PROTO.toApp.say,p);
+const sayMid=new Map(); /* say id → inbox id, so a report that comes late still closes its message */
+function sayApp(text,extra,re){return new Promise(res=>{const id='s'+(++sayTok);if(re)sayReq.set(id,String(re));if(extra&&extra.mid){sayMid.set(id,String(extra.mid));if(sayMid.size>200)sayMid.delete(sayMid.keys().next().value);}const p=Object.assign({},extra||{},{text:text,id:id});if(!appSpeaksBack()){post(PROTO.toApp.say,p);sayOutcome='sent';res('sent');return;}let done=false;const fin=c=>{if(done)return;done=true;sayOutcome=c||'done';sayWait.delete(id);beatWait.delete(id);res(sayOutcome);};sayWait.set(id,fin);post(PROTO.toApp.say,p);
   /* with beats the length guess is gone - the beat IS the measurement; 120 s stays only as a ceiling */
   setTimeout(()=>fin('ceiling'),appBeats()?120000:Math.min(120000,6000+text.length*160));
   if(appBeats()){let w=setTimeout(lost,BEAT_LOST);function lost(){if(done)return;fail('P_SPEAK_LOST',null,'no beat '+BEAT_LOST);fin('lost');}
