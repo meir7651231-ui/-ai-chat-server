@@ -26,7 +26,9 @@ const C = [
   ['הכתובת היא רחוב הרב קוק 12', 2, 'personal'], ['מספר הזהות שלי 123456782', 3, 'personal'], ['תעביר לחשבון 12-345-678901 אלף שקל', 3, 'personal'],
   ['הסיסמה של הבנק היא שמש', 3, 'personal'], ['מספר הכרטיס 4580 1234 5678 9014', 3, 'personal'], ['הת"ז של הבחור 000000018', 3, 'institution'],
   ['קוד הכניסה למשרד הוא ארבע שבע', 3, 'institution'], ['ה-IBAN של העמותה IL62 0108 0000 0009 9999 999', 3, 'institution'], ['חשבון בנק 987654 בסניף שמונה', 3, 'personal'],
-  ['שלוש הספרות בגב הכרטיס הן 123', 3, 'personal']];
+  ['שלוש הספרות בגב הכרטיס הן 123', 3, 'personal'],
+  // from the phone test: a word inside a word is not the word, and "שהייתי" is not a name
+  ["הטלפון חשב שמחובר רמקול בלוטות' זר", 0, 'personal'], ['תודה, זה בדיוק מה שהייתי צריכה', 0, 'personal'], ['החוב של משה עוד לא שולם', 2, 'personal']];
 const got = C.map(([t]) => classify(t));
 const right = C.filter((c, i) => got[i].sens === c[1]).length, under = C.filter((c, i) => c[1] >= 2 && got[i].sens < c[1]);
 ok(right / C.length >= 0.95, `classification: sensitivity right on ${right} of ${C.length}` + (right / C.length < 0.95 ? '\n  ' + C.map((c, i) => got[i].sens !== c[1] ? c[0] + ' → ' + got[i].sens + ' (צפוי ' + c[1] + ')' : '').filter(Boolean).join('\n  ') : ''));
