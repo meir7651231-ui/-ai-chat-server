@@ -869,10 +869,24 @@ class BubbleService : Service(), LibaWeb.Bridge {
     fun sendShared(msg: String) { main.post { lastShared = msg; showLabel("שיתוף → ליבה", 3000); tone("heard"); if (pageReady) { Prefs.log(this, "me", msg); sentAt = SystemClock.elapsedRealtime(); setState(LibaState.SENDING); web?.let { LibaWeb.sendInput(it, msg, "share") } } else Prefs.setPendingShare(this, msg) } }
     private var lastShared = ""
     // ---------- local commands, then send ----------
+    /** reflex-core: answered here in milliseconds; the page gets the question and the answer for the turn log when it is up */
+    private fun reflexSay(id: String, q: String) {
+        val bm = getSystemService(android.os.BatteryManager::class.java)
+        val pct = runCatching { bm.getIntProperty(android.os.BatteryManager.BATTERY_PROPERTY_CAPACITY) }.getOrDefault(-1).let { if (it in 0..100) it else -1 }
+        val charging = runCatching { bm.isCharging }.getOrDefault(false)
+        val caps = runCatching { val cm = getSystemService(ConnectivityManager::class.java); cm.getNetworkCapabilities(cm.activeNetwork) }.getOrNull()
+        val validated = caps?.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED) == true
+        val wifi = caps?.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI) == true
+        val cell = caps?.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR) == true
+        val a = Reflex.answer(id, System.currentTimeMillis(), pct, charging, validated, wifi, cell) ?: return
+        speak(a)
+        if (pageReady) web?.let { LibaWeb.sendReflex(it, q, a, id) }
+    }
     private fun handleUtterance(t: String) {
         val n = t.replace("?", "").trim()
         val id = LibaIntents.match(t) // intent-kernel: the phrases live in liba/intents/registry.json, not here
         when {
+            id != null && id.startsWith("reflex.") -> { reflexSay(id, t); return } // reflex-core: the phone knows this itself
             id == "app.repeat" && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
             id == "app.readPrivate" -> { readHeld(); return }
             id == "app.rollback" -> { rollbackSay(); return }

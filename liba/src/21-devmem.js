@@ -32,3 +32,9 @@ async function conflictsWeekly(now){now=now||Date.now();if(!db)return false;let 
   try{localStorage.setItem(LSK('conflictsSaid'),String(now));}catch(e){}if(!rs.length)return false;
   sayLocal('השבוע '+(rs.length===1?'הייתה סתירה אחת':'היו '+rs.length+' סתירות')+' בין הטלפון לדף: '+rs.slice(0,3).map(r=>'שמרתי "'+String(r.kept).slice(0,30)+'" ולא "'+String(r.lost).slice(0,30)+'"').join('; ')+'.');return true;}
 window.__devmem={snapshot:devMemSnapshot,in:devMemIn,send:devMemSend,weekly:conflictsWeekly};
+
+/* reflex-core: the bubble answered a question itself (time, date, battery, network). Both sides go to the turn log with
+   by:'reflex', so "על מה דיברנו" and the weekly count see them - the words through the same door as every other turn */
+function reflexIn(d){if(!db||!memSettings.logTurns)return;const q=String(d.q||'').slice(0,200),a=String(d.a||'').slice(0,300),k=String(d.kind||'');if(!q||!a)return;const t=Date.now();
+  try{P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',text:dbText(q),cls:classify(q),by:'reflex',kind:k,ts:t}).catch(e=>fail('P_DB_WRITE',e,'reflex'));
+    P.turns().doc(mintId()).set({from:'liba',speaker:'ליבה',kind:'say',text:dbText(a),cls:classify(a),by:'reflex',ts:t+1}).catch(e=>fail('P_DB_WRITE',e,'reflex'));}catch(e){fail('P_DB_WRITE',e,'reflex');}}

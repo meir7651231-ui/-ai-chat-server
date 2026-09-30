@@ -238,6 +238,14 @@
         "body": "str"
       },
       "why": "power-ledger: the day's energy - mAh and percent by subsystem, the projection for a whole day, the phone's own drain beside it - every five minutes"
+    },
+    "reflex": {
+      "fields": {
+        "q": "str",
+        "a": "str",
+        "kind": "str"
+      },
+      "why": "reflex-core: a question the bubble answered itself (time, date, battery, network) - the page writes it to the turn log"
     }
   },
   "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",

@@ -144,6 +144,7 @@ object LibaWeb {
     fun sendCal(web: WebView, snapshot: String) { web.evaluateJavascript("window.__libaCalSync && window.__libaCalSync(${JSONObject.quote(snapshot)})", null) }
     fun sendPower(web: WebView, body: String) { web.evaluateJavascript("window.__libaPower && window.__libaPower(${JSONObject.quote(body)})", null) }
     fun sendCtx(web: WebView, body: String) { web.evaluateJavascript("window.__libaCtx && window.__libaCtx(${JSONObject.quote(body)})", null) }
+    fun sendReflex(web: WebView, q: String, a: String, kind: String) { web.evaluateJavascript("window.__libaReflex && window.__libaReflex(${JSONObject.quote(q)},${JSONObject.quote(a)},${JSONObject.quote(kind)})", null) }
     fun sendMemAsk(web: WebView, items: String) { web.evaluateJavascript("window.__libaMemAsk && window.__libaMemAsk(${JSONObject.quote(items)})", null) }
     fun sendSpeaking(web: WebView, id: String) { web.evaluateJavascript("window.__libaSpeaking && window.__libaSpeaking(${JSONObject.quote(id)})", null) }
     /** step clock: when the phone really started and stopped saying it, and why it stopped (done/error/guard/stop). */

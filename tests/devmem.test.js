@@ -49,6 +49,11 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const wk = await f.evaluate(async () => { localStorage.removeItem('liba.conflictsSaid'); const a = await window.__devmem.weekly(); const b = await window.__devmem.weekly(); return [a, b]; });
   m = await take(p, 800);
   ok(wk[0] === true && wk[1] === false && m.some(x => x.liba === 'say' && /סתירות בין הטלפון לדף/.test(x.text)), 'the conflicts are said once a week: ' + ((m.find(x => x.liba === 'say' && /סתירות/.test(x.text)) || {}).text || '').slice(0, 120));
+  // reflex-core: the bubble answered "מה השעה" itself - both sides land in the turn log, marked by:'reflex'
+  await p.evaluate(() => window.app({ liba: 'reflex', q: 'מה השעה', a: 'השעה 16:05.', kind: 'reflex.time' }));
+  await take(p, 600);
+  const rt = await f.evaluate(() => window.__h.all('chat/log/turns').filter(x => x.by === 'reflex'));
+  ok(rt.length === 2 && rt.some(x => x.from === 'user' && x.text === 'מה השעה') && rt.some(x => x.from === 'liba' && x.text === 'השעה 16:05.'), 'reflex: question and answer are in the turn log: ' + rt.length);
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   // a bubble without 'mem'
   const o = await open(['spoke', 'pulse']);

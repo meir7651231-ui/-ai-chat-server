@@ -3,7 +3,7 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "e95eaa01bb3d"
+    const val HASH = "40855fafdfa9"
     val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense", "cal", "ctx", "holy", "mirror", "power")
 
     /** page -> app */
@@ -43,6 +43,7 @@ object Protocol {
         const val CAL_SYNC = "calSync"
         const val CTX = "ctx"
         const val POWER = "power"
+        const val REFLEX = "reflex"
     }
 
     /** Relay for the top frame's message listener: page -> LibaBridge. */
@@ -71,7 +72,7 @@ object Protocol {
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"e95eaa01bb3d",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy","mirror","power"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"40855fafdfa9",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy","mirror","power"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
@@ -83,6 +84,7 @@ object Protocol {
   window.__libaCalSync=function(snapshot){window.__libaSend("calSync",{snapshot:snapshot});};
   window.__libaCtx=function(body){window.__libaSend("ctx",{body:body});};
   window.__libaPower=function(body){window.__libaSend("power",{body:body});};
+  window.__libaReflex=function(q,a,kind){window.__libaSend("reflex",{q:q,a:a,kind:kind});};
 """
 }
 
