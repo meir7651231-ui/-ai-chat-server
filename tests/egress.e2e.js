@@ -63,6 +63,8 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   await grab(2500);
   let d = await f.evaluate(() => window.__h.get('inbox/pv1'));
   ok(d && !d.spoken && d.delivery && d.delivery.state === 'held' && !says.slice(1).some(x => /מאושפז/.test(x.text || '')), 'held by the phone: pending, delivery=held, not said again');
+  const inLog = await f.evaluate(() => window.__h.all('chat/log/turns').some(t => /מאושפז/.test(t.text || '')));
+  ok(!inLog, 'a held message is not in the conversation log (so not in the envelope to Claude) - it was not said');
   if (pv) await p.evaluate(id => window.app({ liba: 'spoke', id, cause: 'done' }), pv.id);
   await p.waitForTimeout(800); d = await f.evaluate(() => window.__h.get('inbox/pv1'));
   ok(d && d.spoken && d.delivery && d.delivery.late, 'said on the phone later ("תקריאי"): closed by the late spoke');
