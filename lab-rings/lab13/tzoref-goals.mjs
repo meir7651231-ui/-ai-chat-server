@@ -65,6 +65,7 @@ export function goals(){ const G={}; for(const [n,g] of Object.entries(learnedGo
     'הגבל לתחום':{gen:cell(m=>Math.min(Math.max(m[0],m[1]),m[3])),ins:[0,1,3],out:2}, 'חיסור רווי':{gen:cell(m=>m[0]>m[1]?m[0]-m[1]:0),ins:[0,1],out:2},
     'מרחק מ-8':{gen:cell(m=>Math.abs(m[0]-8)),ins:[0],out:2}, 'סכום רווי':{gen:cell(m=>Math.min(m[0]+m[1],15)),ins:[0,1],out:2},
     'הגדול כפול 2':{gen:cell(m=>(Math.max(m[0],m[1])*2)&15),ins:[0,1],out:2}, 'שלושה שווים?':{gen:cell(m=>m[0]===m[1]&&m[1]===m[3]?15:0,m=>{ if(R(2)){ m[1]=m[0]; if(R(2)) m[3]=m[0]; } }),ins:[0,1,3],out:2},
+    'כפל':{gen:cell(m=>(m[0]*m[1])&15),ins:[0,1],out:2}, 'חזקת 2 (תא0 בריבוע)':{gen:cell(m=>(m[0]*m[0])&15),ins:[0],out:2},
     'בחר לפי זוגי':{gen:cell(m=>(m[0]&1)?m[3]:m[1]),ins:[0,1,3],out:2},
     'ועוד 3':{gen:cell(m=>(m[0]+3)&15),ins:[0],out:2}, 'סכום שלושה':{gen:cell(m=>(m[0]+m[1]+m[3])&15),ins:[0,1,3],out:2},
     'השני ברשימה':{gen:list(8,l=>l[1]||0)},
