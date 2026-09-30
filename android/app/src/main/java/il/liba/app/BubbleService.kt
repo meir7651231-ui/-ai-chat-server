@@ -247,15 +247,22 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (listening) { chunks.clear(); return } // fix 4: the user is talking – never talk over the recognizer
         val part = chunks.removeFirstOrNull() ?: run { speaking = false; onSpoken(); return }
         unmuteSystem(); setState(LibaState.SPEAKING); speaking = true
+        partStarted = false // before the text is queued: a fast onStart must not be wiped afterwards (3.36.2 said a spoken message was "lost", and the page said it again)
         speakSegments(part)
         if (bargeIn) { bargeVad?.stop(); var me: VadGate? = null; me = VadGate(sens = 6.0, minRms = 1800.0, comm = true, warm = true) { main.post { if (bargeVad !== me) return@post; bargeVad = null; if (speaking) { try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "barge:" + e.javaClass.simpleName) }; speaking = false; speakGuard?.let { main.removeCallbacks(it) }; showLabel("כן?", 3000); startListening("cmd") } } }; bargeVad = me; me.start() }
         speakGuard?.let { main.removeCallbacks(it) }
         // safety net if TTS never reports. step clock: it is no longer the measurement - when it fires, that is a fault
-        partStart = System.currentTimeMillis(); partLen = part.length; partStarted = false
+        partStart = System.currentTimeMillis(); partLen = part.length
         // the phone test: a voice that never even started is not "said" - the page tries it again (lost), instead of
-        // counting a message Meir only saw flash on the screen
-        speakGuard = Runnable { if (speaking) { speaking = false; spokeCause = if (partStarted) "guard" else "lost"; chunks.clear()
-            Trace.e(Trace.Code.E_TTS_GUARD, "len:" + part.length + ":ms/c:" + guardCore.msPerChar.toInt() + ":started:" + partStarted); onSpoken() } }.also { main.postDelayed(it, guardCore.guardMs(part.length)) }
+        // counting a message Meir only saw flash on the screen. A voice that is still talking is not a fault: wait for it
+        armGuard(part.length, 0)
+    }
+    private fun armGuard(len: Int, extended: Int) {
+        speakGuard = Runnable { if (!speaking) return@Runnable
+            val talking = runCatching { tts?.isSpeaking == true }.getOrDefault(false)
+            if (talking && extended < 6) { armGuard(len, extended + 1); return@Runnable } // still speaking: give it more time, up to six more windows
+            speaking = false; spokeCause = if (partStarted || talking) "guard" else "lost"; chunks.clear()
+            Trace.e(Trace.Code.E_TTS_GUARD, "len:" + len + ":ms/c:" + guardCore.msPerChar.toInt() + ":started:" + partStarted + ":ext:" + extended); onSpoken() }.also { main.postDelayed(it, if (extended == 0) guardCore.guardMs(len) else 4000L) }
     }
     // step 30: Hebrew with English terms – Latin runs are spoken by the English voice
     private fun speakSegments(text: String) {
