@@ -9,7 +9,7 @@ package il.liba.app.power
 object PowerCore {
     /** mA while the tag is on - a starting guess until the phone is calibrated (EnergyModel) */
     val DEFAULT_MA: Map<String, Double> = linkedMapOf("base" to 0.5, "mic.vad" to 8.0, "asr.cloud" to 60.0, "asr.ondevice" to 90.0, "tts" to 40.0,
-        "ui.shader" to 35.0, "web.load" to 120.0, "web.idle" to 4.0, "net.update" to 80.0)
+        "ui.shader" to 35.0, "ui.shader.idle" to 8.0, "web.load" to 120.0, "web.idle" to 4.0, "net.update" to 80.0)
     /** reserved for later steps, rate 0 until measured */
     val RESERVED = listOf("mfcc", "yamnet", "a11y", "geo", "work", "disk")
 

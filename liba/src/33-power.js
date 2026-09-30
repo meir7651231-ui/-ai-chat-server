@@ -5,7 +5,7 @@
    "כמה סוללה אכלת היום" ("היום אכלתי אחוז וחצי, רובו על ההאזנה"), "על מה הלכה הסוללה", "תקציב סוללה עשרה אחוז"
    (memory/settings.power.dailyPct - the duty governor will hold to it). The phone's own drain is said beside it, never
    mixed in: the ledger is what ליבה ran, the phone is everything. */
-const POWER_HE={'base':'הבסיס','mic.vad':'ההאזנה','asr.cloud':'זיהוי הדיבור','asr.ondevice':'זיהוי הדיבור בטלפון','tts':'הדיבור','ui.shader':'הבועה על המסך',
+const POWER_HE={'base':'הבסיס','mic.vad':'ההאזנה','asr.cloud':'זיהוי הדיבור','asr.ondevice':'זיהוי הדיבור בטלפון','tts':'הדיבור','ui.shader':'הבועה על המסך','ui.shader.idle':'הבועה במנוחה',
   'web.load':'טעינת הדף','web.idle':'הדף הפתוח','net.update':'העדכונים'};
 let powerNow=null,powerWrote=0;
 function pctWords(x){x=Math.round((+x||0)*2)/2;const w=Math.floor(x),h=x-w>0;

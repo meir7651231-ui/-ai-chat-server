@@ -126,12 +126,18 @@ class OrbView @JvmOverloads constructor(ctx: Context, attrs: android.util.Attrib
                 wander(dtS)
                 shown += (target - shown) * 0.35f; if (mode != Mode.LISTENING) target *= 0.9f
                 activeK += (activeTarget - activeK) * 0.18f; if (kotlin.math.abs(activeTarget - activeK) < 0.005f) activeK = activeTarget
-                invalidate()
+                // resting bubble: the shader was the biggest line in the power ledger, drawn 60-120 times a second for a
+                // monogram that barely moves. At rest it is drawn 12 times a second; any state, touch or roaming is full rate
+                if (!idleSlow || now - lastDrawNs >= IDLE_FRAME_NS) { lastDrawNs = now; invalidate() }
             }
             start()
         }
     }
     val animating get() = anim != null
+    /** at rest and drawn at the slow rate (the power ledger charges it as ui.shader.idle) */
+    val idleSlow get() = anim != null && (mode == Mode.IDLE || mode == Mode.OFFLINE) && activeK == 0f && activeTarget == 0f && !pressed && !roam
+    private var lastDrawNs = 0L
+    private val IDLE_FRAME_NS = 83_000_000L
     private fun stopAnim() { anim?.cancel(); anim = null; shown = 0f; target = 0f }
     override fun onDetachedFromWindow() { super.onDetachedFromWindow(); stopAnim() }
     override fun onAttachedToWindow() { super.onAttachedToWindow(); startAnim() }

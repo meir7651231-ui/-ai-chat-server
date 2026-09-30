@@ -572,7 +572,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private fun powerSync() { runCatching {
         val on = HashSet<String>()
         if (vad != null) on.add("mic.vad"); if (listening) on.add(if (srOnDevice) "asr.ondevice" else "asr.cloud"); if (speaking) on.add("tts")
-        if (dot?.animating == true) on.add("ui.shader"); if (web != null) on.add(if (pageReady) "web.idle" else "web.load")
+        if (dot?.animating == true) on.add(if (dot?.idleSlow == true) "ui.shader.idle" else "ui.shader"); if (web != null) on.add(if (pageReady) "web.idle" else "web.load")
         il.liba.app.power.PowerLedger.sync(this, on)
         val now = SystemClock.elapsedRealtime()
         if (now - powerSentAt > 5 * 60_000L) { powerSentAt = now; val j = il.liba.app.power.PowerLedger.report(this)
