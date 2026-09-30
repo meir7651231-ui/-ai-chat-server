@@ -1,0 +1,4 @@
+{
+  "note": "duty-governor: the ceiling on periodic timers longer than 5 s outside the governor pulse - only goes down",
+  "max": 9
+}

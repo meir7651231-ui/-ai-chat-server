@@ -51,6 +51,7 @@ object LibaWeb {
         fun onSenseCfg(apps: List<String>)
         fun onPlace(body: String)
         fun onMirror(body: String)
+        fun onPowerCfg(body: String)
     }
 
     private class JsBridge(val b: Bridge) : ProtocolBridge {
@@ -74,6 +75,7 @@ object LibaWeb {
         @JavascriptInterface override fun senseCfg(apps: String) = b.onSenseCfg(list(apps))
         @JavascriptInterface override fun place(body: String) = b.onPlace(body)
         @JavascriptInterface override fun mirror(body: String) = b.onMirror(body)
+        @JavascriptInterface override fun powerCfg(body: String) = b.onPowerCfg(body)
     }
 
     @SuppressLint("SetJavaScriptEnabled")

@@ -18,10 +18,10 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) fails++ };
   const take = () => p.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; });
   const hello = caps => p.evaluate(c => { window.msgs = []; window.app({ liba: 'hello', ver: '3.33.0', pv: 1, caps: c, wall: Date.now() }); }, caps);
-  const heard = [];
+  const heard = [], cfgs = [];
   await p.evaluate(() => { window.msgs = []; window.app({ liba: 'hello', ver: '3.34.0', pv: 1, caps: ['spoke', 'power'], wall: Date.now() }); }); await p.waitForTimeout(800);
   const speak = async ms => { const end = Date.now() + ms; while (Date.now() < end) { const m = await p.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; });
-      for (const x of m) if (x.liba === 'say') { heard.push(x.text); if (x.id) await p.evaluate(id => window.app({ liba: 'spoke', id }), x.id); } await p.waitForTimeout(40); } };
+      for (const x of m) if (x.liba === 'powerCfg') cfgs.push(JSON.parse(x.body)); else if (x.liba === 'say') { heard.push(x.text); if (x.id) await p.evaluate(id => window.app({ liba: 'spoke', id }), x.id); } await p.waitForTimeout(40); } };
   const say = async t => { heard.length = 0; await p.evaluate(t => window.app({ liba: 'input', text: t }), t); for (let i = 0; i < 20 && !heard.length; i++) await speak(250); await speak(300); return heard.join(' | '); };
   let s = await say('כמה סוללה אכלת היום');
   ok(/עוד אין לי מדידה מהטלפון/.test(s), 'no report yet: says so: ' + s.slice(0, 80));
@@ -35,8 +35,10 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   ok(/ההאזנה 71 אחוז, הדיבור 17 אחוז, הבסיס 11 אחוז/.test(s), '"על מה הלכה הסוללה": ' + s.slice(0, 160));
   s = await say('תקציב סוללה שלושה אחוז');
   ok(/תקציב של 3 אחוזים ביממה/.test(s) && (await f.evaluate(() => window.__h.get('memory/settings').power.dailyPct)) === 3, 'a budget by voice, kept in memory/settings.power: ' + s.slice(0, 80));
+  ok(cfgs.some(c => c.dailyPct === 3), 'the budget is sent to the phone (powerCfg): ' + JSON.stringify(cfgs));
+  await p.evaluate(b => window.app({ liba: 'power', body: b }), JSON.stringify(Object.assign({}, day1, { tier: 'ECO' }))); await p.waitForTimeout(200);
   s = await say('כמה סוללה אכלת היום');
-  ok(/ליממה, מעל התקציב שלך/.test(s), 'over the budget: said');
+  ok(/ליממה, מעל התקציב שלך/.test(s) && /אני עכשיו בהילוך חסכוני/.test(s), 'over the budget, and the gear: said: ' + s.slice(-80));
   await p.evaluate(b => window.app({ liba: 'power', body: b }), JSON.stringify({ day: '2026-09-30', mah: 2, pct: 0.05, byTag: { base: 2 }, proj: null, phonePct: null })); await p.waitForTimeout(300);
   const closed = await f.evaluate(() => window.__h.get('memory/power/days/2026-09-29'));
   ok(closed && closed.mah === 70 && closed.closedAt > 0, 'the day turned: yesterday closed into memory/power/days');

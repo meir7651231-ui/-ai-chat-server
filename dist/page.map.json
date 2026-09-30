@@ -1,5 +1,5 @@
 {
- "pageHash": "2a287b694a7c",
+ "pageHash": "76f8c3051d64",
  "anchors": {
   "intents": {
    "src": "liba/src/00-intents.js",
@@ -1349,21 +1349,25 @@
    "src": "liba/src/33-power.js:13",
    "line": 2089
   },
+  "power.powerCfgSend": {
+   "src": "liba/src/33-power.js:19",
+   "line": 2095
+  },
   "power.powerBudgetPct": {
-   "src": "liba/src/33-power.js:17",
-   "line": 2093
+   "src": "liba/src/33-power.js:20",
+   "line": 2096
   },
   "power.powerToday": {
-   "src": "liba/src/33-power.js:18",
-   "line": 2094
+   "src": "liba/src/33-power.js:21",
+   "line": 2097
   },
   "power.powerWhere": {
-   "src": "liba/src/33-power.js:24",
-   "line": 2100
-  },
-  "power.powerBudget": {
    "src": "liba/src/33-power.js:28",
    "line": 2104
+  },
+  "power.powerBudget": {
+   "src": "liba/src/33-power.js:32",
+   "line": 2108
   }
  }
 }

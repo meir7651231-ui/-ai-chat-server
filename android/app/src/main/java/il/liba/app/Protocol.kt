@@ -3,7 +3,7 @@ package il.liba.app
 
 object Protocol {
     const val VERSION = 1
-    const val HASH = "58f68061a51c"
+    const val HASH = "c0c4e8c31b7a"
     val CAPS = listOf("beat", "clock", "proto", "pulse", "spoke", "state", "trace", "mem", "remind", "sense", "cal", "ctx", "holy", "mirror", "power")
 
     /** page -> app */
@@ -27,6 +27,7 @@ object Protocol {
         const val SENSE_CFG = "senseCfg"
         const val PLACE = "place"
         const val MIRROR = "mirror"
+        const val POWER_CFG = "powerCfg"
     }
     /** app -> page */
     object ToPage {
@@ -65,11 +66,12 @@ object Protocol {
     else if(d.liba==="senseCfg"){LibaBridge.senseCfg(JSON.stringify(d.apps||[]));}
     else if(d.liba==="place"){LibaBridge.place(String(d.body||""));}
     else if(d.liba==="mirror"){LibaBridge.mirror(String(d.body||""));}
+    else if(d.liba==="powerCfg"){LibaBridge.powerCfg(String(d.body||""));}
 """
     /** Senders the app calls through evaluateJavascript: app -> page. */
     const val SENDERS = """
   window.__libaSend=function(k,o){Array.prototype.slice.call(document.querySelectorAll('iframe')).forEach(function(f){try{f.contentWindow.postMessage(Object.assign({liba:k},o),'*');}catch(e){}});};
-  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"58f68061a51c",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy","mirror","power"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
+  window.__libaHello=function(){window.__libaSend("hello",{ver:window.__libaVer||'',proto:"c0c4e8c31b7a",pv:1,caps:["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx","holy","mirror","power"],wall:Date.now(),state:window.__libaState||'',urgent:window.__libaUrgent||'',spoken:window.__libaSpoken||''});};
   window.__libaCrash=function(id,version,text){window.__libaSend("crash",{id:id,version:version,text:text});};
   window.__libaSpoke=function(id,startAt,endAt,cause){window.__libaSend("spoke",{id:id,startAt:startAt,endAt:endAt,cause:cause});};
   window.__libaSpeaking=function(id){window.__libaSend("speaking",{id:id});};
@@ -125,4 +127,5 @@ interface ProtocolBridge {
     fun senseCfg(apps: String)
     fun place(body: String)
     fun mirror(body: String)
+    fun powerCfg(body: String)
 }

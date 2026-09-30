@@ -11,14 +11,18 @@ let powerNow=null,powerWrote=0;
 function pctWords(x){x=Math.round((+x||0)*2)/2;const w=Math.floor(x),h=x-w>0;
   if(x<0.5)return 'פחות מחצי אחוז';if(w===0)return 'חצי אחוז';if(w===1)return h?'אחוז וחצי':'אחוז אחד';if(w===2)return h?'שניים וחצי אחוזים':'שני אחוזים';return w+(h?' וחצי':'')+' אחוזים';}
 function powerIn(body){let r;try{r=typeof body==='string'?JSON.parse(body):body;}catch(e){fail('P_MSG_BAD',e,'power');return;}if(!r||!r.day)return;
-  const prev=powerNow;powerNow=Object.assign({},r,{at:Date.now()});if(!db)return;
+  const prev=powerNow;powerNow=Object.assign({},r,{at:Date.now()});
+  /* duty-governor: the gear changed - it is in the day's record, and the phone already said it */
+  if(prev&&r.tier&&prev.tier&&prev.tier!==r.tier)Ledger.record({action:'power.tier',cause:prev.tier,result:r.tier});if(!db)return;
   if(prev&&prev.day&&prev.day!==r.day)P.powerDay(prev.day).set(Object.assign({},prev,{closedAt:Date.now()})).catch(e=>fail('P_DB_WRITE',e,'memory/power/days'));
   if(Date.now()-powerWrote>60000||!prev||prev.day!==r.day){powerWrote=Date.now();P.power().set(powerNow).catch(e=>fail('P_DB_WRITE',e,'channel/power'));}}
+function powerCfgSend(){if(appMode&&hasCap('power'))post(PROTO.toApp.powerCfg,{body:JSON.stringify({dailyPct:powerBudgetPct()})});}
 function powerBudgetPct(){const s=memSettings&&memSettings.power;return s&&+s.dailyPct>0?+s.dailyPct:0;}
 function powerToday(){const r=powerNow;if(!r){sayLocal('עוד אין לי מדידה מהטלפון. היא מגיעה כל חמש דקות כשהבועה פתוחה.');return true;}
   const by=Object.entries(r.byTag||{}).sort((a,b)=>b[1]-a[1]),top=by[0],share=top&&r.mah>0?top[1]/r.mah:0;
   let t='היום אכלתי '+pctWords(r.pct)+(top?(share>0.5?', רובו על ':', הכי הרבה על ')+(POWER_HE[top[0]]||top[0]):'')+'.';
   if(r.proj!=null)t+=' בקצב של השעה האחרונה זה '+pctWords(r.proj)+' ליממה'+(powerBudgetPct()&&r.proj>powerBudgetPct()?', מעל התקציב שלך':'')+'.';
+  if(r.tier&&r.tier!=='FULL')t+=' אני עכשיו ב'+({ECO:'הילוך חסכוני',SURVIVAL:'הילוך הישרדות',COLD:'הילוך קר'}[r.tier]||r.tier)+'.';
   if(r.phonePct!=null&&r.phonePct>0)t+=' הטלפון כולו ירד היום '+pctWords(r.phonePct)+'.';
   sayLocal(t);return true;}
 function powerWhere(){const r=powerNow;if(!r){sayLocal('עוד אין לי מדידה מהטלפון.');return true;}
@@ -28,5 +32,5 @@ const POWER_NUM={'אחד':1,'אחת':1,'שניים':2,'שתיים':2,'שני':2,
 function powerBudget(rest){const t=inorm(rest).split('אחוז')[0].trim();const n=/^\d+$/.test(t)?+t:POWER_NUM[t];if(!(n>0&&n<=50))return false;
   memSettings.power=Object.assign({},memSettings.power||{},{dailyPct:n});
   if(db)P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));
-  Ledger.record({action:'power.budget',cause:'voice',result:n});sayLocal('בסדר: תקציב של '+pctWords(n)+' ביממה. כשאעבור אותו אוריד הילוך ואגיד לך.');return true;}
+  powerCfgSend();Ledger.record({action:'power.budget',cause:'voice',result:n});sayLocal('בסדר: תקציב של '+pctWords(n)+' ביממה. כשאעבור אותו אוריד הילוך ואגיד לך.');return true;}
 window.__power={in:powerIn,words:pctWords,now:()=>powerNow};

@@ -135,6 +135,12 @@
         "body": "str"
       },
       "why": "local-brain: the page's picture of the state (tasks that matter, the brief, who is awake), every 15 s when it changed - the bubble answers \"איפה עצרנו\", \"מה פתוח\", \"מה תקוע\", \"מי המוח\" from it when the page is dead"
+    },
+    "powerCfg": {
+      "fields": {
+        "body": "str"
+      },
+      "why": "duty-governor: Meir's daily battery budget (memory/settings.power.dailyPct) - the phone chooses its gear against it"
     }
   },
   "toPage": {

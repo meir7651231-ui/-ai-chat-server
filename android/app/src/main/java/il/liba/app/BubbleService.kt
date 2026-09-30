@@ -386,7 +386,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         powerSync()
         UrgentPoller.maybe(this@BubbleService, main, pageDeadSince, pageAliveAt) { speak("הודעה דחופה, בלי הדף: " + it.text, true) }
         if (SystemClock.elapsedRealtime() - loginCheckedAt > 10 * 60_000L) { loginCheckedAt = SystemClock.elapsedRealtime(); loginCheck() }
-        main.postDelayed(this, 30000)
+        main.postDelayed(this, if (pageReady) il.liba.app.power.Governor.tier.beatMs else 30000L) // duty-governor: the pulse from the gear; a dead page is still watched every 30 s
     } }
     private fun watchNetwork() {
         try {
@@ -478,7 +478,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 main.post { showLabel("הורדה נכשלה: $why", 10000); speak("ההורדה נכשלה. " + why + ". אפשר לנסות שוב מהמסך הראשי.") } }
         }.start()
     }
-    private val recheck = Runnable { checkUpdate() }
+    private val recheck = Runnable { if (il.liba.app.power.Governor.admit(il.liba.app.power.Job("update", 0))) checkUpdate() else main.postDelayed(this.recheckLater, 3600_000L) }
+    private val recheckLater: Runnable get() = recheck
     /**
      * step 1 (one-tree-one-version): a version check that cannot fail quietly.
      * Two things were wrong before. The request went through whatever the CDN had cached, so the
@@ -534,8 +535,18 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (dot?.animating == true) on.add("ui.shader"); if (web != null) on.add(if (pageReady) "web.idle" else "web.load")
         il.liba.app.power.PowerLedger.sync(this, on)
         val now = SystemClock.elapsedRealtime()
-        if (pageReady && now - powerSentAt > 5 * 60_000L) { powerSentAt = now; val j = il.liba.app.power.PowerLedger.report(this); web?.let { LibaWeb.sendPower(it, j) } }
+        if (now - powerSentAt > 5 * 60_000L) { powerSentAt = now; val j = il.liba.app.power.PowerLedger.report(this)
+            governorTick()
+            if (pageReady) web?.let { LibaWeb.sendPower(it, j.dropLast(1) + ",\"tier\":\"" + il.liba.app.power.Governor.tier.name + "\",\"miss\":" + il.liba.app.power.GovernorCore.missEstimate(il.liba.app.power.Governor.tier, vad?.voiceFrac ?: 0.0) + "}") } }
     }.onFailure { Trace.e(Trace.Code.E_PREFS, "power:" + it.javaClass.simpleName) } }
+    // duty-governor: the gear from the ledger's projection; a change is applied to the mic and said once
+    private fun governorTick() {
+        val ch = il.liba.app.power.Governor.tick(this, il.liba.app.power.PowerLedger.last?.projPct) ?: return
+        val t = ch.second
+        vad?.duty(t.onMs, t.offMs)
+        if (t == il.liba.app.power.Tier.COLD) stopVad() else if (heyOn && vad == null && !listening && !speaking) wakeLoop()
+        if (!isNight()) speak(il.liba.app.power.GovernorCore.words(ch.first, t, ch.third))
+    }
     private fun setState(s: LibaState) {
         powerSync()
         if (!LibaState.canMove(appState, s)) Trace.e(Trace.Code.E_STATE_ILLEGAL, appState.name + ">" + s.name)
@@ -643,7 +654,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         snapAnim = ValueAnimator.ofInt(lp.x, target).apply { duration = 340; interpolator = android.view.animation.OvershootInterpolator(1.1f)
             addUpdateListener { lp.x = it.animatedValue as Int; runCatching { wm.updateViewLayout(h, lp) }.onFailure { x -> Trace.e(Trace.Code.E_OVERLAY_UPDATE, "snap:" + x.javaClass.simpleName) }; syncRoot() }; start() }
     }
-    private fun schedulePeek() { main.removeCallbacks(peekRun); main.postDelayed(peekRun, 9000) }
+    private fun schedulePeek() { main.removeCallbacks(peekRun); if (il.liba.app.power.Governor.admit(il.liba.app.power.Job("peek", 1))) main.postDelayed(peekRun, 9000) }
     private fun peek() {
         if (dot?.roam == true) return
         val root = bubble ?: return; val lp = bubbleLp ?: return
@@ -728,7 +739,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (!ensureMicFgs()) return
         unmuteSystem(); setState(LibaState.WAKE)
         var me: VadGate? = null
+        if (il.liba.app.power.Governor.tier == il.liba.app.power.Tier.COLD) return // duty-governor: no mic in the cold gear
         me = VadGate { main.post { if (vad !== me || !running) return@post; vad = null; if (heyOn && !listening && !speaking) startListening("wake") else wakeLoop() } }
+        il.liba.app.power.Governor.tier.let { me.duty(it.onMs, it.offMs) }
         vad = me; me.start()
     }
     private fun stopVad() { vad?.stop(); vad = null }
@@ -915,6 +928,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     /** step proactive: an alarm rang - say what is due, unless night mode or the car say not now (they are held to later) */
     private fun sayReminders() { val due = Reminders.due(this, night || carMode); if (due.isNotEmpty()) speak(due.joinToString(" ") { it.text }) }
     override fun onRemind(items: String) { Reminders.onRemind(this, items) }
+    override fun onPowerCfg(body: String) { runCatching { il.liba.app.power.Governor.budgetPct = org.json.JSONObject(body).optDouble("dailyPct", 0.0) } }
     override fun onPlace(body: String) { runCatching { val o = org.json.JSONObject(body); Prefs.setPlace(this, Place(o.getDouble("lat"), o.getDouble("lon"), o.optInt("b", 20))) }; holyCheck() }
     // step shabbat-engine: from candle lighting until nightfall - no voice, no microphone, no page, no network
     @Volatile var shabbat = false

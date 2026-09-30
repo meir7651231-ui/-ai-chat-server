@@ -15,6 +15,7 @@ import java.util.TimeZone
 object PowerLedger {
     private val fmt = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply { timeZone = TimeZone.getTimeZone("Asia/Jerusalem") }
     @Volatile private var m: PowerCore.Meter? = null
+    @Volatile var last: PowerCore.Report? = null; private set
     private var phoneStart: Pair<String, Int>? = null
     private fun day(now: Long) = fmt.format(Date(now))
     private fun dir(c: Context) = File(c.filesDir, "power").apply { mkdirs() }
@@ -49,7 +50,7 @@ object PowerLedger {
         val d = mt.day; val ps = phoneStart
         if (ps == null || ps.first != d || charging) phoneStart = d to pct
         val phonePct = phoneStart?.let { if (it.first == d && it.second >= pct && pct >= 0) (it.second - pct).toDouble() else null }
-        val r = PowerCore.report(mt, PowerCore.capacity(cc, pct) ?: 4400.0, now, phonePct)
+        val r = PowerCore.report(mt, PowerCore.capacity(cc, pct) ?: 4400.0, now, phonePct); last = r
         save(c, mt); return PowerCore.json(r)
     }
     private fun save(c: Context, mt: PowerCore.Meter) {
