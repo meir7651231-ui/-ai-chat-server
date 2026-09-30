@@ -1,0 +1,14 @@
+  סבב 1: 14
+✓ זוגי?: נבנה ב-9.3 שנ׳ (14 פקודות, מ-5 הפעולות) ⇒ קוצר ל-14 ⇒ 20000/20000 ⇒ במדף · ניידת
+file:///tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/lab13/tzoref.mjs:190
+  if(!(fresh(best)&&hard(best))) throw new Error('נקודת ההתחלה לא עוברת את הבודק');
+                                       ^
+
+Error: נקודת ההתחלה לא עוברת את הבודק
+    at shorten (file:///tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/lab13/tzoref.mjs:190:40)
+    at work (file:///tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/lab13/tzoref.mjs:304:14)
+    at async file:///tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/lab13/tzoref.mjs:319:37
+
+Node.js v22.22.2
+עם שם: 45 · נכשלו 1 גדול או שווה (מסומנת פסולה, ממתינה לבנייה מחדש) · סך 1127
+לוגיות: 256 · נכשלו 0 · סך 6352
