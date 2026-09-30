@@ -7,7 +7,7 @@
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
 const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
-  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,mandateAllowCmd,mandateDenyCmd,mandateListCmd,approvalsToday,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
@@ -26,7 +26,7 @@ let pendingIntent=null;const PENDING_MS=60000;
 function runIntent(m){const it=m.it;
   if((it.requires||[]).indexOf('db')>=0&&!db){sayLocal('אין לי חיבור למסד כרגע, אז את זה אני לא יכולה לעשות.');return true;}
   const h=HANDLERS[it.handler];if(!h){fail('P_MSG_BAD',null,'intent without handler '+it.id);return false;}
-  const r=h(m.rest,m)!==false;if(r)capSeen(it.id);return r;}
+  const r=h(m.rest,m)!==false;if(r){capSeen(it.id);Ledger.record({action:'intent',cause:'voice',inputs:{id:it.id,how:m.how}});}return r;}
 function confirmYes(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;if(!runIntent(p.m))send({text:p.text,noIntent:true});return true;}
 function confirmNo(){const p=pendingIntent;if(!p||Date.now()-p.at>PENDING_MS)return false;pendingIntent=null;
   if(p.m.how==='fuzzy')send({text:p.text,noIntent:true});else sayLocal('בסדר, לא עשיתי.');return true;}
@@ -46,7 +46,7 @@ let OWNER_TTL=15*60000,ownerRenewedAt=0,ownerTimer=null;
 /* addressing: every change of hands is a line in channel/owner/log - who, since when, why, and the sentence that did it -
    so a line that stayed with the manager is visible and explained, never a mystery flag */
 function ownerLog(o,why,by){if(!db)return;P.ownerLog().doc(mintId()).set({owner:o,at:Date.now(),why:String(why||''),byUtterance:String(by||'').slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'owner log'));}
-async function ownerWrite(o,byVoice,turn,why){const now=Date.now();if(o!==owner)ownerLog(o,why||(byVoice?'voice':'auto'),turn);owner=o;ownerSince=now;ownerRenewedAt=now;if(o!=='manager')ownerPinnedUntil=0;ownerArm();
+async function ownerWrite(o,byVoice,turn,why){const now=Date.now();if(o!==owner)Ledger.record({action:'owner',cause:why||(byVoice?'voice':'auto'),result:o});if(o!==owner)ownerLog(o,why||(byVoice?'voice':'auto'),turn);owner=o;ownerSince=now;ownerRenewedAt=now;if(o!=='manager')ownerPinnedUntil=0;ownerArm();
   try{await P.owner().set({owner:o,since:now,ttl:OWNER_TTL,renewedAt:now,lastTurnId:turn||'',byVoice:!!byVoice,pinnedUntil:o==='manager'?ownerPinnedUntil:0});}catch(e){fail('P_DB_WRITE',e,'channel/owner');log('owner: '+(e.code||e));}}
 function ownerRenew(turn){if(owner!=='manager')return;ownerRenewedAt=Date.now();ownerArm();
   P.owner().update({renewedAt:ownerRenewedAt,lastTurnId:String(turn||'')}).catch(e=>fail('P_DB_WRITE',e,'owner renew'));}

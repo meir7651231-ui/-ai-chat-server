@@ -8,7 +8,7 @@ function quietOff(){setQuiet(0);return true;}
 function slotMinutes(t){const n=t.match(/(\d+)\s*(דקות|דקה)/);if(n)return +n[1];if(/חצי שעה/.test(t))return 30;if(/שעתיים/.test(t))return 120;if(/שלוש שעות/.test(t))return 180;
   if(/עד הערב/.test(t))return Math.max(1,Math.round((new Date().setHours(19,0,0,0)-Date.now())/60000));if(/עד מחר|עד הבוקר/.test(t))return Math.max(1,Math.round((new Date().setHours(32,0,0,0)-Date.now())/60000));return 60;}
 function quietOn(rest){setQuiet(slotMinutes(rest));return true;}
-async function setQuiet(min){const until=min>0?Date.now()+min*60000:0;quietUntil=until;try{await P.quiet().set({until,since:Date.now()});}catch(e){fail('P_DB_WRITE',e,'channel/quiet');}
+async function setQuiet(min){Ledger.record({action:'quiet',cause:'voice',inputs:{min}});const until=min>0?Date.now()+min*60000:0;quietUntil=until;try{await P.quiet().set({until,since:Date.now()});}catch(e){fail('P_DB_WRITE',e,'channel/quiet');}
   const msg=min>0?'ליבה: שקט עד '+new Date(until).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'})+'. רק דחוף יעבור.':'ליבה: השקט בוטל, אני מדברת שוב.';bubble('li',msg);if(appMode)post(PROTO.toApp.say,{text:msg,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(msg);if(!min)pump();}
 let memSettings={logTurns:true,decisions:true,notes:true};
 function sayLocal(m){bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);}

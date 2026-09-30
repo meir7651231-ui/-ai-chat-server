@@ -24,7 +24,7 @@ async function incoming(d){
   if(d.kind!=='cmd')ledgerBump('said');
   if(d.kind==='cmd'){if(!appMode){log('cmd (לא באפליקציה): '+(d.cmd||''));return false;}/* signed-commands: from the channel only signed, not expired, never twice - refused ones are marked and never posted */
     if(!d.local&&!(await sigOk('cmd',d))){fail('P_CMD_REFUSED',null,String(d.cmd||'').split(' ')[0]);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),refused:'unsigned'});}catch(e){fail('P_ACK',e,'cmd refused');}log('פקודה לא חתומה נדחתה');return false;}
-    try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||'',nonce:String(d.nonce||''),exp:+d.exp||0,sig:String(d.sig||'')});log('cmd: '+(d.cmd||''));return true;}
+    try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'cmd');log('cmd ack: '+(e.code||e));}post(PROTO.toApp.cmd,{cmd:d.cmd||'',nonce:String(d.nonce||''),exp:+d.exp||0,sig:String(d.sig||'')});Ledger.record({action:'cmd',cause:'inbox:'+d.id,inputs:{cmd:String(d.cmd||'').split(' ')[0]}});log('cmd: '+(d.cmd||''));return true;}
   d.text=typeof d.text==='string'?d.text:String(d.text==null?'':d.text);
   /* outbox-keys: a reply that quotes the sentence it answers carries its ⟦#id⟧ - never read it aloud */
   d.text=d.text.replace(/\s*⟦#[0-9a-z]+⟧/g,'');
@@ -44,7 +44,7 @@ async function incoming(d){
   if(!appMode&&(ak==='call'||ak==='stuck')){app.className='ring';KIND.textContent='ליבה מצלצלת';KIND.className='kind stuck';ringStart();await new Promise(r=>setTimeout(r,2400));ringStop();app.className='';}
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
   bubble('li',prefixOf(d,who)+lead+d.text);HEARD.hidden=true;OPTS.innerHTML='';
-  if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,text:d.text,speaker:who,topic:d.topic||'',from:d.from||'liba',at:Date.now()};else if(!d.local)lastAsk=null;
+  if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,approvalId:d.approvalId||'',text:d.text,speaker:who,topic:d.topic||'',from:d.from||'liba',at:Date.now()};else if(!d.local)lastAsk=null;
   try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:d.text,msg:d.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   if(appMode)await sayApp(spokenText,{kind:ak,options:d.options||[],from:d.from||'liba',speaker:who,mid:d.local?'':String(d.id||'')},d.local?null:d.re);else await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
   if(d.legacy){try{await P.current().update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'chat/current');log('legacy ack: '+(e.code||e));}}

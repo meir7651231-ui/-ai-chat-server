@@ -241,6 +241,47 @@
    ]
   },
   {
+   "id": "mandate.allow",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "prefix": [
+    "(אתה רשאי|את רשאית|מותר לך)"
+   ],
+   "handler": "mandateAllowCmd",
+   "help": "\"את רשאית לשנות עדיפות\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "mandate.deny",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "prefix": [
+    "(אל תעשה|אל תעשי) לבד"
+   ],
+   "handler": "mandateDenyCmd",
+   "help": "\"אל תעשי לבד מחיקה\"",
+   "requires": [
+    "db"
+   ]
+  },
+  {
+   "id": "mandate.list",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "מה אתה רשאי לעשות",
+    "מה את רשאית לעשות",
+    "מה מותר לך לעשות לבד"
+   ],
+   "handler": "mandateListCmd",
+   "help": "\"מה את רשאית לעשות\""
+  },
+  {
    "id": "sense.add",
    "where": "page",
    "when": "liba",
@@ -1364,14 +1405,19 @@
    "help": "\"כמה עלה היום\""
   },
   {
-   "id": "claude.decisions",
-   "where": "claude",
-   "rule": "manager_rules",
+   "id": "consent.today",
+   "where": "page",
+   "when": "liba",
    "family": "בקרה",
    "exact": [
-    "מה אישרתי היום"
+    "מה אישרתי היום",
+    "על מה אישרתי היום"
    ],
-   "help": "\"מה אישרתי היום\""
+   "handler": "approvalsToday",
+   "help": "\"מה אישרתי היום\"",
+   "requires": [
+    "db"
+   ]
   },
   {
    "id": "routine.summaries",

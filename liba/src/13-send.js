@@ -83,6 +83,7 @@ async function send(text,forcedTag,source){
   text=String(text||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7]/g,'').replace(/\s+/g,' ').trim();if(!text)return;
   if(!forcedTag&&!noIntent&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
   if(!forcedTag&&!noIntent){proWelcome();proHeard(text).catch(e=>fail('P_DB_READ',e,'proactive'));} /* proactive: anything but "לא עכשיו" after a reminder is a welcome */
+  if(!forcedTag&&!noIntent&&consentAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* consent: bound to its approval id */
   if(!forcedTag&&!noIntent&&distillAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* distill: the answer to ליבה's own question stays here */
   const rt=replyTag(text),tag=forcedTag||rt||tagOf();
   if(tag.indexOf('מנהל')>=0)ownerRenew(lastAsk&&lastAsk.id);
@@ -94,7 +95,7 @@ async function send(text,forcedTag,source){
   const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
-  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
+  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();Ledger.record({action:'send',cause:source,inputs:{req:reqId,to:tag.trim()}});reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
   try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "note": "Step budget-contract-gate: every collection the page touches, how many documents it may hold, how long its rows live, and which class it is. The janitor reads ttlDays and cap from here (baked into the page at build time); tests/budget.gate.js fails the build when the page names a collection that is not listed, or the caps add up past the ceiling. cls: voice = never refused; state/record/telemetry = refused near a full db in that order; fixed = rewrites of existing documents only; janitor = the cure, never refused. Over its cap, telemetry is trimmed automatically; record, state and voice are only reported - a writer that made a lot of real work must not lose it to a rule.",
-  "ceiling": 4600,
+  "ceiling": 5200,
   "collections": {
     "inbox": {
       "cap": 200,
@@ -163,6 +163,18 @@
       "cap": 6,
       "cls": "state",
       "time": "at"
+    },
+    "actions/log/items": {
+      "cap": 400,
+      "ttlDays": 7,
+      "cls": "telemetry",
+      "time": "at"
+    },
+    "approvals": {
+      "cap": 100,
+      "ttlDays": 30,
+      "cls": "record",
+      "time": "askedAt"
     }
   }
 }

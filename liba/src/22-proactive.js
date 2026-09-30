@@ -31,9 +31,10 @@ async function proFire(t,now){now=now||Date.now();await proLoad();proDay(now);
   if(proResting(t.kind,now))return 'resting';
   const h=window.__testHour!=null?window.__testHour:jHour(now);if(h<8||h>=22)return 'night'; /* tests pin the hour */
   if(proState.count>=PRO_MAX)return 'budget';
+  const mv=Mandate.allow('speak_unprompted',{now});if(mv.verdict==='deny'||mv.verdict==='ask_first')return 'mandate';
   proState.fired[t.id]=now;
   if(now-(+proState.startedAt||now)<PRO_FIRST){await digestAdd({id:'pro-'+t.id,text:'אני נזכרת: '+t.text,topic:'תזכורת',speaker:'ליבה'},{id:'proactive-first-week',text:'בשבוע הראשון תזכורות נאספות לערב'});proSave();return 'digest';}
-  proState.count++;proSave();lastPro={id:t.id,kind:t.kind,at:now};
+  proState.count++;proSave();lastPro={id:t.id,kind:t.kind,at:now};Ledger.record({action:'remind',cause:t.kind+':'+t.id,mandateVerdict:mv.verdict});
   queueLocal({id:'pro-'+t.id,kind:'say',proactive:true,speaker:'ליבה',topic:'תזכורת',text:'אני נזכרת: '+t.text});return 'said';}
 /* the phone owns the dates when it can; otherwise this page fires them itself */
 async function proTick(now){now=now||Date.now();if(!db)return [];let facts=[];try{facts=await MEM.all();}catch(e){return [];}const out=[];

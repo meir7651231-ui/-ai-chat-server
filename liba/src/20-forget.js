@@ -29,7 +29,7 @@ async function forgetScan(q){const w=memWords(q);if(!w.length)return [];const ha
     try{(await coldGet(P.folds(),[['kind','==',kind]],200)).docs.forEach(d=>{const it=(d.data()||{}).items||{};Object.entries(it).forEach(([k,x])=>{if(has([x.text,x.question,x.answer,x.topic].join(' ')))hits.push({where:'fold',id:d.id,item:k,data:x});});});}catch(e){}}
   return hits;}
 /* one batch: tombs for the stores with a state, real removal (kept in the batch for a day) for the log and its folds */
-async function forgetApply(q,hits){const now=Date.now(),id='f-'+mintId();const keep={q:q,at:now,items:hits.map(h=>({where:h.where,id:h.id,item:h.item||'',data:h.data||null}))};
+async function forgetApply(q,hits){const now=Date.now(),id='f-'+mintId();Ledger.record({action:'forget',cause:'voice',inputs:{q,n:hits.length},result:id});const keep={q:q,at:now,items:hits.map(h=>({where:h.where,id:h.id,item:h.item||'',data:h.data||null}))};
   await P.forget(id).set(keep);
   for(const h of hits){try{
     if(h.where==='fact')await P.fact(h.id).update({state:'tomb',tombAt:now,forgetBatch:id});

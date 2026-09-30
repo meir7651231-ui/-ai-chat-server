@@ -7,8 +7,12 @@ import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..')
-const gates = readdirSync(here).filter(f => f.endsWith('.mjs') && f !== 'run.mjs' && f !== 'field.mjs').sort()
-const extra = [
+/* SHARD=i/N runs every N-th check from the i-th (by position) - a whole run no longer fits one 30-minute window here.
+   CI sets nothing and runs all of them. */
+const [shI, shN] = (process.env.SHARD || '1/1').split('/').map(Number)
+const inShard = (_, k) => shN > 1 ? k % shN === shI - 1 : true
+let gates = readdirSync(here).filter(f => f.endsWith('.mjs') && f !== 'run.mjs' && f !== 'field.mjs').sort()
+let extra = [
   ['page-static', 'node tests/page.test.js'],
   ['page-live', 'node tests/page.e2e.js'],
   ['bridge-live', 'node tests/bridge.e2e.js'],
@@ -43,7 +47,9 @@ const extra = [
   ['zman', 'node tests/zman.test.js'],
   ['shabbat', 'node tests/shabbat.test.js'],
   ['signed', 'node tests/signed.test.js'],
+  ['agent', 'node tests/agent.test.js'],
 ]
+{ const all = gates.map(g => ['g', g]).concat(extra.map(e => ['e', e])).filter(inShard); gates = all.filter(x => x[0] === 'g').map(x => x[1]); extra = all.filter(x => x[0] === 'e').map(x => x[1]) }
 
 let pass = 0
 const lines = []
