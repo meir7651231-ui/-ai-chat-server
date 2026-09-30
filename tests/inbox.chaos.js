@@ -40,7 +40,10 @@ const N = +(process.env.N || 200), KILLS = +(process.env.KILLS || 40);
   const answer = async ms => { const end = Date.now() + ms;
     while (Date.now() < end) { const m = await p.evaluate(() => { const x = window.msgs.slice(); window.msgs = []; return x; });
       for (const x of m) if (x.liba === 'say' && x.id && (x.src === 'a' || x.src === 'b')) { const who = x.src, my = load[who], id = x.id, t = x.text || '', mid = x.mid || '';
-        setTimeout(async () => { if (my !== load[who]) return; inflight[who]++; if (mid) phoneDone[who].push(mid); try { await p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id }), [who, id]); const k = (/חדש-(\d+)/.exec(t) || [])[1]; if (k) { completed[k] = (completed[k] || 0) + 1; spokeBy[who] = (spokeBy[who] || 0) + 1; } } catch {} finally { inflight[who]-- } }, 100 + Math.random() * 500); }
+        /* the real bubble says "still speaking" every two seconds; without it a slow CI runner hit the page's six-second
+           limit, the page retried (correctly) and the late answer counted the message twice */
+        const beat = setInterval(() => { if (my !== load[who]) { clearInterval(beat); return; } p.evaluate(([w, id]) => window.app(w, { liba: 'speaking', id }), [who, id]).catch(() => {}); }, 1000);
+        setTimeout(async () => { clearInterval(beat); if (my !== load[who]) return; inflight[who]++; if (mid) phoneDone[who].push(mid); try { await p.evaluate(([w, id]) => window.app(w, { liba: 'spoke', id }), [who, id]); const k = (/חדש-(\d+)/.exec(t) || [])[1]; if (k) { completed[k] = (completed[k] || 0) + 1; spokeBy[who] = (spokeBy[who] || 0) + 1; } } catch {} finally { inflight[who]-- } }, 100 + Math.random() * 500); }
       await p.waitForTimeout(80); } };
   // writes go through a live frame's stub so subscriptions fire
   const write = async i => { for (const who of ['a', 'b']) { try { await frame(who).evaluate(i => window.__h.set('inbox/n' + i, { from: 'liba', kind: 'say', speaker: 'ליבה', text: 'חדש-' + i, spoken: false, ts: Date.now() }), i); return; } catch {} } };
