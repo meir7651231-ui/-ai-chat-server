@@ -5,6 +5,7 @@ const ACC=2, ACC2=5, X=3, KEY=0; const XS=[8,9,10,11,12,13,14,15], KS=[0,8,9,10,
 const DOM=[]; for(let a=0;a<16;a++) for(const x of XS) for(const k of KS) DOM.push([a,x,k]); const D=DOM.length;
 const idx=(a,x,k)=>(a*8+(x-8))*9+(k?k-7:0);
 const walk=m=>{ const l=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ l.push(a); a=m[a]; } return l; };
+export function runFold(f,mem){ const l=walk(mem); let acc=f.init.cell!=null?mem[f.init.cell]:f.init.c; for(const x of l) acc=f.stepV[idx(acc,x,mem[KEY])]; return acc; }
 export function loop2Build(gen,{name='',maxSize=2,ms=60000,N=64,tries=60}={}){ const t0=Date.now(); const sh=loadShelf(); const blocks=new Map(sh.named.map(b=>[b.name,b]));
   const TB=partTables(sh.named.filter(b=>!b.bad&&b.name!==name)).filter(t=>t.name!=='העתק');
   const ex=Array.from({length:N},()=>gen()); const want=ex.map(e=>e.want&15); const lists=ex.map(e=>walk(e.mem)), keys=ex.map(e=>e.mem[KEY]);
@@ -18,13 +19,25 @@ export function loop2Build(gen,{name='',maxSize=2,ms=60000,N=64,tries=60}={}){ c
   // 2) כל צעד × כל התחלה ⇒ התוצאה בסוף הלולאה בכל דוגמה
   const INITS=[{c:0,name:'0'},{c:15,name:'15'},{cell:KEY,name:'המפתח'}]; const folds=[], fseen=new Set();
   for(const st of steps) for(const I of INITS){ const r=new Uint8Array(ex.length); for(let i=0;i<ex.length;i++){ let acc=I.cell!=null?ex[i].mem[I.cell]:I.c; for(const x of lists[i]) acc=st.v[idx(acc,x,keys[i])]; r[i]=acc; }
-    const k=r.join(','); if(fseen.has(k)) continue; fseen.add(k); folds.push({r,step:st.expr,init:I}); }
+    const k=r.join(','); if(fseen.has(k)) continue; fseen.add(k); folds.push({r,step:st.expr,stepV:st.v,init:I}); }
   // 3) חלק-חיבור: T(צבירה1, צבירה2) = התשובה
   const byFirst=new Map(); folds.forEach(f=>{ const v=f.r[0]; if(!byFirst.has(v)) byFirst.set(v,[]); byFirst.get(v).push(f); });
   let found=null;
   for(const tb of TB){ if(tb.k!==2||found) continue; const F=tb.T; for(const f1 of folds){ if(found||Date.now()-t0>ms) break;
       for(let b0=0;b0<16&&!found;b0++){ if(F[f1.r[0]*16+b0]!==want[0]) continue; for(const f2 of byFirst.get(b0)||[]){ if(f2===f1) continue; let e=1; for(;e<ex.length;e++) if(F[f1.r[e]*16+f2.r[e]]!==want[e]) break; if(e===ex.length){ found={f1,f2,comb:tb.name}; break; } } } } }
-  if(!found) return {prog:null,folds:folds.length,ms:Date.now()-t0};
+  if(!found){ // «מה חסר לי?»: זוג צבירות שהתשובה היא פונקציה שלהן — אבל אין לי חלק כזה
+    let VX=null; const simple=folds.filter(f=>{ const sz=e=>e.cell!=null?0:1+sz(e.a)+(e.b?sz(e.b):0); return sz(f.step)<=1; }); let gap=null;
+    for(let i=0;i<simple.length&&!gap;i++) for(let j=0;j<simple.length&&!gap;j++){ if(i===j) continue; const f1=simple[i], f2=simple[j]; const T=new Map(); let ok=true;
+        for(let e=0;e<ex.length&&ok;e++){ const k=f1.r[e]*16+f2.r[e]; if(T.has(k)&&T.get(k)!==want[e]) ok=false; else T.set(k,want[e]); }
+        if(!ok) continue; if(new Set(folds.map(()=>0)).size&&[...new Set(ex.map((_,e)=>f1.r[e]))].length<3) continue;   // צבירה כמעט קבועה — לא מעניין
+        // התשובה לא תלויה רק באחת מהן?
+        const only=(r)=>{ const M=new Map(); for(let e=0;e<ex.length;e++){ if(M.has(r[e])&&M.get(r[e])!==want[e]) return false; M.set(r[e],want[e]); } return true; };
+        if(only(f1.r)||only(f2.r)) continue;
+        // לוודא על 1,500 דוגמאות נוספות שזו באמת פונקציה של שתיהן (ולא צירוף מקרים)
+        const V=VX||(VX=Array.from({length:1500},()=>gen())); const M=new Map(); let good=true;
+        for(const e of V){ const k=runFold(f1,e.mem)*16+runFold(f2,e.mem); const w=e.want&15; if(M.has(k)&&M.get(k)!==w){ good=false; break; } M.set(k,w); }
+        if(good) gap={f1,f2}; }
+    return {prog:null,folds:folds.length,gap,ms:Date.now()-t0}; }
   // 4) תוכנית
   const EQ=new Map(); { const byT=new Map(); for(const t of TB){ const k=t.k+':'+t.T.join(','); if(!byT.has(k)) byT.set(k,[]); byT.get(k).push(t.name); } for(const L of byT.values()) for(const n of L) EQ.set(n,L); }
   const used=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]).filter(c=>c<8)); const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x);
