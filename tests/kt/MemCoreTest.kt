@@ -57,6 +57,7 @@ fun main(args: Array<String>) {
     egressTests()
     nbestTests()
     reflexTests()
+    timerTests()
     pulseTests()
     guardTests()
     installTests()

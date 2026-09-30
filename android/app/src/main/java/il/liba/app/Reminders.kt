@@ -52,6 +52,8 @@ object Reminders {
             synchronized(this) { core.replace(List(a.length()) { a.getJSONObject(it).let { x -> Reminder(x.optString("id"), x.optLong("at"), x.optLong("until"), x.optString("text"), x.optBoolean("cap", true)) } }) }
             save(c); arm(c) }.onFailure { Trace.e(Trace.Code.E_PREFS, "remind-in:" + it.javaClass.simpleName) }
     }
+    /** reflex-core: a timer set by voice on the phone - kept beside the page's list, armed at once */
+    fun addLocal(c: Context, r: Reminder) = Trace.post { load(c); synchronized(this) { core.addLocal(r) }; save(c); arm(c) }
     /** what to say now; marks them said (spokenMid, so the page counts them) */
     fun due(c: Context, night: Boolean): List<Reminder> { load(c); val now = System.currentTimeMillis()
         val out = synchronized(this) { core.due(now, hour(now), today(now), night) }

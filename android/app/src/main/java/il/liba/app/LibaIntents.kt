@@ -186,6 +186,13 @@ object LibaIntents {
     )
     fun norm(t: String): String = t.replace(Regex("[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]"), "").replace(Regex("[?!.,:;\"'׳״]"), "").replace(Regex("\\s+"), " ").trim()
     fun match(t: String): String? = EXACT[norm(t)]
+    private val APP_PREFIX = listOf<Pair<String, String>>(
+        "תזכירי לי בעוד" to "reflex.timer",
+        "תזכיר לי בעוד" to "reflex.timer",
+        "תזכרי לי בעוד" to "reflex.timer"
+    )
+    /** a bubble command that takes words after it (reflex.timer): (id, the rest), longest prefix first */
+    fun appPrefix(t: String): Pair<String, String>? { val n = norm(t); for ((p, id) in APP_PREFIX) if (n.startsWith("$p ")) return id to n.removePrefix(p).trim(); return null }
     private val KNOWN_EXACT = hashSetOf<String>(
 "אוזניות",
 "אוקיי אני מקשיב תקרי",
@@ -757,6 +764,7 @@ object LibaIntents {
 "בלי עדכונים על",
 "תחזור לשיחה על",
 "תחזרי לשיחה על",
+"תזכירי לי בעוד",
 "תעצור את העובד",
 "תעצרי את העובד",
 "תמשיך את העובד",
@@ -771,6 +779,8 @@ object LibaIntents {
 "אל תעדכן לגבי",
 "אל תעירי אותי",
 "תפסיקי להזכיר",
+"תזכיר לי בעוד",
+"תזכרי לי בעוד",
 "תשהה את העובד",
 "תשהי את העובד",
 "זמני שבת לפי",

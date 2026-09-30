@@ -871,6 +871,13 @@ class BubbleService : Service(), LibaWeb.Bridge {
     fun sendShared(msg: String) { main.post { lastShared = msg; showLabel("שיתוף → ליבה", 3000); tone("heard"); if (pageReady) { Prefs.log(this, "me", msg); sentAt = SystemClock.elapsedRealtime(); setState(LibaState.SENDING); web?.let { LibaWeb.sendInput(it, msg, "share") } } else Prefs.setPendingShare(this, msg) } }
     private var lastShared = ""
     // ---------- local commands, then send ----------
+    /** reflex-core: a timer on the phone's own alarm - it rings with no page and no network */
+    private fun timerSet(q: String, tm: Reflex.Timer) {
+        val now = System.currentTimeMillis()
+        Reminders.addLocal(this, Reminder(ReminderCore.LOCAL + now, now + tm.ms, now + tm.ms + 30 * 60_000L, Reflex.timerRing(tm), cap = false))
+        val a = Reflex.timerSay(tm); speak(a)
+        if (pageReady) web?.let { LibaWeb.sendReflex(it, q, a, "reflex.timer") }
+    }
     /** reflex-core: answered here in milliseconds; the page gets the question and the answer for the turn log when it is up */
     private fun reflexSay(id: String, q: String) {
         val bm = getSystemService(android.os.BatteryManager::class.java)
@@ -886,8 +893,10 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun handleUtterance(t: String) {
         val n = t.replace("?", "").trim()
-        val id = LibaIntents.match(t) // intent-kernel: the phrases live in liba/intents/registry.json, not here
+        val pre = LibaIntents.appPrefix(t) // reflex.timer: a command with words after it
+        val id = LibaIntents.match(t) ?: pre?.first // intent-kernel: the phrases live in liba/intents/registry.json, not here
         when {
+            id == "reflex.timer" && pre != null && Reflex.timer(pre.second) != null -> { timerSet(t, Reflex.timer(pre.second)!!); return } // no duration: goes on to Claude
             id == "reflex.time" || id == "reflex.date" || id == "reflex.battery" || id == "reflex.net" -> { reflexSay(id, t); return } // reflex-core: the phone knows this itself
             id == "app.repeat" && lastSaid.isNotEmpty() -> { speak(lastSaid); return }
             id == "app.readPrivate" -> { readHeld(); return }

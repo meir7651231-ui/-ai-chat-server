@@ -57,6 +57,7 @@ ${pageRows.join(',\n')}
 ]);
 const INTENT_HELP=Object.freeze(${js(help)});
 `
+const appPrefixRows = intents.filter(i => i.status === 'live' && i.where === 'app').flatMap(i => i.prefix.map(ph => ({ ph, id: i.id }))).sort((a, b) => b.ph.length - a.ph.length).map(r => `        ${js(r.ph)} to ${js(r.id)}`)
 const appRows = intents.filter(i => i.status === 'live' && i.where === 'app').flatMap(i => i.exact.map(ph => `        ${js(ph)} to ${js(i.id)}`))
 // device-mem: the few page commands the bubble answers from its own memory when the page is down, longest prefix first
 const offRows = intents.filter(i => i.status === 'live' && i.offline && i.where === 'page').flatMap(i => i.prefix.map(p => ({ p, id: i.id, lead: i.lead || [] }))).sort((a, b) => b.p.length - a.p.length)
@@ -76,6 +77,11 @@ ${appRows.join(',\n')}
     )
     fun norm(t: String): String = t.replace(Regex("[\\u200e\\u200f\\u202a-\\u202e\\u2066-\\u2069\\ufeff\\u0591-\\u05c7]"), "").replace(Regex("[?!.,:;\\"'׳״]"), "").replace(Regex("\\\\s+"), " ").trim()
     fun match(t: String): String? = EXACT[norm(t)]
+    private val APP_PREFIX = listOf<Pair<String, String>>(
+${appPrefixRows.join(',\n')}
+    )
+    /** a bubble command that takes words after it (reflex.timer): (id, the rest), longest prefix first */
+    fun appPrefix(t: String): Pair<String, String>? { val n = norm(t); for ((p, id) in APP_PREFIX) if (n.startsWith("$p ")) return id to n.removePrefix(p).trim(); return null }
     private val KNOWN_EXACT = hashSetOf<String>(
 ${knownExact.map(js).join(',\n')}
     )

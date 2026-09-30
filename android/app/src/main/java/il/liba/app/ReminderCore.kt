@@ -14,10 +14,12 @@ class ReminderCore {
     val fired = LinkedHashSet<String>()
     var day = ""; var count = 0
 
-    companion object { const val MAX = 3; const val DAY_START = 8; const val DAY_END = 22 }
+    companion object { const val MAX = 3; const val DAY_START = 8; const val DAY_END = 22; const val LOCAL = "t-" }
 
     /** a new list from the page replaces the old one; what was already said stays said */
-    fun replace(list: List<Reminder>) { items.clear(); items.addAll(list.filter { it.id !in fired }) }
+    fun replace(list: List<Reminder>) { val local = items.filter { it.id.startsWith(LOCAL) && it.id !in fired }; items.clear(); items.addAll(list.filter { it.id !in fired }); items.addAll(local.filter { l -> list.none { it.id == l.id } }) }
+    /** reflex-core: a timer Meir set on the phone itself ("תזכירי לי בעוד עשר דקות") - the page's list does not own it */
+    fun addLocal(r: Reminder) { items.removeAll { it.id == r.id }; items.add(r) }
 
     private fun roll(today: String) { if (day != today) { day = today; count = 0 } }
 
