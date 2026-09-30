@@ -12,7 +12,8 @@
     "mem",
     "remind",
     "sense",
-    "cal"
+    "cal",
+    "ctx"
   ],
   "toApp": {
     "ready": {
@@ -198,6 +199,12 @@
         "snapshot": "str"
       },
       "why": "calendar-sense: the calendar window (yesterday to a week ahead) as one snapshot, read only, only after Meir allowed it"
+    },
+    "ctx": {
+      "fields": {
+        "body": "str"
+      },
+      "why": "context-fusion: what the phone knows now - screen, lock, headset, call, when Meir woke - sent when it changes"
     }
   },
   "compat": "Adding an optional field is compatible and keeps the version; removing or renaming a message or a field bumps it.",

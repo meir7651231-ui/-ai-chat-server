@@ -163,7 +163,7 @@ const P_RAW={
   owner:()=>db.doc('channel/owner'),ownerLog:()=>db.doc('channel/owner').collection('log'),quiet:()=>db.doc('channel/quiet'),device:()=>db.doc('channel/device'),
   current:()=>db.doc('chat/current'),settings:()=>db.doc('memory/settings'),digest:day=>db.doc('memory/digest').collection('items').doc(day),identity:()=>db.doc('memory/identity'),caps:()=>db.doc('memory/caps'),memMeta:()=>db.doc('memory/meta'),
   forget:id=>db.doc('memory/forgets').collection('items').doc(id),forgets:()=>db.doc('memory/forgets').collection('items'),
-  proactive:()=>db.doc('memory/proactive'),calItem:id=>db.doc('sense/cal').collection('items').doc(id),calItems:()=>db.doc('sense/cal').collection('items'),calState:()=>db.doc('sense/cal'),senseItem:id=>db.doc('sense/notif').collection('items').doc(id),senseItems:()=>db.doc('sense/notif').collection('items'),conflict:id=>db.doc('memory/conflicts').collection('items').doc(id),conflicts:()=>db.doc('memory/conflicts').collection('items'),
+  proactive:()=>db.doc('memory/proactive'),calItem:id=>db.doc('sense/cal').collection('items').doc(id),calItems:()=>db.doc('sense/cal').collection('items'),calState:()=>db.doc('sense/cal'),context:()=>db.doc('sense/context'),body:()=>db.doc('sense/body'),senseItem:id=>db.doc('sense/notif').collection('items').doc(id),senseItems:()=>db.doc('sense/notif').collection('items'),conflict:id=>db.doc('memory/conflicts').collection('items').doc(id),conflicts:()=>db.doc('memory/conflicts').collection('items'),
   cand:k=>db.doc('memory/candidates').collection('items').doc(k),cands:()=>db.doc('memory/candidates').collection('items'),
   person:k=>db.doc('memory/people').collection('items').doc(k),people:()=>db.doc('memory/people').collection('items'),
   fact:k=>db.doc('memory/facts').collection('items').doc(k),facts:()=>db.doc('memory/facts').collection('items'),
@@ -199,7 +199,7 @@ let PAGE_ID='';try{PAGE_ID=localStorage.getItem(LSK('jid'))||'';if(!PAGE_ID){PAG
    never refused. A quota error is caught by name, said aloud once, and the page degrades at once. Nothing at the
    call sites changed: P hands out guarded references, and db-paths already forbids any path outside this table. */
 const CLS_OF={inbox:'voice',inboxDoc:'voice',parts:'voice',current:'voice',owner:'state',quiet:'state',settings:'state',task:'state',tasks:'state',
-  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',digest:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',cand:'record',cands:'record',forget:'record',forgets:'record',conflict:'record',conflicts:'record',proactive:'record',senseItem:'record',senseItems:'record',calItem:'record',calItems:'record',calState:'state',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
+  sessions:'state',budget:'state',ownerLog:'state',gallery:'record',digest:'record',identity:'record',caps:'record',memMeta:'record',person:'record',people:'record',cand:'record',cands:'record',forget:'record',forgets:'record',conflict:'record',conflicts:'record',proactive:'record',senseItem:'record',senseItems:'record',calItem:'record',calItems:'record',calState:'state',context:'fixed',body:'fixed',fact:'record',facts:'record',notes:'record',prefs:'record',turns:'record',decisions:'record',req:'record',reqs:'record',
   device:'telemetry',crash:'telemetry',telemetry:'telemetry',metricsDay:'telemetry',metricsDays:'telemetry',
   /* the janitor frees space, so its folds and lease are never refused - refusing the cure would keep the db full */
   fold:'janitor',folds:'janitor',janitor:'janitor',crashes:'record',
@@ -228,9 +228,9 @@ window.__ch={budget:()=>Object.assign({},chBudget),denied:()=>Object.assign({},c
 /* text from the database goes into the DOM through this, never raw: a task title is written by other
    sessions, and "<img onerror=…>" in one would otherwise run inside the page that holds the channel */
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-const PROTO=Object.freeze({v:1,hash:"eabaa2ddca93",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal"]),
+const PROTO=Object.freeze({v:1,hash:"02425b9a2eb9",caps:Object.freeze(["beat","clock","proto","pulse","spoke","state","trace","mem","remind","sense","cal","ctx"]),
   toApp:Object.freeze({"ready":"ready","say":"say","sent":"sent","error":"error","queued":"queued","outbox":"outbox","tap":"tap","cmd":"cmd","crashSaved":"crashSaved","tasks":"tasks","traceAck":"traceAck","state":"state","memSync":"memSync","memAck":"memAck","remind":"remind","senseAck":"senseAck","senseCfg":"senseCfg"}),
-  toPage:Object.freeze({"hello":"hello","crash":"crash","spoke":"spoke","speaking":"speaking","input":"input","trace":"trace","pulse":"pulse","memAsk":"memAsk","sense":"sense","calSync":"calSync"}),
+  toPage:Object.freeze({"hello":"hello","crash":"crash","spoke":"spoke","speaking":"speaking","input":"input","trace":"trace","pulse":"pulse","memAsk":"memAsk","sense":"sense","calSync":"calSync","ctx":"ctx"}),
   initial:"OFFLINE",moves:Object.freeze({"OFFLINE":["IDLE","WAKE"],"IDLE":["LISTENING","THINKING","SPEAKING","SENDING","RINGING","QUIET","DEGRADED","WAKE","OFFLINE"],"WAKE":["LISTENING","IDLE","SPEAKING","SENDING","RINGING","OFFLINE"],"LISTENING":["THINKING","SENDING","IDLE","SPEAKING","WAKE","OFFLINE"],"THINKING":["SENDING","SPEAKING","IDLE","OFFLINE"],"SENDING":["IDLE","SPEAKING","RINGING","THINKING","DEGRADED","WAKE","LISTENING","OFFLINE"],"SPEAKING":["IDLE","LISTENING","SENDING","WAKE","RINGING","OFFLINE"],"RINGING":["SPEAKING","IDLE","LISTENING","OFFLINE"],"QUIET":["IDLE","SPEAKING","OFFLINE"],"DEGRADED":["IDLE","SPEAKING","SENDING","OFFLINE"]})});
 const $=id=>document.getElementById(id);
 const app=$('app'),H=$('h'),SUB=$('sub'),KIND=$('kind'),OPTS=$('opts'),HEARD=$('heard'),LOG=$('log');
@@ -393,7 +393,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:69,pageHash:"d78df58ed586",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:70,pageHash:"58e6259079b5",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const f=sayWait.get(String(d.id||''));if(f)f(String(d.cause||'done'));}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -402,6 +402,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   else if(d.liba===PROTO.toPage.memAsk&&db){devMemIn(d.items);}
   else if(d.liba===PROTO.toPage.sense&&db){senseIn(d.items);}
   else if(d.liba===PROTO.toPage.calSync&&db){calIn(d.snapshot);}
+  else if(d.liba===PROTO.toPage.ctx){ctxIn(d.body);}
   else if(d.liba===PROTO.toPage.input&&d.text){ledgerBump('heard');if(pendingInput){const prev=pendingInput;pendingInput=null;clearTimeout(pendingT);send(prev);}let st=null;try{st=d.stamps?JSON.parse(String(d.stamps)):null;}catch(e){fail('P_MSG_BAD',e,'stamps');}
     pendingInput={text:String(d.text),source:String(d.source||'voice'),stamps:st};post(PROTO.toApp.tap,{});clearTimeout(pendingT);pendingT=setTimeout(()=>{if(pendingInput){const t=pendingInput;pendingInput=null;send(t);}},1500);}
 });
@@ -491,7 +492,8 @@ function gate(d){const now=Date.now();if(d.retryAt>now)return {ok:false,reason:d
   if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
   const p=d.priority||'normal';if(p==='urgent')return G_OK;
   if(catchupUntil>now&&!d.local&&d.kind!=='ask'&&d.kind!=='stuck'&&(d.ts||0)<catchupAt)return {ok:false,reason:'catchup'};
-  if(p==='morning'){const h=hourNow();if(h<8||h>=22)return {ok:false,reason:'morning'};}if(quietUntil>now)return {ok:false,reason:'quiet'};return G_OK;}
+  const hold=ctxHold(d);if(hold)return {ok:false,reason:hold}; /* context-fusion: a call or a meeting holds all but urgent */
+  if(p==='morning'&&!upNow(now))return {ok:false,reason:'morning'};if(quietUntil>now)return {ok:false,reason:'quiet'};return G_OK;}
 const heldSeen=new Set(),silenceDay={};
 function holdNote(d,reason){const k=d.id+'|'+reason;if(heldSeen.has(k))return;heldSeen.add(k);d.heldFor=reason;silenceDay[reason]=(silenceDay[reason]||0)+1;
   if(!d.local&&db)P.inboxDoc(d.id).update({holds:{[reason]:{at:Date.now(),by:PAGE_ID}}}).catch(e=>fail('P_ACK',e,'hold'));}
@@ -513,7 +515,7 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
       const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),digested:rule.id,delivery:{state:'digest',by:PAGE_ID,at:Date.now(),rule:rule.id}});}catch(e){fail('P_ACK',e,'digest');}continue;}
       const sh=POLICY.shorten(d);if(sh){lastShort=sh.full;d.shortText=sh.text;}
       d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
-      P.inboxDoc(d.id).update({speakingAt:Date.now(),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
+      P.inboxDoc(d.id).update({speakingAt:Date.now(),admit:admitOf(d),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
     sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
     /* the voice went silent without finishing (no beat, or the ceiling): not delivered - back to pending, three tries */
     if(sayOutcome==='lost'||sayOutcome==='ceiling'){spokenLocal.delete(d.id);await inboxRetry(d,sayOutcome);continue;}
@@ -556,7 +558,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
-const HOLD_HE={catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
+const HOLD_HE={call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
 function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));
@@ -1114,7 +1116,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"d78df58ed586"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"58e6259079b5"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -1659,7 +1661,7 @@ async function calIn(raw){let s;try{s=JSON.parse(String(raw||''));}catch(e){fail
   calItems=items;await calNow();proSchedule();return {wrote,gone};}
 /* what is happening now - one document, rewritten */
 async function calNow(now){now=now||Date.now();const on=calItems.filter(i=>calMeeting(i)&&i.begin<=now&&now<i.end)[0]||null;
-  try{await P.calState().set({now:{meeting:!!on,title:on?on.title:'',until:on?on.end:0},at:now,n:calItems.length});}catch(e){fail('P_DB_WRITE',e,'sense/cal');}return on;}
+  try{await P.calState().set({now:{meeting:!!on,title:on?on.title:'',until:on?on.end:0},at:now,n:calItems.length});}catch(e){fail('P_DB_WRITE',e,'sense/cal');}fuseContext(now).catch(()=>{});return on;}
 async function calLoad(){if(calItems.length||!db)return calItems;try{calItems=(await coldGet(P.calItems(),null,600)).docs.map(d=>Object.assign({id:d.id},d.data()||{})).sort((a,b)=>a.begin-b.begin);}catch(e){}return calItems;}
 function calLine(i){return (i.allDay?'כל היום: ':calTime(i.begin)+' ')+i.title+(i.where?' ב'+i.where:'')+(+i.self===2?' (דחית)':'');}
 function calDay(offset){(async()=>{await calLoad();const day=trDay(Date.now()+offset*864e5);const list=calItems.filter(i=>calDayOf(i)===day).sort((a,b)=>(b.allDay-a.allDay)||(a.begin-b.begin));
@@ -1691,4 +1693,34 @@ async function calBriefings(now){now=now||Date.now();await calLoad();const out=[
   return out;}
 setInterval(()=>{if(db&&calItems.length)calNow().catch(()=>{});},60000);
 window.__cal={in:calIn,free:calFreeSlots,briefings:calBriefings,now:calNow,items:()=>calItems};
+/* Step context-fusion. sense/context holds one picture: the phone's (screen, lock, headset, a call - sent as ctx when it
+   changes) and the calendar's (a meeting now = two people or more, not declined). It is rewritten within seconds of any
+   change. The inbox gate reads it: during a call or a meeting everything but urgent waits (reason call / meeting, and
+   "מה פספסתי" says so), and the moment it ends the pump runs. Every message that is said carries its decision -
+   inbox/<id>.admit {rule, ctx} - so a silence is never a mystery. There is no place and no motion here: location waits
+   for Meir's decision. sense/body keeps when he woke up (the first screen-on after four hours dark); a morning message
+   waits for eight - or for him to be up, if that is earlier than eight and later than six. */
+let ctxPhone={screen:null,locked:null,headset:null,call:false,lastWake:0,wakeSource:'',at:0},ctxNow={meeting:false,call:false,headset:null,screen:null,since:0};
+async function ctxIn(raw){let x;try{x=JSON.parse(String(raw||''));}catch(e){fail('P_MSG_BAD',e,'ctx');return null;}if(!x||typeof x!=='object')return null;
+  const woke=+x.lastWake||0,wokeBefore=ctxPhone.lastWake;
+  ctxPhone={screen:!!x.screen,locked:!!x.locked,headset:!!x.headset,call:!!x.call,lastWake:woke,wakeSource:String(x.wakeSource||'').slice(0,20),at:+x.at||Date.now()};
+  if(woke&&woke!==wokeBefore&&db)P.body().set({lastWake:woke,wakeSource:ctxPhone.wakeSource,at:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'sense/body'));
+  return fuseContext();}
+/* one picture; written and acted on only when it changed */
+async function fuseContext(now){now=now||Date.now();let meeting=false,title='';
+  try{const on=calItems.filter(i=>calMeeting(i)&&i.begin<=now&&now<i.end)[0];if(on){meeting=true;title=on.title;}}catch(e){}
+  const next={meeting:meeting,meetingTitle:title,call:!!ctxPhone.call,headset:ctxPhone.headset,screen:ctxPhone.screen,locked:ctxPhone.locked};
+  const changed=['meeting','call','headset','screen','locked'].some(k=>next[k]!==ctxNow[k]);
+  if(!changed)return ctxNow;const was=ctxNow;ctxNow=Object.assign(next,{since:now});
+  if(db)P.context().set(Object.assign({at:now},ctxNow)).catch(e=>fail('P_DB_WRITE',e,'sense/context'));
+  if((was.meeting&&!ctxNow.meeting)||(was.call&&!ctxNow.call))setTimeout(pump,300); /* it ended: what waited goes now */
+  return ctxNow;}
+/* the gate's part: what the context holds back */
+function ctxHold(d){if(ctxNow.call)return 'call';if(ctxNow.meeting)return 'meeting';return '';}
+/* a morning message may go when Meir is up: after eight, or after he woke if that was after six */
+function upNow(now){now=now||Date.now();const h=hourNow();if(h>=8&&h<22)return true;const w=+ctxPhone.lastWake||0;return h>=6&&h<8&&w>0&&trDay(w)===trDay(now);}
+/* the decision each spoken message carries */
+function admitOf(d){return {rule:d.release?'release':d.priority==='urgent'?'urgent':'ok',ctx:{meeting:!!ctxNow.meeting,call:!!ctxNow.call,headset:ctxNow.headset,screen:ctxNow.screen},at:Date.now()};}
+setInterval(()=>{fuseContext().catch(()=>{});},30000);
+window.__ctx={in:ctxIn,fuse:fuseContext,now:()=>ctxNow,phone:()=>ctxPhone,up:upNow};
 </script>

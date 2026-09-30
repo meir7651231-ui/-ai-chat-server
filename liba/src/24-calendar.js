@@ -23,7 +23,7 @@ async function calIn(raw){let s;try{s=JSON.parse(String(raw||''));}catch(e){fail
   calItems=items;await calNow();proSchedule();return {wrote,gone};}
 /* what is happening now - one document, rewritten */
 async function calNow(now){now=now||Date.now();const on=calItems.filter(i=>calMeeting(i)&&i.begin<=now&&now<i.end)[0]||null;
-  try{await P.calState().set({now:{meeting:!!on,title:on?on.title:'',until:on?on.end:0},at:now,n:calItems.length});}catch(e){fail('P_DB_WRITE',e,'sense/cal');}return on;}
+  try{await P.calState().set({now:{meeting:!!on,title:on?on.title:'',until:on?on.end:0},at:now,n:calItems.length});}catch(e){fail('P_DB_WRITE',e,'sense/cal');}fuseContext(now).catch(()=>{});return on;}
 async function calLoad(){if(calItems.length||!db)return calItems;try{calItems=(await coldGet(P.calItems(),null,600)).docs.map(d=>Object.assign({id:d.id},d.data()||{})).sort((a,b)=>a.begin-b.begin);}catch(e){}return calItems;}
 function calLine(i){return (i.allDay?'כל היום: ':calTime(i.begin)+' ')+i.title+(i.where?' ב'+i.where:'')+(+i.self===2?' (דחית)':'');}
 function calDay(offset){(async()=>{await calLoad();const day=trDay(Date.now()+offset*864e5);const list=calItems.filter(i=>calDayOf(i)===day).sort((a,b)=>(b.allDay-a.allDay)||(a.begin-b.begin));

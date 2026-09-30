@@ -133,6 +133,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         il.liba.app.sense.SenseBus.sink = { j -> main.post { if (pageReady) web?.let { LibaWeb.sendSense(it, j) } } }
         il.liba.app.sense.CalSense.sink = { j -> main.post { if (pageReady) web?.let { LibaWeb.sendCal(it, j) } } }
         il.liba.app.sense.CalSense.start(this)
+        il.liba.app.sense.SenseFusion.sink = { j -> main.post { if (pageReady) web?.let { LibaWeb.sendCtx(it, j) } } }
+        il.liba.app.sense.SenseFusion.start(this)
         wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val am0 = getSystemService(AUDIO_SERVICE) as AudioManager; intArrayOf(AudioManager.STREAM_SYSTEM, AudioManager.STREAM_MUSIC).forEach { try { am0.adjustStreamVolume(it, AudioManager.ADJUST_UNMUTE, 0) } catch (e: Exception) { Trace.e(Trace.Code.E_AUDIO_STREAM, "boot:" + e.javaClass.simpleName) } }
         if (!startForegroundNotif()) { stopSelf(); return }
@@ -392,7 +394,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         } catch (e: Exception) { Trace.e(Trace.Code.E_SYS_CB, "net:" + e.javaClass.simpleName) }
         runCatching { // fix: the overlay never gets onVisibilityChanged, so the shader would keep drawing with the screen off
             val sc = object : android.content.BroadcastReceiver() {
-                override fun onReceive(c: Context?, i: Intent?) { main.post { dot?.visibility = if (i?.action == Intent.ACTION_SCREEN_OFF) View.INVISIBLE else View.VISIBLE } }
+                override fun onReceive(c: Context?, i: Intent?) { main.post { dot?.visibility = if (i?.action == Intent.ACTION_SCREEN_OFF) View.INVISIBLE else View.VISIBLE
+                    il.liba.app.sense.SenseFusion.onScreen(this@BubbleService, i?.action == Intent.ACTION_SCREEN_ON) } }
             }
             registerReceiver(sc, android.content.IntentFilter().apply { addAction(Intent.ACTION_SCREEN_OFF); addAction(Intent.ACTION_SCREEN_ON) }); screenCb = sc
         }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "screen:" + it.javaClass.simpleName) }
@@ -855,7 +858,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
     } }
     override fun onReady() { main.post { Prefs.pendingShare(this)?.let { p -> Prefs.setPendingShare(this, null); main.postDelayed({ sendShared(p) }, 1500) }; if (!pageReady) { pageReady = true; pageOk = true; loginRestored(); drainWords(); pageDeadSince = 0L; pageAliveAt = System.currentTimeMillis(); Pulse.resend(); main.postDelayed({ web?.let { pulse(it) } }, 3000); status = "מחובר. לחץ על הבועה ודבר."; idleOrWake(); showLabel("ליבה מחוברת.", 3000)
         if (Prefs.reports(this)) Prefs.crash(this)?.let { c -> web?.let { LibaWeb.sendCrash(it, "c-" + System.currentTimeMillis(), packageManager.getPackageInfo(packageName, 0).versionName ?: "?", c) } }
-        main.postDelayed({ drainTrace() }, 2000); main.postDelayed({ drainMem() }, 3000); main.postDelayed({ il.liba.app.sense.SenseBus.flush(this); il.liba.app.sense.CalSense.last?.let { j -> web?.let { LibaWeb.sendCal(it, j) } } }, 3500) } } }
+        main.postDelayed({ drainTrace() }, 2000); main.postDelayed({ drainMem() }, 3000); main.postDelayed({ il.liba.app.sense.SenseBus.flush(this); il.liba.app.sense.CalSense.last?.let { j -> web?.let { LibaWeb.sendCal(it, j) } }; il.liba.app.sense.SenseFusion.publish(this, force = true) }, 3500) } } }
     fun heyOff() { heyOn = false; Prefs.setHey(this, false); stopVad(); if (listening && listenMode == "wake") { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "heyOff:" + e.javaClass.simpleName) }; listening = false }; unmuteSystem() }
     override fun onCmd(cmd: String) { main.post { when (cmd) { "sense_open" -> openSenseAccess(); "cal_on" -> askCalendar(); "cal_off" -> il.liba.app.sense.CalSense.stop(this); "hey_off" -> { heyOff(); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); try { startActivity(i) } catch (e: Exception) { Trace.e(Trace.Code.E_INTENT_OPEN, "open:" + e.javaClass.simpleName); notifyIntent("ליבה – קישור", u, i) } } } } }

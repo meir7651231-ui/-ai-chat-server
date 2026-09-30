@@ -41,7 +41,8 @@ function gate(d){const now=Date.now();if(d.retryAt>now)return {ok:false,reason:d
   if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
   const p=d.priority||'normal';if(p==='urgent')return G_OK;
   if(catchupUntil>now&&!d.local&&d.kind!=='ask'&&d.kind!=='stuck'&&(d.ts||0)<catchupAt)return {ok:false,reason:'catchup'};
-  if(p==='morning'){const h=hourNow();if(h<8||h>=22)return {ok:false,reason:'morning'};}if(quietUntil>now)return {ok:false,reason:'quiet'};return G_OK;}
+  const hold=ctxHold(d);if(hold)return {ok:false,reason:hold}; /* context-fusion: a call or a meeting holds all but urgent */
+  if(p==='morning'&&!upNow(now))return {ok:false,reason:'morning'};if(quietUntil>now)return {ok:false,reason:'quiet'};return G_OK;}
 const heldSeen=new Set(),silenceDay={};
 function holdNote(d,reason){const k=d.id+'|'+reason;if(heldSeen.has(k))return;heldSeen.add(k);d.heldFor=reason;silenceDay[reason]=(silenceDay[reason]||0)+1;
   if(!d.local&&db)P.inboxDoc(d.id).update({holds:{[reason]:{at:Date.now(),by:PAGE_ID}}}).catch(e=>fail('P_ACK',e,'hold'));}
@@ -63,7 +64,7 @@ async function pump(){if(!isArmed()){inboxQ.forEach(d=>{if(!d.local)holdNote(d,'
       const rule=POLICY.check(d);if(rule){spokenMark(d.id);await digestAdd(d,rule);try{await P.inboxDoc(d.id).update({spoken:true,spokenAt:Date.now(),digested:rule.id,delivery:{state:'digest',by:PAGE_ID,at:Date.now(),rule:rule.id}});}catch(e){fail('P_ACK',e,'digest');}continue;}
       const sh=POLICY.shorten(d);if(sh){lastShort=sh.full;d.shortText=sh.text;}
       d.again=!!d.speakingAt&&!d.spoken;d.attempts=+(d.delivery&&d.delivery.attempts)||0;
-      P.inboxDoc(d.id).update({speakingAt:Date.now(),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
+      P.inboxDoc(d.id).update({speakingAt:Date.now(),admit:admitOf(d),delivery:{state:'speaking',by:PAGE_ID,at:Date.now(),attempts:d.attempts}}).catch(e=>fail('P_ACK',e,'speakingAt'));}
     sayOutcome='done';if(d.stream&&!d.local){await streamPlay(d);continue;}try{await incoming(d);}catch(e){fail('P_MSG_BAD',e,'inbox');log('הודעה פגומה: '+(e&&e.message||e));}if(d.local)continue;
     /* the voice went silent without finishing (no beat, or the ceiling): not delivered - back to pending, three tries */
     if(sayOutcome==='lost'||sayOutcome==='ceiling'){spokenLocal.delete(d.id);await inboxRetry(d,sayOutcome);continue;}
@@ -106,7 +107,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
-const HOLD_HE={catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
+const HOLD_HE={call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
 function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));

@@ -39,6 +39,7 @@ const extra = [
   ['proactive', 'node tests/proactive.test.js'],
   ['sense', 'node tests/sense.e2e.js'],
   ['cal', 'node tests/cal.test.js'],
+  ['context', 'node tests/context.test.js'],
 ]
 
 let pass = 0
