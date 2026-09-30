@@ -17,5 +17,6 @@ fun localBrainTests() {
     val mp = m.copy(proofs = listOf(MProof("הבדיקות עברו", "המנהל", "נמדד", "cmd node tests/zman.test.js", now - 60_000L)))
     ok(LocalBrain.answer("proof.where", mp, now)!!.startsWith("\"הבדיקות עברו\" - נמדד, אמר המנהל. המקור: cmd node tests/zman.test.js (לפי מה שידעתי"), "local brain: where it came from, with the page down: " + LocalBrain.answer("proof.where", mp, now))
     ok(LocalBrain.answer("proof.where", m, now)!!.startsWith("עוד לא אמרתי שום דבר שיש לו מקור"), "local brain: nothing sourced yet - says so")
+    ok(LocalBrain.todayLine(m.copy(today = listOf("דוח נוכחות ב-10", "תורנות מטבח ב-7"))) == "היום נשאר: דוח נוכחות ב-10, תורנות מטבח ב-7." && LocalBrain.todayLine(m) == "" && LocalBrain.todayLine(null) == "", "local brain: what is left today, for the status")
     ok(LocalBrain.age(now, now - 3 * 3600_000L) == "מלפני 3 שעות" && LocalBrain.age(now, now - 30_000L) == "מלפני רגע", "local brain: ages in words")
 }

@@ -8,13 +8,15 @@ package il.liba.app
  */
 data class MTask(val title: String, val status: String, val question: String = "")
 data class MProof(val text: String, val speaker: String, val grade: String, val src: String, val at: Long)
-data class Mirror(val at: Long, val tasks: List<MTask>, val openLoop: List<String>, val waitingOn: String, val nextAction: String, val brain: String, val live: Int, val proofs: List<MProof> = emptyList())
+data class Mirror(val at: Long, val tasks: List<MTask>, val openLoop: List<String>, val waitingOn: String, val nextAction: String, val brain: String, val live: Int, val proofs: List<MProof> = emptyList(), val today: List<String> = emptyList())
 
 object LocalBrain {
     fun age(now: Long, at: Long): String { val m = ((now - at) / 60_000L).coerceAtLeast(0)
         return when { m < 1 -> "מלפני רגע"; m == 1L -> "מלפני דקה"; m < 60 -> "מלפני $m דקות"; m < 120 -> "מלפני שעה"; m < 24 * 60 -> "מלפני ${m / 60} שעות"; else -> "מלפני ${m / (24 * 60)} ימים" } }
     private fun src(now: Long, m: Mirror) = " (לפי מה שידעתי " + age(now, m.at) + ", הדף לא מחובר)"
     /** id is the registry intent the utterance matched (LibaIntents.offline); null when this is not a state question */
+    /** work-book: the second line of the status - what is left today, from the mirror (the page may be dead) */
+    fun todayLine(m: Mirror?): String = if (m == null || m.today.isEmpty()) "" else "היום נשאר: " + m.today.take(4).joinToString(", ") + "."
     fun answer(id: String, m: Mirror?, now: Long): String? {
         if (m == null) return when (id) { "brain.where", "brain.open", "brain.who", "tasks.stuck", "proof.where" -> "אין לי עדיין תמונה של המצב בטלפון. כשהדף יחזור אדע."; else -> null }
         return when (id) {

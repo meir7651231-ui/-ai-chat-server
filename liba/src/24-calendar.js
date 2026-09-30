@@ -27,8 +27,9 @@ async function calNow(now){now=now||Date.now();const on=calItems.filter(i=>calMe
 async function calLoad(){if(calItems.length||!db)return calItems;try{calItems=(await coldGet(P.calItems(),null,600)).docs.map(d=>Object.assign({id:d.id},d.data()||{})).sort((a,b)=>a.begin-b.begin);}catch(e){}return calItems;}
 function calLine(i){return (i.allDay?'כל היום: ':calTime(i.begin)+' ')+i.title+(i.where?' ב'+i.where:'')+(+i.self===2?' (דחית)':'');}
 function calDay(offset){(async()=>{await calLoad();const day=trDay(Date.now()+offset*864e5);const list=calItems.filter(i=>calDayOf(i)===day).sort((a,b)=>(b.allDay-a.allDay)||(a.begin-b.begin));
-  if(!calItems.length&&!(await calAllowed())){sayLocal('אני עוד לא קוראת את היומן. תגיד תקראי את היומן שלי.');return;}
-  sayLocal(list.length?(offset?'מחר':'היום')+' יש לך '+(list.length===1?'דבר אחד':list.length+' דברים')+': '+list.map(calLine).join('; ')+'.':(offset?'מחר':'היום')+' היומן ריק.');})()
+  const bk=bookDayLine(offset); /* work-book: the day's obligations with the calendar */
+  if(!calItems.length&&!(await calAllowed())){sayLocal((bk?bk.trim()+' ':'')+'את היומן אני עוד לא קוראת. תגיד תקראי את היומן שלי.');return;}
+  sayLocal((list.length?(offset?'מחר':'היום')+' יש לך '+(list.length===1?'דבר אחד':list.length+' דברים')+': '+list.map(calLine).join('; ')+'.':(offset?'מחר':'היום')+' היומן ריק.')+bk);})()
   .catch(e=>{fail('P_DB_READ',e,'calendar');sayLocal('לא הצלחתי לקרוא את היומן.');});return true;}
 function calToday(){return calDay(0);}
 function calTomorrow(){return calDay(1);}

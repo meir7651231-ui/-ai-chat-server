@@ -1947,6 +1947,112 @@
    ],
    "handler": "metricsSay",
    "help": "\"השערים\" / \"מה נמדד\""
+  },
+  {
+   "id": "book.add",
+   "where": "page",
+   "when": "liba",
+   "family": "ספר העבודה",
+   "handler": "bookAdd",
+   "help": "\"תוסיף חובה: דוח נוכחות, כל חמישי בעשר\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תוסיף|תוסיפי) חובה"
+   ]
+  },
+  {
+   "id": "book.week",
+   "where": "page",
+   "when": "liba",
+   "family": "ספר העבודה",
+   "handler": "bookWeek",
+   "help": "\"מה יש לי השבוע\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "מה יש לי השבוע",
+    "מה יש השבוע",
+    "מה בשבוע הזה"
+   ]
+  },
+  {
+   "id": "book.today",
+   "where": "page",
+   "when": "liba",
+   "family": "ספר העבודה",
+   "handler": "bookToday",
+   "help": "\"מה בספר העבודה היום\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "מה בספר העבודה היום",
+    "מה נשאר לי היום"
+   ]
+  },
+  {
+   "id": "book.close",
+   "where": "page",
+   "when": "liba",
+   "family": "ספר העבודה",
+   "handler": "bookCloseCmd",
+   "help": "\"סגרתי את X\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(סגרתי|גמרתי) את"
+   ]
+  },
+  {
+   "id": "form.start",
+   "where": "page",
+   "when": "liba",
+   "family": "ספר העבודה",
+   "handler": "formStart",
+   "help": "\"תמלאי את דוח הנוכחות\"",
+   "requires": [
+    "db"
+   ],
+   "prefix": [
+    "(תמלאי|תמלא|נמלא) את"
+   ]
+  },
+  {
+   "id": "form.resume",
+   "where": "page",
+   "when": "liba",
+   "family": "ספר העבודה",
+   "handler": "formResume",
+   "help": "\"תמשיך את הדוח\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "תמשיך את הדוח",
+    "תמשיכי את הדוח",
+    "נמשיך את הדוח"
+   ]
+  },
+  {
+   "id": "form.back",
+   "where": "page",
+   "when": "liba",
+   "family": "ספר העבודה",
+   "handler": "formBack",
+   "help": "\"תחזור שאלה אחורה\"",
+   "requires": [
+    "db"
+   ],
+   "exact": [
+    "תחזור שאלה אחורה",
+    "תחזרי שאלה אחורה",
+    "שאלה אחורה",
+    "אחורה"
+   ]
   }
  ],
  "families": {

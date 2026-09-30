@@ -56,7 +56,7 @@ async function deliverWithRetry(text,tag){
 }
 let flushing=false;
 async function flushOutbox(){
-  fleetTick(); /* the fleet rides the outbox tick - no timer of its own */
+  fleetTick();bookTick(); /* the fleet and the work-book ride the outbox tick - no timers of their own */
   if(!flushing&&!outbox.length&&db&&Date.now()-walRecAt>60000)await walRecover();
   if(flushing||!walPending().length||!navigator.onLine||!comments)return;
   flushing=true;let items=[];
@@ -86,6 +86,7 @@ async function send(text,forcedTag,source){
   if(!forcedTag&&!noIntent&&switchOwner(text)){post(PROTO.toApp.sent,{text,local:true});if(!isBusy())drainQ();return;}
   if(!forcedTag&&!noIntent){proWelcome();proHeard(text).catch(e=>fail('P_DB_READ',e,'proactive'));} /* proactive: anything but "לא עכשיו" after a reminder is a welcome */
   if(!forcedTag&&!noIntent&&consentAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* consent: bound to its approval id */
+  if(!forcedTag&&!noIntent&&bookAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* work-book + voice-form: answers to ליבה's own questions */
   if(!forcedTag&&!noIntent&&distillAnswer(text)){bubble('me',text);post(PROTO.toApp.sent,{text,local:true});return;} /* distill: the answer to ליבה's own question stays here */
   const rt=replyTag(text),tag=forcedTag||rt||fleetTag()||tagOf(); /* fleet-router: an answer to a worker goes to that worker */
   if(tag.indexOf('מנהל')>=0)ownerRenew(lastAsk&&lastAsk.id);

@@ -15,7 +15,7 @@
 const GRADE={measured:'נמדד',quoted:'צוטט',inferred:'הוסק'},PROOF_WAIT=60000,PROOF_TYPES=['tests','pr','build','apk','file','url'];
 const FACTUAL=/(^|\s)(עבר|עברו|נכשל|נכשלו|נכשלה|מוזג|מוזגה|מוזגו|מוכן|מוכנה|מוכנים|הושלם|הושלמה|הושלמו|עלה|עלתה|עלו|נשלח|נשלחה|נשלחו|הותקן|הותקנה|פורסם|פורסמה|תוקן|תוקנה|תוקנו|גמרתי|סיימתי|סיים|סיימה|ירוק|ירוקים|אדום|נבנה|נבנתה|רץ בהצלחה)(\s|$|[,.!])/;
 /* "בדקתי לפני דקה", "אתמול" - the ago words without their leading מ */
-const agoAt=(now,t)=>{const w=agoWords(now,t);return w==='מאתמול'?'אתמול':w==='משלשום'?'שלשום':w.replace(/^מ/,'');};
+const agoAt=(now,t)=>{const w=agoWords(now,t);return w==='מאתמול'?'אתמול':w==='משלשום'?'שלשום':(w[0]==='מ'?w.slice(1):w);};
 let evRing=[],evCursor=-1,evLog=new Map();try{evRing=JSON.parse(localStorage.getItem(LSK('ev'))||'[]');}catch(e){evRing=[];}
 function claimOf(d){const c=d&&d.claim;return c&&GRADE[c.grade]?c:null;}
 function factual(d){if(!d||d.local||d.from==='liba'||d.kind==='ask'||d.kind==='cmd')return false;return d.kind==='done'||FACTUAL.test(' '+String(d.text||'')+' ');}

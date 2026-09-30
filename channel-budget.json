@@ -22,12 +22,12 @@
       "time": "updatedAt"
     },
     "gallery": {
-      "cap": 150,
+      "cap": 120,
       "cls": "record",
       "time": "ts"
     },
     "req": {
-      "cap": 500,
+      "cap": 350,
       "ttlDays": 14,
       "cls": "record",
       "time": "askedAt"
@@ -51,7 +51,7 @@
       "time": "ts"
     },
     "telemetry/events/items": {
-      "cap": 300,
+      "cap": 250,
       "ttlDays": 7,
       "cls": "telemetry",
       "time": "ts"
@@ -72,7 +72,7 @@
       "time": "ts"
     },
     "fold": {
-      "cap": 400,
+      "cap": 350,
       "cls": "janitor",
       "time": "at"
     },
@@ -148,7 +148,7 @@
       "time": "at"
     },
     "sense/notif/items": {
-      "cap": 200,
+      "cap": 150,
       "ttlDays": 2,
       "cls": "record",
       "time": "at"
@@ -165,7 +165,7 @@
       "time": "at"
     },
     "actions/log/items": {
-      "cap": 350,
+      "cap": 300,
       "ttlDays": 7,
       "cls": "telemetry",
       "time": "at"
@@ -286,6 +286,51 @@
       "ttlDays": 30,
       "cls": "record",
       "time": "at"
+    },
+    "book": {
+      "cap": 10,
+      "cls": "state",
+      "time": "at"
+    },
+    "book/roles/items": {
+      "cap": 50,
+      "cls": "record",
+      "time": "at"
+    },
+    "book/presence/items": {
+      "cap": 60,
+      "cls": "telemetry",
+      "time": "lastAt",
+      "ttlDays": 60
+    },
+    "book/closes/items": {
+      "cap": 100,
+      "cls": "record",
+      "time": "ts",
+      "ttlDays": 90
+    },
+    "book/ledger/items": {
+      "cap": 30,
+      "cls": "record",
+      "time": "at",
+      "ttlDays": 365
+    },
+    "book/forms/items": {
+      "cap": 20,
+      "cls": "record",
+      "time": "at"
+    },
+    "book/runs/items": {
+      "cap": 60,
+      "cls": "record",
+      "time": "startedAt",
+      "ttlDays": 90
+    },
+    "book/lock/items": {
+      "cap": 20,
+      "cls": "state",
+      "time": "at",
+      "ttlDays": 30
     }
   }
 }

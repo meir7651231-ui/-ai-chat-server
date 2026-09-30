@@ -41,6 +41,8 @@ function onInbox(){pikuachCheck(inboxMerged());const items=inboxMerged().filter(
   P.orders().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,Object.assign({id:d.id},d.data()||{})));fleetIn('o',m);},e=>fail('P_DB_READ',e,'fleet/orders'));
   P.evidence().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));evidenceIn(m);},e=>fail('P_DB_READ',e,'evidence/log'));
   P.metrics().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,Object.assign({id:d.id},d.data()||{})));metricsIn(m);},e=>fail('P_DB_READ',e,'metrics'));
+  P.cycle().onSnapshot(s=>bookIn('cycle',(s.exists&&s.data())||{}),e=>fail('P_DB_READ',e,'book/cycle'));
+  P.roles().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));bookIn('roles',m);},e=>fail('P_DB_READ',e,'book/roles'));
   P.policy().onSnapshot(s=>fleetIn('p',(s.exists&&s.data())||{}),e=>fail('P_DB_READ',e,'fleet/policy'));
   P.rosterItems().onSnapshot(q=>{const m=new Map();q.docs.forEach(d=>m.set(d.id,d.data()||{}));rosterIn(m);},e=>fail('P_DB_READ',e,'brain/roster'));
   P.owner().onSnapshot(s=>{ownerFromDb((s.exists&&s.data())||{});},e=>fail('P_DB_READ',e,'channel/owner'));

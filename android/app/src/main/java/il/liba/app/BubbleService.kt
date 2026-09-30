@@ -905,8 +905,9 @@ class BubbleService : Service(), LibaWeb.Bridge {
         }, 2500L + i * 2200L) }
     }
     private fun localStatus(): String {
-        if (!pageReady) return "לא מחובר לדף. $status"
-        val t = if (taskSummary.isNotBlank()) taskSummary else "אין משימות פתוחות"
+        val today = LocalBrain.todayLine(StateMirror.get(this)).let { if (it.isEmpty()) "" else " $it" } // work-book: also with the page dead
+        if (!pageReady) return "לא מחובר לדף. $status$today"
+        val t = (if (taskSummary.isNotBlank()) taskSummary else "אין משימות פתוחות") + today
         if (sentAt > 0) { val s = (SystemClock.elapsedRealtime() - sentAt) / 1000; return "$t. ושלחתי לפני $s שניות ומחכה לתשובה." }
         return t
     }
