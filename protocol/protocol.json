@@ -14,7 +14,8 @@
     "sense",
     "cal",
     "ctx",
-    "holy"
+    "holy",
+    "mirror"
   ],
   "toApp": {
     "ready": {
@@ -127,6 +128,12 @@
         "body": "str"
       },
       "why": "shabbat-engine: the place the Shabbat times are computed for (lat, lon, minutes before sunset) - the phone computes the windows itself, offline"
+    },
+    "mirror": {
+      "fields": {
+        "body": "str"
+      },
+      "why": "local-brain: the page's picture of the state (tasks that matter, the brief, who is awake), every 15 s when it changed - the bubble answers \"איפה עצרנו\", \"מה פתוח\", \"מה תקוע\", \"מי המוח\" from it when the page is dead"
     }
   },
   "toPage": {

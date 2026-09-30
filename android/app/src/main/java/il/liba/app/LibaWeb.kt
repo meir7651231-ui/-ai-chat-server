@@ -50,6 +50,7 @@ object LibaWeb {
         fun onSenseAck(ids: List<String>)
         fun onSenseCfg(apps: List<String>)
         fun onPlace(body: String)
+        fun onMirror(body: String)
     }
 
     private class JsBridge(val b: Bridge) : ProtocolBridge {
@@ -72,6 +73,7 @@ object LibaWeb {
         @JavascriptInterface override fun senseAck(ids: String) = b.onSenseAck(list(ids))
         @JavascriptInterface override fun senseCfg(apps: String) = b.onSenseCfg(list(apps))
         @JavascriptInterface override fun place(body: String) = b.onPlace(body)
+        @JavascriptInterface override fun mirror(body: String) = b.onMirror(body)
     }
 
     @SuppressLint("SetJavaScriptEnabled")

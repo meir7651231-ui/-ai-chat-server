@@ -817,7 +817,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             id == "app.words.list" -> { val w = WordQueue.all(this); speak(if (w.isEmpty()) "אין משפטים שמורים." else "שמרתי ${w.size}: " + w.takeLast(3).joinToString("; ") { it.optString("t") }); return }
             id == "app.words.clear" -> { WordQueue.clear(this); speak("מחקתי את מה ששמרתי."); return }
             !pageReady && LibaIntents.offline(t) != null -> { val (oid, rest) = LibaIntents.offline(t)!!  // device-mem: the memory answers without the page
-                speak(when (oid) { "people.who" -> MemoryStore.who(rest); "memory.remember" -> MemoryStore.remember(this, rest); else -> MemoryStore.about(rest) }); return }
+                speak(when (oid) { "brain.where", "brain.open", "brain.who", "tasks.stuck" -> LocalBrain.answer(oid, StateMirror.get(this), System.currentTimeMillis()) ?: ""; "people.who" -> MemoryStore.who(rest); "memory.remember" -> MemoryStore.remember(this, rest); else -> MemoryStore.about(rest) }); return }
             !pageReady -> { val dropped = WordQueue.add(this, t, System.currentTimeMillis()); tone("heard")
                 val now = SystemClock.elapsedRealtime(); if (now - wordsSaidAt > 10 * 60_000L) { wordsSaidAt = now; speak("שמרתי, אשלח כשאחזור. אני לא מחוברת כי " + silentWhy() + ".") } else showLabel("נשמר (" + WordQueue.size(this) + ")", 3000)
                 if (dropped > 0) Trace.e(Trace.Code.E_PREFS, "words-cap"); return }
@@ -930,6 +930,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
         exitShabbat(); main.postDelayed({ speak("מצב חירום. אני פתוחה לחצי שעה.", true) }, 800)
     }
     override fun onSenseAck(ids: List<String>) { il.liba.app.sense.SenseBus.ack(this, ids) }
+    override fun onMirror(body: String) { StateMirror.onMirror(this, body) }
     override fun onSenseCfg(apps: List<String>) { il.liba.app.sense.SenseBus.setApps(this, apps) }
     /** step calendar-sense: the runtime permission needs an activity - MainActivity asks, and starts CalSense when allowed */
     private fun askCalendar() {

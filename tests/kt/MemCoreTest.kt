@@ -50,6 +50,7 @@ fun main(args: Array<String>) {
     holyTests(args[1], args[2])
     signedTests(args[3])
     updateTests(args[4])
+    localBrainTests()
     println(if (fails > 0) "\n$fails נכשלו" else "\nכל הבדיקות עברו")
     if (fails > 0) System.exit(1)
 }

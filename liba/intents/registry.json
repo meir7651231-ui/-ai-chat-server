@@ -311,7 +311,8 @@
    "help": "\"איפה עצרנו\"",
    "requires": [
     "db"
-   ]
+   ],
+   "offline": true
   },
   {
    "id": "brain.who",
@@ -324,7 +325,8 @@
     "איזה מוח מדבר איתי"
    ],
    "handler": "brainWho",
-   "help": "\"מי המוח\""
+   "help": "\"מי המוח\"",
+   "offline": true
   },
   {
    "id": "brain.open",
@@ -339,7 +341,22 @@
    "help": "\"מה פתוח עכשיו\"",
    "requires": [
     "db"
-   ]
+   ],
+   "offline": true
+  },
+  {
+   "id": "tasks.stuck",
+   "offline": true,
+   "where": "page",
+   "when": "liba",
+   "family": "משימות",
+   "exact": [
+    "מה תקוע",
+    "מה תקוע עכשיו",
+    "איזה משימות תקועות"
+   ],
+   "handler": "tasksStuck",
+   "help": "\"מה תקוע\""
   },
   {
    "id": "brain.roster",

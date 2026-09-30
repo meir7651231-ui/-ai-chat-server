@@ -89,6 +89,19 @@ object LibaIntents {
     )
     fun norm(t: String): String = t.replace(Regex("[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]"), "").replace(Regex("[?!.,:;\"'׳״]"), "").replace(Regex("\\s+"), " ").trim()
     fun match(t: String): String? = EXACT[norm(t)]
+    private val OFFLINE_EXACT = mapOf<String, String>(
+        "איפה עצרנו" to "brain.where",
+        "איפה עצרנו אתמול" to "brain.where",
+        "מאיפה ממשיכים" to "brain.where",
+        "מי המוח" to "brain.who",
+        "מי המוח עכשיו" to "brain.who",
+        "איזה מוח מדבר איתי" to "brain.who",
+        "מה פתוח עכשיו" to "brain.open",
+        "מה פתוח" to "brain.open",
+        "מה תקוע" to "tasks.stuck",
+        "מה תקוע עכשיו" to "tasks.stuck",
+        "איזה משימות תקועות" to "tasks.stuck"
+    )
     private val OFFLINE = listOf(
         Triple("מה אתה זוכרת על", "memory.about", listOf<String>()),
         Triple("מה אני יודעת על", "memory.about", listOf<String>()),
@@ -111,6 +124,7 @@ object LibaIntents {
     /** step device-mem: (id, rest) for a memory command the bubble can answer itself; the lead words as the page strips them */
     fun offline(t: String): Pair<String, String>? {
         val n = norm(t)
+        OFFLINE_EXACT[n]?.let { return it to "" }
         for ((p, id, lead) in OFFLINE) {
             if (n != p && !n.startsWith("$p ")) continue
             var r = n.removePrefix(p).trim()
