@@ -6,7 +6,11 @@
      queued  - waiting for the next flush
      sending - someone is delivering it right now, until leaseUntil (a dead page's lease simply expires)
    and before any resend the request is checked in the database - if it already went out, it is dropped.
-   localStorage and not IndexedDB: it already works inside this iframe, and each write is atomic. */
+   localStorage and not IndexedDB: it already works inside this iframe, and each write is atomic.
+   Not encrypted, on purpose (keystore-vault): this is a write-ahead log - the sentence is on disk before the send starts,
+   in one synchronous write. WebCrypto is asynchronous only, so an encrypted log would have a window in which a page that
+   dies loses what Meir just said. On the phone the WebView's storage is inside the app's private directory; the durable
+   copy is req/<id> in the database, under its access rules. A lost sentence costs more than a second lock on a locked box. */
 const LEASE=60000;
 let outbox=[];try{outbox=JSON.parse(localStorage.getItem(LSK('outbox'))||'[]');}catch(e){fail('P_STORE',e,'get outbox');}
 outbox=outbox.map(it=>Object.assign({phase:'queued',leaseUntil:0,attempts:0},it,{req:it.req||('legacy-'+mintId())}));
