@@ -1,7 +1,7 @@
 // «בונה-ערכים»: במקום לחפש פקודות — מחפש צירוף של חלקים לפי מה שהם נותנים (ערכים על הדוגמאות).
 // כל ערך חדש שנראה כבר (אותן תוצאות בכל הדוגמאות) — נזרק. כך מגיעים מהר לצירופים של 3–5 חלקים.
 // בסוף: הופך את הצירוף לתוכנית (שיבוץ תאים בלי לדרוס ערכים חיים), ובודק אותה בבודק הרגיל.
-import { loadShelf, placements, makeChecker } from './tzoref.mjs'; import { partTables } from './tzoref-tables.mjs'; import { dataOf } from './recipes.mjs'; import { run as runSlow } from './machine3s.mjs';
+import { loadShelf, placements, makeChecker } from './tzoref.mjs'; import { partTables } from './tzoref-tables.mjs'; import { dataOf } from './recipes.mjs'; import { keepOf as GM_KEEP_ } from './tzoref-goals.mjs'; const GM_KEEP=n=>GM_KEEP_(n,{}); import { run as runSlow } from './machine3s.mjs';
 // טבלה לחלק עם 3 כניסות (16×16×16) — כמו partTables, רק לשלוש
 function tables3(named){ const out=[]; for(const b of named){ const ins=(b.ins||[]).filter(c=>c<8), o=b.out??2; if(ins.length!==3||o>7||/רשימה|ספור|בלי|אמצע|וקטן/.test(b.name)) continue;
   const T=new Uint8Array(4096); let ok=true; for(let x=0;x<4096&&ok;x++){ let v=null; for(let k=0;k<2;k++){ const m=Array.from({length:16},()=>Math.floor(Math.random()*16)); m[ins[0]]=x>>8; m[ins[1]]=(x>>4)&15; m[ins[2]]=x&15; const r=runSlow(b.prog,m,{maxSteps:20000}); if(!r||r.st.length){ ok=false; break; } if(v==null) v=r.mem[o]; else if(v!==r.mem[o]){ ok=false; break; } } T[x]=v??0; }
@@ -31,10 +31,17 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
   const usedCells=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]).filter(c=>c<8));
   const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x);
   // תוכנית מהצירוף: מחשבים קודם את הענף הגדול; כל תוצאת-ביניים לתא פנוי; חלק לא נוגע בתאים חיים ולא בתאי-הקלט
+  const PROTECT=GM_KEEP(name); const SPILLS=[15,14,13,12].filter(c=>!PROTECT.includes(c)&&!ins.includes(c)); let SPILL=false;
+  const PS=s=>s.split(';').map(x=>x.trim()).filter(Boolean).map(x=>{ const [o,a]=x.split(' '); return a==null?[o]:[o,+a]; });
   function gen1(rnd){ const prog=[]; const live=new Set(); const R=k=>rnd?Math.floor(Math.random()*k):0;
     const emit=(e,target)=>{ if(e.cell!=null) return e.cell;
       const kids=e.c?[e.a,e.b,e.c]:e.b?[e.a,e.b]:[e.a]; const order=kids.map((k,i)=>i).sort((i,j)=>size(kids[j])-size(kids[i])); const cells=[];
-      for(const i of order){ const c=emit(kids[i],null); if(c==null) return null; cells[i]=c; if(!ins.includes(c)) live.add(c); }
+      const spilled={}; let sp=0;
+      for(let oi=0;oi<order.length;oi++){ const i=order[oi]; const c=emit(kids[i],null); if(c==null) return null; cells[i]=c; if(!ins.includes(c)) live.add(c);
+        // «מגירה»: אם יש עוד ילד לחשב ואין הרבה תאים פנויים — מעבירים את התוצאה זמנית לתא רחוק (15, 14…) ומשחררים
+        if(SPILL&&oi<order.length-1&&!ins.includes(c)&&sp<SPILLS.length){ const S=SPILLS[sp++]; prog.push(...PS(`WHERE ${c}; GO; TAKE; WHERE ${S}; GO; PUT`)); live.delete(c); spilled[i]=S; } }
+      for(const [i,S] of Object.entries(spilled)){ const fr=[2,4,5,6,7].filter(c=>!live.has(c)&&!ins.includes(c)&&!cells.includes(c)); if(!fr.length) return null; const f=fr[R(fr.length)];
+        prog.push(...PS(`WHERE ${S}; GO; TAKE; WHERE ${f}; GO; PUT`)); cells[i]=f; live.add(f); }
       // כל לבנה שעושה בדיוק אותו דבר (אותה טבלה) — גם גרסה «ניידת» של לבנה מוברגת
       const same=(EQ.get(e.f)||[e.f]).map(n=>blocks.get(n)); const free=[2,4,5,6,7].filter(c=>!live.has(c)&&!ins.includes(c));
       const tgt=target??(free.length?free[R(free.length)]:null); if(tgt==null) return null;
@@ -43,7 +50,7 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
       if(!ok.length) return null; const p=ok[R(ok.length)]; prog.push(...shift(p.prog,prog.length));
       for(const c of cells) live.delete(c); return tgt; };
     return emit(found,out)==null?null:prog; }
-  for(let t=0;t<tries;t++){ const p=gen1(t>0); if(p&&chk(p)) return {prog:p,expr:found,made,ms:Date.now()-t0}; }
+  for(let t=0;t<tries;t++){ SPILL=t>=tries/2; const p=gen1(t>0); if(p&&chk(p)) return {prog:p,expr:found,made,ms:Date.now()-t0}; }
   // לא הצלחנו להפוך לתוכנית: חוסמים את החלקים «המוברגים» שבצירוף (אין להם שיבוץ גמיש) ומחפשים צירוף אחר
   const names=[]; const walk=e=>{ if(e.cell!=null) return; names.push(e.f); walk(e.a); if(e.b) walk(e.b); if(e.c) walk(e.c); }; walk(found);
   const stuck=[...new Set(names)].filter(n=>(EQ.get(n)||[n]).every(m=>blocks.get(m)?.movable===false)); const k3=[...new Set(names)].filter(n=>T3CACHE.some(t=>t.name===n)); const ban2=[...new Set([...ban,...(stuck.length?stuck:k3.length?k3:names.slice(0,1))])];   // קודם מוברגים, אחר-כך חלקי-שלושה, ורק בסוף השורש
