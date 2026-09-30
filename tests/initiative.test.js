@@ -47,6 +47,18 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const s = await say('מה עשית לבד היום');
   ok(/היום שמתי לב ל-\d+ דברים, ועשיתי לבד \d+/.test(s), '"מה עשית לבד היום": ' + s.slice(0, 120));
   ok((await f.evaluate(() => window.__agent.ledger.ring().filter(x => x.action === 'initiative').every(x => x.mandateVerdict))), 'every initiative is in the ledger with its verdict');
+  // a question of her own waits while Meir is answering another (the phone test: an old-task question took his answer)
+  heard.length = 0;
+  await f.evaluate(() => window.__h.set('inbox/qa1', { from: 'manager', kind: 'ask', speaker: 'המנהל', topic: 'בדיקה', text: 'ביקש טביעת אצבע?', options: ['ביקש', 'לא ביקש'], spoken: false, ts: Date.now() }));
+  await speak(1500);
+  await f.evaluate(() => queueLocal({ id: 'init-probe', kind: 'ask', proactive: true, speaker: 'ליבה', text: 'שמתי לב: משימה ישנה מחכה לך?', options: ['כן', 'לא'] }));
+  await speak(1500);
+  const early = heard.some(h => /משימה ישנה מחכה לך/.test(h)), la = await f.evaluate(() => lastAsk && lastAsk.id);
+  ok(!early && la === 'qa1', 'her own question waits while Meir is answering the other - the answer stays bound to it');
+  await say('לא ביקש');
+  const dec = await f.evaluate(() => window.__h.all('decisions/log/items').filter(d => /טביעת אצבע/.test(d.question || '')).length);
+  await speak(1500);
+  ok(heard.some(h => /משימה ישנה מחכה לך/.test(h)), 'after the answer, her question is asked at once');
   ok(!errs.length, 'no page error: ' + errs.join(' | '));
   await b.close(); console.log(fails ? `\n${fails} נכשלו` : '\nכל הבדיקות עברו'); process.exit(fails ? 1 : 0);
 })().catch(e => { console.log('HARNESS ERROR', e); process.exit(1); });

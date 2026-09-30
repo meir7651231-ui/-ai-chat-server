@@ -412,7 +412,7 @@ function listen(){return new Promise(res=>{if(!SR){res(null);return;}if(listenin
 /* ---- wake lock ---- */
 async function keepAwake(){try{if('wakeLock' in navigator){wakeLock=await navigator.wakeLock.request('screen');wakeLock.addEventListener('release',()=>{wakeLock=null;});}}catch(e){fail('P_WAKELOCK',e);}}
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&isArmed()&&!wakeLock)keepAwake();});
-const PAGE_NUM=({page:78,}).page; /* say-ship: the page's own number, written in the page:NN, form so the bump and the page-version gate cover it */
+const PAGE_NUM=({page:79,}).page; /* say-ship: the page's own number, written in the page:NN, form so the bump and the page-version gate cover it */
 
 /* ---- capabilities ---- */
 /* protocol-contract: an app older than the page does not know some of its messages - Meir hears it once,
@@ -441,7 +441,7 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:78,pageHash:"159aa6d63e8d",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:79,pageHash:"9c13b962c0e5",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const sid=String(d.id||''),f=sayWait.get(sid);if(f)f(String(d.cause||'done'));else if(sayMid.has(sid)&&String(d.cause||'done')==='done')lateSpoke(sayMid.get(sid));if(String(d.cause||'done')!=='held')sayMid.delete(sid);} /* held: the phone may still say it later */
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
   else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:(r=>r.allow?r.payload.text:'[הושמט: רגיש]')(egress('db:crashes',{text:String(d.text).slice(0,4000),meta:{kind:'system'}})),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
@@ -548,8 +548,12 @@ function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.som
 const hourNow=()=>window.__testHour!=null?window.__testHour:new Date().getHours(); /* tests pin the hour */
 const G_OK={ok:true};
 function gate(d){const now=Date.now();if(shabbatOn(now)&&!d.pikuachOk)return {ok:false,reason:'shabbat'}; /* shabbat-engine: before everything, urgent and commands too */
+  if(d.retryWhy==='asking'&&d.retryAt>now&&(!lastAsk||(lastReqAt||0)>lastAsk.at))d.retryAt=0; /* Meir answered - her question may come now */
   if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
   if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
+  /* a question ליבה raises on her own waits while Meir is still answering another one - or his answer lands on the
+     wrong question (the phone test, 3.36.0: an old-task question took "it crashed") */
+  if(d.proactive&&(d.kind==='ask'||(d.options&&d.options.length))&&lastAsk&&lastAsk.id!==d.id&&lastAsk.from!=='liba'&&now-lastAsk.at<REPLY_WINDOW&&!((lastReqAt||0)>lastAsk.at)){d.retryAt=lastAsk.at+REPLY_WINDOW+500;d.retryWhy='asking';return {ok:false,reason:'asking'};}
   const fa=fleetAutoGate(d);if(fa)return {ok:false,reason:fa};
   const pg=proofGate(d);if(pg)return {ok:false,reason:pg}; /* auditor-hold */
   const p=d.priority||'normal';if(p==='urgent')return G_OK;
@@ -629,7 +633,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;Ledger.record(
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
-const HOLD_HE={proof:'כי אני בודקת אותן לפני שאני אומרת',triage:'כי הן שאלות של עובדים שלא חוסמות הרבה - יצטברו לסיכום',auto:'כי עניתי עליהן לבד מהחלטה קודמת',shabbat:'כי שבת',call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
+const HOLD_HE={asking:'כי אתה עוד עונה על שאלה אחרת',proof:'כי אני בודקת אותן לפני שאני אומרת',triage:'כי הן שאלות של עובדים שלא חוסמות הרבה - יצטברו לסיכום',auto:'כי עניתי עליהן לבד מהחלטה קודמת',shabbat:'כי שבת',call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
 function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));
@@ -1041,7 +1045,7 @@ async function send(text,forcedTag,source){
   const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
-  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();Ledger.record({action:'send',cause:source,inputs:{req:reqId,to:tag.trim()}});reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
+  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();if(inboxQ.some(x=>x.retryWhy==='asking'))setTimeout(pump,400);Ledger.record({action:'send',cause:source,inputs:{req:reqId,to:tag.trim()}});reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
   try{P.req(reqId).set({text:dbText(text),askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
@@ -1198,7 +1202,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"159aa6d63e8d"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"9c13b962c0e5"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -2062,7 +2066,7 @@ async function buildWake(text,wakeId){const b=await readBrief();const parts=[];
   const blocked=(lastTasks||[]).filter(t=>t.status==='blocked').slice(0,3).map(t=>t.title+(t.question?' ('+t.question+')':''));if(blocked.length)parts.push('תקוע: '+blocked.join('; '));
   if(b.lastDecision)parts.push('החלטה אחרונה: '+b.lastDecision);
   try{const since=Date.now()-6*3600e3;const t=(await turnsBetween(since,Date.now()+1,60)).filter(x=>x.from==='user'||x.from==='manager').slice(-4,-1);if(t.length)parts.push('לפני כן: '+t.map(x=>(x.from==='user'?'מאיר: ':'')+String(x.text||'').slice(0,90)).join(' / '));}catch(e){}
-  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"159aa6d63e8d");
+  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"9c13b962c0e5");
   let out='';for(const p of parts){if(out.length+p.length+3>WAKE_MAX)break;out+=(out?'\n':'')+p;}
   if(db)P.wake(wakeId).set({envelope:out,len:out.length,at:Date.now(),brainAt:briefNow&&+briefNow.at||0}).catch(()=>{});
   return out;}

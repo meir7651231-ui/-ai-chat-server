@@ -38,8 +38,12 @@ function queueLocal(d){d.local=true;d.from='liba';d.ts=Date.now();if(!inboxQ.som
 const hourNow=()=>window.__testHour!=null?window.__testHour:new Date().getHours(); /* tests pin the hour */
 const G_OK={ok:true};
 function gate(d){const now=Date.now();if(shabbatOn(now)&&!d.pikuachOk)return {ok:false,reason:'shabbat'}; /* shabbat-engine: before everything, urgent and commands too */
+  if(d.retryWhy==='asking'&&d.retryAt>now&&(!lastAsk||(lastReqAt||0)>lastAsk.at))d.retryAt=0; /* Meir answered - her question may come now */
   if(d.retryAt>now)return {ok:false,reason:d.retryWhy||'claim'};if(d.kind==='cmd')return appMode?G_OK:{ok:false,reason:'noapp'};
   if(d.release)return G_OK;if(!d.local&&expired(d))return G_OK; /* an expired one passes, to be marked expired and never said */
+  /* a question ליבה raises on her own waits while Meir is still answering another one - or his answer lands on the
+     wrong question (the phone test, 3.36.0: an old-task question took "it crashed") */
+  if(d.proactive&&(d.kind==='ask'||(d.options&&d.options.length))&&lastAsk&&lastAsk.id!==d.id&&lastAsk.from!=='liba'&&now-lastAsk.at<REPLY_WINDOW&&!((lastReqAt||0)>lastAsk.at)){d.retryAt=lastAsk.at+REPLY_WINDOW+500;d.retryWhy='asking';return {ok:false,reason:'asking'};}
   const fa=fleetAutoGate(d);if(fa)return {ok:false,reason:fa};
   const pg=proofGate(d);if(pg)return {ok:false,reason:pg}; /* auditor-hold */
   const p=d.priority||'normal';if(p==='urgent')return G_OK;
@@ -119,7 +123,7 @@ async function inboxRetry(d,why){const attempts=(d.attempts||0)+1;Ledger.record(
 /* "מה פספסתי" / "מה חיכה לי": what is waiting right now and why; "תשחרר הכול" / "תשחרר רק שאלות" lets it through. A
    release goes through the same pump - merged, grouped, one intro - never an avalanche. Another device's claim and a
    command with no bubble are never released: that would mean saying it twice, or running it nowhere. */
-const HOLD_HE={proof:'כי אני בודקת אותן לפני שאני אומרת',triage:'כי הן שאלות של עובדים שלא חוסמות הרבה - יצטברו לסיכום',auto:'כי עניתי עליהן לבד מהחלטה קודמת',shabbat:'כי שבת',call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
+const HOLD_HE={asking:'כי אתה עוד עונה על שאלה אחרת',proof:'כי אני בודקת אותן לפני שאני אומרת',triage:'כי הן שאלות של עובדים שלא חוסמות הרבה - יצטברו לסיכום',auto:'כי עניתי עליהן לבד מהחלטה קודמת',shabbat:'כי שבת',call:'כי אתה בשיחה',meeting:'כי אתה בפגישה',catchup:'מחכות שתגיד הכול',quiet:'בגלל השקט',morning:'מחכות לבוקר',offline:'כי הייתי מנותקת',claim:'כי מכשיר אחר מקריא אותן',retry:'כי הקול נפל ואני מנסה שוב',noapp:'פקודות שמחכות לבועה'};
 const heldNow=()=>inboxQ.filter(d=>!spokenLocal.has(d.id)).map(d=>({d,g:gate(d)})).filter(x=>!x.g.ok);
 function missedList(){{const h=heldNow();const by={};h.forEach(x=>{by[x.g.reason]=(by[x.g.reason]||0)+1;});
     const parts=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([r,n])=>(n===1?'אחת':n)+' '+(HOLD_HE[r]||r));

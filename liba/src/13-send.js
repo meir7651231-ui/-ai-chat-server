@@ -98,7 +98,7 @@ async function send(text,forcedTag,source){
   const mine=bubble('me',text);const th=bubble('li think','ליבה חושבת…');
   /* one request per sentence: what was said, how, to whom, and what it answered - so "how many did ליבה
      close" is a query and not a feeling */
-  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();Ledger.record({action:'send',cause:source,inputs:{req:reqId,to:tag.trim()}});reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
+  const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();if(inboxQ.some(x=>x.retryWhy==='asking'))setTimeout(pump,400);Ledger.record({action:'send',cause:source,inputs:{req:reqId,to:tag.trim()}});reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
   try{P.req(reqId).set({text:dbText(text),askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
