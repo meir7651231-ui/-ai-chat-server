@@ -167,9 +167,10 @@ const INTENTS=Object.freeze([
   {"id":"consent.today","where":"page","when":"liba","exact":["מה אישרתי היום","על מה אישרתי היום"],"prefix":[],"suffix":[],"handler":"approvalsToday","confirm":false,"pass":false,"requires":["db"],"lead":[],"leadRequired":false},
   {"id":"power.today","where":"page","when":"liba","exact":["כמה סוללה אכלת היום","כמה סוללה אכלת","כמה סוללה הלכה היום","כמה את עולה בסוללה"],"prefix":[],"suffix":[],"handler":"powerToday","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
   {"id":"power.where","where":"page","when":"liba","exact":["על מה הלכה הסוללה","על מה הלך","על מה הלכה הסוללה היום"],"prefix":[],"suffix":[],"handler":"powerWhere","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
-  {"id":"power.budget","where":"page","when":"liba","exact":[],"prefix":["תקציב סוללה"],"suffix":[],"handler":"powerBudget","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false}
+  {"id":"power.budget","where":"page","when":"liba","exact":[],"prefix":["תקציב סוללה"],"suffix":[],"handler":"powerBudget","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false},
+  {"id":"egress.asSaid","where":"page","when":"liba","exact":["תשלח כמו שאמרתי","תשלחי כמו שאמרתי","שלח כמו שאמרתי"],"prefix":[],"suffix":[],"handler":"sendAsSaid","confirm":false,"pass":false,"requires":[],"lead":[],"leadRequired":false}
 ]);
-const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"איפה עצרנו\", \"מי המוח\", \"מה פתוח עכשיו\", \"מה תקוע\", \"מי ער\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"דני הוא הבן שלי\", \"מי זה X\", \"תקרא לו X\", \"תאחד את X עם Y\", \"ליבה תחזור\", \"תעלה את המנהל\", \"למי זה הלך\", \"תחזיר לי את זה\" (לצד השני), \"תשאיר את זה אצל המנהל\" (עד סוף היום), \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"מתי נכנסת שבת\", \"זמני שבת לפי בני ברק\" (בשבת ליבה שותקת לגמרי), \"למה לא סיפרת לי\", \"מה הכללים שלי\", \"תבטל את הכלל על X\", \"אל תעדכן אותי על X\", \"תשתיק X\", \"אל תעיר אותי לפני שש\", \"תקצר\", \"מה פספסתי\", \"תשחרר הכול\", \"הכול\" (אחרי תדרוך), \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"נחזור לזה אחרי הפגישה\" (ליבה תזכיר כשהפגישה תעלה), \"לא עכשיו\" (אחרי תזכורת - פחות כאלה), \"תפסיק להזכיר\", \"תשכח הכול על X\" (מכל מקום, עם ספירה לפני), \"תחזיר את מה ששכחת\" (עד יממה), \"תשכח את…\", \"אל תשאל אותי על…\", \"מה את זוכרת על X\", \"בלי הקשר\" (למשפט הבא), \"אני מאיר, …\" (כרטיס הזהות), \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"על מה דיברנו אתמול\", \"תחזור לשיחה על X\", \"תייצא את הזיכרון\", \"מה למדנו היום\" (מה ליבה למדה לבד מהשיחות)"],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה יש לי היום\", \"מה יש לי מחר\", \"מתי אני פנוי\", \"תקראי את היומן שלי\" (קריאה בלבד), \"תפסיקי לקרוא את היומן\", \"תקבע פגישה…\" (מחכה להחלטה שלך), \"תקשיבי להתראות של וואטסאפ\", \"תפסיקי להקשיב להתראות של…\", \"לאיזה אפליקציות את מקשיבה\", \"מה הגיע בהתראות\", \"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"את רשאית לשנות עדיפות\", \"אל תעשי לבד מחיקה\", \"מה את רשאית לעשות\", \"מה עשית לבד היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"כמה עלה היום\", \"מה אישרתי היום\", \"כמה סוללה אכלת היום\", \"על מה הלכה הסוללה\", \"תקציב סוללה עשרה אחוז\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
+const INTENT_HELP=Object.freeze([["דיבור","לחיצה על הבועה, \"ליבה\" (מילת הפעלה), כפתור אוזניה במצב רכב, אריח \"ליבה – דבר\" במסך הנעילה, שיתוף מכל אפליקציה → ליבה"],["משימות","\"מה בניתי השבוע\", \"איפה עצרנו\", \"מי המוח\", \"מה פתוח עכשיו\", \"מה תקוע\", \"מי ער\", \"מפה\" (כל הסשנים), \"תפתח\" (תוצאה אחרונה), \"קודם את X\", \"מה הסטטוס\", \"תעצור את X\", \"תמשיך את X\""],["בנייה","\"המחולל\", \"תבנה לי X\", \"תבדוק X\", \"תתקן X\" – נפתח עובד, \"תעלה לאוויר\", \"תחזור לגרסה של הבוקר\""],["אנשים","\"דני הוא הבן שלי\", \"מי זה X\", \"תקרא לו X\", \"תאחד את X עם Y\", \"ליבה תחזור\", \"תעלה את המנהל\", \"למי זה הלך\", \"תחזיר לי את זה\" (לצד השני), \"תשאיר את זה אצל המנהל\" (עד סוף היום), \"מה המנהל עושה עכשיו\""],["שקט","\"תפריע\", \"אל תפריע שעה / עד הערב\", \"מתי נכנסת שבת\", \"זמני שבת לפי בני ברק\" (בשבת ליבה שותקת לגמרי), \"למה לא סיפרת לי\", \"מה הכללים שלי\", \"תבטל את הכלל על X\", \"אל תעדכן אותי על X\", \"תשתיק X\", \"אל תעיר אותי לפני שש\", \"תקצר\", \"מה פספסתי\", \"תשחרר הכול\", \"הכול\" (אחרי תדרוך), \"מצב לילה\", \"בטל מצב לילה\", \"שקט\" (כיבוי מילת הפעלה)"],["קול","\"חזור\", \"לאט יותר\", \"מהר יותר\", \"תני להפריע\", \"מצב רכב\", \"בלי צלילים\", \"דלג\", \"תמשיך\", \"רגע\""],["זיכרון","\"תזכור ש…\", \"נחזור לזה אחרי הפגישה\" (ליבה תזכיר כשהפגישה תעלה), \"לא עכשיו\" (אחרי תזכורת - פחות כאלה), \"תפסיק להזכיר\", \"תשכח הכול על X\" (מכל מקום, עם ספירה לפני), \"תחזיר את מה ששכחת\" (עד יממה), \"תשכח את…\", \"אל תשאל אותי על…\", \"מה את זוכרת על X\", \"בלי הקשר\" (למשפט הבא), \"אני מאיר, …\" (כרטיס הזהות), \"מה אתה זוכר\", \"אל תשמור שיחות\", \"מה נשמר\", \"על מה דיברנו אתמול\", \"תחזור לשיחה על X\", \"תייצא את הזיכרון\", \"מה למדנו היום\" (מה ליבה למדה לבד מהשיחות)"],["שליחה","\"מה לא נשלח\", \"תשלח שוב\", \"מה אמרתי כשהיית מנותקת\""],["חושים","\"מה יש לי היום\", \"מה יש לי מחר\", \"מתי אני פנוי\", \"תקראי את היומן שלי\" (קריאה בלבד), \"תפסיקי לקרוא את היומן\", \"תקבע פגישה…\" (מחכה להחלטה שלך), \"תקשיבי להתראות של וואטסאפ\", \"תפסיקי להקשיב להתראות של…\", \"לאיזה אפליקציות את מקשיבה\", \"מה הגיע בהתראות\", \"מה חשוב במייל\", \"תענה ש…\", \"תזכיר לי מחר בתשע…\", \"תחפש…\""],["בקרה","\"מה נשבר היום\", \"את רשאית לשנות עדיפות\", \"אל תעשי לבד מחיקה\", \"מה את רשאית לעשות\", \"מה עשית לבד היום\", \"כמה בקשות היום\", \"כמה זמן לוקח לך לענות\", \"מה מצב הקו\", \"למה שתקת\", \"תתקין\" (גרסה חדשה), \"כמה עלה היום\", \"מה אישרתי היום\", \"כמה סוללה אכלת היום\", \"על מה הלכה הסוללה\", \"תקציב סוללה עשרה אחוז\", \"תשלח כמו שאמרתי\""],["עזרה","\"מה את יודעת\", \"פקודות <משפחה>\""]]);
 const MOADIM=Object.freeze({"2026-04-02":"פסח","2026-04-08":"שביעי של פסח","2026-05-22":"שבועות","2026-09-12":"ראש השנה","2026-09-13":"ראש השנה","2026-09-21":"יום כיפור","2026-09-26":"סוכות","2026-10-03":"שמיני עצרת","2027-04-22":"פסח","2027-04-28":"שביעי של פסח","2027-06-11":"שבועות","2027-10-02":"ראש השנה","2027-10-03":"ראש השנה","2027-10-11":"יום כיפור","2027-10-16":"סוכות","2027-10-23":"שמיני עצרת","2028-04-11":"פסח","2028-04-17":"שביעי של פסח","2028-05-31":"שבועות","2028-09-21":"ראש השנה","2028-09-22":"ראש השנה","2028-09-30":"יום כיפור","2028-10-05":"סוכות","2028-10-12":"שמיני עצרת","2029-03-31":"פסח","2029-04-06":"שביעי של פסח","2029-05-20":"שבועות","2029-09-10":"ראש השנה","2029-09-11":"ראש השנה","2029-09-19":"יום כיפור","2029-09-24":"סוכות","2029-10-01":"שמיני עצרת","2030-04-18":"פסח","2030-04-24":"שביעי של פסח","2030-06-07":"שבועות","2030-09-28":"ראש השנה","2030-09-29":"ראש השנה","2030-10-07":"יום כיפור","2030-10-12":"סוכות","2030-10-19":"שמיני עצרת","2031-04-08":"פסח","2031-04-14":"שביעי של פסח","2031-05-28":"שבועות","2031-09-18":"ראש השנה","2031-09-19":"ראש השנה","2031-09-27":"יום כיפור","2031-10-02":"סוכות","2031-10-09":"שמיני עצרת","2032-03-27":"פסח","2032-04-02":"שביעי של פסח","2032-05-16":"שבועות","2032-09-06":"ראש השנה","2032-09-07":"ראש השנה","2032-09-15":"יום כיפור","2032-09-20":"סוכות","2032-09-27":"שמיני עצרת","2033-04-14":"פסח","2033-04-20":"שביעי של פסח","2033-06-03":"שבועות","2033-09-24":"ראש השנה","2033-09-25":"ראש השנה","2033-10-03":"יום כיפור","2033-10-08":"סוכות","2033-10-15":"שמיני עצרת","2034-04-04":"פסח","2034-04-10":"שביעי של פסח","2034-05-24":"שבועות","2034-09-14":"ראש השנה","2034-09-15":"ראש השנה","2034-09-23":"יום כיפור","2034-09-28":"סוכות","2034-10-05":"שמיני עצרת","2035-04-24":"פסח","2035-04-30":"שביעי של פסח","2035-06-13":"שבועות","2035-10-04":"ראש השנה","2035-10-05":"ראש השנה","2035-10-13":"יום כיפור","2035-10-18":"סוכות","2035-10-25":"שמיני עצרת","2036-04-12":"פסח","2036-04-18":"שביעי של פסח","2036-06-01":"שבועות","2036-09-22":"ראש השנה","2036-09-23":"ראש השנה","2036-10-01":"יום כיפור","2036-10-06":"סוכות","2036-10-13":"שמיני עצרת","2037-03-31":"פסח","2037-04-06":"שביעי של פסח","2037-05-20":"שבועות","2037-09-10":"ראש השנה","2037-09-11":"ראש השנה","2037-09-19":"יום כיפור","2037-09-24":"סוכות","2037-10-01":"שמיני עצרת","2038-04-20":"פסח","2038-04-26":"שביעי של פסח","2038-06-09":"שבועות","2038-09-30":"ראש השנה","2038-10-01":"ראש השנה","2038-10-09":"יום כיפור","2038-10-14":"סוכות","2038-10-21":"שמיני עצרת","2039-04-09":"פסח","2039-04-15":"שביעי של פסח","2039-05-29":"שבועות","2039-09-19":"ראש השנה","2039-09-20":"ראש השנה","2039-09-28":"יום כיפור","2039-10-03":"סוכות","2039-10-10":"שמיני עצרת","2040-03-29":"פסח","2040-04-04":"שביעי של פסח","2040-05-18":"שבועות","2040-09-08":"ראש השנה","2040-09-09":"ראש השנה","2040-09-17":"יום כיפור","2040-09-22":"סוכות","2040-09-29":"שמיני עצרת","2041-04-16":"פסח","2041-04-22":"שביעי של פסח","2041-06-05":"שבועות","2041-09-26":"ראש השנה","2041-09-27":"ראש השנה","2041-10-05":"יום כיפור","2041-10-10":"סוכות","2041-10-17":"שמיני עצרת","2042-04-05":"פסח","2042-04-11":"שביעי של פסח","2042-05-25":"שבועות","2042-09-15":"ראש השנה","2042-09-16":"ראש השנה","2042-09-24":"יום כיפור","2042-09-29":"סוכות","2042-10-06":"שמיני עצרת","2043-04-25":"פסח","2043-05-01":"שביעי של פסח","2043-06-14":"שבועות","2043-10-05":"ראש השנה","2043-10-06":"ראש השנה","2043-10-14":"יום כיפור","2043-10-19":"סוכות","2043-10-26":"שמיני עצרת","2044-04-12":"פסח","2044-04-18":"שביעי של פסח","2044-06-01":"שבועות","2044-09-22":"ראש השנה","2044-09-23":"ראש השנה","2044-10-01":"יום כיפור","2044-10-06":"סוכות","2044-10-13":"שמיני עצרת","2045-04-02":"פסח","2045-04-08":"שביעי של פסח","2045-05-22":"שבועות","2045-09-12":"ראש השנה","2045-09-13":"ראש השנה","2045-09-21":"יום כיפור","2045-09-26":"סוכות","2045-10-03":"שמיני עצרת","2046-04-21":"פסח","2046-04-27":"שביעי של פסח","2046-06-10":"שבועות","2046-10-01":"ראש השנה","2046-10-02":"ראש השנה","2046-10-10":"יום כיפור","2046-10-15":"סוכות","2046-10-22":"שמיני עצרת"});
 const P_RAW={
   inbox:()=>db.collection('inbox'),inboxDoc:id=>db.doc('inbox/'+id),
@@ -409,10 +410,10 @@ window.addEventListener('message',e=>{if(e.source!==window.parent)return;const d
   if(d.liba===PROTO.toPage.hello){urgentSeen(d.urgent,'native');urgentSeen(d.spoken,'phone');if(!appMode)catchupCheck();appMode=true;arm('hello');appVer=String(d.ver||'');appCaps=Array.isArray(d.caps)?d.caps.map(String):null;appPv=+d.pv||0;protoCheck();
     /* step clock: the page and the phone read the same wall clock, so this is transit plus drift. Over the limit,
        timings from this load are marked and left out of every statistic - never quietly corrected. */
-    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:76,pageHash:"15d9b845a80b",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
+    if(+d.wall>0){clockSkew=Date.now()-(+d.wall);if(Math.abs(clockSkew)>SKEW_MAX)fail('P_CLOCK_SKEW',null,'skew '+clockSkew);}trVer=appVer;try{if(!window.__devSent){window.__devSent=true;P.device().set({skew:(+d.wall>0?Date.now()-(+d.wall):null),app:d.ver||'',page:76,pageHash:"4f34c095676a",at:Date.now(),ua:navigator.userAgent.slice(0,120)}).catch(e=>fail('P_DB_WRITE',e,'channel/device'));}}catch(e){fail('P_DB_WRITE',e,'channel/device');}handsFree=false;$('start').hidden=true;$('hf').hidden=true;$('talk').hidden=true;SUB.textContent='מחובר לבועה של אנדרואיד';setSt('בועה','on');post(PROTO.toApp.ready,{});setTimeout(devMemSend,1500);setTimeout(proSchedule,2500);setTimeout(senseCfgSend,1200);setTimeout(shabbatPlaceSend,1300);setTimeout(powerCfgSend,1400);if(cur&&cur.id!==seen){const c=cur;cur=null;incoming(c);}pump();}
   else if(d.liba===PROTO.toPage.spoke){spokeTimed(d);const sid=String(d.id||''),f=sayWait.get(sid);if(f)f(String(d.cause||'done'));else if(sayMid.has(sid)&&String(d.cause||'done')==='done')lateSpoke(sayMid.get(sid));sayMid.delete(sid);}
   else if(d.liba===PROTO.toPage.speaking){const b=beatWait.get(String(d.id||''));if(b)b();}
-  else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:String(d.text).slice(0,4000),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
+  else if(d.liba===PROTO.toPage.crash&&d.text&&db){P.crash((d.id||mintId())).set({text:(r=>r.allow?r.payload.text:'[הושמט: רגיש]')(egress('db:crashes',{text:String(d.text).slice(0,4000),meta:{kind:'system'}})),version:String(d.version||''),ts:Date.now()}).then(()=>post(PROTO.toApp.crashSaved,{id:d.id})).catch(e=>{fail('P_DB_WRITE',e,'crashes');log('crash: '+(e.code||e));});}
   else if(d.liba===PROTO.toPage.trace&&d.events&&db){trBridge(String(d.batch||''),String(d.events));}
   else if(d.liba===PROTO.toPage.pulse&&d.dev&&db){pulseIn(d);}
   else if(d.liba===PROTO.toPage.memAsk&&db){devMemIn(d.items);}
@@ -667,7 +668,7 @@ function helpAll(){const el=$('help');el.hidden=false;el.innerHTML='<div class="
   sayLocal('אני יודעת '+(HE_NUM[HELP.length]||HELP.length)+' משפחות של פקודות: '+HELP.map(h=>h[0]).join(', ')+'. תגיד למשל "פקודות משימות" ואקריא אותן. הרשימה גם על המסך.');return true;}
 function helpFamily(rest){const h=HELP.find(x=>rest.includes(x[0]));if(!h)return false;sayLocal(h[0]+': '+h[1].replace(/"/g,''));return true;}
 function galleryWeek(){{const wk=Date.now()-7*24*3600*1000;const g=galleryList.filter(x=>(x.ts||0)>wk);if(!g.length){sayLocal('השבוע עוד לא נבנה משהו שנרשם בגלריה.');return true;}lastTasks=g.map(x=>({id:x.id,title:x.title,link:x.link,status:'done'})).concat(lastTasks);sayLocal('השבוע נבנו '+g.length+': '+g.map(x=>x.title).join(', ')+'. תגיד תפתח ואפתח את האחרון.');return true;}}
-function generatorOpen(){{const u='https://claude.ai/artifact/AcTS4zzdMcXFcxFFvr5UVn';sayLocal('פותחת את המחולל.');if(appMode)post(PROTO.toApp.cmd,{cmd:'open '+u});else window.open(u,'_blank');return true;}}
+function generatorOpen(){{const u='https://claude.ai/artifact/AcTS4zzdMcXFcxFFvr5UVn';sayLocal('פותחת את המחולל.');if(appMode)post(PROTO.toApp.cmd,{cmd:'open '+u});else openSafe(u);return true;}}
 /* mem-core: the memory commands, on the fact store (16-memory.js) */
 function memRemember(rest){const note=rest.trim();if(note.length<2)return false;
   const pf=MEM.parse(note);peopleFromFact(pf);
@@ -718,7 +719,7 @@ function outboxList(){{const w=outbox.map(x=>String(x.text).replace(/ ⟦#[0-9a-
 function outboxResend(){{const n=outbox.length;outbox.forEach(x=>{x.phase='queued';x.leaseUntil=0;});saveOutbox();
     sayLocal(n?'שולחת שוב '+(n===1?'משפט אחד':n+' משפטים')+'.':'אין מה לשלוח שוב.');if(n)setTimeout(flushOutbox,300);return true;}}
 function mapShow(){{mapOn=true;renderMap();const m=mapSummary();bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:'ליבה, מפת המערכת: '+m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}}
-function openLast(){{const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);window.open(d.link,'_blank');}return true;}}
+function openLast(){{const d=lastTasks.find(x=>x.status==='done'&&x.link)||lastTasks.find(x=>x.link);if(!d)return false;const m='פותחת: '+d.title;bubble('li',m);if(appMode){post(PROTO.toApp.cmd,{cmd:'open '+d.link});post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});}else{say(m);openSafe(d.link);}return true;}}
 function taskPriority(rest){{const q=rest.trim();if(!q)return false;const task=lastTasks.find(x=>(x.title||'').includes(q));if(!task)return false;P.task(task.id).update({priority:Date.now(),updatedAt:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'tasks'));const m='בסדר, '+task.title+' קודם.';bubble('li',m);if(appMode)post(PROTO.toApp.say,{text:m,kind:'say',options:[],from:'liba',speaker:'ליבה'});else say(m);return true;}}
 /* intent-kernel: one router. The registry (liba/intents/registry.json -> INTENTS) says what a sentence is; this decides
    whether it is a command here and runs it: exact phrase, then the longest prefix (the rest is the slot), then - only
@@ -727,7 +728,7 @@ function taskPriority(rest){{const q=rest.trim();if(!q)return false;const task=l
 const inorm=t=>String(t||'').replace(/[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff\u0591-\u05c7]/g,'').replace(/[?!.,:;"'׳״]/g,'').replace(/\s+/g,' ').trim().replace(/(^|\s)ליבא(?=\s|$)/g,'$1ליבה');
 const HANDLERS={quietOff,quietOn,helpAll,helpFamily,galleryWeek,generatorOpen,traceToday,memRemember,memForget,memPref,memList,memNoLog,memLog,memPrivacy,
   reqToday,latencyToday,lineStatus,phoneWhy,outboxList,outboxResend,missedList,missedAll,missedAsks,mapShow,openLast,taskPriority,confirmYes,confirmNo,
-  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,mandateAllowCmd,mandateDenyCmd,mandateListCmd,approvalsToday,agendaToday,brainWhere,brainWho,brainOpen,rosterSay,tasksStuck,powerToday,powerWhere,powerBudget,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
+  policyWhy,distillToday,memForgetAll,memForgetDo,memUndo,proReturn,proNot,senseAdd,senseRemove,senseList,senseToday,calToday,calTomorrow,calFree,calOn,calOff,calWrite,shabbatWhen,shabbatSetPlace,mandateAllowCmd,mandateDenyCmd,mandateListCmd,approvalsToday,agendaToday,brainWhere,brainWho,brainOpen,rosterSay,tasksStuck,powerToday,powerWhere,powerBudget,sendAsSaid,policyList,policyDrop,policyFull,memAbout,memNoBrief,memIdentity,peopleAdd,peopleWho,peopleAlias,peopleMerge,routeWhere,routeOther,ownerPin,catchupAll,daysYesterday,daysBack,ownerLiba:()=>setOwner('liba'),ownerManager:()=>setOwner('manager'),addressLiba:()=>{ownerWrite('liba',true);return false;},addressManager:()=>{ownerWrite('manager',true);return false;}};
 const intentHere=it=>it.where==='page'&&!(it.when==='liba'&&owner==='manager')&&!(it.when==='manager'&&owner!=='manager');
 function lev(a,b){if(a===b)return 0;const m=a.length,n=b.length;let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c;}return p[n];}
@@ -881,7 +882,7 @@ async function incoming(d){
   KIND.textContent=k==='done'?'סיימתי':k==='stuck'?'נתקעתי':'';KIND.className='kind '+k;
   bubble('li',prefixOf(d,who)+lead+d.text);HEARD.hidden=true;OPTS.innerHTML='';
   if(k==='ask'||k==='stuck'||(d.options&&d.options.length))lastAsk={id:d.id,approvalId:d.approvalId||'',text:d.text,speaker:who,topic:d.topic||'',from:d.from||'liba',at:Date.now()};else if(!d.local)lastAsk=null;
-  try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:d.text,msg:d.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
+  try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:d.from||'liba',speaker:who,topic:d.topic||'',kind:k,text:dbText(d.text),cls:classify(d.text),msg:d.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   if(appMode)await sayApp(spokenText,{kind:ak,options:d.options||[],from:d.from||'liba',speaker:who,mid:d.local?'':String(d.id||'')},d.local?null:d.re);else await say(spokenText+(d.options&&d.options.length?'. '+d.options.join(', או ')+'?':''));
   if(d.legacy){try{await P.current().update({spoken:true,spokenAt:Date.now()});}catch(e){fail('P_ACK',e,'chat/current');log('legacy ack: '+(e.code||e));}}
   if(d.options&&d.options.length){OPTS.innerHTML=d.options.map(o=>`<button>${esc(o)}</button>`).join('');OPTS.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>send(b.textContent,null,'option')));}
@@ -931,7 +932,8 @@ let lastSent={text:'',id:'',ts:0},lastIncomingAt=0,lastReqId='',lastReqAt=0; /* 
 function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send({text:nx.text,tag:nx.tag,source:nx.source,stamps:nx.stamps}),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 function tagOf(o){return (o||owner)==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
-async function deliver(text,tag){
+async function deliver(text,tag,asSaid){
+  if(!asSaid)text=egress('relay',{text}).payload.text; /* egress-gate: every sentence to Claude leaves through the gate */
   let reason='no_comments';
   if(!comments){fail('P_SEND',null,reason);return {sent:false,reason};}
   try{const can=await comments.canSendToClaude();if(can!=='available'){fail('P_SEND',null,can);return {sent:false,reason:String(can)};}
@@ -993,15 +995,16 @@ async function send(text,forcedTag,source){
      close" is a query and not a feeling */
   const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();Ledger.record({action:'send',cause:source,inputs:{req:reqId,to:tag.trim()}});reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
-  try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
+  try{P.req(reqId).set({text:dbText(text),askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
-  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
-  try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',to:owner,text,re:id,req:reqId,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
+  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:dbText(lastAsk.text),to:lastAsk.speaker,topic:lastAsk.topic||'',answer:dbText(text),cls:classify(text),msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
+  try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',to:owner,text:dbText(text),cls:classify(text),re:id,req:reqId,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   let ctx='';try{if(!noIntent)ctx=await brief(text);}catch(e){fail('P_DB_READ',e,'brief');}
   try{const w=await buildWake(text,reqId);if(w)ctx+='\n---\n'+w;}catch(e){fail('P_DB_READ',e,'wake');} /* wake-envelope */
   if(ctx)try{P.req(reqId).update({brief:ctx.trim().slice(0,40)}).catch(()=>{});}catch(e){}
-  workOpen(reqId,text,tag); /* brain-roster-lease */
-  walPut({req:reqId,text:text+ctx+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
+  workOpen(reqId,dbText(text),tag); /* brain-roster-lease */
+  relayNote(text,ctx,reqId,tag); /* outbound-redactor */
+  walPut({req:reqId,text:egress('relay',{text:text+ctx}).payload.text+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
   const r=await deliverWithRetry(text+ctx+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;
   const reqState=st=>{try{P.req(reqId).update(Object.assign({state:st,at:Date.now()},st==='sent'?{sentAt:Date.now()}:{reason:String(reason||'')})).catch(e=>fail('P_DB_WRITE',e,'req state'));}catch(e){}};
   if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');bubbleState(reqId,'sent');if(!noIntent&&!forcedTag)capHint(text);}
@@ -1146,7 +1149,7 @@ function pulseIn(d,now){now=now||Date.now();const dev=String(d.dev).replace(/[^A
   if(last&&now-last.at>PULSE_STALE)healthGap(dev,last.body,body,last.at,now);
   else if(!last)P.pulse(dev).get().then(g=>{const prev=g.exists?(g.data()||{}):null;if(prev&&now-(+prev.at||0)>PULSE_STALE)healthGap(dev,prev,body,+prev.at,now);}).catch(e=>fail('P_DB_READ',e,'pulse prev'));
   pulseLast[dev]={sig:sig,at:now,body:body};
-  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"15d9b845a80b"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
+  P.pulse(dev).set(Object.assign(body,{dev:dev,name:String(d.name||'').slice(0,40),at:now,pageHash:"4f34c095676a"})).catch(e=>fail('P_DB_WRITE',e,'pulse'));
   return true;}
 /* the ledger: this page's counts for the day, under its own holder key */
 const ledger={req:0,said:0,heard:0};let ledgerDay='',ledgerAt=0;
@@ -2009,7 +2012,7 @@ async function buildWake(text,wakeId){const b=await readBrief();const parts=[];
   const blocked=(lastTasks||[]).filter(t=>t.status==='blocked').slice(0,3).map(t=>t.title+(t.question?' ('+t.question+')':''));if(blocked.length)parts.push('תקוע: '+blocked.join('; '));
   if(b.lastDecision)parts.push('החלטה אחרונה: '+b.lastDecision);
   try{const since=Date.now()-6*3600e3;const t=(await turnsBetween(since,Date.now()+1,60)).filter(x=>x.from==='user'||x.from==='manager').slice(-4,-1);if(t.length)parts.push('לפני כן: '+t.map(x=>(x.from==='user'?'מאיר: ':'')+String(x.text||'').slice(0,90)).join(' / '));}catch(e){}
-  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"15d9b845a80b");
+  parts.push('על הקו: '+(owner==='manager'?'המנהל':'ליבה')+(briefNow&&briefNow.sessionId?' · מוח '+String(briefNow.sessionId).slice(-8):'')+' · גרסה '+(appVer||'דפדפן')+' · דף '+"4f34c095676a");
   let out='';for(const p of parts){if(out.length+p.length+3>WAKE_MAX)break;out+=(out?'\n':'')+p;}
   if(db)P.wake(wakeId).set({envelope:out,len:out.length,at:Date.now(),brainAt:briefNow&&+briefNow.at||0}).catch(()=>{});
   return out;}
@@ -2110,4 +2113,88 @@ function powerBudget(rest){const t=inorm(rest).split('אחוז')[0].trim();const
   if(db)P.settings().set(memSettings).catch(e=>fail('P_DB_WRITE',e,'memory/settings'));
   powerCfgSend();Ledger.record({action:'power.budget',cause:'voice',result:n});sayLocal('בסדר: תקציב של '+pctWords(n)+' ביממה. כשאעבור אותו אוריד הילוך ואגיד לך.');return true;}
 window.__power={in:powerIn,words:pctWords,now:()=>powerNow};
+// pseudonyms, and nothing goes out except through one gate that knows each channel
+/* Step cls-birth. classify(text, meta) -> {scope: personal|institution|system, subject: self|third-party|none, sens 0..3}:
+   3 - an identity number, a bank account, a card, a password; 2 - health, debts and salary, the law, a phone number, a
+   birth date, an address; 1 - personal or about someone else; 0 - the rest. Where it is not clear the scope is personal
+   (fail-closed): an institution sentence has to say so. The classification is recomputed at the gate for anything
+   written by someone else (a session cannot hold the phone's key, so a stored label from outside proves nothing).
+   Step outbound-redactor. redact(text) -> {out, hits, map}: an Israeli ID (nine digits with a valid check digit), a card
+   (Luhn), an IBAN, an account number after "חשבון", a phone, an e-mail, a birth date, a street address - each replaced by
+   a stable pseudonym (טלפון-1 is the same number every time in this session); the map lives only in this page's memory,
+   never in the db. "תשלח כמו שאמרתי" sends the last sentence as spoken, after a yes, and the ledger keeps it.
+   Step egress-gate. EGRESS names every channel - voice, relay (to Claude), db:turns, db:decisions, db:crashes, bridge,
+   open-url, notification, public-beacon, mail - with the most sensitive thing it may carry and what is done to it on
+   the way (redact, ids-only, pointer). egress(channel, doc) is the one door, deny by default: a channel not in the table
+   is closed. */
+/*<pure>*/
+const CLS_ID=v=>{const d=v.replace(/\D/g,'');if(d.length!==9)return false;let s=0;for(let i=0;i<9;i++){let x=(+d[i])*((i%2)+1);if(x>9)x-=9;s+=x;}return s%10===0&&!/^(\d)\1+$/.test(d);};
+const CLS_LUHN=v=>{const d=v.replace(/\D/g,'');if(d.length<13||d.length>19)return false;let s=0,alt=false;for(let i=d.length-1;i>=0;i--){let x=+d[i];if(alt){x*=2;if(x>9)x-=9;}s+=x;alt=!alt;}return s%10===0;};
+const REDACT_KINDS=[
+  ['iban',/\bIL\d{2}(?:[ -]?\d{4}){4}[ -]?\d{3}\b/gi,'חשבון',3],
+  ['card',/(?<=(?:כרטיס|אשראי|הכרטיס)(?: מספר)?:?\s{1,2})\d(?:[ -]?\d){12,18}(?!\d)/g,'כרטיס',3],
+  ['card',/\b\d(?:[ -]?\d){12,18}\b/g,'כרטיס',3,CLS_LUHN],
+  ['id',/(?<=(?:ת"ז|ת״ז|תעודת זהות|מספר הזהות|מספר זהות)(?: של[א-ת ]{0,12})?:?\s{1,2})\d{5,9}(?!\d)/g,'מספר-זהות',3],
+  ['id',/(?<![\d-])\d{9}(?![\d-])/g,'מספר-זהות',3,CLS_ID],
+  ['account',/(?<=(?:חשבון|ח-ן|ח"ן|ח״ן)(?: בנק)?(?: מספר)?:?\s{0,2})\d{2,3}[-/ ]?\d{3}[-/ ]?\d{3,9}|(?<=(?:חשבון|ח-ן|ח"ן|ח״ן)(?: בנק)?(?: מספר)?:?\s{0,2})\d{5,12}/g,'חשבון',3],
+  ['phone',/(?:\+972[- ]?|(?<!\d)0)(?:5\d|[2-4]|[89]|7\d)[- ]?\d{3}[- ]?\d{4}(?!\d)/g,'טלפון',2],
+  ['email',/[\w.+-]+@[\w-]+\.[\w.]+/g,'מייל',2],
+  ['dob',/(?<=(?:נולד|נולדה|נולדתי|תאריך לידה|ת\. לידה|יום הולדת)\s(?:ב\s?|ב-|ביום\s)?)\d{1,2}[./]\d{1,2}[./]\d{2,4}/g,'לידה',2],
+  ['address',/(?:רחוב|רח'|רח׳|שדרות|שד')\s+[א-ת"׳']+(?:\s[א-ת"׳']+)?\s+\d+/g,'כתובת',2]];
+const CLS_SECRET=/(סיסמה|סיסמא|קוד ה?סודי|קוד ה?כניסה|קוד האשראי|\bpin\b|תוקף הכרטיס|שלוש הספרות)/i;
+const CLS_HEALTH=/(אבחנה|אבחון|מחלה|חולה|תרופה|תרופות|ניתוח|בית חולים|בית החולים|אשפוז|מאושפז|פסיכולוג|פסיכיאטר|דיכאון|חרדה|הריון|הפלה|סרטן|כימותרפיה|בדיקת דם|סכרת|לחץ דם|טיפול רגשי|ריטלין)/;
+const CLS_MONEY=/(חוב|חובות|משכורת|המשכורת|שכר של|הלוואה|משכנתא|עיקול|הוצאה לפועל|ירושה|גירושין|גירושים|\bגט\b|פשיטת רגל|מינוס בבנק)/;
+const CLS_LAW=/(תביעה|תובע|עורך דין|עורכת דין|משטרה|חקירה|תלונה במשטרה|בית משפט|כתב אישום|רווחה|עובדת סוציאלית)/;
+const CLS_INST=/(המוסד|מוסד|הישיבה|ישיבה|תלמיד|תלמידים|בחור|בחורים|ר"מ|ר״מ|רמ"ים|רמ״ים|הצוות|צוות|הנהלה|העמותה|עמותה|תקציב|מלגה|מלגות|דו"ח|דוח|דו״ח|מזכירות|כולל|אברכים|רישום|שיעור|שיעורים|מחזור|הורים של|ועד|משרד החינוך|משרד הדתות|פנימייה|חדר אוכל|מטבח|קבלן|ספק)/;
+const CLS_PERS=/(אשתי|בעלי|הילדים שלי|הבן שלי|הבת שלי|אמא שלי|אבא שלי|אחי|אחותי|המשפחה|משפחה|בבית שלי|חתונה של|הנכדים|חמי|חמותי|גיסי|גיסתי|אני מרגיש|אני חולה|שלי\b)/;
+const CLS_SYS=/(גרסה|באג|שרת|הדף|אפליקציה|האפליקציה|הבועה|בועה|עדכון|קריסה|סשן|קומיט|גיטהאב|שער|בדיקות|סוללה|מיקרופון|טלפון נתקע|הודעת שגיאה)/;
+const CLS_SELF=/(^|\s)(אני|לי|שלי|אותי|אצלי|עליי|אליי|בשבילי)(\s|$|[,.?!])/;
+const CLS_VERB='אמר|אמרה|ביקש|ביקשה|צריך|צריכה|חולה|התקשר|התקשרה|שילם|שילמה|חייב|חייבת|נפגש|נפגשה|רוצה|יבוא|תבוא|הגיע|הגיעה|לא הגיע|לא הגיעה|עזב|עזבה|סיפר|סיפרה|שאל|שאלה|כתב|כתבה|מאושפז|מאושפזת|בוכה|כועס|כועסת';
+const CLS_NOTNAME=new Set(['אני','הוא','היא','אתה','את','אנחנו','הם','הן','מי','מה','זה','זאת','כל','כולם','מישהו','מישהי','אחד','אחת','המנהל','ליבה','קלוד','המוח','הבועה','הדף','השרת','הספק','המוסד','הצוות','ההנהלה','התלמיד','הבחור','ר"מ','מאיר']);
+function clsThird(t,names){if(names&&names.some(n=>n&&t.indexOf(n)>=0))return true;const re=new RegExp('(^|[\\s,])([א-ת"׳\']{2,12})\\s+(?:'+CLS_VERB+')(?=[\\s,.?!]|$)','g');let m;while((m=re.exec(t))){if(!CLS_NOTNAME.has(m[2])&&!(m[2][0]==='ה'&&!(names&&names.indexOf(m[2])>=0))&&!/^(ה|ו|ש|כש|וה|שה)?(הוא|היא|אני|הם|הן|כולם|מישהו)$/.test(m[2]))return true;}
+  return /(הבן של|הבת של|אשתו של|אשת|אבא של|אמא של|ההורים של|המשפחה של)/.test(t);}
+function redact(text,map,only){map=map||new Map();const hits=[];let out=String(text||'');const n={};for(const v of map.values())n[v.split('-').slice(0,-1).join('-')]=Math.max(n[v.split('-').slice(0,-1).join('-')]||0,+v.split('-').pop()||0);
+  for(const [kind,re,label,,check] of REDACT_KINDS){if(only&&only.indexOf(kind)<0)continue;out=out.replace(re,v=>{if(check&&!check(v))return v;const key=kind+':'+v.replace(/[\s-]/g,'');let p=map.get(key);if(!p){n[label]=(n[label]||0)+1;p=label+'-'+n[label];map.set(key,p);}hits.push(kind);return p;});}
+  return {out,hits,map};}
+function classify(text,meta){meta=meta||{};const t=String(text||'');const r=redact(t,new Map());const kinds=new Set(r.hits);
+  let sens=0;if(kinds.has('id')||kinds.has('card')||kinds.has('iban')||kinds.has('account')||CLS_SECRET.test(t))sens=3;
+  else if(CLS_HEALTH.test(t)||CLS_MONEY.test(t)||CLS_LAW.test(t)||kinds.has('phone')||kinds.has('dob')||kinds.has('address')||kinds.has('email'))sens=2;
+  const third=clsThird(t,meta.names),self=CLS_SELF.test(' '+t+' ');
+  const subject=third?'third-party':self?'self':'none';
+  let scope=(meta.kind==='trace'||meta.kind==='pulse'||meta.kind==='system')?'system':CLS_PERS.test(t)?'personal':CLS_INST.test(t)?'institution':CLS_SYS.test(t)?'system':'personal';
+  if(sens<1&&(scope==='personal'&&(self||third)||third))sens=1;
+  return {scope,subject,sens};}
+const EGRESS={voice:{maxSens:3,why:'to Meir himself - the phone decides by where the sound goes'},
+  relay:{maxSens:3,transform:'ids',why:'to Claude: the brain needs the words, not the identity numbers'},
+  'db:turns':{maxSens:3,transform:'redact',why:'the log keeps what was said, never an identifier'},
+  'db:decisions':{maxSens:3,transform:'redact',why:'the same'},
+  'db:crashes':{maxSens:1,transform:'redact',why:'a crash report is technical'},
+  bridge:{maxSens:3,why:'to the phone in Meir\'s hand'},
+  'open-url':{maxSens:0,noQuery:true,why:'a link carries no content in its address'},
+  notification:{maxSens:1,transform:'pointer',why:'a lock screen is seen by others'},
+  'public-beacon':{maxSens:0,why:'anyone may see it'}};
+function egressDecide(ch,doc,map){const c=EGRESS[ch];if(!c)return {allow:false,reason:'closed channel: '+ch};const text=String(doc&&doc.text||'');const cls=(doc&&doc.cls)||classify(text,doc&&doc.meta);
+  if(c.noQuery&&/[?#].+/.test(text))return {allow:false,reason:'a link with content',cls};
+  if(c.transform==='pointer'&&cls.sens>c.maxSens)return {allow:true,payload:{text:'יש הודעה אישית'},reason:'pointer',cls};
+  if(cls.sens>c.maxSens&&c.transform!=='redact')return {allow:false,reason:'sens '+cls.sens+' > '+c.maxSens,cls};
+  if(c.transform==='redact'||(c.transform==='redact'&&cls.sens>c.maxSens)){const r=redact(text,map);if(cls.sens>c.maxSens&&classify(r.out).sens>c.maxSens)return {allow:false,reason:'still sensitive after redaction',cls};return {allow:true,payload:Object.assign({},doc,{text:r.out}),hits:r.hits,reason:r.hits.length?'redacted':'ok',cls};}
+  if(c.transform==='ids'){const r=redact(text,map,['id','card','iban','account']);return {allow:true,payload:Object.assign({},doc,{text:r.out}),hits:r.hits,reason:r.hits.length?'redacted':'ok',cls};}
+  return {allow:true,payload:doc,reason:'ok',cls};}
+/*</pure>*/
+const REDACT_MAP=new Map();let lastUnredacted=null;
+/* the one door: every text that leaves goes through here, and whatever was changed or refused is in the ledger */
+function egress(ch,doc){const r=egressDecide(ch,doc,REDACT_MAP);if(!r.allow||r.reason!=='ok')Ledger.record({action:'egress',cause:ch,decision:{reason:r.reason,sens:r.cls&&r.cls.sens},result:r.allow?(r.hits||[]).join(',')||r.reason:'refused'});return r;}
+const REDACT_HE={id:'מספר הזהות',card:'מספר הכרטיס',iban:'מספר החשבון',account:'מספר החשבון',phone:'הטלפון',email:'המייל',dob:'תאריך הלידה',address:'הכתובת'};
+/* what goes into the db: the words, never an identifier */
+function dbText(t){return egress('db:turns',{text:String(t==null?'':t)}).payload.text;}
+/* a link leaves only through here: no content in its address */
+function openSafe(u){const r=egress('open-url',{text:String(u||'')});if(!r.allow){sayLocal('לא פותחת קישור שנושא תוכן בכתובת שלו.');return false;}window.open(u,'_blank');return true;}
+/* before a sentence goes to Claude: what was cut is said once, and can be sent as said */
+function relayNote(text,ctx,reqId,tag){const r=redact(text,REDACT_MAP,['id','card','iban','account']);if(!r.hits.length)return;
+  const k=[...new Set(r.hits.map(h=>REDACT_HE[h]))];lastUnredacted={text:text+ctx,reqId,tag,hits:k};
+  sayLocal('הורדתי מהמשפט את '+k.join(' ואת ')+' לפני ששלחתי. אם הם צריכים ללכת, תגיד "תשלח כמו שאמרתי".');}
+function sendAsSaid(){if(!lastUnredacted){sayLocal('לא חתכתי שום דבר מהמשפט האחרון.');return true;}const x=lastUnredacted;
+  Consent.request({action:'send_unredacted',effect:'לשלוח לקלוד את המשפט כמו שאמרת, עם המספרים',reversible:false,say:'המשפט האחרון יצא בלי '+x.hits.join(', ')+'. לשלוח אותו כמו שאמרת?'}).then(yes=>{
+    if(!yes)return;lastUnredacted=null;Ledger.record({action:'egress.bypass',cause:'voice',result:x.reqId});deliver(x.text+reqMark(x.reqId),x.tag,true).then(r=>sayLocal(r.sent?'נשלח כמו שאמרת.':'לא הצלחתי לשלוח.'));});return true;}
+window.__cls={classify,redact,egress:egressDecide,channels:EGRESS};
 </script>

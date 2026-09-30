@@ -35,7 +35,8 @@ let lastSent={text:'',id:'',ts:0},lastIncomingAt=0,lastReqId='',lastReqAt=0; /* 
 function drainQ(){if(sendQ.length){const nx=sendQ.shift();setTimeout(()=>send({text:nx.text,tag:nx.tag,source:nx.source,stamps:nx.stamps}),300);return true;}return false;}
 const RETRYABLE=r=>/network|fetch|timeout|unavailable|rate|503|502|429|offline|aborted|internal/i.test(r);
 function tagOf(o){return (o||owner)==='manager'?'[ליבה→מנהל] ':'[ליבה] ';}
-async function deliver(text,tag){
+async function deliver(text,tag,asSaid){
+  if(!asSaid)text=egress('relay',{text}).payload.text; /* egress-gate: every sentence to Claude leaves through the gate */
   let reason='no_comments';
   if(!comments){fail('P_SEND',null,reason);return {sent:false,reason};}
   try{const can=await comments.canSendToClaude();if(can!=='available'){fail('P_SEND',null,can);return {sent:false,reason:String(can)};}
@@ -97,15 +98,16 @@ async function send(text,forcedTag,source){
      close" is a query and not a feeling */
   const reqId=mintId();lastReqId=reqId;lastReqAt=Date.now();Ledger.record({action:'send',cause:source,inputs:{req:reqId,to:tag.trim()}});reqBubble.set(reqId,mine);bubbleState(reqId,'sending');
   ledgerBump('req');
-  try{P.req(reqId).set({text,askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
+  try{P.req(reqId).set({text:dbText(text),askedAt:Date.now(),owner,tag:tag.trim(),source,reBubble:id,device:appMode?'app':'browser',state:'sending',
     t:{voice:(stamps&&+stamps.voice)||0,heard:(stamps&&+stamps.heard)||0,asked:Date.now(),skew:clockSkew,skewBad:clockSkew!=null&&Math.abs(clockSkew)>SKEW_MAX}}).catch(e=>fail('P_DB_WRITE',e,'req'));}catch(e){fail('P_DB_WRITE',e,'req');}
-  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:lastAsk.text,to:lastAsk.speaker,topic:lastAsk.topic||'',answer:text,msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
-  try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',to:owner,text,re:id,req:reqId,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
+  try{if(memSettings.decisions&&lastAsk&&(Date.now()-lastAsk.at<3*60*1000)){P.decisions().doc(mintId()).set({question:dbText(lastAsk.text),to:lastAsk.speaker,topic:lastAsk.topic||'',answer:dbText(text),cls:classify(text),msg:lastAsk.id,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'decisions/log/items'));lastAsk=null;}}catch(e){fail('P_DB_WRITE',e,'decisions/log/items');}
+  try{if(memSettings.logTurns)P.turns().doc(mintId()).set({from:'user',speaker:'מאיר',to:owner,text:dbText(text),cls:classify(text),re:id,req:reqId,ts:Date.now()}).catch(e=>fail('P_DB_WRITE',e,'chat/log/turns'));}catch(e){fail('P_DB_WRITE',e,'chat/log/turns');}
   let ctx='';try{if(!noIntent)ctx=await brief(text);}catch(e){fail('P_DB_READ',e,'brief');}
   try{const w=await buildWake(text,reqId);if(w)ctx+='\n---\n'+w;}catch(e){fail('P_DB_READ',e,'wake');} /* wake-envelope */
   if(ctx)try{P.req(reqId).update({brief:ctx.trim().slice(0,40)}).catch(()=>{});}catch(e){}
-  workOpen(reqId,text,tag); /* brain-roster-lease */
-  walPut({req:reqId,text:text+ctx+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
+  workOpen(reqId,dbText(text),tag); /* brain-roster-lease */
+  relayNote(text,ctx,reqId,tag); /* outbound-redactor */
+  walPut({req:reqId,text:egress('relay',{text:text+ctx}).payload.text+reqMark(reqId),tag,ts:Date.now(),phase:'sending',leaseUntil:Date.now()+LEASE,attempts:1});
   const r=await deliverWithRetry(text+ctx+reqMark(reqId),tag);const sent=r.sent,reason=r.reason;
   const reqState=st=>{try{P.req(reqId).update(Object.assign({state:st,at:Date.now()},st==='sent'?{sentAt:Date.now()}:{reason:String(reason||'')})).catch(e=>fail('P_DB_WRITE',e,'req state'));}catch(e){}};
   if(sent){walDone(reqId);lastSent={text,id,ts:Date.now()};reqState('sent');bubbleState(reqId,'sent');if(!noIntent&&!forcedTag)capHint(text);}

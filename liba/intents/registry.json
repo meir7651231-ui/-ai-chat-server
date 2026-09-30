@@ -1555,6 +1555,19 @@
    ],
    "handler": "powerBudget",
    "help": "\"תקציב סוללה עשרה אחוז\""
+  },
+  {
+   "id": "egress.asSaid",
+   "where": "page",
+   "when": "liba",
+   "family": "בקרה",
+   "exact": [
+    "תשלח כמו שאמרתי",
+    "תשלחי כמו שאמרתי",
+    "שלח כמו שאמרתי"
+   ],
+   "handler": "sendAsSaid",
+   "help": "\"תשלח כמו שאמרתי\""
   }
  ],
  "families": {
