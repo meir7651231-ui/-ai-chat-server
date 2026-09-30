@@ -301,10 +301,11 @@ export async function work({names=NEW_GOALS,baseMs=30000,minutes=2}={}){ const {
     brain.ngram=brain.ngram||{};
     // 4 ליבות: כל החלקים (צר) · רק הקטנים · 5 הפעולות לבד · כל החלקים (רחב) — הראשונה שמוצאת מנצחת
     // קודם «בונה-הערכים» (מחפש צירוף חלקים לפי מה שהם נותנים) — מהיר מאוד במשימות של כמה חלקים; אם לא — 4 הליבות
-    let r=null; if(CFG.VALUE!==false&&g.ins){ const { valueBuild, show }=await import('./tzoref-value.mjs'); const v=valueBuild(gen,{name,ins:g.ins,out:g.out??2,ms:CFG.VALUE_MS||20000});
+    let r=null; { const S=await import('./tzoref-solve.mjs'); const v=await S.solve(name,gen,g,{say}); if(v.prog){ r={prog:v.prog,tries:0,used:[]}; say(`  המוח (${v.tried.join(' ⇒ ')}): ${v.how} · ${(v.ms/1000).toFixed(1)} שנ׳`); } }
+    if(false){ const { valueBuild, show }=await import('./tzoref-value.mjs'); const v=valueBuild(gen,{name,ins:g.ins,out:g.out??2,ms:CFG.VALUE_MS||20000});
       if(v.prog){ r={prog:v.prog,tries:v.made,used:[],how:'בונה-ערכים: '+show(v.expr)}; say(`  בונה-הערכים מצא: ${show(v.expr)} (${(v.ms/1000).toFixed(1)} שנ׳)`); } }
     // משימה על רשימה: קודם «בונה-לולאות» (צובר אחד), ואם לא — «שני צוברים»
-    if(!r&&!g.ins){ const L=await import('./tzoref-loop.mjs'); const v=L.loopBuild(gen,{name}); if(v.prog){ r={prog:v.prog,tries:v.made,used:[]}; say(`  בונה-הלולאות מצא: התחל מ-${v.init}, בכל איבר: ${L.showL(v.step)} (${(v.ms/1000).toFixed(1)} שנ׳)`); }
+    if(false){ /* הוחלף ב«מוח אחד» — tzoref-solve.mjs */ const L=await import('./tzoref-loop.mjs'); const v=L.loopBuild(gen,{name}); if(v.prog){ r={prog:v.prog,tries:v.made,used:[]}; say(`  בונה-הלולאות מצא: התחל מ-${v.init}, בכל איבר: ${L.showL(v.step)} (${(v.ms/1000).toFixed(1)} שנ׳)`); }
       else { const L2=await import('./tzoref-loop2.mjs'); const w=L2.loop2Build(gen,{name}); if(w.prog){ r={prog:w.prog,tries:w.folds,used:[]}; say(`  שני-צוברים מצא: ${w.found.f1.init.name}/${w.found.f2.init.name} · בסוף ${w.found.comb} (${(w.ms/1000).toFixed(1)} שנ׳)`); } } }
     if(!r) r=await P.build(name,{ms,ngram:brain.ngram,N:8,tables,ins:insG,lab:CFG.LAB,rules:CFG.RULES,sw:CFG.SW||null,maxLen:CFG.MAXLEN||128,jobs:(CFG.MIX||[['A',1],['S',10],['Z',100],['A',40]]).map(([k,m,l,K],i)=>({pieces:k==='A'?pieces:k==='S'?small:k==='T'?ranked.slice(0,K||600):k==='B'?[...small,...ranked.filter(q=>!smallSet.has(q)).slice(0,K||300)]:[],width:CFG.W0*m,lab:l,slice:i===0?(CFG.SLICE||0):0}))});
     if(!r.prog){ q[name]={tries:((q[name]?.tries)||0)+1,last:new Date().toISOString()}; fs.writeFileSync(QUEUE,JSON.stringify(q));

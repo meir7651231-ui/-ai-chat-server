@@ -43,7 +43,8 @@ export function splitBuild(gen,{N=16,maxA=3,maxB=4,ms=3600000,log=()=>{}}={}){ c
   return {na,nb,mids:mids.size,ms:Date.now()-t0}; }
 export const showSplit=r=>`שלב 1 — לפני: ${r.a.init.map(nm).join(', ')||'-'} · כל עוד תא${r.a.cond}≠0: ${r.a.body.map(nm).join(', ')}  ‖  שלב 2 — לפני: ${r.b.init.map(nm).join(', ')||'-'} · לכל מספר 15..8 (בתא 4): ${r.b.body.map(nm).join(', ')} · בסוף: ${r.b.fin.map(nm).join(', ')||'-'}`;
 if(import.meta.url==='file://'+process.argv[1]){ const { goals, goalFor }=await import('./tzoref-goals.mjs'); const G=goals(); const nmT=process.argv[2]; const gen=goalFor(nmT,{},G);
-  const r=splitBuild(gen,{ms:(+process.env.MIN||55)*60000,log:s=>console.log(s)});
+  const r=splitBuild(gen,{ms:(+process.env.MIN||55)*60000,log:s=>{ if(!process.env.JSON) console.log(s); }});
+  if(process.env.JSON){ console.log('JSON'+JSON.stringify(r)); process.exit(0); }
   console.log(r.a?`✓ ${nmT}: ${showSplit(r)} · ${((r.ms)/1000).toFixed(0)} שנ׳`:`✗ ${nmT}: לא נמצא · ${r.nb.toLocaleString()} שלבים-שניים נבדקו · ${(r.ms/1000).toFixed(0)} שנ׳`); process.exit(0); }
 // ─── הפיכה לתוכנית: שתי לולאות. לולאה 1 על הרשימה (בדיקה בסוף), לולאה 2: תא4 = 15, 14, … 8 (עוצרים כש-תא4 ⇐ 7: הזזה-ימינה ×3 נותנת 0)
 const PP=s=>s.split(';').map(x=>x.trim()).filter(Boolean).map(x=>{ const [o,a]=x.split(' '); return a==null?[o]:[o,+a]; });
