@@ -88,7 +88,7 @@
       "time": "at"
     },
     "channel": {
-      "cap": 12,
+      "cap": 16,
       "cls": "state",
       "time": "at"
     },
@@ -98,7 +98,7 @@
       "time": "at"
     },
     "memory": {
-      "cap": 12,
+      "cap": 20,
       "cls": "record",
       "time": "at"
     },
@@ -247,6 +247,11 @@
       "ttlDays": 60,
       "cls": "record",
       "time": "lastAt"
+    },
+    "fleet": {
+      "cap": 5,
+      "cls": "state",
+      "time": "at"
     }
   }
 }

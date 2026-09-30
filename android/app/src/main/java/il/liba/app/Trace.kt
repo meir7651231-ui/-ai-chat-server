@@ -163,7 +163,7 @@ object Trace {
     // ---------- file ----------
     /** The one silent catch in the tree, and the only one that has to be: a failure to write the
      *  fault log has nowhere left to be written. Every Trace I/O goes through here. */
-    private inline fun io(b: () -> Unit) { try { b() } catch (x: Exception) {} }
+    private inline fun io(b: () -> Unit) { try { b() } catch (x: Exception) { /* fault-ok: the recorder cannot report its own failure to write */ } }
 
     private fun append(lines: List<String>) {
         val c = app ?: return

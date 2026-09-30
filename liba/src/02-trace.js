@@ -48,7 +48,7 @@ function trBridge(batch,json){
   Promise.all(arr.slice(0,TRACE_BATCH).map(ev=>{
     const t=+ev.t||Date.now(),c=String(ev.c||'E_UNKNOWN'),cx=trCtx(ev.ctx);
     const L={id:String(ev.id||trId(t,c,cx)),t:t,c:c,n:+ev.n||0,ctx:cx,v:String(ev.v||''),s:String(ev.s||'k'),d:+ev.d||0};
-    trRingPush(L);
+    trRingPush(L);if(typeof faultSeen==='function')faultSeen(L); /* faults: three in a day opens a repair worker */
     /* a rejected write is simply left out of ids – unacked, so it comes back in the next batch */
     try{return Promise.resolve(trCol().doc(L.id).set(trDoc(L))).then(()=>{ok.push(L.id);},()=>{});}catch(e){return Promise.resolve();}
   })).then(()=>post(PROTO.toApp.traceAck,{batch:batch,ids:JSON.stringify(ok)}),()=>post(PROTO.toApp.traceAck,{batch:batch,ids:JSON.stringify(ok)}));}

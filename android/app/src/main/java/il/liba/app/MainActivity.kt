@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         "page" -> BubbleService.instance?.repairReload()
         "battery" -> startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName")))
         else -> Unit
-    } }; h.postDelayed({ refresh() }, 800) }
+    } }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "mainactivity135:" + it.javaClass.simpleName) }; h.postDelayed({ refresh() }, 800) }
     private fun lineStatus(): String {
         val a = if (!BubbleService.running) "הקו: הבועה כבויה" else if (BubbleService.needsLogin) "הקו: מנותקת מ-claude" else if (BubbleService.pageOk) "הקו: מחוברת" else "הקו: מתחברת לדף…"
         val miss = listOfNotNull(if (!micOk()) "מיקרופון" else null, if (!overlayOk()) "בועה" else null, if (!batteryOk()) "פטור סוללה" else null, if (!notifOk()) "התראות" else null)
@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             /* one-life: without the battery exemption a Samsung kills the service and nothing brings it back for long;
                asked once, never forced - declining still starts the bubble */
             !batteryOk() && !Prefs.batteryAsked(this) -> { Prefs.setBatteryAsked(this, true)
-                runCatching { startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName"))) } }
+                runCatching { startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:$packageName"))) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "mainactivity159:" + it.javaClass.simpleName) } }
             BubbleService.running -> { Prefs.setOn(this, false); stopService(Intent(this, BubbleService::class.java)); h.postDelayed({ web.loadUrl(getString(R.string.artifact_url)); refresh() }, 500) }
             else -> {
                 web.loadUrl("about:blank")

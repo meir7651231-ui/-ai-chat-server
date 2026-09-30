@@ -20,7 +20,7 @@ object SenseBus {
 
     @Synchronized fun load(c: Context) {
         if (loaded) return; loaded = true
-        runCatching { val a = JSONArray(apps(c).readText()); for (i in 0 until a.length()) core.apps.add(a.getString(i)) }
+        runCatching { val a = JSONArray(apps(c).readText()); for (i in 0 until a.length()) core.apps.add(a.getString(i)) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "sensebus23:" + it.javaClass.simpleName) }
         runCatching { core.restore((il.liba.app.Vault.load(c, "sense", f(c)) ?: "").lines().filter { it.isNotBlank() }.map { JSONObject(it).let { x ->
             SenseItem(x.optString("id"), x.optString("kind"), x.optString("key"), x.optString("app"), x.optString("title"), x.optString("text"), x.optLong("at"), x.optInt("importance"), x.optLong("ttl")) } }) }
             .onFailure { Trace.e(Trace.Code.E_PREFS, "sense:" + it.javaClass.simpleName) }
@@ -38,5 +38,5 @@ object SenseBus {
         val b = synchronized(this) { core.batch(50, System.currentTimeMillis()) }; if (b.isNotEmpty()) s(JSONArray(b.map { json(it) }).toString()) }
     fun ack(c: Context, ids: List<String>) = Trace.post { load(c); synchronized(this) { core.ack(ids) }; save(c); if (synchronized(this) { core.ring.isNotEmpty() }) flush(c) }
     fun setApps(c: Context, list: List<String>) = Trace.post { load(c); synchronized(this) { core.apps.clear(); core.apps.addAll(list) }
-        runCatching { apps(c).writeText(JSONArray(list).toString()) } }
+        runCatching { apps(c).writeText(JSONArray(list).toString()) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "sensebus41:" + it.javaClass.simpleName) } }
 }

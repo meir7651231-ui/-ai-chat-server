@@ -1,5 +1,5 @@
 {
- "pageHash": "d55175fd178c",
+ "pageHash": "9774c819ccd5",
  "anchors": {
   "intents": {
    "src": "liba/src/00-intents.js",
@@ -1470,116 +1470,128 @@
    "line": 2292
   },
   "fleet.workerCmd": {
-   "src": "liba/src/36-fleet.js:32",
-   "line": 2299
+   "src": "liba/src/36-fleet.js:35",
+   "line": 2302
   },
   "fleet.fleetBuild": {
-   "src": "liba/src/36-fleet.js:37",
-   "line": 2304
+   "src": "liba/src/36-fleet.js:40",
+   "line": 2307
   },
   "fleet.dispatch": {
-   "src": "liba/src/36-fleet.js:39",
-   "line": 2306
+   "src": "liba/src/36-fleet.js:42",
+   "line": 2309
   },
   "fleet.applyControl": {
-   "src": "liba/src/36-fleet.js:51",
-   "line": 2318
+   "src": "liba/src/36-fleet.js:54",
+   "line": 2321
   },
   "fleet.requeue": {
-   "src": "liba/src/36-fleet.js:59",
-   "line": 2326
-  },
-  "fleet.fleetSaid": {
    "src": "liba/src/36-fleet.js:62",
    "line": 2329
   },
+  "fleet.fleetSaid": {
+   "src": "liba/src/36-fleet.js:65",
+   "line": 2332
+  },
   "fleet.sweep": {
-   "src": "liba/src/36-fleet.js:63",
-   "line": 2330
+   "src": "liba/src/36-fleet.js:66",
+   "line": 2333
   },
   "fleet.fleetTick": {
-   "src": "liba/src/36-fleet.js:74",
-   "line": 2341
-  },
-  "fleet.fleetIn": {
-   "src": "liba/src/36-fleet.js:75",
-   "line": 2342
-  },
-  "fleet.triageScore": {
    "src": "liba/src/36-fleet.js:77",
    "line": 2344
   },
-  "fleet.fleetAutoGate": {
+  "fleet.fleetIn": {
+   "src": "liba/src/36-fleet.js:78",
+   "line": 2345
+  },
+  "fleet.triageScore": {
    "src": "liba/src/36-fleet.js:80",
    "line": 2347
   },
-  "fleet.fleetGate": {
-   "src": "liba/src/36-fleet.js:82",
-   "line": 2349
+  "fleet.fleetAutoGate": {
+   "src": "liba/src/36-fleet.js:83",
+   "line": 2350
   },
-  "fleet.fleetAsksOpen": {
+  "fleet.fleetGate": {
    "src": "liba/src/36-fleet.js:85",
    "line": 2352
   },
-  "fleet.fleetMuted": {
-   "src": "liba/src/36-fleet.js:86",
-   "line": 2353
+  "fleet.fleetAsksOpen": {
+   "src": "liba/src/36-fleet.js:88",
+   "line": 2355
   },
-  "fleet.fleetDecLoad": {
+  "fleet.fleetMuted": {
    "src": "liba/src/36-fleet.js:89",
    "line": 2356
   },
+  "fleet.fleetDecLoad": {
+   "src": "liba/src/36-fleet.js:92",
+   "line": 2359
+  },
   "fleet.fleetAuto": {
-   "src": "liba/src/36-fleet.js:91",
-   "line": 2358
+   "src": "liba/src/36-fleet.js:94",
+   "line": 2361
   },
   "fleet.fleetRepeats": {
-   "src": "liba/src/36-fleet.js:98",
-   "line": 2365
-  },
-  "fleet.fleetRouteSet": {
    "src": "liba/src/36-fleet.js:101",
    "line": 2368
   },
+  "fleet.fleetRouteSet": {
+   "src": "liba/src/36-fleet.js:104",
+   "line": 2371
+  },
   "fleet.fleetTag": {
-   "src": "liba/src/36-fleet.js:102",
-   "line": 2369
-  },
-  "fleet.fleetSpeaker": {
-   "src": "liba/src/36-fleet.js:103",
-   "line": 2370
-  },
-  "fleet.matchWorker": {
    "src": "liba/src/36-fleet.js:105",
    "line": 2372
   },
-  "fleet.workerCtl": {
+  "fleet.fleetSpeaker": {
+   "src": "liba/src/36-fleet.js:106",
+   "line": 2373
+  },
+  "fleet.matchWorker": {
    "src": "liba/src/36-fleet.js:108",
    "line": 2375
   },
+  "fleet.workerCtl": {
+   "src": "liba/src/36-fleet.js:111",
+   "line": 2378
+  },
   "fleet.fleetPause": {
-   "src": "liba/src/36-fleet.js:113",
-   "line": 2380
+   "src": "liba/src/36-fleet.js:116",
+   "line": 2383
   },
   "fleet.fleetHalt": {
-   "src": "liba/src/36-fleet.js:114",
-   "line": 2381
-  },
-  "fleet.fleetGo": {
    "src": "liba/src/36-fleet.js:117",
    "line": 2384
   },
+  "fleet.fleetGo": {
+   "src": "liba/src/36-fleet.js:120",
+   "line": 2387
+  },
   "fleet.fleetLine": {
-   "src": "liba/src/36-fleet.js:121",
-   "line": 2388
+   "src": "liba/src/36-fleet.js:124",
+   "line": 2391
   },
   "fleet.fleetMap": {
-   "src": "liba/src/36-fleet.js:123",
-   "line": 2390
+   "src": "liba/src/36-fleet.js:126",
+   "line": 2393
   },
   "fleet.fleetContract": {
-   "src": "liba/src/36-fleet.js:125",
-   "line": 2392
+   "src": "liba/src/36-fleet.js:128",
+   "line": 2395
+  },
+  "faults": {
+   "src": "liba/src/37-faults.js",
+   "line": 2399
+  },
+  "faults.faultSeen": {
+   "src": "liba/src/37-faults.js:12",
+   "line": 2408
+  },
+  "faults.faultWorker": {
+   "src": "liba/src/37-faults.js:16",
+   "line": 2412
   }
  }
 }

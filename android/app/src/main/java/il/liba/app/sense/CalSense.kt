@@ -37,7 +37,7 @@ object CalSense {
         }.onFailure { Trace.e(Trace.Code.E_SYS_CB, "cal-observe:" + it.javaClass.simpleName) }
         sync(c)
     }
-    fun stop(c: Context) { observer?.let { runCatching { c.contentResolver.unregisterContentObserver(it) } }; observer = null; last = null }
+    fun stop(c: Context) { observer?.let { runCatching { c.contentResolver.unregisterContentObserver(it) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "calsense40:" + it.javaClass.simpleName) } }; observer = null; last = null }
 
     fun sync(c: Context) = Trace.post {
         if (!granted(c)) return@post

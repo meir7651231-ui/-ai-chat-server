@@ -92,6 +92,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     private val chunks = ArrayDeque<String>() // step 29: long texts read in parts
     private var paused = false
     private var speakGuard: Runnable? = null      // fix 1: one cancellable safety timer
+    private val guardCore = GuardCore(); private var partStart = 0L; private var partLen = 0 // faults: the guard learns this phone's voice
+    private var pendingSayTimer: Runnable? = null  // faults: a reply held while the user talks is never lost
     private var pendingSay: String? = null        // fix 8: reply that arrived while the user was talking
     private var netCb: ConnectivityManager.NetworkCallback? = null
     private var screenCb: android.content.BroadcastReceiver? = null
@@ -203,7 +205,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
                 tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(id: String?) { main.post { speakLock(true); if (sayId != null && sayStartAt == 0L) sayStartAt = System.currentTimeMillis() } }
                     override fun onError(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakLock(false); speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; spokeCause = "error"; onSpoken() } }
-                    override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakLock(false); speakGuard?.let { main.removeCallbacks(it) }; bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
+                    override fun onDone(id: String?) { if (id?.startsWith("seg-") == true) return; main.post { speakLock(false); speakGuard?.let { main.removeCallbacks(it) }; if (partStart > 0) guardCore.learn(partLen, System.currentTimeMillis() - partStart); partStart = 0; bargeVad?.stop(); bargeVad = null; if (chunks.isNotEmpty() && !paused) { main.postDelayed({ speakNextChunk(false) }, 350) } else onSpoken() } }
                 })
                 if (!ttsReady) { Trace.e(Trace.Code.E_TTS_INIT, "he-IL=" + r); main.post { showLabel("אין קול עברי בטלפון – התקן Google Text-to-Speech עברית", 6000) } }
             }
@@ -219,7 +221,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     }
     private fun speak(text: String, urgent: Boolean = false) {
         if (shabbat) return // shabbat-engine: no voice at all
-        if (listening && listenMode != "wake") { pendingSay = text; return } // fix 8: don't cut the user off; flush after the recognizer ends
+        if (listening && listenMode != "wake") { pendingSay = text // fix 8: don't cut the user off; flush after the recognizer ends
+            pendingSayTimer?.let { main.removeCallbacks(it) }; pendingSayTimer = Runnable { pendingSay?.let { t -> pendingSay = null; Trace.e(Trace.Code.E_SR_LIFECYCLE, "pendingSay-timeout"); if (listening) { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "cancel:" + e.javaClass.simpleName) }; listening = false }; speak(t) } }.also { main.postDelayed(it, 12_000L) }; return }
         lastSaid = text
         stopVad()
         if (listening) { try { sr?.cancel() } catch (e: Exception) { Trace.e(Trace.Code.E_SR_LIFECYCLE, "speak:" + e.javaClass.simpleName) }; listening = false; unmuteSystem() }
@@ -246,7 +249,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
         if (bargeIn) { bargeVad?.stop(); var me: VadGate? = null; me = VadGate(sens = 6.0, minRms = 1800.0, comm = true, warm = true) { main.post { if (bargeVad !== me) return@post; bargeVad = null; if (speaking) { try { tts?.stop() } catch (e: Exception) { Trace.e(Trace.Code.E_TTS_OP, "barge:" + e.javaClass.simpleName) }; speaking = false; speakGuard?.let { main.removeCallbacks(it) }; showLabel("כן?", 3000); startListening("cmd") } } }; bargeVad = me; me.start() }
         speakGuard?.let { main.removeCallbacks(it) }
         // safety net if TTS never reports. step clock: it is no longer the measurement - when it fires, that is a fault
-        speakGuard = Runnable { if (speaking) { speaking = false; spokeCause = "guard"; Trace.e(Trace.Code.E_TTS_GUARD, "len:" + part.length); onSpoken() } }.also { main.postDelayed(it, 4000L + part.length * 120L) }
+        partStart = System.currentTimeMillis(); partLen = part.length
+        speakGuard = Runnable { if (speaking) { speaking = false; spokeCause = "guard"; Trace.e(Trace.Code.E_TTS_GUARD, "len:" + part.length + ":ms/c:" + guardCore.msPerChar.toInt()); onSpoken() } }.also { main.postDelayed(it, guardCore.guardMs(part.length)) }
     }
     // step 30: Hebrew with English terms – Latin runs are spoken by the English voice
     private fun speakSegments(text: String) {
@@ -356,7 +360,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (on) { if (wake == null) wake = getSystemService(PowerManager::class.java).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "liba:speak").apply { setReferenceCounted(false) }; wake?.acquire(90_000) }
             else if (wake?.isHeld == true) wake?.release()
             Unit
-        }
+        }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "bubbleservice359:" + it.javaClass.simpleName) }
     }
     /** login-health: a claude.ai session that died must not die in silence. Every ten minutes: cookies flushed to disk
      *  (a killed WebView otherwise loses a fresh login), and no claude.ai cookie at all means logged out for certain -
@@ -364,7 +368,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
      *  only goes to the black box: the name is claude.ai's to change, and a wrong guess would cry wolf every hour. */
     private var loginCheckedAt = 0L; private var loginLost = false
     private fun loginCheck() {
-        val cm = android.webkit.CookieManager.getInstance(); runCatching { cm.flush() }
+        val cm = android.webkit.CookieManager.getInstance(); runCatching { cm.flush() }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "bubbleservice371:" + it.javaClass.simpleName) }
         val ck = runCatching { cm.getCookie("https://claude.ai") ?: "" }.getOrDefault("")
         if (ck.isNotEmpty() && !ck.contains("sessionKey")) Trace.e(Trace.Code.E_PAGE_LOGIN, "cookie-name")
         if (ck.isEmpty() && !loginLost) {
@@ -909,7 +913,7 @@ class BubbleService : Service(), LibaWeb.Bridge {
             if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); notifyIntent("ליבה רוצה לפתוח קישור", u, Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)); return@post }
             Trace.e(Trace.Code.E_CMD_REFUSED, why + ":" + cmd.substringBefore(' ').take(20)); showLabel("פקודה נדחתה: $why", 5000); return@post
         }
-        if (sig.isNotEmpty()) runCatching { nonceFile.writeText(seen.joinToString("\n")) } // vault-ok: random nonces, no words
+        if (sig.isNotEmpty()) runCatching { nonceFile.writeText(seen.joinToString("\n")) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "bubbleservice916:" + it.javaClass.simpleName) } // vault-ok: random nonces, no words
         when (cmd) { "sense_open" -> openSenseAccess(); "cal_on" -> askCalendar(); "cal_off" -> il.liba.app.sense.CalSense.stop(this); "hey_off" -> { heyOff(); speak("מילת ההפעלה כובתה מרחוק."); showLabel("מילת ההפעלה כובתה מרחוק", 4000) }; "hey_on" -> { heyOn = true; Prefs.setHey(this, true); wakeLoop() }; "style 0", "style 1", "style 2" -> { val st = cmd.removePrefix("style ").trim().toIntOrNull() ?: 2; Prefs.setStyle(this, st); dot?.style = st; showLabel("עיצוב " + (when (st) { 2 -> "יצור חי"; 1 -> "משולב"; else -> "אורורה" }), 3000) }; "update" -> { showLabel("בודקת גרסה חדשה…", 4000); checkUpdate { if (Prefs.updateUrl(this) != null) installUpdate() else showLabel("אין גרסה חדשה", 3000) } }; "reload" -> { pageReady = false; pageOk = false; main.postDelayed({ web?.reload() }, 1500) }
         else -> if (cmd.startsWith("open ")) { val u = cmd.removePrefix("open ").trim(); val i = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(u)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             if (!EgressCore.urlClean(u)) { Trace.e(Trace.Code.E_CMD_REFUSED, "url-content"); showLabel("לא פותחת קישור שנושא תוכן", 5000); return@post } // kotlin-egress
@@ -934,8 +938,8 @@ class BubbleService : Service(), LibaWeb.Bridge {
     /** step proactive: an alarm rang - say what is due, unless night mode or the car say not now (they are held to later) */
     private fun sayReminders() { val due = Reminders.due(this, night || carMode); if (due.isNotEmpty()) speak(due.joinToString(" ") { it.text }) }
     override fun onRemind(items: String) { Reminders.onRemind(this, items) }
-    override fun onPowerCfg(body: String) { runCatching { il.liba.app.power.Governor.budgetPct = org.json.JSONObject(body).optDouble("dailyPct", 0.0) } }
-    override fun onPlace(body: String) { runCatching { val o = org.json.JSONObject(body); Prefs.setPlace(this, Place(o.getDouble("lat"), o.getDouble("lon"), o.optInt("b", 20))) }; holyCheck() }
+    override fun onPowerCfg(body: String) { runCatching { il.liba.app.power.Governor.budgetPct = org.json.JSONObject(body).optDouble("dailyPct", 0.0) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "bubbleservice941:" + it.javaClass.simpleName) } }
+    override fun onPlace(body: String) { runCatching { val o = org.json.JSONObject(body); Prefs.setPlace(this, Place(o.getDouble("lat"), o.getDouble("lon"), o.optInt("b", 20))) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "bubbleservice942:" + it.javaClass.simpleName) }; holyCheck() }
     // step shabbat-engine: from candle lighting until nightfall - no voice, no microphone, no page, no network
     @Volatile var shabbat = false
     private var emergencyUntil = 0L

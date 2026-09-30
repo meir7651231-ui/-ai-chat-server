@@ -25,7 +25,7 @@ object PowerLedger {
         if (cur != null && cur.day == d) return cur
         if (cur != null) { cur.flush(now); save(c, cur) }
         val n = PowerCore.Meter(d, EnergyModel.rates(c))
-        if (cur == null) runCatching { val o = org.json.JSONObject(File(dir(c), "day.json").readText()); if (o.optString("day") == d) o.optJSONObject("mah")?.let { j -> j.keys().forEach { k -> n.mah[k] = j.getDouble(k) } } }
+        if (cur == null) runCatching { val o = org.json.JSONObject(File(dir(c), "day.json").readText()); if (o.optString("day") == d) o.optJSONObject("mah")?.let { j -> j.keys().forEach { k -> n.mah[k] = j.getDouble(k) } } }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "powerledger28:" + it.javaClass.simpleName) }
         cur?.open()?.forEach { n.set(it, true, now) }
         m = n; return n
     }
@@ -63,7 +63,7 @@ object PowerLedger {
 object EnergyModel {
     fun rates(c: Context): Map<String, Double> {
         val out = LinkedHashMap(PowerCore.DEFAULT_MA)
-        runCatching { val o = org.json.JSONObject(File(c.filesDir, "power/model.json").readText()); o.keys().forEach { k -> val v = o.getDouble(k); if (v in 0.0..2000.0) out[k] = v } }
+        runCatching { val o = org.json.JSONObject(File(c.filesDir, "power/model.json").readText()); o.keys().forEach { k -> val v = o.getDouble(k); if (v in 0.0..2000.0) out[k] = v } }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "powerledger66:" + it.javaClass.simpleName) }
         return out
     }
 }

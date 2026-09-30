@@ -29,7 +29,10 @@ async function openWorker(s){const now=Date.now(),kind=s.kind||'build',idem=s.id
   const o={ts:s.ts||now,at:now,idem,wid:w,kind,title,claimBy:'',claimAt:0};await P.order(w).set(o);fleetOrders.set(w,Object.assign({id:w},o));
   fleetWorkers.set(w,{id:w,title,kind,status:'queued',transitions:[],createdAt:now,idem,spec:s.spec});
   Mandate.spent('open_worker');Ledger.record({action:'open_worker',cause:'voice',inputs:{kind,title},result:w});return {wid:w};}
-function workerCmd(rest,kind){const spec=String(rest||'').trim();if(memWords(spec).length<2){sayLocal('מה בדיוק '+(kind==='fix'?'לתקן':kind==='check'?'לבדוק':'לבנות')+'? תגיד את זה במשפט אחד.');return true;}
+/* "תבנה לי" is always work; "תתקן" / "תבדוק" only when it is about something that is built - "תבדוק אם אבי שלח" is a
+   question for the brain, and goes to it as before */
+const FLEET_OBJ=/(באג|דף|הדף|אפליקציה|האפליקציה|קוד|הקוד|שער|בדיקה|בדיקות|גרסה|הגרסה|ענף|שרת|השרת|גיבוי|הגיבוי|טבלה|טבלת|אתר|האתר|טופס|הטופס|בועה|הבועה|מחשבון|קישור|הקישור|התראות|לוח|כפתור|תקלה|קריסה|המחולל|סקריפט|כלי|הכלי|מסך|עמוד)/;
+function workerCmd(rest,kind){const spec=String(rest||'').trim();if(kind!=='build'&&!FLEET_OBJ.test(spec))return false;if(memWords(spec).length<2){sayLocal('מה בדיוק '+(kind==='fix'?'לתקן':kind==='check'?'לבדוק':'לבנות')+'? תגיד את זה במשפט אחד.');return true;}
   const go=()=>openWorker({kind,spec,title:spec}).then(r=>sayLocal(r.dup?'כבר פתחתי את זה לפני רגע - עובד אחד.':'פתחתי עובד '+FLEET_KINDS[kind]+': '+spec.slice(0,50)+(fleetPolicy.halt?'. הצי עצור - הוא יחכה בתור עד שתגיד להמשיך.':'. הוא בתור.'))).catch(e=>{fail('P_DB_WRITE',e,'workers');sayLocal('לא הצלחתי לפתוח עובד.');});
   const v=Mandate.allow('open_worker');if(v.verdict==='deny'){sayLocal('לא עכשיו - '+v.why+'.');return true;}
   if(v.verdict==='ask_first'){Consent.request({action:'open_worker',effect:'לפתוח עובד: '+spec.slice(0,60),reversible:true,say:'לפתוח עובד '+FLEET_KINDS[kind]+': '+spec.slice(0,60)+'?'}).then(y=>{if(y)go();});return true;}

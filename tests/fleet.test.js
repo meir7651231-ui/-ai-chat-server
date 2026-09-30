@@ -82,7 +82,8 @@ const { chromium } = require('playwright'); const fs = require('fs'); const path
   const sw2 = await f.evaluate(n => window.__fleet.sweep(n + 1000), now); await speak(800);
   s0 = await st();
   ok(s0.workers.find(w => w.id === wa.id).status === 'stalled' && heard.filter(x => /מת בשקט/.test(x)).length === 1, 'no beat for two leases: stalled, said once: ' + JSON.stringify(sw));
-  ok(s0.workers.find(w => w.id === wb.id).status === 'queued' && (s0.workers.find(w => w.id === wb.id).transitions || []).some(t => t.why === 'abandoned'), 'dispatched, never beat in ten minutes: back to the queue');
+  const wbT = (s0.workers.find(w => w.id === wb.id).transitions || []); const ab = wbT.findIndex(t => t.why === 'abandoned');
+  ok(ab >= 0 && wbT[ab].to === 'queued' && ['queued', 'running'].indexOf(s0.workers.find(w => w.id === wb.id).status) >= 0 && (await f.evaluate(id => window.__h.all('fleet/orders/items').filter(o => o.wid === id).length, wb.id)) === 1, 'dispatched, never beat in ten minutes: back to the queue under the same order (and may be taken again)');
   ok(['paused'].indexOf(s0.workers.find(w => w.id === wc.id).status) >= 0, 'a control nobody applied: the page applies it (deaf or not)');
   // triage
   const lowIds = []; for (let i = 0; i < 30; i++) { lowIds.push('a' + i); }

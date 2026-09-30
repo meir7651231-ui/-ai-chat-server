@@ -48,7 +48,7 @@ object Prefs {
     fun setReports(c: Context, v: Boolean) = p(c).edit().putBoolean("reports", v).apply()
     /** keystore-vault: the crash is in the vault; an old plaintext one is moved in and erased the first time it is read */
     fun crash(c: Context): String? {
-        p(c).getString("crash", null)?.let { old -> runCatching { Vault.put(c, "crash", old) }; p(c).edit().remove("crash").apply() }
+        p(c).getString("crash", null)?.let { old -> runCatching { Vault.put(c, "crash", old) }.onFailure { il.liba.app.Trace.e(il.liba.app.Trace.Code.E_PREFS, "prefs51:" + it.javaClass.simpleName) }; p(c).edit().remove("crash").apply() }
         return Vault.get(c, "crash") ?: p(c).getString("crash_min", null) }
     fun clearCrash(c: Context) { Vault.remove(c, "crash"); p(c).edit().remove("crash").remove("crash_min").apply() }
     fun updateUrl(c: Context): String? = p(c).getString("updateUrl", null)
