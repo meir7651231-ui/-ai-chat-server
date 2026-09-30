@@ -9,7 +9,8 @@ const runSplit=(name,min)=>Promise.all([0,1,2,3].map(k=>new Promise(res=>{ let o
 export async function solve(name,gen,g,{say=()=>{},splitMin=10,depth=0}={}){ const t0=Date.now(); const chk=makeChecker(gen,300); const sample=gen(); const tried=[];
   const done=(prog,how)=>({prog,how,tried,ms:Date.now()-t0});
   if(g.ins){ const { valueBuild, show }=await import('./tzoref-value.mjs'); tried.push('ערכים'); const v=valueBuild(gen,{name,ins:g.ins,out:g.out??2,ms:20000}); if(v.prog) return done(v.prog,'בונה-ערכים: '+show(v.expr));
-    const RP=await import('./tzoref-repeat.mjs'); tried.push('חזור-N-פעמים'); const w=RP.repeatBuild(gen,{name,ins:g.ins}); if(w.prog) return done(w.prog,'חזור-N-פעמים: '+RP.showR(w.found)); return done(null,null); }
+    const RP=await import('./tzoref-repeat.mjs'); tried.push('חזור-N-פעמים'); const w=RP.repeatBuild(gen,{name,ins:g.ins}); if(w.prog) return done(w.prog,'חזור-N-פעמים: '+RP.showR(w.found));
+    const WH=await import('./tzoref-while.mjs'); tried.push('כל-עוד'); const x=WH.whileBuild(gen,{name,ins:g.ins}); if(x.prog) return done(x.prog,'כל-עוד: '+WH.showW(x.found)); return done(null,null); }
   if(sample.want!=null){ const L=await import('./tzoref-loop.mjs'); tried.push('לולאות'); const a=L.loopBuild(gen,{name}); if(a.prog) return done(a.prog,`בונה-לולאות: התחל מ-${a.init}, בכל איבר ${L.showL(a.step)}`);
     const L2=await import('./tzoref-loop2.mjs'); tried.push('שני-צוברים'); let b=L2.loop2Build(gen,{name});
     // «מה חסר לי?» — אם נמצא פער (שתי צבירות שהתשובה תלויה רק בהן), בונים את החלק החסר, שמים במדף, ומנסים שוב
