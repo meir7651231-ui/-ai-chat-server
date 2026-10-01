@@ -312,7 +312,9 @@ export async function work({names=NEW_GOALS,baseMs=30000,minutes=2}={}){ const {
       say(`✗ ${name}: לא נמצא (${(r.tries/1e6).toFixed(1)} מיליון ניסיונות, ${((clock()-T0)/1000).toFixed(0)} שנ׳) ⇒ לרשימת «לנסות שוב», בפעם הבאה ${ms*2/1000} שנ׳`); rows.push({name,ok:false}); continue; }
     if(r.path){ const P=['^','^',...r.path]; for(let i=2;i<P.length;i++){ const k2=P[i-2]+'|'+P[i-1], k3=k2+'|'+P[i]; brain.ngram[k2]=(brain.ngram[k2]||0)+1; brain.ngram[k3]=(brain.ngram[k3]||0)+1; } }
     const built=r.prog.length, buildSec=((clock()-T0)/1000).toFixed(1);
-    let s2; try{ s2=shorten(r.prog,gen,{minutes,quiet:1}); }catch(e){ q[name]={tries:((q[name]?.tries)||0)+1}; fs.writeFileSync(QUEUE,JSON.stringify(q)); say(`✗ ${name}: נמצאה תוכנית שלא עוברת את הבודק המלא ⇒ לרשימה`); continue; }
+    // «מהדומה ביותר במדף»: אם יש — מקצרים גם אותה, ולוקחים את הקצרה
+    let near=null; try{ const N=await import('./tzoref-near.mjs'); const nb=N.nearBuild(gen,{name}); if(nb.prog){ near=shorten(nb.prog,gen,{minutes,quiet:1}); say(`  מהמדף: ${N.showN(nb)} ⇒ ${near.prog.length}`); } }catch{}
+    let s2; try{ s2=shorten(r.prog,gen,{minutes,quiet:1}); if(near&&near.prog.length<s2.prog.length) s2=near; }catch(e){ if(near) s2=near; else { q[name]={tries:((q[name]?.tries)||0)+1}; fs.writeFileSync(QUEUE,JSON.stringify(q)); say(`✗ ${name}: נמצאה תוכנית שלא עוברת את הבודק המלא ⇒ לרשימה`); continue; } }
     const fc=finalCheck(s2.prog,gen);
     if(fc.bad){ say(`✗ ${name}: נכשל בבדיקה הסופית — לא נכנס`); continue; }
     const mov=movable(s2.prog,gen); const sh2=loadShelf(); const old=sh2.named.find(b=>b.name===name); const entry={name,prog:s2.prog,ins:g.ins||[],out:g.out??2,movable:mov,by:'הצורף · נבנה לבד'}; if(old){ delete old.bad; Object.assign(old,entry); } else sh2.named.push(entry); saveShelf(sh2);
