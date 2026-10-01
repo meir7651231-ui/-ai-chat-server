@@ -1,3 +1,4 @@
+import fs from 'fs';
 // «בונה-לולאות»: כמעט כל משימה על רשימה היא «התחל ממספר, ובכל איבר עדכן אותו».
 // הצורף מחפש רק שני דברים: במה להתחיל (0 / 15 / המפתח), ומה לעשות בכל צעד — צירוף חלקים על (צובר, איבר, מפתח).
 // את השלד (מעבר על הרשימה) הוא כותב בעצמו, ובודק את התוכנית כולה בבודק הרגיל.
@@ -84,8 +85,11 @@ export function loopBuild(gen,{name='',maxSize=3,ms=30000,N=64,tries=80}={}){ co
   const bodies=[]; if(found.step) bodies.push({mk:body,init:found.init,post:found.post}); if(cfound) bodies.push({mk:condBody,init:cfound.init,cond:true});
   const best=[]; for(const bd of bodies){ const init=bd.init.cell!=null?P(`WHERE ${bd.init.cell}; GO; TAKE; WHERE ${ACC}; GO; PUT`):P(`WHERE ${ACC}; GO; TAKE; TAKE; CALC; TAKE; CALC; PUT`+(bd.init.c===0?'; TAKE; TAKE; CALC; PUT':'')); const SK=mkSK(init);
   for(const [nm,mk] of Object.entries(SK)) for(let t=0;t<Math.ceil(tries/3);t++){ const B=bd.mk(t>0); if(!B) continue; let prog=mk(B); if(bd.post){ const Q=exprToAcc(bd.post,t>0); if(!Q) continue; prog=[...prog,...shift(Q,prog.length)]; } if(chk(prog)){ best.push({prog,skel:nm+(bd.cond?' · עם תנאי':'')}); break; } } }
-  if(best.length){ best.sort((a,b)=>a.prog.length-b.prog.length); return {prog:best[0].prog,skel:best[0].skel,all:best,step:found.step,cond:cfound,post:found.post,init:found.init.name,made,ms:Date.now()-t0}; }
+  // הלומד: כמה כל צורה התקצרה בעבר (קובץ tzoref-loop-wins.json) — בוחרים לפי האורך הצפוי אחרי קיצור, לא לפי האורך עכשיו
+  if(best.length){ const W=loopWins(); best.forEach(b=>b.pred=Math.round(b.prog.length*(W[b.skel]??0.6))); best.sort((a,b)=>a.pred-b.pred||a.prog.length-b.prog.length); return {prog:best[0].prog,skel:best[0].skel,all:best,step:found.step,cond:cfound,post:found.post,init:found.init.name,made,ms:Date.now()-t0}; }
   return {prog:null,step:found.step,init:found.init.name,made,ms:Date.now()-t0,why:'נמצא צעד, אבל התוכנית לא עברה'}; }
+export function loopWins(){ try{ const L=JSON.parse(fs.readFileSync('tzoref-loop-wins.json','utf8')); const m={}; for(const r of L){ (m[r.skel]||(m[r.skel]=[])).push(r.short/r.raw); } const o={}; for(const k in m){ const v=m[k]; o[k]=(v.reduce((a,b)=>a+b,0)+0.6*2)/(v.length+2); } return o; }catch{ return {}; } }
+export function recordWin(skel,raw,short,name){ let L=[]; try{ L=JSON.parse(fs.readFileSync('tzoref-loop-wins.json','utf8')); }catch{} L.push({skel,raw,short,name}); fs.writeFileSync('tzoref-loop-wins.json',JSON.stringify(L)); }
 export const showL=e=>e.cell!=null?(e.cell===ACC?'צובר':e.cell===X?'איבר':'מפתח'):`${e.f}(${showL(e.a)}${e.b?', '+showL(e.b):''})`;
 if(import.meta.url==='file://'+process.argv[1]){ const { goals, goalFor }=await import('./tzoref-goals.mjs'); const G=goals();
   for(const name of process.argv.slice(2)){ const g=G[name]; const r=loopBuild(goalFor(name,{ins:g.ins},G),{name});
