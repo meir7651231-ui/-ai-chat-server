@@ -12,16 +12,16 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
   const TB=partTables(sh.named.filter(b=>!b.bad&&b.name!==name)).filter(t=>t.name!=='העתק'); if(!T3CACHE) T3CACHE=tables3(sh.named.filter(b=>!b.bad)); TB.push(...T3CACHE.filter(t=>t.name!==name)); for(let i=TB.length-1;i>=0;i--) if(ban.includes(TB[i].name)) TB.splice(i,1);
   const ex0=[...extra,...Array.from({length:N},()=>gen())]; const ex=ex0; const NN=ex.length; const want=Uint8Array.from(ex.map(e=>e.want&15)); const wkey=Buffer.from(want).toString('latin1');
   const seen=new Map(); const bySize=[]; let found=null, made=0;
-  const add=(vec,expr,s)=>{ const k=Buffer.from(vec).toString('latin1'); if(seen.has(k)) return; seen.set(k,expr); (bySize[s]||(bySize[s]=[])).push({vec,expr}); made++; if(k===wkey) found=expr; };
+  const add=(vec,expr,s)=>{ const k=Buffer.from(vec).toString('latin1'); if(seen.has(k)) return; if(seen.size>maxBank){ if(k===wkey) found=expr; return; }   /* מחסן מלא ⇒ רק בודקים, לא שומרים */ seen.set(k,expr); (bySize[s]||(bySize[s]=[])).push({vec,expr}); made++; if(k===wkey) found=expr; };
   bySize[0]=[]; ins.forEach((c,i)=>add(Uint8Array.from(ex.map(e=>e.mem[c]&15)),{cell:c},0));
   const close=v=>{ let eq=0; const joint=new Map(); for(let e=0;e<NN;e++){ if(v[e]===want[e]) eq++; const k=v[e]*16+want[e]; joint.set(k,(joint.get(k)||0)+1); } return eq+0.5*(NN-joint.size); };   // «קרוב»: שווה לתשובה, או קובע אותה
   for(let s=1;s<=maxSize&&!found;s++){ if(s>=3&&bySize[s-1]&&bySize[s-1].length>keep){ { const isConst=v=>v.every(x=>x===v[0]); const C=bySize[s-1].filter(x=>isConst(x.vec)); bySize[s-1]=[...C,...bySize[s-1].filter(x=>!isConst(x.vec)).map(x=>[close(x.vec),x]).sort((a,b)=>b[0]-a[0]).slice(0,keep).map(x=>x[1])]; } }
-    for(const tb of TB){ if(found||seen.size>maxBank||Date.now()-t0>ms) break; const F=tb.T;
+    for(const tb of TB){ if(found||Date.now()-t0>ms) break; const F=tb.T;
       if(tb.k===1){ for(const x of bySize[s-1]||[]){ const v=new Uint8Array(NN); for(let e=0;e<NN;e++) v[e]=F[x.vec[e]]; add(v,{f:tb.name,k:1,a:x.expr},s); if(found) break; } }
-      else if(tb.k===3){ for(let sa=0;sa<=s-1&&!found;sa++) for(let sb=0;sa+sb<=s-1&&!found;sb++){ const sc=s-1-sa-sb; const A=bySize[sa]||[], B=bySize[sb]||[], C=bySize[sc]||[]; if(A.length*B.length*C.length>2e6) continue;
+      else if(tb.k===3){ for(let sa=0;sa<=s-1&&!found;sa++) for(let sb=0;sa+sb<=s-1&&!found;sb++){ const sc=s-1-sa-sb; let A=bySize[sa]||[], B=bySize[sb]||[], C=bySize[sc]||[]; if(A.length*B.length*C.length>2e6){ const top=L=>L.length<=120?L:(L._top||(L._top=L.map(x=>[close(x.vec),x]).sort((a,b)=>b[0]-a[0]).slice(0,120).map(x=>x[1]))); A=top(A); B=top(B); C=top(C); }   /* גדול מדי ⇒ רק המבטיחים */
           for(const x of A){ if(found) break; for(const y of B){ if(found) break; if(x===y) continue; for(const z of C){ if(z===x||z===y) continue; const v=new Uint8Array(NN); for(let e=0;e<NN;e++) v[e]=F[x.vec[e]*256+y.vec[e]*16+z.vec[e]]; add(v,{f:tb.name,k:3,a:x.expr,b:y.expr,c:z.expr},s); if(found) break; } } } } }
       else for(let sa=0;sa<=s-1&&!found;sa++){ const sb=s-1-sa; for(const x of bySize[sa]||[]){ if(found) break; for(const y of bySize[sb]||[]){ if(x===y) continue;
-            const v=new Uint8Array(NN); for(let e=0;e<NN;e++) v[e]=F[x.vec[e]*16+y.vec[e]]; add(v,{f:tb.name,k:2,a:x.expr,b:y.expr},s); if(found) break; } if(seen.size>maxBank||Date.now()-t0>ms) break; } } } }
+            const v=new Uint8Array(NN); for(let e=0;e<NN;e++) v[e]=F[x.vec[e]*16+y.vec[e]]; add(v,{f:tb.name,k:2,a:x.expr,b:y.expr},s); if(found) break; } if(Date.now()-t0>ms) break; } } } }
   if(!found) return {prog:null,made,ms:Date.now()-t0};
   { const tbl=new Map(TB.map(t=>[t.name,t])); const ev=(e,m)=>e.cell!=null?m[e.cell]&15:(e.k===1?tbl.get(e.f).T[ev(e.a,m)]:e.k===3?tbl.get(e.f).T[ev(e.a,m)*256+ev(e.b,m)*16+ev(e.c,m)]:tbl.get(e.f).T[ev(e.a,m)*16+ev(e.b,m)]);
     const bad=[]; for(let t=0;t<3000&&bad.length<16;t++){ const x=gen(); if(ev(found,x.mem)!==(x.want&15)) bad.push(x); }
