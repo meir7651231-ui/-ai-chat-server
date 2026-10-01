@@ -23,10 +23,13 @@ export function loopBuild(gen,{name='',maxSize=3,ms=30000,N=64,tries=80}={}){ co
     if(tb.k===1){ for(const a of by[s-1]||[]){ const v=new Uint8Array(D); for(let i=0;i<D;i++) v[i]=F[a.v[i]]; if(add(v,{f:tb.name,k:1,a:a.expr},s)) break; } }
     else for(let sa=0;sa<=s-1&&!found;sa++) for(const a of by[sa]||[]){ if(found) break; for(const b of by[s-1-sa]||[]){ if(a===b) continue; const v=new Uint8Array(D); for(let i=0;i<D;i++) v[i]=F[a.v[i]*16+b.v[i]]; if(add(v,{f:tb.name,k:2,a:a.expr,b:b.expr},s)) break; } } }
   // «לולאה ואחריה חישוב»: צבירה שהתשובה היא פונקציה שלה (למשל «הקטן» ⇒ «פחות 8») — מחפשים את החישוב שאחרי
-  if(!found){ const U=[{v:Uint8Array.from([...Array(16).keys()]),e:{cell:ACC}}], useen=new Set([U[0].v.join()]);
-    for(let s=1;s<=3;s++){ const cur=U.slice(); for(const tb of TB){ const F=tb.T;
-        if(tb.k===1){ for(const a of cur){ const v=a.v.map(x=>F[x]); const k=v.join(); if(!useen.has(k)){ useen.add(k); U.push({v,e:{f:tb.name,k:1,a:a.e}}); } } }
-        else for(const a of cur) for(const b of cur){ const v=a.v.map((x,i)=>F[x*16+b.v[i]]); const k=v.join(); if(!useen.has(k)){ useen.add(k); U.push({v,e:{f:tb.name,k:2,a:a.e,b:b.e}}); } } } if(U.length>20000) break; }
+  if(!found){ const U=[{v:Uint8Array.from([...Array(16).keys()]),e:{cell:ACC}}], useen=new Set([U[0].v.join()]); const lev=[[U[0]]];
+    // חישובים-שאחרי: כל שכבה מצטרפת רק לפשוטות (לא «כולם עם כולם» — זה התפוצץ כשהמדף גדל), עד 6,000 בשכבה
+    for(let s=1;s<=3;s++){ const L=[]; const push=(v,e)=>{ const k=v.join(); if(useen.has(k)||L.length>6000) return; useen.add(k); const u={v,e}; L.push(u); U.push(u); };
+      for(const tb of TB){ const F=tb.T;
+        if(tb.k===1){ for(const a of lev[s-1]) push(a.v.map(x=>F[x]),{f:tb.name,k:1,a:a.e}); }
+        else for(const a of lev[s-1]) for(const b of [...lev[0],...(lev[1]||[]).slice(0,300)]){ if(a===b) continue; push(a.v.map((x,i)=>F[x*16+b.v[i]]),{f:tb.name,k:2,a:a.e,b:b.e}); push(a.v.map((x,i)=>F[b.v[i]*16+x]),{f:tb.name,k:2,a:b.e,b:a.e}); } }
+      lev.push(L); }
     const idx=(a,x,k)=>(a*8+(x-8))*9+(k?k-7:0); const V=Array.from({length:1500},()=>gen()).filter(e=>e.want!=null); const VL=V.map(e=>walk(e.mem));
     const fold=(v,I,m,l)=>{ let acc=I.cell!=null?m[I.cell]:I.c; for(const x of l) acc=v[idx(acc,x,m[KEY])]; return acc; };
     outer: for(const st of by.slice(0,3).flat()) for(const I of INITS){ const r=ex.map((e,i)=>fold(st.v,I,e.mem,lists[i])); const M=new Map(); let ok=true;
