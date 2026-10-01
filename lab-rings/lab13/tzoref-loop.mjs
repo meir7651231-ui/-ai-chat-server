@@ -36,6 +36,12 @@ export function loopBuild(gen,{name='',maxSize=3,ms=30000,N=64,tries=80}={}){ co
         for(let i=0;i<ex.length&&ok;i++){ const w=ex[i].want&15; if(M.has(r[i])&&M.get(r[i])!==w) ok=false; M.set(r[i],w); } if(!ok||M.size<2) continue;
         for(const u of U){ let good=true; for(const [k,w] of M) if(u.v[k]!==w){ good=false; break; } if(!good) continue;
           if(V.every((e,i)=>u.v[fold(st.v,I,e.mem,VL[i])]===(e.want&15))){ found={step:st.expr,init:I,post:u.e}; break outer; } } } }
+  // «צעד עם תנאי»: אם תנאי(צובר,איבר) לא אפס — מדלגים; אחרת צובר ⇐ ערך. (כמו «אם גדול — החלף»: קצר יותר מלחשב «הגדול» בכל סיבוב)
+  let cfound=null; { const A0=by[0][0].v; const conds=[...(by[0]||[]),...(by[1]||[]),...(by[2]||[])].slice(0,20000), vals=[...(by[0]||[]),...(by[1]||[])].slice(0,400);
+    const testC=v=>{ for(const I of INITS){ let ok=true; const idx=(a,x,k)=>(a*8+(x-8))*9+(k?k-7:0); for(let i=0;i<ex.length&&ok;i++){ let acc=I.cell!=null?ex[i].mem[I.cell]:I.c; for(const x of lists[i]) acc=v[idx(acc,x,keys[i])]; if(acc!==(ex[i].want&15)) ok=false; } if(ok) return I; } return null; };
+    const live=c=>{ const byK=new Map(); for(let i=0;i<D;i++){ const k=i%9, z=c.v[i]!==0; if(!byK.has(k)) byK.set(k,z); else if(byK.get(k)!==z) return true; } return false; };   /* תנאי שתלוי רק במפתח — לא תנאי */
+    const C2=conds.filter(live); const cs=new Set(); outerC: for(const val of vals){ if(val.v===A0) continue; for(const c of C2){ if(Date.now()-t0>ms+20000) break outerC; const v=new Uint8Array(D); for(let i=0;i<D;i++) v[i]=c.v[i]!==0?A0[i]:val.v[i]; const k=hkey(v); if(cs.has(k)) continue; cs.add(k); const I=testC(v); if(I){ cfound={cond:c.expr,val:val.expr,init:I}; break outerC; } } } }
+  if(!found&&cfound) found={step:null,init:cfound.init};
   if(!found) return {prog:null,made,ms:Date.now()-t0};
   // תוכנית: התחלה · ראש ⇒ תא 3 · אם ריק — לסוף · גוף: צעד ⇒ תא-עזר ⇒ תא 2 · הבא · חזור
   const EQ=new Map(); { const byT=new Map(); for(const t of TB){ const k=t.k+':'+t.T.join(','); if(!byT.has(k)) byT.set(k,[]); byT.get(k).push(t.name); } for(const L of byT.values()) for(const n of L) EQ.set(n,L); }
@@ -43,19 +49,19 @@ export function loopBuild(gen,{name='',maxSize=3,ms=30000,N=64,tries=80}={}){ co
   const P=s=>s.split(';').map(x=>x.trim()).filter(Boolean).map(x=>{ const [o,a]=x.split(' '); return a==null?[o]:[o,+a]; });
   const size=e=>e.cell!=null?0:1+size(e.a)+(e.b?size(e.b):0);
   const body=rnd=>exprToAcc(found.step,rnd);
-  function exprToAcc(EXPR,rnd){ const prog=[], live=new Set(); const R=k=>rnd?Math.floor(Math.random()*k):0; const keep=[0,1,ACC,X];
+  function exprToAcc(EXPR,rnd,DST=ACC){ const prog=[], live=new Set(); const R=k=>rnd?Math.floor(Math.random()*k):0; const keep=[0,1,ACC,X];
     const emit=(e,target)=>{ if(e.cell!=null) return e.cell; const kids=e.b?[e.a,e.b]:[e.a]; const order=kids.map((k,i)=>i).sort((i,j)=>size(kids[j])-size(kids[i])); const cells=[];
       for(const i of order){ const c=emit(kids[i],null); if(c==null) return null; cells[i]=c; if(!keep.includes(c)) live.add(c); }
       const free=[4,5,6,7].filter(c=>!live.has(c)); const tgt=target??(free.length?free[R(free.length)]:null); if(tgt==null) return null;
       const C=(EQ.get(e.f)||[e.f]).map(n=>blocks.get(n)).flatMap(b=>b.movable===false?[{prog:b.prog,ins:(b.ins||[]).filter(c=>c<8),out:b.out??2}]:placements(b,6000));
       const ok=C.filter(p=>p.out===tgt&&p.ins.join()===cells.join()&&[...used(p.prog)].every(c=>c===tgt||cells.includes(c)||(!live.has(c)&&!keep.includes(c))));
       if(!ok.length) return null; const p=ok[R(ok.length)]; prog.push(...shift(p.prog,prog.length)); for(const c of cells) live.delete(c); return tgt; };
-    if(EXPR.cell!=null){ const c=EXPR.cell; return c===ACC?[]:P(`WHERE ${c}; GO; TAKE; WHERE ${ACC}; GO; PUT`); }
-    const t=emit(EXPR,null); if(t==null) return null; return [...prog,...P(`WHERE ${t}; GO; TAKE; WHERE ${ACC}; GO; PUT`)]; }
-  const init=found.init.cell!=null?P(`WHERE ${found.init.cell}; GO; TAKE; WHERE ${ACC}; GO; PUT`):P(`WHERE ${ACC}; GO; TAKE; TAKE; CALC; TAKE; CALC; PUT`+(found.init.c===0?'; TAKE; TAKE; CALC; PUT':''));
+    if(EXPR.cell!=null){ const c=EXPR.cell; return c===DST?[]:P(`WHERE ${c}; GO; TAKE; WHERE ${DST}; GO; PUT`); }
+    const t=emit(EXPR,null); if(t==null) return null; return t===DST?prog:[...prog,...P(`WHERE ${t}; GO; TAKE; WHERE ${DST}; GO; PUT`)]; }
+  const init0=found.init.cell!=null?P(`WHERE ${found.init.cell}; GO; TAKE; WHERE ${ACC}; GO; PUT`):P(`WHERE ${ACC}; GO; TAKE; TAKE; CALC; TAKE; CALC; PUT`+(found.init.c===0?'; TAKE; TAKE; CALC; PUT':''));
   const chk=makeChecker(gen,300);
   // שלדים: הצורף מנסה כמה צורות של לולאה ושומר את הקצרה שעוברת (ומה שניצח — נזכר לפעם הבאה)
-  const SK={
+  const mkSK=init=>({
     'בדיקה בהתחלה':(B)=>{ const head=[...init,...P(`WHERE 1; GO; TAKE; WHERE ${X}; GO; PUT`)]; const pre=[...head,...P(`WHERE ${X}; GO; TAKE`)];
       const bodyAt=pre.length+2+P(`WHERE ${X}; GO; TAKE; TAKE; CALC`).length+2; const next=P(`WHERE ${X}; GO; TAKE; WHERE@; GO; TAKE; WHERE ${X}; GO; PUT; WHERE ${X}; GO; TAKE`);
       const endAt=bodyAt+B.length+next.length+2;
@@ -68,9 +74,13 @@ export function loopBuild(gen,{name='',maxSize=3,ms=30000,N=64,tries=80}={}){ co
       const head=[...init,...P(`WHERE 1; GO; TAKE; WHERE ${X}; GO; PUT`)]; const bodyAt=head.length;
       const next=P(`WHERE ${X}; GO; TAKE; WHERE@; GO; TAKE; WHERE ${X}; GO; PUT; TAKE`);
       return [...head,...shift(B,bodyAt),...next,['WHERE',bodyAt,'code'],['JUMP']]; },
-  };
-  const best=[]; for(const [nm,mk] of Object.entries(SK)) for(let t=0;t<Math.ceil(tries/3);t++){ const B=body(t>0); if(!B) continue; let prog=mk(B); if(found.post){ const Q=exprToAcc(found.post,t>0); if(!Q) continue; prog=[...prog,...shift(Q,prog.length)]; } if(chk(prog)){ best.push({prog,skel:nm}); break; } }
-  if(best.length){ best.sort((a,b)=>a.prog.length-b.prog.length); return {prog:best[0].prog,skel:best[0].skel,all:best,step:found.step,post:found.post,init:found.init.name,made,ms:Date.now()-t0}; }
+  });
+  const condBody=rnd=>{ let C, T; if(cfound.cond.cell!=null){ C=[]; T=cfound.cond.cell; } else { T=4+(rnd?Math.floor(Math.random()*4):0); C=exprToAcc(cfound.cond,rnd,T); if(!C) return null; } const V=exprToAcc(cfound.val,rnd); if(!V) return null;
+    const o=C.length+P(`WHERE ${T}; GO; TAKE`).length+2; return [...C,...P(`WHERE ${T}; GO; TAKE`),['WHERE',o+V.length,'code'],['JUMP'],...shift(V,o)]; };
+  const bodies=[]; if(found.step) bodies.push({mk:body,init:found.init,post:found.post}); if(cfound) bodies.push({mk:condBody,init:cfound.init,cond:true});
+  const best=[]; for(const bd of bodies){ const init=bd.init.cell!=null?P(`WHERE ${bd.init.cell}; GO; TAKE; WHERE ${ACC}; GO; PUT`):P(`WHERE ${ACC}; GO; TAKE; TAKE; CALC; TAKE; CALC; PUT`+(bd.init.c===0?'; TAKE; TAKE; CALC; PUT':'')); const SK=mkSK(init);
+  for(const [nm,mk] of Object.entries(SK)) for(let t=0;t<Math.ceil(tries/3);t++){ const B=bd.mk(t>0); if(!B) continue; let prog=mk(B); if(bd.post){ const Q=exprToAcc(bd.post,t>0); if(!Q) continue; prog=[...prog,...shift(Q,prog.length)]; } if(chk(prog)){ best.push({prog,skel:nm+(bd.cond?' · עם תנאי':'')}); break; } } }
+  if(best.length){ best.sort((a,b)=>a.prog.length-b.prog.length); return {prog:best[0].prog,skel:best[0].skel,all:best,step:found.step,cond:cfound,post:found.post,init:found.init.name,made,ms:Date.now()-t0}; }
   return {prog:null,step:found.step,init:found.init.name,made,ms:Date.now()-t0,why:'נמצא צעד, אבל התוכנית לא עברה'}; }
 export const showL=e=>e.cell!=null?(e.cell===ACC?'צובר':e.cell===X?'איבר':'מפתח'):`${e.f}(${showL(e.a)}${e.b?', '+showL(e.b):''})`;
 if(import.meta.url==='file://'+process.argv[1]){ const { goals, goalFor }=await import('./tzoref-goals.mjs'); const G=goals();
