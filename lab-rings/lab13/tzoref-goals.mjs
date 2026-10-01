@@ -24,7 +24,7 @@ export function learnedGoals(){ try{ return JSON.parse(fs.readFileSync(new URL('
 const tableGoal=(pairs)=>()=>{ const [a,b,w]=pairs[R(pairs.length)]; const m=Array.from({length:16},()=>R(16)); m[0]=a; m[1]=b; return {mem:m,want:w,ok:r=>r[2]===w}; };
 export function goals(){ const G={}; for(const [n,g] of Object.entries(learnedGoals())) G[n]={gen:tableGoal(g.pairs),ins:[0,1],out:2};
   Object.assign(G,{
-    'העתק':{gen:cell(m=>m[0])}, 'לא (מספר)':{gen:cell(m=>~m[0]&15)}, 'וגם (מספרים)':{gen:cell(m=>m[0]&m[1])}, 'או (מספרים)':{gen:cell(m=>m[0]|m[1])}, 'שונה (מספרים)':{gen:cell(m=>m[0]^m[1])},
+    'העתק':{gen:cell(m=>m[0])}, 'לא (מספר)':{gen:cell(m=>~m[0]&15)}, 'וגם (מספרים)':{gen:cell(m=>m[0]&m[1])}, 'נאנד (מספרים)':{gen:cell(m=>~(m[0]&m[1])&15)}, 'או (מספרים)':{gen:cell(m=>m[0]|m[1])}, 'שונה (מספרים)':{gen:cell(m=>m[0]^m[1])},
     'קבוע 15':{gen:cell(()=>15)}, 'קבוע 14 (15 ועוד 15)':{gen:cell(()=>14)}, 'קבוע 1':{gen:cell(()=>1)}, 'ועוד 1':{gen:cell(m=>(m[0]+1)&15)}, 'חיבור מספרים':{gen:cell(m=>(m[0]+m[1])&15)},
     'שווה (מספרים)':{gen:cell(m=>m[0]===m[1]?15:0,m=>{ if(R(2)) m[1]=m[0]; })},
     'קח מהכתובת שבתא':{gen:cell(m=>m[m[0]],m=>{ m[0]=8+R(8); })},
@@ -84,7 +84,7 @@ export function goals(){ const G={}; for(const [n,g] of Object.entries(learnedGo
     'ספור זוגיים ברשימה':{gen:list(8,l=>l.filter(x=>x%2===0).length)}, 'האם ממוינת?':{gen:list(8,l=>l.every((x,i)=>!i||l[i-1]<x)?15:0)}, 'הגדול כפול הקטן':{gen:list(8,l=>l.length?(Math.max(...l)*Math.min(...l))&15:0)}, 'ספור עליות':{gen:list(8,l=>l.filter((x,i)=>i&&x>l[i-1]).length)}, 'השני בגודלו':{gen:list(8,l=>[...l].sort((a,b)=>b-a)[1]||0)}, 'ספור ירידות':{gen:list(8,l=>l.filter((x,i)=>i&&x<l[i-1]).length)}, 'ממוצע הרשימה (בערך)':{gen:list(8,l=>l.length?Math.floor(l.reduce((a,b)=>a+b,0)/l.length)&15:0)},
     'מקסימום נייד':{gen:cell(m=>Math.max(m[4],m[3]),m=>{ if(R(4)===0) m[3]=m[4]; }),ins:[4,3],out:2},   // «מקסימום» על תאים אחרים (4,3) — הקיים מוברג ל-0/1, אז כאן אי אפשר סתם להעתיק אותו
   });
-  const I1=['העתק','לא (מספר)','ועוד 1','ועוד 2','קח מהכתובת שבתא'], I2=['וגם (מספרים)','או (מספרים)','שונה (מספרים)','חיבור מספרים','שווה (מספרים)','חיסור','קטן מ-','גדול מ-','מינימום','מקסימום','דלג אם לא-אפס (תא0 אפס ⇒ העתק תא1)'];
+  const I1=['העתק','לא (מספר)','ועוד 1','ועוד 2','קח מהכתובת שבתא'], I2=['נאנד (מספרים)','וגם (מספרים)','או (מספרים)','שונה (מספרים)','חיבור מספרים','שווה (מספרים)','חיסור','קטן מ-','גדול מ-','מינימום','מקסימום','דלג אם לא-אפס (תא0 אפס ⇒ העתק תא1)'];
   for(const n of I1) if(G[n]) Object.assign(G[n],{ins:[0],out:2}); for(const n of I2) if(G[n]) Object.assign(G[n],{ins:[0,1],out:2});
   for(const n of ['קבוע 15','קבוע 14 (15 ועוד 15)','קבוע 1']) Object.assign(G[n],{ins:[],out:2}); Object.assign(G['אם (תא0 לא-אפס ⇒ תא1, אחרת תא3)'],{ins:[0,1,3],out:2});
   return G; }
