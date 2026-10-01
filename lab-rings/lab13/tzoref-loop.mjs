@@ -74,6 +74,10 @@ export function loopBuild(gen,{name='',maxSize=3,ms=30000,N=64,tries=80}={}){ co
       const head=[...init,...P(`WHERE 1; GO; TAKE; WHERE ${X}; GO; PUT`)]; const bodyAt=head.length;
       const next=P(`WHERE ${X}; GO; TAKE; WHERE@; GO; TAKE; WHERE ${X}; GO; PUT; TAKE`);
       return [...head,...shift(B,bodyAt),...next,['WHERE',bodyAt,'code'],['JUMP']]; },
+    'חזרה לראש':(B)=>{ // הקפיצה חוזרת אל «שמור איבר» שבראש — הבא נשאר על המחסנית ונשמר שם (בלי לשמור פעמיים)
+      const L=init.length+P(`WHERE 1; GO; TAKE`).length; const bodyAt=L+3;
+      const next=P(`WHERE ${X}; GO; TAKE; WHERE@; GO; TAKE; TAKE`);
+      return [...init,...P(`WHERE 1; GO; TAKE`),...P(`WHERE ${X}; GO; PUT`),...shift(B,bodyAt),...next,['WHERE',L,'code'],['JUMP'],...P(`WHERE ${X}; GO; PUT`)]; },   /* ביציאה נשאר 0 על המחסנית — מנקים */
   });
   const condBody=rnd=>{ let C, T; if(cfound.cond.cell!=null){ C=[]; T=cfound.cond.cell; } else { T=4+(rnd?Math.floor(Math.random()*4):0); C=exprToAcc(cfound.cond,rnd,T); if(!C) return null; } const V=exprToAcc(cfound.val,rnd); if(!V) return null;
     const o=C.length+P(`WHERE ${T}; GO; TAKE`).length+2; return [...C,...P(`WHERE ${T}; GO; TAKE`),['WHERE',o+V.length,'code'],['JUMP'],...shift(V,o)]; };
