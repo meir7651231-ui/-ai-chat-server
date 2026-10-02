@@ -7,7 +7,7 @@ export function basicBuild(tt,{ms=60000,maxBank=4000000,ins=[0,1],ops=[],multi=0
   ins.forEach((c,j)=>add(leaf(j),{c},0)); if(found) return {expr:found,ms:Date.now()-t0};
   // אחורה: חבר — ? = תשובה פחות x (תשובה אחת). נאנד — ביטים שבהם x=1 קובעים את ?, השאר חופשיים: מנסים למלא אותם כמו ?-מוכר
   const want=new Map(); const wantAdd=(v,mk)=>{ const k=key(v); if(seen.has(k)){ found=mk(seen.get(k).e); return true; } if(want.size<2e6&&!want.has(k)) want.set(k,mk); return false; };
-  const back=x=>{ const y=new Uint8Array(N); for(let i=0;i<N;i++) y[i]=(W[i]-x.v[i])&15; if(wantAdd(y,e=>({o:'ADD',a:x.e,b:e}))) return;
+  const T1=[]; const back=x=>{ const y=new Uint8Array(N); for(let i=0;i<N;i++) y[i]=(W[i]-x.v[i])&15; if(T1.length<4000) T1.push({v:y,mk:e=>({o:'ADD',a:x.e,b:e})}); if(wantAdd(y,e=>({o:'ADD',a:x.e,b:e}))) return;
     let ok=true; const fix=new Uint8Array(N), msk=new Uint8Array(N); for(let i=0;i<N;i++){ const nw=(~W[i])&15; if((~x.v[i]&15)&~nw&15){ ok=false; break; } }   // נאנד: איפה ש-x=0 התשובה חייבת להיות 1
     if(!ok) return; for(let i=0;i<N;i++){ msk[i]=x.v[i]; fix[i]=(~W[i])&x.v[i]&15; }
     nandT.push({x,fix,msk}); };
@@ -28,7 +28,9 @@ export function basicBuild(tt,{ms=60000,maxBank=4000000,ins=[0,1],ops=[],multi=0
     for(let sa=0;sa<s&&!found;sa++){ const sb=s-1-sa; if(sb<sa) break; for(const x of lev[sa]||[]){ if(found||Date.now()-t0>ms||seen.size>maxBank) break; for(const y of lev[sb]||[]){ if(sa===sb&&y===x) {} 
           const v1=new Uint8Array(N), v2=new Uint8Array(N); for(let i=0;i<N;i++){ v1[i]=(x.v[i]+y.v[i])&15; v2[i]=(~(x.v[i]&y.v[i]))&15; }
           emit(v1,{o:'ADD',a:x.e,b:y.e}); emit(v2,{o:'NAND',a:x.e,b:y.e}); if(found) break; } } }
-    if(!found&&s<=3) for(const x of L) back(x); if(nandT.length>3000) nandT.length=3000; }
+    if(!found&&s<=3) for(const x of L) back(x); if(nandT.length>3000) nandT.length=3000;
+    // שני צעדים אחורה: «מבוקש» = (מבוקש-ראשון) פחות x' — עוד צעד חבר; ו-(מבוקש-ראשון) = נאנד(x', ?) כשהוא נקבע
+    if(!found&&s===3&&!process.env.NOBACK2){ const X=[...lev[0],...lev[1],...(lev[2]||[])].slice(0,600); for(const t of T1){ if(found||want.size>1.5e6) break; for(const x of X){ const y=new Uint8Array(N); for(let i=0;i<N;i++) y[i]=(t.v[i]-x.v[i])&15; if(wantAdd(y,e=>t.mk({o:'ADD',a:x.e,b:e}))) break; } } } }
   if(multi){ if(found&&!sols.includes(found)) sols.push(found); return {expr:sols[0]||null,all:sols,ms:Date.now()-t0,bank:seen.size}; }
   return {expr:found,ms:Date.now()-t0,bank:seen.size}; }
 const size=e=>e.c!=null?0:1+size(e.a)+(e.b?size(e.b):0);

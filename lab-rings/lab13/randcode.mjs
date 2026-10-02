@@ -6,8 +6,8 @@ const rnd=d=>{ if(d<=0||R(4)===0) return {c:R(2)}; const o=OPS[R(3)]; return o==
 const ev=(e,a,b)=>e.c!=null?(e.c?b:a):e.o==='SHR'?ev(e.a,a,b)>>1:e.o==='ADD'?(ev(e.a,a,b)+ev(e.b,a,b))&15:(~(ev(e.a,a,b)&ev(e.b,a,b)))&15;
 const comp=e=>e.c!=null?[['WHERE',e.c],['GO'],['TAKE']]:e.o==='SHR'?[...comp(e.a),['SHR']]:[...comp(e.a),...comp(e.b),[e.o==='NAND'?'CALC':'ADD']];
 const show=e=>e.c!=null?(e.c?'ב':'א'):e.o==='SHR'?`חצי(${show(e.a)})`:`${e.o==='ADD'?'חבר':'נאנד'}(${show(e.a)}, ${show(e.b)})`;
-let done=0; while(done<NP){ const e=rnd(4); const tt=[]; for(let a=0;a<16;a++) for(let b=0;b<16;b++) tt.push(ev(e,a,b));
-  if(new Set(tt).size<4) continue; const code=[...comp(e),['WHERE',2],['GO'],['PUT']]; if(code.length<20||code.length>60) continue;
+let done=0; while(done<NP){ const e=rnd(+process.env.DEPTH||4); const tt=[]; for(let a=0;a<16;a++) for(let b=0;b<16;b++) tt.push(ev(e,a,b));
+  if(new Set(tt).size<4) continue; const code=[...comp(e),['WHERE',2],['GO'],['PUT']]; if(code.length<(+process.env.LMIN||20)||code.length>(+process.env.LMAX||60)) continue;
   const gen=()=>{ const m=Array.from({length:16},()=>RR(16)); const w=ev(e,m[0],m[1]); const a0=m[0],b0=m[1]; return {mem:m,want:w,ok:r=>r[2]===w&&r[0]===a0&&r[1]===b0}; };
   if(finalCheck(code,gen,2000).bad) continue; done++;
   const t1=Date.now(); const s1=process.env.ONLY?{prog:code}:shorten(code,gen,{minutes:MIN,quiet:9}); const T1=(Date.now()-t1)/1000;
