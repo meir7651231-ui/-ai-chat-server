@@ -3,7 +3,7 @@
 // בסוף: הופך את הצירוף לתוכנית (שיבוץ תאים בלי לדרוס ערכים חיים), ובודק אותה בבודק הרגיל.
 import { loadShelf, placements, makeChecker } from './tzoref.mjs'; import { partTables } from './tzoref-tables.mjs'; import { dataOf } from './recipes.mjs'; import { keepOf as GM_KEEP_ } from './tzoref-goals.mjs'; const GM_KEEP=n=>GM_KEEP_(n,{}); import { run as runSlow } from './machine3s.mjs';
 // טבלה לחלק עם 3 כניסות (16×16×16) — כמו partTables, רק לשלוש
-function tables3(named){ const out=[]; for(const b of named){ const ins=(b.ins||[]).filter(c=>c<8), o=b.out??2; if(ins.length!==3||o>7||/רשימה|ספור|בלי|אמצע|וקטן/.test(b.name)) continue;
+export function tables3(named){ const out=[]; for(const b of named){ const ins=(b.ins||[]).filter(c=>c<8), o=b.out??2; if(ins.length!==3||o>7||/רשימה|ספור|בלי|אמצע|וקטן/.test(b.name)) continue;
   const T=new Uint8Array(4096); let ok=true; for(let x=0;x<4096&&ok;x++){ let v=null; for(let k=0;k<2;k++){ const m=Array.from({length:16},()=>Math.floor(Math.random()*16)); m[ins[0]]=x>>8; m[ins[1]]=(x>>4)&15; m[ins[2]]=x&15; const r=runSlow(b.prog,m,{maxSteps:20000}); if(!r||r.st.length){ ok=false; break; } if(v==null) v=r.mem[o]; else if(v!==r.mem[o]){ ok=false; break; } } T[x]=v??0; }
   if(ok) out.push({name:b.name,k:3,T}); } return out; }
 let T3CACHE=null;

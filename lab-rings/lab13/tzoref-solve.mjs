@@ -10,7 +10,14 @@ export async function solve(name,gen,g,{say=()=>{},splitMin=10,depth=0}={}){ con
   const done=(prog,how)=>({prog,how,tried,ms:Date.now()-t0});
   if(g.ins){ const { valueBuild, show }=await import('./tzoref-value.mjs');
     // בונה-יסודות (חבר/נאנד/חצי, כל הקלטים) ובונה-ערכים (חלקים מהמדף) — שניהם; לוקחים את הקצר שעובר
-    let bb=null; if(g.ins.length<=3){ const BS=await import('./tzoref-basic.mjs'); tried.push('יסודות'); const T=BS.tableOf(gen,g.ins); if(T){ const r=BS.basicBuild(T,{ins:g.ins,ms:+process.env.BASICMS||20000}); if(r.expr){ const p=BS.compile(r.expr,g.out??2); if(chk(p)) bb={prog:p,how:'בונה-יסודות: '+BS.showB(r.expr)}; } } }
+    let bb=null; if(g.ins.length<=3){ const BS=await import('./tzoref-basic.mjs'); tried.push('יסודות'); const T=BS.tableOf(gen,g.ins); if(T){ const fs=await import('fs'); const TZ=await import('./tzoref.mjs'); const TT=await import('./tzoref-tables.mjs');
+        let MAC={}; try{ MAC=JSON.parse(fs.readFileSync('tzoref-macros.json','utf8')); }catch{} const sh=TZ.loadShelf(); const blocks=new Map(sh.named.map(b=>[b.name,b]));
+        // קופסאות: חלקי-מדף שאין להם מתכון של יסודות (מינימום, כפל…) — נכנסים כצעד אחד
+        const ops=!process.env.BOX?[]:TT.partTables(sh.named.filter(b=>!b.bad&&b.name!==name)).filter(t=>t.k<=2&&!t.partial&&!/^עזר/.test(t.name)).map(t=>({name:t.name,k:t.k,T:t.T,w:MAC[t.name]?Math.max(1,Math.round(MAC[t.name].size/3)):Math.max(1,Math.round((blocks.get(t.name)?.prog.length||30)/25))}));
+  if(g.ins.length===3&&process.env.BOX) for(const t of (await import('./tzoref-value.mjs')).tables3(sh.named.filter(b=>!b.bad&&b.name!==name))) ops.push({name:t.name,k:3,T:t.T,w:2});
+        const r=BS.basicBuild(T,{ins:g.ins,ops,ms:+process.env.BASICMS||20000});
+        if(r.expr){ let p=null; if(!BS.hasM(r.expr)){ p=BS.compile(r.expr,g.out??2); if(!chk(p)) p=null; } else for(let t=0;t<40&&!p;t++){ const q=BS.compileH(r.expr,{out:g.out??2,ins:g.ins,blocks,placements:TZ.placements,rnd:t>0}); if(q&&chk(q)) p=q; }
+          if(p) bb={prog:p,how:'בונה-יסודות: '+BS.showB(r.expr)}; } } }
     tried.push('ערכים'); const v=valueBuild(gen,{name,ins:g.ins,out:g.out??2,ms:60000});
     const best=[bb,v.prog?{prog:v.prog,how:'בונה-ערכים: '+show(v.expr)}:null].filter(Boolean).sort((a,b)=>a.prog.length-b.prog.length)[0]; if(best) return done(best.prog,best.how);
     const RP=await import('./tzoref-repeat.mjs'); tried.push('חזור-N-פעמים'); const w=RP.repeatBuild(gen,{name,ins:g.ins}); if(w.prog) return done(w.prog,'חזור-N-פעמים: '+RP.showR(w.found));
