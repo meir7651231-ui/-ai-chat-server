@@ -11,7 +11,7 @@ let done=0; while(done<NP){ const e=rnd(4); const tt=[]; for(let a=0;a<16;a++) f
   const gen=()=>{ const m=Array.from({length:16},()=>RR(16)); const w=ev(e,m[0],m[1]); const a0=m[0],b0=m[1]; return {mem:m,want:w,ok:r=>r[2]===w&&r[0]===a0&&r[1]===b0}; };
   if(finalCheck(code,gen,2000).bad) continue; done++;
   const t1=Date.now(); const s1=process.env.ONLY?{prog:code}:shorten(code,gen,{minutes:MIN,quiet:9}); const T1=(Date.now()-t1)/1000;
-  if(process.env.BASIC){ const t3=Date.now(); const r=basicBuild(tt,{ms:+process.env.BMS||60000}); const T3=(Date.now()-t3)/1000; if(!r.expr){ console.log(`#${done} ${show(e)}\n   מקור ${code.length} · בונה-יסודות ⇒ לא נמצא (${T3.toFixed(0)} שנ׳)`); continue; }
+  if(process.env.BASIC){ const t3=Date.now(); const r=basicBuild(tt,{ins:[0,1],ms:+process.env.BMS||60000}); const T3=(Date.now()-t3)/1000; if(!r.expr){ console.log(`#${done} ${show(e)}\n   מקור ${code.length} · בונה-יסודות ⇒ לא נמצא (${T3.toFixed(0)} שנ׳)`); continue; }
     let p=compile(r.expr); const ok0=!finalCheck(p,gen,3000).bad; let sp=p; if(ok0&&!process.env.ONLY) sp=shorten(p,gen,{minutes:MIN,quiet:9}).prog; const ok=!finalCheck(sp,gen).bad;
     console.log(`#${done} ${show(e)}\n   מקור ${code.length} · בונה-יסודות ⇒ ${p.length}${ok0?'':' ✗'}${process.env.ONLY?'':' ⇒ קוצר '+sp.length+(ok?'':' ✗')} (${T3.toFixed(0)} שנ׳) · נמצא: ${showB(r.expr)}`); continue; }
   const t2=Date.now(); let v=null; try{ v=valueBuild(gen,{name:'אקראי',ins:[0,1],out:2,ms:60000}); }catch{} let s2=null; if(v&&v.prog) s2=process.env.ONLY?{prog:v.prog}:shorten(v.prog,gen,{minutes:MIN,quiet:9}); const T2=(Date.now()-t2)/1000;
