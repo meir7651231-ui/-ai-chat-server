@@ -1,6 +1,6 @@
 // «בונה-יסודות»: רק חבר / נאנד / חצי על שני תאים — כל 256 הקלטים בבת אחת. קדימה (מהקטן לגדול) + אחורה (מהתשובה)
 const key=v=>Buffer.from(v).toString('latin1');
-export function basicBuild(tt,{ms=60000,maxBank=4000000,ins=[0,1],ops=[],multi=0}={}){ const sols=[]; const t0=Date.now(); const W=Uint8Array.from(tt), wk=key(W); const N=W.length, K=ins.length;
+export function basicBuild(tt,{ms=60000,maxBank=4000000,ins=[0,1],ops=[],multi=0,keepBank=false}={}){ const sols=[]; const t0=Date.now(); const W=Uint8Array.from(tt), wk=key(W); const N=W.length, K=ins.length;
   const leaf=j=>Uint8Array.from({length:N},(_,i)=>(i>>(4*(K-1-j)))&15);   // תא-קלט מספר j: הספרה ה-j של האינדקס
   const seen=new Map(), lev=[[]]; let found=null;
   const add=(v,e,s)=>{ const k=key(v); if(seen.has(k)) return; seen.set(k,{e,s}); (lev[s]||(lev[s]=[])).push({v,e}); if(k===wk) found=e; };
@@ -31,8 +31,14 @@ export function basicBuild(tt,{ms=60000,maxBank=4000000,ins=[0,1],ops=[],multi=0
     if(!found&&s<=3) for(const x of L) back(x); if(nandT.length>3000) nandT.length=3000;
     // שני צעדים אחורה: «מבוקש» = (מבוקש-ראשון) פחות x' — עוד צעד חבר; ו-(מבוקש-ראשון) = נאנד(x', ?) כשהוא נקבע
     if(!found&&s===3&&!process.env.NOBACK2){ const X=[...lev[0],...lev[1],...(lev[2]||[])].slice(0,600); for(const t of T1){ if(found||want.size>1.5e6) break; for(const x of X){ const y=new Uint8Array(N); for(let i=0;i<N;i++) y[i]=(t.v[i]-x.v[i])&15; if(wantAdd(y,e=>t.mk({o:'ADD',a:x.e,b:e}))) break; } } } }
+  // מעבר-סיום לחיבור: לכל חלק x במחסן — האם «התשובה פחות x» גם במחסן? (שני חצאים שכבר נבנו, גם גדולים)
+  if(!found&&!process.env.NOADDFIN){ const need=new Uint8Array(N); outerA: for(const L of lev) for(const x of L||[]){ for(let i=0;i<N;i++) need[i]=(W[i]-x.v[i])&15; const k=key(need); const y=seen.get(k); if(y){ found={o:'ADD',a:x.e,b:y.e}; break outerA; } } }
+  // מעבר-סיום לנאנד: «נאנד(x, ?)» — סורקים את כל מה שנבנה ומחפשים ? שמתאים לתבנית (ביטים קבועים איפה ש-x=1). קודם המבוקשים הכי «קבועים»
+  if(!found&&nandT.length&&process.env.FINAL){ const pc=t=>{ let c=0; for(let i=0;i<N;i++){ let m=t.msk[i]; while(m){ c+=m&1; m>>=1; } } return c; };
+    const TT=nandT.map(t=>({t,p:pc(t)})).sort((a,b)=>b.p-a.p).slice(0,+process.env.NFIN||200).map(x=>x.t); const t1=Date.now();
+    outerF: for(const t of TT){ if(Date.now()-t1>(+process.env.FINMS||30000)) break; for(const L of lev) for(const y of L||[]){ let ok=true; for(let i=0;i<N;i++) if((y.v[i]&t.msk[i])!==t.fix[i]){ ok=false; break; } if(ok){ found={o:'NAND',a:t.x.e,b:y.e}; break outerF; } } } }
   if(multi){ if(found&&!sols.includes(found)) sols.push(found); return {expr:sols[0]||null,all:sols,ms:Date.now()-t0,bank:seen.size}; }
-  return {expr:found,ms:Date.now()-t0,bank:seen.size}; }
+  return {expr:found,ms:Date.now()-t0,bank:seen.size,lev:keepBank?lev:undefined}; }
 const size=e=>e.c!=null?0:1+size(e.a)+(e.b?size(e.b):0);
 const hasM=(e,MAC={})=>e.c==null&&((e.m!=null&&!MAC[e.m])||hasM(e.a,MAC)||(e.b?hasM(e.b,MAC):false)||(e.d?hasM(e.d,MAC):false));
 const depth=e=>e.c!=null||e.m!=null?1:e.b?Math.max(depth(e.a),depth(e.b)+1):depth(e.a);
