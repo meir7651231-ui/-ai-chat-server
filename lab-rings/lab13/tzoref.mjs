@@ -9,6 +9,7 @@
 import fs from 'fs'; import * as TR from './tzoref-tricks.mjs'; import { rankParts, loadUsed, noteUsed } from './tzoref-pick.mjs';
 import { run as runSlow } from './machine3s.mjs';
 import { encode, runCode, MEM } from './machine3f.mjs';
+let WM=null; if(!process.env.NOWASM){ try{ WM=await import('./machine3w.mjs'); }catch{ WM=null; } }   // המכונה ב-C (WebAssembly) — אם אין, נשארים ב-JS
 import { add4 } from './lifted-add.mjs'; import { shr4 } from './lifted-shr.mjs';
 import { expand, dataOf } from './recipes.mjs';
 import { shrink, ALPHA } from './tools3f.mjs';
@@ -21,14 +22,34 @@ const clock=()=>Date.now();
 
 // ─── 1. הבודק האחד ───────────────────────────────────────────────────────────
 // דוגמאות קבועות לכל בודק; כל דוגמה נבדקת פעמיים (בלי ערבוב / עם ערבוב); «לאן/איפה» מכסים את כל 16×16 באופן שיטתי.
+// בדיקה מהירה: אחרי הצלחה ראשונה לומדים אילו תאים הבודק באמת בודק, ובאיזה ערך יחיד — ומאז משווים רק אותם (בלי להעתיק זיכרון ובלי לקרוא לבודק)
+function learnFx(ok,R){ const fx=[]; for(let i=0;i<16;i++){ let acc=0, val=-1; const keep=R[i]; for(let v=0;v<16;v++){ R[i]=v; if(ok(R)){ acc++; val=v; } } R[i]=keep; if(acc===16) continue; if(acc!==1||val!==keep) return null; fx.push(i,keep); }
+  // ביטחון: אם שני תאים משנים יחד ועדיין «נכון» — הבודק תלוי בצירוף; לא סומכים על הקיצור
+  const T=R.slice(); for(let t=0;t<8;t++){ for(let i=0;i<16;i++) T[i]=R[i]; for(let j=0;j<fx.length;j+=2){} for(let i=0;i<16;i++) if(!fx.some((c,j)=>j%2===0&&c===i)) T[i]=(R[i]+1+t)&15; if(!ok(T)) return null; }
+  return Int32Array.from(fx); }
 export function makeChecker(gen,N,maxSteps=20000){
   const cases=[]; for(let idx=0;idx<N;idx++){ const e=gen(); const sc=1+Math.floor(Math.random()*1e6);
     for(const s of [0,sc]) cases.push({e,sc:s,pa:(idx*5+(s?7:0))&15,aa:((idx>>4)*3+(s?11:0)+idx)&15}); }
   const f=(p)=>{ f.calls++; const code=encode(p);
     for(let i=0;i<cases.length;i++){ const c=cases[i]; const r=runCode(code,c.pa,c.aa,c.e.mem,maxSteps,c.sc);
-      let bad; if(r===-2) bad=!slowOk(p,c,maxSteps); else bad=r!==1||!c.e.ok(Array.from(MEM));
+      let bad; if(r===-2) bad=!slowOk(p,c,maxSteps); else if(r!==1) bad=true; else if(c.fx){ bad=false; const fx=c.fx; for(let j=0;j<fx.length;j+=2) if(MEM[fx[j]]!==fx[j+1]){ bad=true; break; } if(process.env.FASTVERIFY){ const sl=!c.e.ok(Array.from(MEM)); if(sl!==bad){ globalThis.__DIS=(globalThis.__DIS||0)+1; } globalThis.__CMP=(globalThis.__CMP||0)+1; } }
+      else { const R=Array.from(MEM); bad=!c.e.ok(R); if(!bad&&c.fx!==null) c.fx=learnFx(c.e.ok,R); }
       if(bad){ if(i>0){ cases.splice(i,1); cases.unshift(c); } return false; } }   // הדוגמה שהפילה — ראשונה בפעם הבאה
     return true; };
+  f.calls=0; const w=WM&&wasmChecker(cases,maxSteps); if(w&&process.env.CMPCHK){ const g=(p)=>{ const a=f(p), b=w(p); globalThis.__CMP=(globalThis.__CMP||0)+1; if(a!==b) globalThis.__DIS=(globalThis.__DIS||0)+1; return a; }; g.calls=0; return g; } return w||f; }
+// אותו בודק — הלולאה רצה ב-C. מקרה שעוד אין לו «תאים-לבדוק» (או שהמחסנית התפוצצה) — חוזר ל-JS רק עבורו
+function wasmChecker(cases,maxSteps){ const {W,H,alloc,MEMO}=WM; const n=cases.length, CS=52;
+  const pC=alloc(n*CS), pOrd=alloc(n), pO=alloc(4096), pA=alloc(4096); if(pC<0||pOrd<0||pO<0||pA<0) return null;
+  const C=pC>>2, ORD=pOrd>>2, O=pO>>2, A=pA>>2;
+  cases.forEach((c,i)=>{ const b=C+i*CS; H[b]=c.pa; H[b+1]=c.aa; H[b+2]=c.sc; for(let j=0;j<16;j++) H[b+3+j]=c.e.mem[j]|0; H[b+19]=-1; H[ORD+i]=i; });
+  const setFx=(i,fx)=>{ const b=C+i*CS; if(!fx||fx.length>32){ H[b+19]=-2; return; } H[b+19]=fx.length; for(let j=0;j<fx.length;j++) H[b+20+j]=fx[j]; };
+  const noLearn=new Set(); const front=i=>{ if(i<=0) return; const v=H[ORD+i]; for(let k=i;k>0;k--) H[ORD+k]=H[ORD+k-1]; H[ORD]=v; };
+  const f=(p)=>{ f.calls++; const code=encode(p); if(code.n>4096) return false; H.set(code.ops,O); H.set(code.args,A);
+    let start=0; for(;;){ const r=W.batch(pO,pA,code.n,pC,pOrd,n,maxSteps,start); if(r<0) return true; const i=r>>2, kind=r&3, ci=H[ORD+i], c=cases[ci];
+      if(kind===1){ front(i); return false; }
+      if(kind===2){ if(!slowOk(p,c,maxSteps)){ front(i); return false; } start=i+1; continue; }
+      // kind 3: אין עדיין תאים-לבדוק — הבודק הכללי, ולומדים אותם להבא (או מסמנים «תמיד JS»)
+      const R=Array.from(H.subarray(MEMO,MEMO+16)); if(!c.e.ok(R)){ front(i); return false; } if(!noLearn.has(ci)){ const fx=learnFx(c.e.ok,R.slice()); if(fx&&fx.length<=32) setFx(ci,fx); else noLearn.add(ci); } start=i+1; } };
   f.calls=0; return f; }
 const prefix=(p,pa,aa)=>[['WHERE',pa],['GO'],['WHERE',aa],...p.map(([o,k,c])=>o==='WHERE'?['WHERE',c?k+3:k]:[o])];
 function slowOk(p,c,maxSteps){ const r=runSlow(prefix(p,c.pa,c.aa),c.e.mem,{maxSteps,scramble:c.sc}); return !!r&&!r.st.length&&c.e.ok(r.mem); }
