@@ -24,7 +24,7 @@ export function learnedGoals(){ try{ return JSON.parse(fs.readFileSync(new URL('
 const tableGoal=(pairs)=>()=>{ const [a,b,w]=pairs[R(pairs.length)]; const m=Array.from({length:16},()=>R(16)); m[0]=a; m[1]=b; return {mem:m,want:w,ok:r=>r[2]===w}; };
 // מטרה-נלמדת עם טבלה מלאה על תאי-קלט כלשהם (משימה שהמכונה בנתה ושמה במדף)
 const tableGoalN=(ins,tt)=>()=>{ const m=Array.from({length:16},()=>R(16)); let i=0; for(const c of ins) i=i*16+m[c]; const w=tt[i]; return {mem:m,want:w,ok:r=>r[2]===w}; };
-export function goals(){ const G={}; for(const [n,g] of Object.entries(learnedGoals())) G[n]=g.tt?{gen:tableGoalN(g.ins,g.tt),ins:g.ins,out:2}:{gen:tableGoal(g.pairs),ins:[0,1],out:2};
+export function goals(){ const G={}; for(const [n,g] of Object.entries(learnedGoals())) G[n]=g.listf?{gen:list(8,new Function('l','return ('+g.listf+')(l)&15'))}:g.tt?{gen:tableGoalN(g.ins,g.tt),ins:g.ins,out:2}:{gen:tableGoal(g.pairs),ins:[0,1],out:2};   /* listf: מטרת-רשימה שנלמדה (מקור הפונקציה כטקסט) */
   Object.assign(G,{
     'העתק':{gen:cell(m=>m[0])}, 'לא (מספר)':{gen:cell(m=>~m[0]&15)}, 'וגם (מספרים)':{gen:cell(m=>m[0]&m[1])}, 'נאנד (מספרים)':{gen:cell(m=>~(m[0]&m[1])&15)}, 'או (מספרים)':{gen:cell(m=>m[0]|m[1])}, 'שונה (מספרים)':{gen:cell(m=>m[0]^m[1])},
     'קבוע 15':{gen:cell(()=>15)}, 'קבוע 14 (15 ועוד 15)':{gen:cell(()=>14)}, 'קבוע 1':{gen:cell(()=>1)}, 'ועוד 1':{gen:cell(m=>(m[0]+1)&15)}, 'חיבור מספרים':{gen:cell(m=>(m[0]+m[1])&15)},

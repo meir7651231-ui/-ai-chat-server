@@ -11,7 +11,7 @@ const Z=[['WHERE',0],['GO']];   // כל כלי מתחיל כאילו מההתח�
 export function listCompose(gen,{N=200,ban=[]}={}){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8'));
   const ex=Array.from({length:N},()=>gen()); const want=ex.map(e=>e.want);
   // כלי-רשימה בטוחים: עונים בתא 2 ולא משנים את הרשימה (תאים 8–15)
-  const tools=[]; for(const b of sh.named){ if(ban.includes(b.name)||!b.prog.some(x=>x[0]==='WHERE@')||b.prog.length>200) continue; let ok=true; const v=[];
+  const tools=[]; for(const b of sh.named){ if(ban.includes(b.name)||!b.prog.some(x=>x[0]==='WHERE@')||b.prog.length>(+process.env.MAXTOOL||400)) continue; let ok=true; const v=[];
     const PAD=[['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO']]; const moved=[...PAD,...shift(b.prog,PAD.length)];
     for(const e of ex){ const r=run(b.prog,e.mem,{maxSteps:20000}); if(!r||[8,9,10,11,12,13,14,15].some(c=>r.mem[c]!==e.mem[c])){ ok=false; break; } const r2=run(moved,e.mem,{maxSteps:20000}); if(!r2||(r2.mem[2]&15)!==(r.mem[2]&15)){ ok=false; break; } v.push(r.mem[2]&15); }   // «נייד»: עובד גם כשהוא לא בתחילת התוכנית
     if(ok) tools.push({b,v,prog:b.prog,name:b.name}); }
@@ -32,12 +32,19 @@ export function listCompose(gen,{N=200,ban=[]}={}){ const sh=JSON.parse(fs.readF
       else { // תאי-שמירה: מנסים את כל הבחירות מ-3..7 (הכלים קוראים גם תאים בעקיפין) — הראשונה שעוברת את הבודק
         const C5=[3,4,5,6,7]; outer: for(const S of C5) for(const h1 of C5) for(const h0 of C5) for(const T2 of C5){ if(new Set([S,h1,h0]).size<3||T2===S) continue;
           let q=[...mv(1,h1),...mv(0,h0),...Z]; q=[...q,...shift(cd.A.b.prog,q.length)]; q=[...q,...mv(2,S),...mv(h1,1),...mv(h0,0),...Z]; q=[...q,...shift(cd.B.b.prog,q.length)]; q=[...q,...mv(2,T2)];
-          const P=placements(opB,6000).filter(z=>z.ins.join()===S+','+T2&&z.out===2); if(!P.length) continue; const cand=[...q,...shift(P[0].prog,q.length)]; if(chk(cand)){ p=cand; break outer; } } } }
+          const P=placements(opB,6000).filter(z=>z.ins.join()===S+','+T2&&z.out===2); if(!P.length) continue; const cand=[...q,...shift(P[0].prog,q.length)]; if(chk(cand)){ p=cand; break outer; } }
+        // «שמירה במחסנית»: ראש-הרשימה ותשובת א נשמרים במחסנית ולא בתאים — כלים מורכבים משתמשים בתאים 3–7 בעצמם
+        if(!p&&!process.env.NOSTACK){ const opP=placements(opB,6000); outer2: for(const S of [3,4,5,6,7]) for(const T2 of [3,4,5,6,7]){ if(S===T2) continue; const P=opP.filter(z=>z.ins.join()===S+','+T2&&z.out===2); if(!P.length) continue;
+            let q=[['WHERE',1],['GO'],['TAKE'],['WHERE',0],['GO'],['TAKE'],...Z]; q=[...q,...shift(cd.A.b.prog,q.length)];
+            q=[...q,['WHERE',0],['GO'],['PUT'],['WHERE',1],['GO'],['PUT'],['WHERE',2],['GO'],['TAKE'],...Z]; q=[...q,...shift(cd.B.b.prog,q.length)];
+            q=[...q,...mv(2,T2),['WHERE',S],['GO'],['PUT']]; const cand=[...q,...shift(P[0].prog,q.length)]; if(chk(cand)){ p=cand; break outer2; } } } } }
     if(process.env.LCDBG) console.log('  מועמד',cd.kind,cd.op?.name,cd.A.b.name,cd.B?.b.name,'⇒',p?(chk(p)?'עובר':'נכשל בבודק'):'לא הורכב');
     if(p&&chk(p)) progs.push({p,how:cd.kind===1?cd.A.b.name:cd.kind===2?`${cd.op.name}(${cd.A.b.name})`:`${cd.op.name}(${cd.A.b.name}, ${cd.B.b.name})`}); if(progs.length>=5) break; }
   progs.sort((x,y)=>x.p.length-y.p.length); return progs[0]?{prog:progs[0].p,how:progs[0].how,ntools:tools.length,ncands:cands.length}:{prog:null,ntools:tools.length,ncands:cands.length}; }
 if((process.argv[1]||'').endsWith('listcomp.mjs')){
   const sum=l=>l.reduce((a,b)=>a+b,0), mx=l=>l.length?Math.max(...l):0, mnn=l=>l.length?Math.min(...l):0;
+  // מקור עצמאי של פונקציית-המשימה (בלי עזרי sum/mx/mnn) — כדי שאפשר לשמור אותה כמטרה ולבדוק אחר-כך
+  const HELP='const sum=l=>l.reduce((a,b)=>a+b,0), mx=l=>l.length?Math.max(...l):0, mnn=l=>l.length?Math.min(...l):0;'; const SRC=f=>'(l=>{ '+HELP+' return ('+f.toString()+')(l); })';
   const T=[
    ['רר1 סכום הזוגיים פחות ספור גדולים מ-12',l=>sum(l.filter(x=>x%2===0))-l.filter(x=>x>12).length],
    ['רר2 הגדול פחות הקטן',l=>mx(l)-mnn(l)],
@@ -48,6 +55,16 @@ if((process.argv[1]||'').endsWith('listcomp.mjs')){
    ['רר7 האחרון פחות הראשון, כפול 2',l=>2*(l.length?(l[l.length-1]-l[0]):0)],
    ['רר8 סכום פחות (הגדול פחות האורך)',l=>sum(l)-(((l.length?Math.max(...l):0)-l.length)&15)],
   ];
-  let ok=0; for(const [name,f] of T){ const gen=listGen(f); const t=Date.now(); const r=listCompose(gen); const good=r.prog&&!finalCheck(r.prog,gen,5000).bad; let indep=null; if(good){ let bad=0; const { run }=await import('./machine3.mjs'); for(let t=0;t<20000;t++){ const e=gen(); const z=run(r.prog,e.mem,{maxSteps:60000}); if(!z||z.mem[2]!==e.want||z.st.length) bad++; } indep=bad; } if(good) ok++;
+  const F2=Object.fromEntries(T.map(([n,f])=>[n.split(' ')[0],f])); const m16=x=>((x%16)+16)%16;
+  const T3=[
+   ['ררר1 רר1 ועוד רר3',l=>m16(F2['רר1'](l))+m16(F2['רר3'](l))],
+   ['ררר2 הגדול מבין רר2 ו-רר6',l=>Math.max(m16(F2['רר2'](l)),m16(F2['רר6'](l)))],
+   ['ררר3 רר8 פחות רר7',l=>m16(F2['רר8'](l))-m16(F2['רר7'](l))],
+   ['ררר4 הקטן מבין רר4 ו-רר5',l=>Math.min(m16(F2['רר4'](l)),m16(F2['רר5'](l)))],
+  ];
+  const LIST=process.env.LEVEL==='3'?T3:T; const BAN=process.env.NOPREV?T.map(x=>x[0]):[];
+  const SAVE=process.env.SAVE==='1'; let ok=0; for(const [name,f] of LIST){ const gen=listGen(f); const t=Date.now(); const r=listCompose(gen,{ban:BAN}); const good=r.prog&&!finalCheck(r.prog,gen,5000).bad; let indep=null; if(good){ let bad=0; const { run }=await import('./machine3.mjs'); for(let t=0;t<20000;t++){ const e=gen(); const z=run(r.prog,e.mem,{maxSteps:60000}); if(!z||z.mem[2]!==e.want||z.st.length) bad++; } indep=bad; } if(good) ok++;
+    if(good&&SAVE){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); sh.named=sh.named.filter(b=>b.name!==name); sh.named.push({name,prog:r.prog,ins:[],out:2,by:'מרכיב-הרשימות',how:r.how}); fs.writeFileSync('shelf3.json',JSON.stringify(sh));
+      let LG={}; try{ LG=JSON.parse(fs.readFileSync('tzoref-learned-goals.json','utf8')); }catch{} LG[name]={listf:SRC(f)}; fs.writeFileSync('tzoref-learned-goals.json',JSON.stringify(LG)); }
     console.log(`${good?'✓':'✗'} ${name}: ${good?r.prog.length+' פקודות · '+r.how:'לא נמצא'} · בדיקה-עצמאית: ${indep===null?'-':indep+' שגויים מ-20000'} · כלים ${r.ntools} · מועמדים ${r.ncands} · ${((Date.now()-t)/1000).toFixed(1)} שנ׳`); }
-  console.log(`סך: ${ok}/${T.length}`); process.exit(0); }
+  console.log(`סך: ${ok}/${LIST.length}`); process.exit(0); }
