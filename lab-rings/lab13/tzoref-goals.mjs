@@ -91,7 +91,7 @@ export function goals(){ const G={}; for(const [n,g] of Object.entries(learnedGo
   for(const n of ['קבוע 15','קבוע 14 (15 ועוד 15)','קבוע 1']) Object.assign(G[n],{ins:[],out:2}); Object.assign(G['אם (תא0 לא-אפס ⇒ תא1, אחרת תא3)'],{ins:[0,1,3],out:2});
   return G; }
 // אילו תאים אסור לשנות: לבני-רשימה — כל הרשימה ותאים 0,1; הפוך/מיין משנים את הרשימה בכוונה; אחרות — הכניסות שלהן
-export function keepOf(name,block){ if(/הפוך|מיין|כתוב לכתובת/.test(name)) return []; if(/רשימה|ספור|בלי|אמצע|וקטן/.test(name)) return LIST;
+export function keepOf(name,block){ if(/הפוך|מיין|כתוב לכתובת/.test(name)) return []; if(learnedGoals()[name]?.listlf) return [];   /* רשימה⇒רשימה שנלמדה: מותר לשנות את הרשימה */ if(/רשימה|ספור|בלי|אמצע|וקטן/.test(name)) return LIST;
   if(block&&block.tt!=null) return [0,1,3]; return ((block&&block.ins)||[]).filter(c=>c!==2); }
 // מטרה מלאה: מחולל + שמירת-קלט
 export function goalFor(name,block,G){ const base=block&&block.tt!=null?truth(block.tt):G[name]&&G[name].gen; if(!base) return null; const keep=keepOf(name,block);
