@@ -35,13 +35,19 @@ const L4=[
  ['ש4 הקטן מבין השלישי והראשון של שלב 3',[0,1],(a,b)=>mn(f3[K3[2]](a,b),f3[K3[0]](a,b))],
  ['ש4 הרביעי של שלב 3, כפול 2, ועוד ג',[0,1,3],(a,b,c)=>m(f3[K3[3]](a,b,c)*2+c)],
 ];
-const LV={1:L1,2:L2,3:L3,4:L4};
+const f4=Object.fromEntries(L4.map(([n,i,f])=>[n,f])); const K4=L4.map(x=>x[0]);
+const L5=[
+ ['ש5 הגדול מבין שני הראשונים של שלב 4',[0,1],(a,b)=>mx(f4[K4[0]](a,b),f4[K4[1]](a,b))],
+ ['ש5 הראשון של שלב 4 פחות השני',[0,1],(a,b)=>m(f4[K4[0]](a,b)-f4[K4[1]](a,b))],
+ ['ש5 השלישי של שלב 4 ועוד א',[0,1,3],(a,b,c)=>m(f4[K4[2]](a,b,c)+a)],
+];
+const LV={1:L1,2:L2,3:L3,4:L4,5:L5};
 const genOf=(ins,f)=>()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c])); const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; };
 const ttOf=(ins,f)=>{ const N=16**ins.length, T=[]; for(let i=0;i<N;i++){ const v=ins.map((_,j)=>(i>>(4*(ins.length-1-j)))&15); T.push(f(...v)); } return T; };
 if(process.env.SAVE||process.env.LEVEL==='1'){ const LIST=LV[process.env.SAVE||1]; const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); let LG={}; try{ LG=JSON.parse(fs.readFileSync('tzoref-learned-goals.json','utf8')); }catch{}
   for(const [name,ins,f] of LIST){ const gen=genOf(ins,f); const t=Date.now(); const v=valueBuild(gen,{name,ins,out:2,ms:+process.env.VMS||90000}); if(!v.prog){ console.log(`✗ ${name}`); continue; }
     let s=v.prog; try{ s=shorten(v.prog,gen,{minutes:+process.env.MIN||1,quiet:9}).prog; }catch{} const fc=finalCheck(s,gen); if(fc.bad){ console.log(`✗ ${name} (בדיקה)`); continue; }
-    sh.named=sh.named.filter(b=>b.name!==name); sh.named.push({name,prog:s,ins,out:2,movable:movable(s,gen),by:'הסולם · שלב '+(process.env.SAVE||1)}); LG[name]={ins,tt:ttOf(ins,f)};
+    sh.named=sh.named.filter(b=>b.name!==name); sh.named.push({name,prog:s,ins,out:2,movable:movable(s,gen),...(v.expr?{expr:v.expr}:{}),by:'הסולם · שלב '+(process.env.SAVE||1)}); LG[name]={ins,tt:ttOf(ins,f)};
     fs.writeFileSync('shelf3.json',JSON.stringify(sh)); fs.writeFileSync('tzoref-learned-goals.json',JSON.stringify(LG));
     console.log(`✓ ${name}: נבנה ${v.prog.length} ⇒ קוצר ${s.length} · ${((Date.now()-t)/1000).toFixed(0)} שנ׳ ⇒ במדף`); } }
 if(process.env.TEST||process.env.LEVEL==='2'){ const lv=+(process.env.TEST||2); const ban=process.env.NOPREV?LV[lv-1].map(x=>x[0]):process.env.NOL1?L1.map(x=>x[0]):[];
