@@ -1,0 +1,3 @@
+import fs from 'fs'; import * as TZ from './tzoref.mjs'; import { flatten } from './tzoref-flat.mjs'; import { show } from './tzoref-value.mjs';
+const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const blocks=new Map(sh.named.map(b=>[b.name,b])); const b=blocks.get('ש1 חצי ההפרש');
+const fl=flatten(b.expr,blocks); console.log(show(fl)); const w=e=>{ if(e.cell!=null) return; const bb=blocks.get(e.f); console.log(e.f,'· ins',bb.ins,'out',bb.out,'movable',bb.movable,'אורך',bb.prog.length, 'שיבוצים', bb.movable===false?'מוברג':TZ.placements(bb,6000).length); [e.a,e.b,e.c].filter(Boolean).forEach(w); }; w(fl); process.exit(0);
