@@ -47,16 +47,28 @@ const L6=[
  ['ש6 השני של שלב 5 כפול 2',[0,1],(a,b)=>m(f5[K5[1]](a,b)*2)],
  ['ש6 הראשון של שלב 5 ועוד השני',[0,1],(a,b)=>m(f5[K5[0]](a,b)+f5[K5[1]](a,b))],
 ];
-const LV={1:L1,2:L2,3:L3,4:L4,5:L5,6:L6};
+const f6=Object.fromEntries(L6.map(([n,i,f])=>[n,f])); const K6=L6.map(x=>x[0]);
+const L7=[
+ ['ש7 הגדול מבין השני והשלישי של שלב 6',[0,1],(a,b)=>mx(f6[K6[1]](a,b),f6[K6[2]](a,b))],
+ ['ש7 הראשון של שלב 6 ועוד ב',[0,1,3],(a,b,c)=>m(f6[K6[0]](a,b,c)+b)],
+ ['ש7 השלישי של שלב 6 פחות השני',[0,1],(a,b)=>m(f6[K6[2]](a,b)-f6[K6[1]](a,b))],
+];
+const LV={1:L1,2:L2,3:L3,4:L4,5:L5,6:L6,7:L7};
+// «כמה דרכים»: אחרי הפתרון הראשון — מחפשים שוב בלי כלי-הסולם שהוא השתמש בהם, ושומרים את הקצר
+const fnsOf=e=>e&&e.cell==null?[e.f,...[e.a,e.b,e.c].filter(Boolean).flatMap(fnsOf)]:[];
+function multiBuild(gen,opts,K=+(process.env.ALT||0)){ let best=null; try{ best=valueBuild(gen,opts); }catch{} if(!best?.prog) return best; let ban=[...(opts.ban||[])];
+  for(let r=0;r<K;r++){ const tools=[...new Set(fnsOf(best.expr))].filter(n=>/^ש\d /.test(n)&&!ban.includes(n)); if(!tools.length) break; ban=[...ban,...tools]; let v=null; try{ v=valueBuild(gen,{...opts,ban}); }catch{}
+    if(process.env.ALTLOG) console.log(`   דרך ${r+2}: ${v?.prog?v.prog.length:'—'} (במקום ${best.prog.length})`); if(v?.prog&&v.prog.length<best.prog.length) best=v; }
+  return best; }
 const genOf=(ins,f)=>()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c])); const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; };
 const ttOf=(ins,f)=>{ const N=16**ins.length, T=[]; for(let i=0;i<N;i++){ const v=ins.map((_,j)=>(i>>(4*(ins.length-1-j)))&15); T.push(f(...v)); } return T; };
 if(process.env.SAVE||process.env.LEVEL==='1'){ const LIST=LV[process.env.SAVE||1]; const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); let LG={}; try{ LG=JSON.parse(fs.readFileSync('tzoref-learned-goals.json','utf8')); }catch{}
-  for(const [name,ins,f] of LIST){ const gen=genOf(ins,f); const t=Date.now(); const v=valueBuild(gen,{name,ins,out:2,ms:+process.env.VMS||90000}); if(!v.prog){ console.log(`✗ ${name}`); continue; }
+  for(const [name,ins,f] of LIST){ if(process.env.SKIPDONE&&sh.named.some(b=>b.name===name)){ console.log('כבר במדף:',name); continue; } const gen=genOf(ins,f); const t=Date.now(); const v=multiBuild(gen,{name,ins,out:2,ms:+process.env.VMS||90000}); if(!v.prog){ console.log(`✗ ${name}`); continue; }
     let s=v.prog; try{ s=shorten(v.prog,gen,{minutes:+process.env.MIN||1,quiet:9}).prog; }catch{} const fc=finalCheck(s,gen); if(fc.bad){ console.log(`✗ ${name} (בדיקה)`); continue; }
     sh.named=sh.named.filter(b=>b.name!==name); sh.named.push({name,prog:s,ins,out:2,movable:movable(s,gen),...(v.expr?{expr:v.expr}:{}),by:'הסולם · שלב '+(process.env.SAVE||1)}); LG[name]={ins,tt:ttOf(ins,f)};
     fs.writeFileSync('shelf3.json',JSON.stringify(sh)); fs.writeFileSync('tzoref-learned-goals.json',JSON.stringify(LG));
     console.log(`✓ ${name}: נבנה ${v.prog.length} ⇒ קוצר ${s.length} · ${((Date.now()-t)/1000).toFixed(0)} שנ׳ ⇒ במדף`); } }
 if(process.env.TEST||process.env.LEVEL==='2'){ const lv=+(process.env.TEST||2); const ban=process.env.NOPREV?LV[lv-1].map(x=>x[0]):process.env.NOL1?L1.map(x=>x[0]):[];
-  for(const [name,ins,f] of LV[lv]){ const gen=genOf(ins,f); const t=Date.now(); let v=null; try{ v=valueBuild(gen,{name,ins,out:2,ms:+process.env.VMS||60000,ban}); }catch(e){}
+  for(const [name,ins,f] of LV[lv]){ const gen=genOf(ins,f); const t=Date.now(); let v=null; try{ v=multiBuild(gen,{name,ins,out:2,ms:+process.env.VMS||60000,ban}); }catch(e){}
     const ok=v&&v.prog&&!finalCheck(v.prog,gen,3000).bad; console.log(`${ok?'✓':'✗'} ${name}: ${ok?v.prog.length+' פקודות · '+show(v.expr).slice(0,90):'לא נמצא'} · ${((Date.now()-t)/1000).toFixed(0)} שנ׳`); } }
 process.exit(0);
