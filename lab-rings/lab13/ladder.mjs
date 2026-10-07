@@ -71,4 +71,5 @@ if(process.env.SAVE||process.env.LEVEL==='1'){ const LIST=LV[process.env.SAVE||1
 if(process.env.TEST||process.env.LEVEL==='2'){ const lv=+(process.env.TEST||2); const ban=process.env.NOPREV?LV[lv-1].map(x=>x[0]):process.env.NOL1?L1.map(x=>x[0]):[];
   for(const [name,ins,f] of LV[lv]){ const gen=genOf(ins,f); const t=Date.now(); let v=null; try{ v=multiBuild(gen,{name,ins,out:2,ms:+process.env.VMS||60000,ban}); }catch(e){}
     const ok=v&&v.prog&&!finalCheck(v.prog,gen,3000).bad; console.log(`${ok?'✓':'✗'} ${name}: ${ok?v.prog.length+' פקודות · '+show(v.expr).slice(0,90):'לא נמצא'} · ${((Date.now()-t)/1000).toFixed(0)} שנ׳`); } }
-process.exit(0);
+export { LV, genOf, multiBuild };
+if(!process.env.NOEXIT) process.exit(0);

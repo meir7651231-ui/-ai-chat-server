@@ -23,7 +23,17 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
       if(tb.k===1){ let ok=true; for(let e=0;e<NN;e++){ const y=I[want[e]]; if(y<0){ ok=false; break; } need[e]=y; } if(ok){ const k=Buffer.from(need).toString('latin1'); if(seen.has(k)){ found={f:tb.name,k:1,a:seen.get(k)}; return; } if(!TGT.has(k)) TGT.set(k,{f:tb.name,k:1}); } continue; }
       for(let sa=0;sa<bySize.length;sa++) for(const x of (bySize[sa]||[]).slice(0,lim)) for(const side of [0,1]){ let ok=true; for(let e=0;e<NN;e++){ const y=I[side*256+x.vec[e]*16+want[e]]; if(y<0){ ok=false; break; } need[e]=y; }
         if(!ok) continue; const k=Buffer.from(need).toString('latin1'); if(seen.has(k)){ const y=seen.get(k); found=side?{f:tb.name,k:2,a:y,b:x.expr}:{f:tb.name,k:2,a:x.expr,b:y}; return; } if(TGT.size<400000&&!TGT.has(k)) TGT.set(k,{f:tb.name,k:2,x:x.expr,side}); } } };   /* לא נמצא עכשיו ⇒ «מבוקש»: ייתפס ברגע שייבנה */
-  for(let s=1;s<=maxSize&&!found;s++){ tryInv(3000); if(found) break; if(s>=3&&bySize[s-1]&&bySize[s-1].length>keep){ { const isConst=v=>v.every(x=>x===v[0]); const C=bySize[s-1].filter(x=>isConst(x.vec)); bySize[s-1]=[...C,...bySize[s-1].filter(x=>!isConst(x.vec)).map(x=>[close(x.vec),x]).sort((a,b)=>b[0]-a[0]).slice(0,keep).map(x=>x[1])]; } }
+  // «כיסוי»: התשובה = הקטן (או הגדול) מבין כמה דברים ⇒ כל אחד מהם תמיד ≥ התשובה (או ≤), ובכל דוגמה לפחות אחד שווה לה.
+  // אוספים מהמחסן את כל המועמדים, ובוחרים 2–3 שמכסים את כל הדוגמאות.
+  const esz=e=>e.cell!=null?0:1+esz(e.a)+(e.b?esz(e.b):0)+(e.c?esz(e.c):0);
+  const tryCover=()=>{ if(found||process.env.NOCOVER) return; for(const [fn,ge] of [['מינימום',1],['מקסימום',0]]){ if(!TB.some(t=>t.name===fn)) continue; const D=[];
+      for(const [k,expr] of seen){ if(expr.cell!=null&&false) continue; let ok=true, m0=0n; for(let e=0;e<NN;e++){ const v=k.charCodeAt(e); if(ge?v<want[e]:v>want[e]){ ok=false; break; } if(v===want[e]) m0|=1n<<BigInt(e); } if(ok&&m0) D.push({m:m0,expr,n:esz(expr)}); if(D.length>200000) break; }
+      if(!D.length) continue; const FULL=(1n<<BigInt(NN))-1n; const pc=x=>{ let c=0; while(x){ x&=x-1n; c++; } return c; };
+      D.sort((a,b)=>pc(b.m)-pc(a.m)||a.n-b.n); const top=D.slice(0,400);
+      for(const a of top){ if(a.m===FULL){ found=a.expr; return; } }
+      for(let i=0;i<top.length&&!found;i++) for(let j=i+1;j<top.length;j++) if((top[i].m|top[j].m)===FULL){ found={f:fn,k:2,a:top[i].expr,b:top[j].expr}; return; }
+      for(let i=0;i<Math.min(top.length,150)&&!found;i++) for(let j=i+1;j<Math.min(top.length,150);j++){ const mij=top[i].m|top[j].m; for(let l=j+1;l<top.length;l++) if((mij|top[l].m)===FULL){ found={f:fn,k:2,a:{f:fn,k:2,a:top[i].expr,b:top[j].expr},b:top[l].expr}; return; } } } };
+  for(let s=1;s<=maxSize&&!found;s++){ if(s>=3) tryCover(); if(found) break; tryInv(3000); if(found) break; if(s>=3&&bySize[s-1]&&bySize[s-1].length>keep){ { const isConst=v=>v.every(x=>x===v[0]); const C=bySize[s-1].filter(x=>isConst(x.vec)); bySize[s-1]=[...C,...bySize[s-1].filter(x=>!isConst(x.vec)).map(x=>[close(x.vec),x]).sort((a,b)=>b[0]-a[0]).slice(0,keep).map(x=>x[1])]; } }
     for(const tb of TB){ if(found||Date.now()-t0>ms) break; const F=tb.T;
       if(tb.k===1){ for(const x of bySize[s-1]||[]){ const v=new Uint8Array(NN); for(let e=0;e<NN;e++) v[e]=F[x.vec[e]]; add(v,{f:tb.name,k:1,a:x.expr},s); if(found) break; } }
       else if(tb.k===3){ for(let sa=0;sa<=s-1&&!found;sa++) for(let sb=0;sa+sb<=s-1&&!found;sb++){ const sc=s-1-sa-sb; let A=bySize[sa]||[], B=bySize[sb]||[], C=bySize[sc]||[]; if(A.length*B.length*C.length>2e6){ const top=L=>L.length<=120?L:(L._top||(L._top=L.map(x=>[close(x.vec),x]).sort((a,b)=>b[0]-a[0]).slice(0,120).map(x=>x[1]))); A=top(A); B=top(B); C=top(C); }   /* גדול מדי ⇒ רק המבטיחים */
@@ -31,6 +41,7 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
       else for(let sa=0;sa<=s-1&&!found;sa++){ const sb=s-1-sa; for(const x of bySize[sa]||[]){ if(found) break; for(const y of bySize[sb]||[]){ if(x===y) continue;
             const v=new Uint8Array(NN); for(let e=0;e<NN;e++) v[e]=F[x.vec[e]*16+y.vec[e]]; add(v,{f:tb.name,k:2,a:x.expr,b:y.expr},s); if(found) break; } if(Date.now()-t0>ms) break; } } } }
   if(!found) tryInv(20000);
+  if(!found) tryCover();
   if(!found) return {prog:null,made,ms:Date.now()-t0};
   { const tbl=new Map(TB.map(t=>[t.name,t])); const ev=(e,m)=>e.cell!=null?m[e.cell]&15:(e.k===1?tbl.get(e.f).T[ev(e.a,m)]:e.k===3?tbl.get(e.f).T[ev(e.a,m)*256+ev(e.b,m)*16+ev(e.c,m)]:tbl.get(e.f).T[ev(e.a,m)*16+ev(e.b,m)]);
     const bad=[]; for(let t=0;t<3000&&bad.length<16;t++){ const x=gen(); if(ev(found,x.mem)!==(x.want&15)) bad.push(x); }
@@ -66,10 +77,14 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
       const P=same.flatMap(b=>b.movable===false?[{prog:b.prog,ins:(b.ins||[]).filter(c=>c<8),out:b.out??2}]:placements(b,6000));
       const ok=P.filter(p=>p.out===tgt&&p.ins.join()===cells.join()&&[...usedCells(p.prog)].every(c=>c===tgt||cells.includes(c)||(!live.has(c)&&!ins.includes(c))));
       // «שמור-והחזר»: לבנה מוברגת שנוגעת בתא של קלט/ערך-חי — מעתיקים אותו לתא בטוח לפני, ומחזירים אחרי
-      if(!ok.length&&!process.env.NOSAVE){ for(const p of P.filter(p=>p.out===tgt&&p.ins.join()===cells.join())){ const U=usedCells(p.prog); const hit=[...U].filter(c=>c!==tgt&&!cells.includes(c)&&(live.has(c)||ins.includes(c)));
-          if(hit.some(c=>c===tgt)) continue; const safe=[15,14,13,12,11,10,9,8].filter(c=>!U.has(c)&&!PROTECT.includes(c)&&!ins.includes(c)&&!live.has(c)&&!Object.values(spilled).includes(c)&&!p.prog.some(x=>x[0]==='WHERE'&&!x[2]&&x[1]===c));
-          if(safe.length<hit.length) continue; const sv=hit.map((c,i)=>[c,safe[i]]);
-          for(const [c,S] of sv) prog.push(...PS(`WHERE ${c}; GO; TAKE; WHERE ${S}; GO; PUT`)); prog.push(...shift(p.prog,prog.length)); for(const [c,S] of sv) prog.push(...PS(`WHERE ${S}; GO; TAKE; WHERE ${c}; GO; PUT`));
+      if(!ok.length&&!process.env.NOSAVE){ for(const p of P.filter(p=>p.ins.join()===cells.join()&&(p.out===tgt||(!ins.includes(p.out)&&!cells.includes(p.out))))){ const U=usedCells(p.prog); const hit=[...U].filter(c=>c!==tgt&&!cells.includes(c)&&(live.has(c)||ins.includes(c)));
+          if(hit.some(c=>c===tgt)) continue; if(p.out!==tgt&&(live.has(tgt)||ins.includes(tgt))) continue;
+          const extra=p.out!==tgt&&live.has(p.out)?[p.out]:[]; const need=[...hit,...extra];
+          const safe=[15,14,13,12,11,10,9,8].filter(c=>!U.has(c)&&!PROTECT.includes(c)&&!ins.includes(c)&&!live.has(c)&&!Object.values(spilled).includes(c)&&!p.prog.some(x=>x[0]==='WHERE'&&!x[2]&&x[1]===c));
+          if(safe.length<need.length) continue; const sv=need.map((c,i)=>[c,safe[i]]);
+          for(const [c,S] of sv) prog.push(...PS(`WHERE ${c}; GO; TAKE; WHERE ${S}; GO; PUT`)); prog.push(...shift(p.prog,prog.length));
+          if(p.out!==tgt) prog.push(...PS(`WHERE ${p.out}; GO; TAKE; WHERE ${tgt}; GO; PUT`));
+          for(const [c,S] of sv) prog.push(...PS(`WHERE ${S}; GO; TAKE; WHERE ${c}; GO; PUT`));
           for(const c of cells) live.delete(c); return tgt; } }
       if(!ok.length){ globalThis.__WHY='אין שיבוץ ל-'+e.f+' · קלט '+cells.join(',')+' · יעד '+tgt+' · חיים '+[...live].join(','); return null; } const p=ok[R(ok.length)]; prog.push(...shift(p.prog,prog.length));
       for(const c of cells) live.delete(c); return tgt; };
