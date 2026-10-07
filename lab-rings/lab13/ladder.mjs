@@ -29,7 +29,13 @@ const L3=[
  ['ש3 (שארית-3) כפול (סכום-רווי-כפול-2)',[0,1],(a,b)=>m(f2['ש2 (א כפול ב ועוד א) שארית 3'](a,b)*f2['ש2 סכום רווי פחות 1, כפול 2'](a,b))],
  ['ש3 אם-בין פחות הגדול-פחות-ממוצע',[0,1,3],(a,b,c)=>m(f2['ש2 אם ג בין א ל-ב: הפרש ועוד ג, אחרת 0'](a,b,c)-f2['ש2 הגדול מבין א+ב ו-ג, פחות ממוצע הגדול והקטן'](a,b,c))],
 ];
-const LV={1:L1,2:L2,3:L3};
+const f3=Object.fromEntries(L3.map(([n,i,f])=>[n,f])); const K3=L3.map(x=>x[0]);
+const L4=[
+ ['ש4 סכום שני הראשונים של שלב 3',[0,1],(a,b)=>m(f3[K3[0]](a,b)+f3[K3[1]](a,b))],
+ ['ש4 הקטן מבין השלישי והראשון של שלב 3',[0,1],(a,b)=>mn(f3[K3[2]](a,b),f3[K3[0]](a,b))],
+ ['ש4 הרביעי של שלב 3, כפול 2, ועוד ג',[0,1,3],(a,b,c)=>m(f3[K3[3]](a,b,c)*2+c)],
+];
+const LV={1:L1,2:L2,3:L3,4:L4};
 const genOf=(ins,f)=>()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c])); const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; };
 const ttOf=(ins,f)=>{ const N=16**ins.length, T=[]; for(let i=0;i<N;i++){ const v=ins.map((_,j)=>(i>>(4*(ins.length-1-j)))&15); T.push(f(...v)); } return T; };
 if(process.env.SAVE||process.env.LEVEL==='1'){ const LIST=LV[process.env.SAVE||1]; const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); let LG={}; try{ LG=JSON.parse(fs.readFileSync('tzoref-learned-goals.json','utf8')); }catch{}

@@ -40,26 +40,33 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
   const usedCells=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]).filter(c=>c<8));
   const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x);
   // תוכנית מהצירוף: מחשבים קודם את הענף הגדול; כל תוצאת-ביניים לתא פנוי; חלק לא נוגע בתאים חיים ולא בתאי-הקלט
-  const PROTECT=GM_KEEP(name); const SPILLS=[15,14,13,12].filter(c=>!PROTECT.includes(c)&&!ins.includes(c)); let SPILL=false;
+  const PROTECT=GM_KEEP(name);
+  // תאי-«מגירה»: רק תאים שאף לבנה מוברגת בצירוף לא נוגעת בהם (אחרת היא דורסת את מה ששמרנו)
+  const boltUsed=new Set(); { const w=e=>{ if(e.cell!=null) return; for(const n of (EQ.get(e.f)||[e.f])){ const b=blocks.get(n); if(b&&b.movable===false) for(const x of b.prog) if(x[0]==='WHERE'&&!x[2]) boltUsed.add(x[1]); } w(e.a); if(e.b) w(e.b); if(e.c) w(e.c); }; w(found); }
+  const SPILLS=[15,14,13,12,11,10,9,8].filter(c=>!PROTECT.includes(c)&&!ins.includes(c)&&!boltUsed.has(c)); let SPILL=false;
   const PS=s=>s.split(';').map(x=>x.trim()).filter(Boolean).map(x=>{ const [o,a]=x.split(' '); return a==null?[o]:[o,+a]; });
-  function gen1(rnd){ const prog=[]; const live=new Set(); const R=k=>rnd?Math.floor(Math.random()*k):0;
+  function gen1(rnd){ const prog=[]; const live=new Set(); let sp=0; const R=k=>rnd?Math.floor(Math.random()*k):0;
     const emit=(e,target)=>{ if(e.cell!=null) return e.cell;
       const kids=e.c?[e.a,e.b,e.c]:e.b?[e.a,e.b]:[e.a]; const order=kids.map((k,i)=>i).sort((i,j)=>size(kids[j])-size(kids[i])); const cells=[];
-      const spilled={}; let sp=0;
+      const spilled={};
       for(let oi=0;oi<order.length;oi++){ const i=order[oi]; const c=emit(kids[i],null); if(c==null) return null; cells[i]=c; if(!ins.includes(c)) live.add(c);
         // «מגירה»: אם יש עוד ילד לחשב ואין הרבה תאים פנויים — מעבירים את התוצאה זמנית לתא רחוק (15, 14…) ומשחררים
         if(SPILL&&oi<order.length-1&&!ins.includes(c)&&sp<SPILLS.length){ const S=SPILLS[sp++]; prog.push(...PS(`WHERE ${c}; GO; TAKE; WHERE ${S}; GO; PUT`)); live.delete(c); spilled[i]=S; } }
-      for(const [i,S] of Object.entries(spilled)){ const fr=[2,4,5,6,7].filter(c=>!live.has(c)&&!ins.includes(c)&&!cells.includes(c)); if(!fr.length) return null; const f=fr[R(fr.length)];
+      for(const [i,S] of Object.entries(spilled)){ const fr=[2,4,5,6,7].filter(c=>!live.has(c)&&!ins.includes(c)&&!cells.includes(c)); if(!fr.length){ globalThis.__WHY='אין תא פנוי להחזרה מהמגירה'; return null; } const f=fr[R(fr.length)];
         prog.push(...PS(`WHERE ${S}; GO; TAKE; WHERE ${f}; GO; PUT`)); cells[i]=f; live.add(f); }
+      // היעד תפוס בקלט של הצעד הזה (למשל התשובה חייבת לתא 2 ותא 2 הוא קלט) — מעבירים את הקלט לתא פנוי קודם
+      if(target!=null&&cells.includes(target)&&!ins.includes(target)){ const fr=[4,5,6,7,2].filter(c=>c!==target&&!live.has(c)&&!ins.includes(c)&&!cells.includes(c)); if(fr.length){ const f=fr[0]; prog.push(...PS(`WHERE ${target}; GO; TAKE; WHERE ${f}; GO; PUT`)); const j=cells.indexOf(target); cells[j]=f; live.delete(target); live.add(f); } }
       // כל לבנה שעושה בדיוק אותו דבר (אותה טבלה) — גם גרסה «ניידת» של לבנה מוברגת
       const same=(EQ.get(e.f)||[e.f]).map(n=>blocks.get(n)); const free=[2,4,5,6,7].filter(c=>!live.has(c)&&!ins.includes(c));
-      const tgt=target??(free.length?free[R(free.length)]:null); if(tgt==null) return null;
+      const boltOut=same.every(b=>b&&b.movable===false)?(same[0].out??2):null;   /* לבנה מוברגת — התשובה שלה תמיד באותו תא: בוחרים אותו */
+      const tgt=target??(boltOut!=null&&free.includes(boltOut)?boltOut:(free.length?free[R(free.length)]:null)); if(tgt==null){ globalThis.__WHY='אין תא פנוי לתשובה של '+e.f+' · חיים: '+[...live].join(','); return null; }
       const P=same.flatMap(b=>b.movable===false?[{prog:b.prog,ins:(b.ins||[]).filter(c=>c<8),out:b.out??2}]:placements(b,6000));
       const ok=P.filter(p=>p.out===tgt&&p.ins.join()===cells.join()&&[...usedCells(p.prog)].every(c=>c===tgt||cells.includes(c)||(!live.has(c)&&!ins.includes(c))));
-      if(!ok.length) return null; const p=ok[R(ok.length)]; prog.push(...shift(p.prog,prog.length));
+      if(!ok.length){ globalThis.__WHY='אין שיבוץ ל-'+e.f+' · קלט '+cells.join(',')+' · יעד '+tgt+' · חיים '+[...live].join(','); return null; } const p=ok[R(ok.length)]; prog.push(...shift(p.prog,prog.length));
       for(const c of cells) live.delete(c); return tgt; };
     return emit(found,out)==null?null:prog; }
-  for(let t=0;t<tries;t++){ SPILL=t>=tries/2; const p=gen1(t>0); if(p&&chk(p)) return {prog:p,expr:found,made,ms:Date.now()-t0}; }
+  let nNull=0, nChk=0; for(let t=0;t<tries;t++){ SPILL=t>=tries/2; const p=gen1(t>0); if(!p){ nNull++; if(process.env.VDBG&&(t===0||t===tries/2)) console.log('DBG',t,globalThis.__WHY); continue; } if(chk(p)) return {prog:p,expr:found,made,ms:Date.now()-t0}; nChk++; if(process.env.VDBG&&nChk===1){ console.log('DBG נכשל-בבודק', show(found), 'אורך', p.length); } }
+  if(process.env.VDBG) console.log('DBG צירוף:', show(found), '· לא-הורכב', nNull, '· נכשל-בבודק', nChk);
   // לא הצלחנו להפוך לתוכנית: חוסמים את החלקים «המוברגים» שבצירוף (אין להם שיבוץ גמיש) ומחפשים צירוף אחר
   const names=[]; const walk=e=>{ if(e.cell!=null) return; names.push(e.f); walk(e.a); if(e.b) walk(e.b); if(e.c) walk(e.c); }; walk(found);
   const stuck=[...new Set(names)].filter(n=>(EQ.get(n)||[n]).every(m=>blocks.get(m)?.movable===false)); const k3=[...new Set(names)].filter(n=>T3CACHE.some(t=>t.name===n)); const ban2=[...new Set([...ban,...(stuck.length?stuck:k3.length?k3:names.slice(0,1))])];   // קודם מוברגים, אחר-כך חלקי-שלושה, ורק בסוף השורש
