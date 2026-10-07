@@ -41,7 +41,13 @@ const L5=[
  ['ש5 הראשון של שלב 4 פחות השני',[0,1],(a,b)=>m(f4[K4[0]](a,b)-f4[K4[1]](a,b))],
  ['ש5 השלישי של שלב 4 ועוד א',[0,1,3],(a,b,c)=>m(f4[K4[2]](a,b,c)+a)],
 ];
-const LV={1:L1,2:L2,3:L3,4:L4,5:L5};
+const f5=Object.fromEntries(L5.map(([n,i,f])=>[n,f])); const K5=L5.map(x=>x[0]);
+const L6=[
+ ['ש6 הקטן מבין הראשון והשלישי של שלב 5',[0,1,3],(a,b,c)=>mn(f5[K5[0]](a,b),f5[K5[2]](a,b,c))],
+ ['ש6 השני של שלב 5 כפול 2',[0,1],(a,b)=>m(f5[K5[1]](a,b)*2)],
+ ['ש6 הראשון של שלב 5 ועוד השני',[0,1],(a,b)=>m(f5[K5[0]](a,b)+f5[K5[1]](a,b))],
+];
+const LV={1:L1,2:L2,3:L3,4:L4,5:L5,6:L6};
 const genOf=(ins,f)=>()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c])); const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; };
 const ttOf=(ins,f)=>{ const N=16**ins.length, T=[]; for(let i=0;i<N;i++){ const v=ins.map((_,j)=>(i>>(4*(ins.length-1-j)))&15); T.push(f(...v)); } return T; };
 if(process.env.SAVE||process.env.LEVEL==='1'){ const LIST=LV[process.env.SAVE||1]; const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); let LG={}; try{ LG=JSON.parse(fs.readFileSync('tzoref-learned-goals.json','utf8')); }catch{}

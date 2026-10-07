@@ -49,7 +49,10 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
     const emit=(e,target)=>{ if(e.cell!=null) return e.cell;
       const kids=e.c?[e.a,e.b,e.c]:e.b?[e.a,e.b]:[e.a]; const order=kids.map((k,i)=>i).sort((i,j)=>size(kids[j])-size(kids[i])); const cells=[];
       const spilled={};
-      for(let oi=0;oi<order.length;oi++){ const i=order[oi]; const c=emit(kids[i],null); if(c==null) return null; cells[i]=c; if(!ins.includes(c)) live.add(c);
+      // אותו חישוב פעמיים (X+X): מחשבים פעם אחת ומעתיקים
+      const dupOf=kids.map((k,i)=>k.cell==null&&!process.env.NODUP?kids.findIndex((q,j)=>j<i&&show(q)===show(k)):-1);
+      for(let oi=0;oi<order.length;oi++){ const i=order[oi]; if(dupOf[i]>=0&&cells[dupOf[i]]!=null){ const src=spilled[dupOf[i]]??cells[dupOf[i]]; const fr=[4,5,6,7,2].filter(c=>!live.has(c)&&!ins.includes(c)&&!cells.includes(c)); if(fr.length){ const f=fr[R(fr.length)]; prog.push(...PS(`WHERE ${src}; GO; TAKE; WHERE ${f}; GO; PUT`)); cells[i]=f; live.add(f); continue; } }
+        const c=emit(kids[i],null); if(c==null) return null; cells[i]=c; if(!ins.includes(c)) live.add(c);
         // «מגירה»: אם יש עוד ילד לחשב ואין הרבה תאים פנויים — מעבירים את התוצאה זמנית לתא רחוק (15, 14…) ומשחררים
         if(SPILL&&oi<order.length-1&&!ins.includes(c)&&sp<SPILLS.length){ const S=SPILLS[sp++]; prog.push(...PS(`WHERE ${c}; GO; TAKE; WHERE ${S}; GO; PUT`)); live.delete(c); spilled[i]=S; } }
       for(const [i,S] of Object.entries(spilled)){ const fr=[2,4,5,6,7].filter(c=>!live.has(c)&&!ins.includes(c)&&!cells.includes(c)); if(!fr.length){ globalThis.__WHY='אין תא פנוי להחזרה מהמגירה'; return null; } const f=fr[R(fr.length)];
@@ -62,6 +65,12 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
       const tgt=target??(boltOut!=null&&free.includes(boltOut)?boltOut:(free.length?free[R(free.length)]:null)); if(tgt==null){ globalThis.__WHY='אין תא פנוי לתשובה של '+e.f+' · חיים: '+[...live].join(','); return null; }
       const P=same.flatMap(b=>b.movable===false?[{prog:b.prog,ins:(b.ins||[]).filter(c=>c<8),out:b.out??2}]:placements(b,6000));
       const ok=P.filter(p=>p.out===tgt&&p.ins.join()===cells.join()&&[...usedCells(p.prog)].every(c=>c===tgt||cells.includes(c)||(!live.has(c)&&!ins.includes(c))));
+      // «שמור-והחזר»: לבנה מוברגת שנוגעת בתא של קלט/ערך-חי — מעתיקים אותו לתא בטוח לפני, ומחזירים אחרי
+      if(!ok.length&&!process.env.NOSAVE){ for(const p of P.filter(p=>p.out===tgt&&p.ins.join()===cells.join())){ const U=usedCells(p.prog); const hit=[...U].filter(c=>c!==tgt&&!cells.includes(c)&&(live.has(c)||ins.includes(c)));
+          if(hit.some(c=>c===tgt)) continue; const safe=[15,14,13,12,11,10,9,8].filter(c=>!U.has(c)&&!PROTECT.includes(c)&&!ins.includes(c)&&!live.has(c)&&!Object.values(spilled).includes(c)&&!p.prog.some(x=>x[0]==='WHERE'&&!x[2]&&x[1]===c));
+          if(safe.length<hit.length) continue; const sv=hit.map((c,i)=>[c,safe[i]]);
+          for(const [c,S] of sv) prog.push(...PS(`WHERE ${c}; GO; TAKE; WHERE ${S}; GO; PUT`)); prog.push(...shift(p.prog,prog.length)); for(const [c,S] of sv) prog.push(...PS(`WHERE ${S}; GO; TAKE; WHERE ${c}; GO; PUT`));
+          for(const c of cells) live.delete(c); return tgt; } }
       if(!ok.length){ globalThis.__WHY='אין שיבוץ ל-'+e.f+' · קלט '+cells.join(',')+' · יעד '+tgt+' · חיים '+[...live].join(','); return null; } const p=ok[R(ok.length)]; prog.push(...shift(p.prog,prog.length));
       for(const c of cells) live.delete(c); return tgt; };
     return emit(found,out)==null?null:prog; }
