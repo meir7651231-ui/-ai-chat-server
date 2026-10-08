@@ -1,0 +1,277 @@
+{
+ "tasks": [
+  {
+   "name": "ספור שיאים",
+   "kind": "list2num",
+   "src": "l=>{ let m=-1,c=0; for(const x of l){ if(x>m){ m=x; c++; } } return c; }",
+   "difficulty": "hard",
+   "file": "agg.json"
+  },
+  {
+   "name": "אורך ההתחלה העולה",
+   "kind": "list2num",
+   "src": "l=>{ if(!l.length) return 0; let i=1; while(i<l.length&&l[i]>l[i-1]) i++; return i; }",
+   "difficulty": "hard",
+   "file": "agg.json"
+  },
+  {
+   "name": "הגדול לפני הקטן?",
+   "kind": "list2num",
+   "src": "l=>l.length>1&&l.indexOf(Math.max(...l))<l.indexOf(Math.min(...l))?15:0",
+   "difficulty": "hard",
+   "file": "agg.json"
+  },
+  {
+   "name": "מיקום ההצעה הגבוהה",
+   "kind": "list2num",
+   "src": "l=>l.length?l.indexOf(Math.max(...l)):15",
+   "difficulty": "medium",
+   "file": "app.json"
+  },
+  {
+   "name": "ממוצע ציונים",
+   "kind": "list2num",
+   "src": "l=>l.length?Math.floor(l.reduce((a,b)=>a+b,0)/l.length):0",
+   "difficulty": "hard",
+   "file": "app.json"
+  },
+  {
+   "name": "שלושת האחרונים, החדש ראשון",
+   "kind": "list2list",
+   "src": "l=>l.slice(-3).reverse()",
+   "difficulty": "easy",
+   "file": "app.json"
+  },
+  {
+   "name": "קניות לפי הסדר עד תקציב 30",
+   "kind": "list2list",
+   "src": "l=>{ let s=0; const r=[]; for(const x of l){ if(s+x>30) break; s+=x; r.push(x); } return r; }",
+   "difficulty": "hard",
+   "file": "app.json"
+  },
+  {
+   "name": "טבלת מובילים: שלושה ראשונים",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>b-a).slice(0,3)",
+   "difficulty": "medium",
+   "file": "app.json"
+  },
+  {
+   "name": "ירידות מחיר",
+   "kind": "list2list",
+   "src": "l=>l.filter((x,i)=>i>0&&x<l[i-1])",
+   "difficulty": "medium",
+   "file": "app.json"
+  },
+  {
+   "name": "חציון הרשימה",
+   "kind": "list2num",
+   "src": "l=>{ if(!l.length) return 0; const s=[...l].sort((a,b)=>a-b); return s[(s.length-1)>>1]; }",
+   "difficulty": "hard",
+   "file": "critic.json"
+  },
+  {
+   "name": "הקטן החסר",
+   "kind": "list2num",
+   "src": "l=>{ for(let v=8;v<=15;v++){ if(!l.includes(v)) return v; } return 0; }",
+   "difficulty": "hard",
+   "file": "critic.json"
+  },
+  {
+   "name": "סכום מתחלף",
+   "kind": "list2num",
+   "src": "l=>{ let s=0; l.forEach((x,i)=>{ s+=(i%2)?-x:x; }); return ((s%16)+16)%16; }",
+   "difficulty": "medium",
+   "file": "critic.json"
+  },
+  {
+   "name": "הרצף העולה הארוך",
+   "kind": "list2num",
+   "src": "l=>{ let best=0, cur=0; for(let i=0;i<l.length;i++){ cur=(i>0&&l[i]>l[i-1])?cur+1:1; if(cur>best) best=cur; } return best; }",
+   "difficulty": "hard",
+   "file": "critic.json"
+  },
+  {
+   "name": "סיבוב שמאלה",
+   "kind": "list2list",
+   "src": "l=>l.length?[...l.slice(1),l[0]]:[]",
+   "difficulty": "easy",
+   "file": "critic.json"
+  },
+  {
+   "name": "כל איבר שני",
+   "kind": "list2list",
+   "src": "l=>l.filter((x,i)=>i%2===0)",
+   "difficulty": "medium",
+   "file": "critic.json"
+  },
+  {
+   "name": "סיבוב עד הקטן",
+   "kind": "list2list",
+   "src": "l=>{ if(!l.length) return []; const i=l.indexOf(Math.min(...l)); return [...l.slice(i),...l.slice(0,i)]; }",
+   "difficulty": "hard",
+   "file": "critic.json"
+  },
+  {
+   "name": "קצוות לסירוגין",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; let i=0, j=l.length-1; while(i<=j){ r.push(l[i++]); if(i<=j) r.push(l[j--]); } return r; }",
+   "difficulty": "hard",
+   "file": "critic.json"
+  },
+  {
+   "name": "מיון לפי שני הביטים התחתונים",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>((a&3)-(b&3))||(a-b))",
+   "difficulty": "hard",
+   "file": "critic.json"
+  },
+  {
+   "name": "בלי המקסימום",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x!==Math.max(...l))",
+   "difficulty": "easy",
+   "file": "decide.json"
+  },
+  {
+   "name": "קח כל עוד קטן מ-13",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(const x of l){ if(x>=13) break; r.push(x); } return r; }",
+   "difficulty": "medium",
+   "file": "decide.json"
+  },
+  {
+   "name": "הפוך אם ראשון גדול מאחרון",
+   "kind": "list2list",
+   "src": "l=>(l.length>1&&l[0]>l[l.length-1])?[...l].reverse():[...l]",
+   "difficulty": "medium",
+   "file": "decide.json"
+  },
+  {
+   "name": "מיין אם האורך אי-זוגי",
+   "kind": "list2list",
+   "src": "l=>l.length%2===1?[...l].sort((a,b)=>a-b):[...l]",
+   "difficulty": "medium",
+   "file": "decide.json"
+  },
+  {
+   "name": "קטנים מהאחרון",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x<l[l.length-1])",
+   "difficulty": "medium",
+   "file": "decide.json"
+  },
+  {
+   "name": "שיאים מתחדשים",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; let m=-1; for(const x of l){ if(x>m){ r.push(x); m=x; } } return r; }",
+   "difficulty": "hard",
+   "file": "decide.json"
+  },
+  {
+   "name": "רישא יורדת",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(const x of l){ if(r.length&&x>r[r.length-1]) break; r.push(x); } return r; }",
+   "difficulty": "hard",
+   "file": "decide.json"
+  },
+  {
+   "name": "זוגיות הפוכה לראשון",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x%2!==l[0]%2)",
+   "difficulty": "hard",
+   "file": "decide.json"
+  },
+  {
+   "name": "הזוגיות של הרוב",
+   "kind": "list2list",
+   "src": "l=>{ const e=l.filter(x=>x%2===0), o=l.filter(x=>x%2===1); return e.length>=o.length?e:o; }",
+   "difficulty": "hard",
+   "file": "decide.json"
+  },
+  {
+   "name": "כפולות 3 פעמיים ועוד 1",
+   "kind": "list2num",
+   "src": "l=>(2*l.filter(x=>x%3===0).length+1)&15",
+   "difficulty": "medium",
+   "file": "hidden.json"
+  },
+  {
+   "name": "מינימום מתוך {11,12,14}",
+   "kind": "list2num",
+   "src": "l=>{ const s=l.filter(x=>x===11||x===12||x===14); return s.length?Math.min(...s):0; }",
+   "difficulty": "medium",
+   "file": "hidden.json"
+  },
+  {
+   "name": "XOR של {9,10,13}",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>[9,10,13].includes(x)).reduce((a,b)=>a^b,0)",
+   "difficulty": "medium",
+   "file": "hidden.json"
+  },
+  {
+   "name": "שלוש פעמים ספירת קצוות",
+   "kind": "list2num",
+   "src": "l=>3*l.filter(x=>x===8||x===15).length",
+   "difficulty": "easy",
+   "file": "hidden.json"
+  },
+  {
+   "name": "סכום שארית 1 ב-4 ועוד 1",
+   "kind": "list2num",
+   "src": "l=>(l.filter(x=>x%4===1).reduce((a,b)=>a+b,0)+1)&15",
+   "difficulty": "medium",
+   "file": "hidden.json"
+  },
+  {
+   "name": "הפרש ספירות שתי קבוצות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(const x of l){ if(x===9||x===11||x===12) c++; else if(x===13||x===14) c--; } return ((c%16)+16)%16; }",
+   "difficulty": "hard",
+   "file": "hidden.json"
+  },
+  {
+   "name": "שלושת הקטנים",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>a-b).slice(0,3)",
+   "difficulty": "medium",
+   "file": "reorder.json"
+  },
+  {
+   "name": "האמצע הפוך",
+   "kind": "list2list",
+   "src": "l=>l.slice(1,-1).reverse()",
+   "difficulty": "medium",
+   "file": "reorder.json"
+  },
+  {
+   "name": "זוגיים קודם",
+   "kind": "list2list",
+   "src": "l=>[...l.filter(x=>x%2===0),...l.filter(x=>x%2===1)]",
+   "difficulty": "medium",
+   "file": "reorder.json"
+  },
+  {
+   "name": "בלי שני הקטנים, מהגדול",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>a-b).slice(2).reverse()",
+   "difficulty": "hard",
+   "file": "reorder.json"
+  },
+  {
+   "name": "גדולים מהראשון",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x>l[0])",
+   "difficulty": "hard",
+   "file": "reorder.json"
+  },
+  {
+   "name": "זוגיים עד האי-זוגי",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(const x of l){ if(x%2===1) break; r.push(x); } return r; }",
+   "difficulty": "hard",
+   "file": "reorder.json"
+  }
+ ]
+}

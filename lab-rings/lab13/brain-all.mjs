@@ -1,11 +1,11 @@
 // «המוח המאוחד»: מקבל משימה (רק דוגמאות קלט/פלט) ובוחר לבד איזה בונה לנסות — מהמהיר לאיטי.
 //   מספרים            ⇒ בונה-ערכים ⇒ מסגרת-לולאה ⇒ פיצול-מקרים ⇒ פריסת-ביטים (תקציב אחד למשימה: כל שלב מקבל רק את מה שנשאר)
-//   רשימה ⇒ מספר      ⇒ צירוף-זוג ⇒ שרשרת ⇒ סינון-נסתר (לומד תנאי חסר)
-//   רשימה ⇒ רשימה     ⇒ רצף-כלים ⇒ סינון ⇒ סינון עם תנאי שנלמד מהדוגמאות ⇒ מסגרות-החלטה
+//   רשימה ⇒ מספר      ⇒ צירוף-זוג ⇒ שרשרת ⇒ קיפול+מיפוי ⇒ סריקה-עם-זיכרון ⇒ סינון-נסתר (לומד תנאי חסר)
+//   רשימה ⇒ רשימה     ⇒ רצף-כלים ⇒ סינון ⇒ סינון עם תנאי שנלמד מהדוגמאות ⇒ מסגרות-סריקה ⇒ מסגרות-החלטה
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { valueBuild } from './tzoref-value.mjs'; import { shorten, finalCheck, movable } from './tzoref.mjs';
 import { listGen, listCompose } from './listcomp.mjs'; import { llGen, llCompose } from './listlist.mjs'; import { pipeCompose } from './pipeline.mjs';
 import { loopBuild } from './numloop.mjs'; import { caseBuild } from './tzoref-case.mjs'; import { bitsliceSolve } from './bitslice.mjs';
-import { filterCompose } from './filtcomp.mjs'; import { ifCompose } from './ifcomp.mjs'; import { hiddenFilter } from './hiddenfilter.mjs';
+import { filterCompose } from './filtcomp.mjs'; import { ifCompose } from './ifcomp.mjs'; import { hiddenFilter } from './hiddenfilter.mjs'; import { scanCompose as cutCompose } from './cutframes.mjs'; import { postOpCompose } from './postop.mjs'; import { scanCompose as foldCompose } from './scanfold.mjs';
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 export function genFor(spec){ const f=new Function('return ('+spec.src+')')();
   if(spec.kind==='num'){ const ins=spec.ins; return ()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c]))&15; const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; }; }
@@ -31,9 +31,13 @@ export async function solveAny(spec,{say=()=>{}}={}){ const gen=genFor(spec); co
     if(!r&&!off('case')&&left()>30000){ r=sure(await attempt('פיצול-מקרים',()=>caseBuild(gen,{ins:spec.ins,ms:Math.min(+process.env.CASEMS||280000,left()-(off('bits')?10000:+process.env.BSRESERVE||50000))}))); if(r) r.how='פיצול-מקרים: '+r.how; }
     if(!r&&!off('bits')&&left()>15000) r=await attempt('פריסת-ביטים',()=>bitsliceSolve(gen,{ins:spec.ins,ms:left()-10000}));   // רשת-ביטחון: מדויק לכל פונקציה של הקלטים (ארוך)
   }
-  else if(spec.kind==='list2num'){ r=await attempt('צירוף-זוג',()=>listCompose(gen)) || await attempt('שרשרת',()=>pipeCompose(gen)) || await attempt('סינון-נסתר',()=>hiddenFilter(gen)); }
+  else if(spec.kind==='list2num'){ r=await attempt('צירוף-זוג',()=>listCompose(gen)) || await attempt('שרשרת',()=>pipeCompose(gen))
+      || await attempt('קיפול+מיפוי',()=>postOpCompose(gen,{ms:+process.env.POMS||150000}))   // קיפול על תת-קבוצה נסתרת + פעולה אחריו / שני קיפולים (postop.mjs)
+      || await attempt('סריקה-עם-זיכרון',()=>foldCompose(gen,{ms:+process.env.SCANMS||150000}))   // מצב רץ: שיא, קודם, מיקום (scanfold.mjs)
+      || await attempt('סינון-נסתר',()=>hiddenFilter(gen)); }
   else { r=await attempt('רצף-כלים',()=>llCompose(gen)) || await attempt('סינון',()=>filterCompose(gen))
       || await attempt('סינון+תנאי-נלמד',async()=>{ const tt=inferFromExamples(gen); if(!tt) return {prog:null}; const n=await learnCond(tt); if(!n) return {prog:null}; return filterCompose(gen); })
+      || await attempt('מסגרות-סריקה',()=>cutCompose(gen,{ms:+process.env.CUTMS||150000}))   // קח/דלג-כל-עוד, סנן מול ערך-מהרשימה, מצב-רץ (cutframes.mjs)
       || await attempt('מסגרות-החלטה',()=>ifCompose(gen)); }
   let bad=null; if(r){ bad=0; if(!r.sure) for(let k=0;k<20000;k++){ const e=gen(); const z=run(r.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) bad++; } }
   return {ok:!!r&&bad===0,prog:r&&bad===0?r.prog:null,len:r?.prog?.length??null,how:r?.how||null,stage:r?.stage||null,bad,tried,ms:Date.now()-T0}; }

@@ -1,0 +1,193 @@
+{
+ "tasks": [
+  {
+   "name": "ספור קטנים מ-11",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>x<11).length",
+   "difficulty": "easy",
+   "file": "agg.json"
+  },
+  {
+   "name": "האם יש 15?",
+   "kind": "list2num",
+   "src": "l=>l.includes(15)?15:0",
+   "difficulty": "easy",
+   "file": "agg.json"
+  },
+  {
+   "name": "הראשון ועוד האחרון",
+   "kind": "list2num",
+   "src": "l=>l.length?(l[0]+l[l.length-1])&15:0",
+   "difficulty": "easy",
+   "file": "agg.json"
+  },
+  {
+   "name": "ארוכה מ-4?",
+   "kind": "list2num",
+   "src": "l=>l.length>4?15:0",
+   "difficulty": "easy",
+   "file": "agg.json"
+  },
+  {
+   "name": "סכום האי-זוגיים",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>x&1).reduce((a,b)=>a+b,0)&15",
+   "difficulty": "medium",
+   "file": "agg.json"
+  },
+  {
+   "name": "הגדול פחות הראשון",
+   "kind": "list2num",
+   "src": "l=>l.length?Math.max(...l)-l[0]:0",
+   "difficulty": "medium",
+   "file": "agg.json"
+  },
+  {
+   "name": "כולם גדולים מ-9?",
+   "kind": "list2num",
+   "src": "l=>l.every(x=>x>9)?15:0",
+   "difficulty": "medium",
+   "file": "agg.json"
+  },
+  {
+   "name": "זוגיים פחות אי-זוגיים",
+   "kind": "list2num",
+   "src": "l=>(l.filter(x=>x%2===0).length-l.filter(x=>x&1).length)&15",
+   "difficulty": "medium",
+   "file": "agg.json"
+  },
+  {
+   "name": "השני בקטנו",
+   "kind": "list2num",
+   "src": "l=>l.length<2?0:[...l].sort((a,b)=>a-b)[1]",
+   "difficulty": "hard",
+   "file": "agg.json"
+  },
+  {
+   "name": "יש שני מספרים עוקבים?",
+   "kind": "list2num",
+   "src": "l=>l.some(x=>l.includes(x+1))?15:0",
+   "difficulty": "hard",
+   "file": "app.json"
+  },
+  {
+   "name": "האחרון מתחת ל-12",
+   "kind": "list2num",
+   "src": "l=>{ for(let i=l.length-1;i>=0;i--){ if(l[i]<12) return l[i]; } return 0; }",
+   "difficulty": "medium",
+   "file": "app.json"
+  },
+  {
+   "name": "ערכים רצופים?",
+   "kind": "list2num",
+   "src": "l=>(l.length===0||Math.max(...l)-Math.min(...l)===l.length-1)?15:0",
+   "difficulty": "hard",
+   "file": "critic.json"
+  },
+  {
+   "name": "הורד ראשון אם זוגי",
+   "kind": "list2list",
+   "src": "l=>(l.length>0&&l[0]%2===0)?l.slice(1):[...l]",
+   "difficulty": "easy",
+   "file": "decide.json"
+  },
+  {
+   "name": "דלג על אי-זוגיים בהתחלה",
+   "kind": "list2list",
+   "src": "l=>{ let i=0; while(i<l.length&&l[i]%2===1) i++; return l.slice(i); }",
+   "difficulty": "medium",
+   "file": "decide.json"
+  },
+  {
+   "name": "מהמקסימום והלאה",
+   "kind": "list2list",
+   "src": "l=>{ if(!l.length) return []; const m=Math.max(...l); return l.slice(l.indexOf(m)); }",
+   "difficulty": "medium",
+   "file": "decide.json"
+  },
+  {
+   "name": "ספירת חברי {9,12,14}",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>[9,12,14].includes(x)).length",
+   "difficulty": "easy",
+   "file": "hidden.json"
+  },
+  {
+   "name": "סכום שארית 1 ב-3",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>x%3===1).reduce((a,b)=>a+b,0)&15",
+   "difficulty": "easy",
+   "file": "hidden.json"
+  },
+  {
+   "name": "סכום בטווח 10..13",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>x>=10&&x<=13).reduce((a,b)=>a+b,0)&15",
+   "difficulty": "medium",
+   "file": "hidden.json"
+  },
+  {
+   "name": "מקסימום מתוך {8,11,13}",
+   "kind": "list2num",
+   "src": "l=>{ const s=l.filter(x=>x===8||x===11||x===13); return s.length?Math.max(...s):0; }",
+   "difficulty": "medium",
+   "file": "hidden.json"
+  },
+  {
+   "name": "סכום עם ביט 1 דלוק",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>(x>>1)&1).reduce((a,b)=>a+b,0)&15",
+   "difficulty": "hard",
+   "file": "hidden.json"
+  },
+  {
+   "name": "הראשון שמתחלק ב-5",
+   "kind": "list2num",
+   "src": "l=>{ for(const x of l){ if(x%5===0) return x; } return 0; }",
+   "difficulty": "medium",
+   "file": "hidden.json"
+  },
+  {
+   "name": "מיון עולה",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>a-b)",
+   "difficulty": "easy",
+   "file": "reorder.json"
+  },
+  {
+   "name": "היפוך",
+   "kind": "list2list",
+   "src": "l=>[...l].reverse()",
+   "difficulty": "easy",
+   "file": "reorder.json"
+  },
+  {
+   "name": "בלי שני הראשונים",
+   "kind": "list2list",
+   "src": "l=>l.slice(2)",
+   "difficulty": "easy",
+   "file": "reorder.json"
+  },
+  {
+   "name": "רק מעל 11",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x>11)",
+   "difficulty": "easy",
+   "file": "reorder.json"
+  },
+  {
+   "name": "אי-זוגיים מהגדול",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x%2===1).sort((a,b)=>b-a)",
+   "difficulty": "medium",
+   "file": "reorder.json"
+  },
+  {
+   "name": "רק 9, 12, 14",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x===9||x===12||x===14)",
+   "difficulty": "medium",
+   "file": "reorder.json"
+  }
+ ]
+}
