@@ -1,14 +1,14 @@
 // «בונה-יסודות»: רק חבר / נאנד / חצי על שני תאים — כל 256 הקלטים בבת אחת. קדימה (מהקטן לגדול) + אחורה (מהתשובה)
 const key=v=>Buffer.from(v).toString('latin1');
-export function basicBuild(tt,{ms=60000,maxBank=4000000,ins=[0,1],ops=[],multi=0,keepBank=false}={}){ const sols=[]; const t0=Date.now(); const W=Uint8Array.from(tt), wk=key(W); const N=W.length, K=ins.length;
-  const leaf=j=>Uint8Array.from({length:N},(_,i)=>(i>>(4*(K-1-j)))&15);   // תא-קלט מספר j: הספרה ה-j של האינדקס
+export function basicBuild(tt,{ms=60000,maxBank=4000000,ins=[0,1],ops=[],multi=0,keepBank=false,leaves=null}={}){ const sols=[]; const t0=Date.now(); const W=Uint8Array.from(tt), wk=key(W); const N=W.length, K=ins.length;
+  const leaf=j=>leaves?Uint8Array.from(leaves[j]):Uint8Array.from({length:N},(_,i)=>(i>>(4*(K-1-j)))&15);   // תא-קלט מספר j: הספרה ה-j של האינדקס (או: ערכי הקלט על רשימת-דוגמאות נתונה — «תחום חלקי»)
   const seen=new Map(), lev=[[]]; let found=null;
   const add=(v,e,s)=>{ const k=key(v); if(seen.has(k)) return; seen.set(k,{e,s}); (lev[s]||(lev[s]=[])).push({v,e}); if(k===wk) found=e; };
   ins.forEach((c,j)=>add(leaf(j),{c},0)); if(found) return {expr:found,ms:Date.now()-t0};
   // אחורה: חבר — ? = תשובה פחות x (תשובה אחת). נאנד — ביטים שבהם x=1 קובעים את ?, השאר חופשיים: מנסים למלא אותם כמו ?-מוכר
   const want=new Map(); const wantAdd=(v,mk)=>{ const k=key(v); if(seen.has(k)){ found=mk(seen.get(k).e); return true; } if(want.size<2e6&&!want.has(k)) want.set(k,mk); return false; };
   const T1=[]; const back=x=>{ const y=new Uint8Array(N); for(let i=0;i<N;i++) y[i]=(W[i]-x.v[i])&15; if(T1.length<4000) T1.push({v:y,mk:e=>({o:'ADD',a:x.e,b:e})}); if(wantAdd(y,e=>({o:'ADD',a:x.e,b:e}))) return;
-    let ok=true; const fix=new Uint8Array(N), msk=new Uint8Array(N); for(let i=0;i<N;i++){ const nw=(~W[i])&15; if((~x.v[i]&15)&~nw&15){ ok=false; break; } }   // נאנד: איפה ש-x=0 התשובה חייבת להיות 1
+    let ok=true; const fix=new Uint8Array(N), msk=new Uint8Array(N); for(let i=0;i<N;i++){ const nw=(~W[i])&15; if((~x.v[i]&15)&nw){ ok=false; break; } }   /* תוקן: היה (~x)&W — הפוך */   // נאנד: איפה ש-x=0 התשובה חייבת להיות 1
     if(!ok) return; for(let i=0;i<N;i++){ msk[i]=x.v[i]; fix[i]=(~W[i])&x.v[i]&15; }
     nandT.push({x,fix,msk}); };
   const nandT=[];   // «נאנד-מבוקש»: ? מתאים אם (?&msk)==fix בכל 256 — נבדק על כל ביטוי חדש

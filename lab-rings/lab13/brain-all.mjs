@@ -1,9 +1,10 @@
 // «המוח המאוחד»: מקבל משימה (רק דוגמאות קלט/פלט) ובוחר לבד איזה בונה לנסות — מהמהיר לאיטי.
-//   מספרים            ⇒ בונה-ערכים
+//   מספרים            ⇒ בונה-ערכים ⇒ מסגרת-לולאה ⇒ פיצול-מקרים ⇒ פריסת-ביטים (תקציב אחד למשימה: כל שלב מקבל רק את מה שנשאר)
 //   רשימה ⇒ מספר      ⇒ צירוף-זוג ⇒ שרשרת ⇒ סינון-נסתר (לומד תנאי חסר)
 //   רשימה ⇒ רשימה     ⇒ רצף-כלים ⇒ סינון ⇒ סינון עם תנאי שנלמד מהדוגמאות ⇒ מסגרות-החלטה
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { valueBuild } from './tzoref-value.mjs'; import { shorten, finalCheck, movable } from './tzoref.mjs';
 import { listGen, listCompose } from './listcomp.mjs'; import { llGen, llCompose } from './listlist.mjs'; import { pipeCompose } from './pipeline.mjs';
+import { loopBuild } from './numloop.mjs'; import { caseBuild } from './tzoref-case.mjs'; import { bitsliceSolve } from './bitslice.mjs';
 import { filterCompose } from './filtcomp.mjs'; import { ifCompose } from './ifcomp.mjs'; import { hiddenFilter } from './hiddenfilter.mjs';
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 export function genFor(spec){ const f=new Function('return ('+spec.src+')')();
@@ -21,10 +22,18 @@ async function learnCond(tt){ const name='תנאי: '+tt.slice(8).map((x,i)=>x?S
 export async function solveAny(spec,{say=()=>{}}={}){ const gen=genFor(spec); const tried=[]; const T0=Date.now();
   const attempt=async(name,fn)=>{ const t=Date.now(); let r=null; try{ r=await fn(); }catch(e){ r={prog:null,err:String(e.message||e).slice(0,80)}; } tried.push(`${name}${r&&r.prog?'✓':'✗'}(${((Date.now()-t)/1000).toFixed(0)}s)`); say(tried.at(-1)); return r&&r.prog?{...r,stage:name}:null; };
   let r=null;
-  if(spec.kind==='num'){ r=await attempt('בונה-ערכים',()=>valueBuild(gen,{name:spec.name,ins:spec.ins,out:2,ms:+process.env.VMS||90000})); if(r) r.how=r.how||'בונה-ערכים'; }
+  if(spec.kind==='num'){ const left=()=>(+process.env.NUMMS||280000)-(Date.now()-T0), off=s=>(process.env.NUMOFF||'').split(',').includes(s);   // NUMOFF=loop,case,bits מכבה שלבים
+    const sure=x=>{ if(!x) return null; for(let k=0;k<20000;k++){ const e=gen(); const z=run(x.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)){ tried.push(x.stage+': נפסל בבדיקה הסופית'); return null; } } return {...x,sure:true}; };   // שלב שנכשל בבדיקה הסופית ⇒ ממשיכים לבא אחריו
+    const loop=ms=>attempt('מסגרת-לולאה',()=>loopBuild(gen,{ins:spec.ins,ms})).then(sure);
+    if(process.env.LOOPFIRST&&!off('loop')) r=await loop(+process.env.LOOPMS||30000);
+    if(!r){ r=await attempt('בונה-ערכים',()=>valueBuild(gen,{name:spec.name,ins:spec.ins,out:2,ms:+process.env.VMS||90000})); if(r) r.how=r.how||'בונה-ערכים'; }
+    if(!r&&!process.env.LOOPFIRST&&!off('loop')&&left()>15000) r=await loop(Math.min(+process.env.LOOPMS||60000,left()-10000));   // מסגרת-לולאה: מהירה וקצרה, 0–20 שנ׳ במה שהיא פותרת
+    if(!r&&!off('case')&&left()>30000){ r=sure(await attempt('פיצול-מקרים',()=>caseBuild(gen,{ins:spec.ins,ms:Math.min(+process.env.CASEMS||280000,left()-(off('bits')?10000:+process.env.BSRESERVE||50000))}))); if(r) r.how='פיצול-מקרים: '+r.how; }
+    if(!r&&!off('bits')&&left()>15000) r=await attempt('פריסת-ביטים',()=>bitsliceSolve(gen,{ins:spec.ins,ms:left()-10000}));   // רשת-ביטחון: מדויק לכל פונקציה של הקלטים (ארוך)
+  }
   else if(spec.kind==='list2num'){ r=await attempt('צירוף-זוג',()=>listCompose(gen)) || await attempt('שרשרת',()=>pipeCompose(gen)) || await attempt('סינון-נסתר',()=>hiddenFilter(gen)); }
   else { r=await attempt('רצף-כלים',()=>llCompose(gen)) || await attempt('סינון',()=>filterCompose(gen))
       || await attempt('סינון+תנאי-נלמד',async()=>{ const tt=inferFromExamples(gen); if(!tt) return {prog:null}; const n=await learnCond(tt); if(!n) return {prog:null}; return filterCompose(gen); })
       || await attempt('מסגרות-החלטה',()=>ifCompose(gen)); }
-  let bad=null; if(r){ bad=0; for(let k=0;k<20000;k++){ const e=gen(); const z=run(r.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) bad++; } }
+  let bad=null; if(r){ bad=0; if(!r.sure) for(let k=0;k<20000;k++){ const e=gen(); const z=run(r.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) bad++; } }
   return {ok:!!r&&bad===0,prog:r&&bad===0?r.prog:null,len:r?.prog?.length??null,how:r?.how||null,stage:r?.stage||null,bad,tried,ms:Date.now()-T0}; }
