@@ -1,0 +1,6 @@
+{"tasks":[
+ {"name":"הפרש מוחלט","kind":"num","ins":[0,1],"src":"(a,b)=>Math.abs(a-b)","difficulty":"easy","note":"smoke"},
+ {"name":"סכום האי-זוגיים","kind":"list2num","src":"l=>l.filter(x=>x%2).reduce((a,b)=>a+b,0)&15","difficulty":"easy","note":"smoke"},
+ {"name":"ממוינת בלי הקטן","kind":"list2list","src":"l=>[...l].sort((a,b)=>a-b).slice(1)","difficulty":"easy","note":"smoke"},
+ {"name":"בלי 9 ו-14","kind":"list2list","src":"l=>l.filter(x=>x!==9&&x!==14)","difficulty":"medium","note":"smoke"}
+]}
