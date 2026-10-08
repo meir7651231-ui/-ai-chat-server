@@ -1,0 +1,14 @@
+{"tasks":[
+{"name":"ספור קטנים מ-11","kind":"list2num","src":"l=>l.filter(x=>x<11).length","difficulty":"easy","note":"Counts elements below a fixed threshold (only 8, 9, 10 qualify)."},
+{"name":"האם יש 15?","kind":"list2num","src":"l=>l.includes(15)?15:0","difficulty":"easy","note":"Existence test for one fixed value, answered as 15/0."},
+{"name":"הראשון ועוד האחרון","kind":"list2num","src":"l=>l.length?(l[0]+l[l.length-1])&15:0","difficulty":"easy","note":"Adds the first and last elements mod 16 (a single element counts twice; empty gives 0)."},
+{"name":"ארוכה מ-4?","kind":"list2num","src":"l=>l.length>4?15:0","difficulty":"easy","note":"Compares the list length with a constant and returns 15/0."},
+{"name":"סכום האי-זוגיים","kind":"list2num","src":"l=>l.filter(x=>x&1).reduce((a,b)=>a+b,0)&15","difficulty":"medium","note":"Conditional sum mod 16 over the odd elements only (empty or no odds gives 0)."},
+{"name":"הגדול פחות הראשון","kind":"list2num","src":"l=>l.length?Math.max(...l)-l[0]:0","difficulty":"medium","note":"Difference of two aggregates: the maximum minus the first element (empty gives 0)."},
+{"name":"כולם גדולים מ-9?","kind":"list2num","src":"l=>l.every(x=>x>9)?15:0","difficulty":"medium","note":"Universal test over the list, 15/0, with the empty list vacuously true (15)."},
+{"name":"זוגיים פחות אי-זוגיים","kind":"list2num","src":"l=>(l.filter(x=>x%2===0).length-l.filter(x=>x&1).length)&15","difficulty":"medium","note":"Difference of two conditional counts, wrapped mod 16 when negative."},
+{"name":"השני בקטנו","kind":"list2num","src":"l=>l.length<2?0:[...l].sort((a,b)=>a-b)[1]","difficulty":"hard","note":"Second-smallest element, needing two running minima (fewer than 2 elements gives 0)."},
+{"name":"ספור שיאים","kind":"list2num","src":"l=>{ let m=-1,c=0; for(const x of l){ if(x>m){ m=x; c++; } } return c; }","difficulty":"hard","note":"Counts records (elements larger than everything before them): a loop with a running max and a decision."},
+{"name":"אורך ההתחלה העולה","kind":"list2num","src":"l=>{ if(!l.length) return 0; let i=1; while(i<l.length&&l[i]>l[i-1]) i++; return i; }","difficulty":"hard","note":"Length of the longest strictly increasing prefix: a loop that compares neighbours and stops early."},
+{"name":"הגדול לפני הקטן?","kind":"list2num","src":"l=>l.length>1&&l.indexOf(Math.max(...l))<l.indexOf(Math.min(...l))?15:0","difficulty":"hard","note":"Compares the positions of the max and the min: 15 if the max comes first, else 0 (fewer than 2 elements gives 0)."}
+]}

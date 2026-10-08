@@ -1,0 +1,14 @@
+{"tasks":[
+{"name":"אותה זוגיות?","kind":"num","ins":[0,1],"src":"(a,b)=>((a^b)&1)?0:15","difficulty":"easy","note":"Parity comparison of two numbers returning a 0/15 flag."},
+{"name":"נשא בחיבור","kind":"num","ins":[0,1],"src":"(a,b)=>a+b>15?1:0","difficulty":"easy","note":"Detects 4-bit overflow of a+b, returning the carry bit 0/1."},
+{"name":"שניהם גדולים מ-7?","kind":"num","ins":[0,1],"src":"(a,b)=>(a>7&&b>7)?15:0","difficulty":"easy","note":"Logical AND of two threshold tests (both inputs above 7) as a 0/15 flag."},
+{"name":"א ועוד חצי ב","kind":"num","ins":[0,1],"src":"(a,b)=>(a+(b>>1))&15","difficulty":"easy","note":"Halving one input and adding it to the other modulo 16."},
+{"name":"סימן ההפרש","kind":"num","ins":[0,1],"src":"(a,b)=>a>b?1:(a<b?15:0)","difficulty":"medium","note":"Three-way compare: 1 if a>b, 15 (i.e. -1 mod 16) if a<b, 0 if equal."},
+{"name":"מרחק מעגלי","kind":"num","ins":[0,1],"src":"(a,b)=>{ const d=Math.abs(a-b); return Math.min(d,16-d); }","difficulty":"medium","note":"Distance on a 16-hour clock: the shorter of the two ways around."},
+{"name":"החצי העליון של המכפלה","kind":"num","ins":[0,1],"src":"(a,b)=>(a*b)>>4","difficulty":"medium","note":"High 4 bits of the 8-bit product a*b (floor of a*b/16)."},
+{"name":"הגבל ליד ב","kind":"num","ins":[0,1],"src":"(a,b)=>Math.min(Math.max(a,b-2),b+2)","difficulty":"medium","note":"Clamps a into the window [b-2, b+2] (window edges cut by 0..15 naturally)."},
+{"name":"מרחק האמינג","kind":"num","ins":[0,1],"src":"(a,b)=>{ let x=(a^b)&15, c=0; while(x){ c+=x&1; x>>=1; } return c; }","difficulty":"hard","note":"Counts the bit positions where a and b differ (popcount of a XOR b)."},
+{"name":"מחלק משותף גדול","kind":"num","ins":[0,1],"src":"(a,b)=>{ while(b){ const t=a%b; a=b; b=t; } return a; }","difficulty":"hard","note":"Greatest common divisor by a loop with a decision; gcd(a,0)=a and gcd(0,0)=0."},
+{"name":"חזקה מודולו 16","kind":"num","ins":[0,1],"src":"(a,b)=>{ let r=1; for(let i=0;i<b;i++) r=(r*a)&15; return r; }","difficulty":"hard","note":"a to the power b modulo 16 by repeated multiplication, with a^0=1 (also 0^0=1)."},
+{"name":"סובב ביטים שמאלה","kind":"num","ins":[0,1],"src":"(a,b)=>{ const k=b&3; return ((a<<k)|(a>>(4-k)))&15; }","difficulty":"hard","note":"Rotates the 4 bits of a left by (b mod 4) positions, wrapping the top bits around."}
+]}

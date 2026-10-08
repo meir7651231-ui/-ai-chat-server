@@ -14,12 +14,12 @@ async function ensureCond(tt){ const sh=JSON.parse(fs.readFileSync('shelf3.json'
   const v=valueBuild(gen,{name,ins:[0],out:2,ms:90000}); if(!v.prog) return null; let s=v.prog; try{ s=shorten(v.prog,gen,{minutes:1,quiet:9}).prog; }catch{} if(finalCheck(s,gen).bad) return null;
   sh.named.push({name,prog:s,ins:[0],out:2,movable:movable(s,gen),by:'נלמד: סינון נסתר'}); fs.writeFileSync('shelf3.json',JSON.stringify(sh)); G[name]={ins:[0],tt}; fs.writeFileSync('tzoref-learned-goals.json',JSON.stringify(G));
   const b={name,prog:s,ins:[0],out:2}; const q=placements(b,6000).find(z=>z.ins.join()==='4'&&z.out===2&&[...usedC(z.prog)].every(c=>c<8)); return q?{name,prog:q.prog,learned:true,len:s.length}:null; }
-export async function hiddenFilter(gen,{N=80}={}){ const direct=pipeCompose(gen); if(direct.prog) return {...direct,via:'שרשרת מהמדף'};
+export async function hiddenFilter(gen,{N=80,ms=+process.env.HFMS||300000}={}){ const DEAD=Date.now()+ms; const direct=pipeCompose(gen); if(direct.prog) return {...direct,via:'שרשרת מהמדף'};
   const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const ex=Array.from({length:N},()=>gen()); const Ls=ex.map(e=>walk(e.mem));
   const V=sh.named.filter(b=>b.prog.some(x=>x[0]==='WHERE@')&&b.prog.length<=200&&!/^(בלי|רק) /.test(b.name));
   // ערכי כל מחשב על כל רשימה-מסוננת אפשרית — מחושב לפי דרישה ונשמר
   const cache=new Map(); const val=(v,i,S)=>{ const l=Ls[i].filter(x=>S>>(x-8)&1); const k=v.name+'|'+i+'|'+l.join(','); if(cache.has(k)) return cache.get(k); const r=RUN(v.prog,relink(ex[i].mem,l)); const y=r&&!r.st.length?r.mem[2]&15:-1; cache.set(k,y); return y; };
-  for(let S=1;S<255;S++) for(const v of V){ let ok=true; for(let i=0;i<N&&ok;i++) if(val(v,i,S)!==ex[i].want) ok=false; if(!ok) continue;
+  for(let S=1;S<255;S++) for(const v of V){ if(Date.now()>DEAD) return {prog:null,timeout:true}; let ok=true; for(let i=0;i<N&&ok;i++) if(val(v,i,S)!==ex[i].want) ok=false; if(!ok) continue;
     const tt=Array.from({length:16},(_,x)=>x>=8&&!(S>>(x-8)&1)?15:0);   // 15 = להוציא
     const c=await ensureCond(tt); if(!c) continue; let p=filterFrame(c.prog,true); p=[...p,...Z,...shift(v.prog,p.length+2)];
     if(makeChecker(gen,300,600000)(p)) return {prog:p,how:`סנן: הוצא איברים ש[${c.name}] ⇒ ${v.name}`,via:c.learned?`למד תנאי חדש (${c.len} פקודות)`:'תנאי מהמדף'}; }

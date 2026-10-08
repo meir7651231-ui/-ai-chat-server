@@ -27,4 +27,4 @@ export async function solveAny(spec,{say=()=>{}}={}){ const gen=genFor(spec); co
       || await attempt('סינון+תנאי-נלמד',async()=>{ const tt=inferFromExamples(gen); if(!tt) return {prog:null}; const n=await learnCond(tt); if(!n) return {prog:null}; return filterCompose(gen); })
       || await attempt('מסגרות-החלטה',()=>ifCompose(gen)); }
   let bad=null; if(r){ bad=0; for(let k=0;k<20000;k++){ const e=gen(); const z=run(r.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) bad++; } }
-  return {ok:!!r&&bad===0,len:r?.prog?.length??null,how:r?.how||null,stage:r?.stage||null,bad,tried,ms:Date.now()-T0}; }
+  return {ok:!!r&&bad===0,prog:r&&bad===0?r.prog:null,len:r?.prog?.length??null,how:r?.how||null,stage:r?.stage||null,bad,tried,ms:Date.now()-T0}; }

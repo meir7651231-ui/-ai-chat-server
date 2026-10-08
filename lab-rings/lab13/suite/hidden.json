@@ -1,0 +1,14 @@
+{"tasks":[
+{"name":"ספירת חברי {9,12,14}","kind":"list2num","src":"l=>l.filter(x=>[9,12,14].includes(x)).length","difficulty":"easy","note":"Counts only elements belonging to an arbitrary hidden set {9,12,14}."},
+{"name":"סכום שארית 1 ב-3","kind":"list2num","src":"l=>l.filter(x=>x%3===1).reduce((a,b)=>a+b,0)&15","difficulty":"easy","note":"Sums (mod 16) only elements with x%3==1, i.e. 10 and 13."},
+{"name":"סכום בטווח 10..13","kind":"list2num","src":"l=>l.filter(x=>x>=10&&x<=13).reduce((a,b)=>a+b,0)&15","difficulty":"medium","note":"Sums (mod 16) only elements inside the hidden window 10..13."},
+{"name":"כפולות 3 פעמיים ועוד 1","kind":"list2num","src":"l=>(2*l.filter(x=>x%3===0).length+1)&15","difficulty":"medium","note":"Counts multiples of 3 (9,12,15), then applies 2*c+1."},
+{"name":"מקסימום מתוך {8,11,13}","kind":"list2num","src":"l=>{ const s=l.filter(x=>x===8||x===11||x===13); return s.length?Math.max(...s):0; }","difficulty":"medium","note":"Max over only the hidden set {8,11,13}, 0 when none present."},
+{"name":"מינימום מתוך {11,12,14}","kind":"list2num","src":"l=>{ const s=l.filter(x=>x===11||x===12||x===14); return s.length?Math.min(...s):0; }","difficulty":"medium","note":"Min over only the hidden set {11,12,14}, 0 when none present."},
+{"name":"סכום עם ביט 1 דלוק","kind":"list2num","src":"l=>l.filter(x=>(x>>1)&1).reduce((a,b)=>a+b,0)&15","difficulty":"hard","note":"Sums (mod 16) only elements whose bit 1 is set (10,11,14,15), a bitwise hidden filter."},
+{"name":"XOR של {9,10,13}","kind":"list2num","src":"l=>l.filter(x=>[9,10,13].includes(x)).reduce((a,b)=>a^b,0)","difficulty":"medium","note":"XOR-folds only the elements in the hidden set {9,10,13}."},
+{"name":"שלוש פעמים ספירת קצוות","kind":"list2num","src":"l=>3*l.filter(x=>x===8||x===15).length","difficulty":"easy","note":"Counts the extreme values 8 and 15 only and multiplies the count by 3."},
+{"name":"סכום שארית 1 ב-4 ועוד 1","kind":"list2num","src":"l=>(l.filter(x=>x%4===1).reduce((a,b)=>a+b,0)+1)&15","difficulty":"medium","note":"Sums elements with x%4==1 (9,13), adds 1, reduces mod 16."},
+{"name":"הראשון שמתחלק ב-5","kind":"list2num","src":"l=>{ for(const x of l){ if(x%5===0) return x; } return 0; }","difficulty":"medium","note":"Returns the first element in list order divisible by 5 (10 or 15), else 0."},
+{"name":"הפרש ספירות שתי קבוצות","kind":"list2num","src":"l=>{ let c=0; for(const x of l){ if(x===9||x===11||x===12) c++; else if(x===13||x===14) c--; } return ((c%16)+16)%16; }","difficulty":"hard","note":"Count of {9,11,12} minus count of {13,14}, mod 16 (two hidden sets with opposite signs)."}
+]}

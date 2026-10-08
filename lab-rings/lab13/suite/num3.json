@@ -1,0 +1,14 @@
+{"tasks":[
+ {"name":"חציון של שלושה","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>a+b+c-Math.max(a,b,c)-Math.min(a,b,c)","difficulty":"medium","note":"Median of three: needs max and min (or a sorting network) and elimination."},
+ {"name":"טווח של שלושה","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>Math.max(a,b,c)-Math.min(a,b,c)","difficulty":"medium","note":"Range of three numbers: max of three minus min of three."},
+ {"name":"האם ג בין א ל-ב","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>(c>=Math.min(a,b)&&c<=Math.max(a,b))?15:0","difficulty":"medium","note":"Inclusive betweenness test where the bounds a,b may come in either order (15=true, 0=false)."},
+ {"name":"סכום משוקלל 1-2-3","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>(a+2*b+3*c)&15","difficulty":"easy","note":"Weighted sum a+2b+3c reduced mod 16, testing repeated addition with wraparound."},
+ {"name":"אם א גדול מ-ב אז ג אחרת ב","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>a>b?c:b","difficulty":"easy","note":"Conditional selection driven by a strict comparison of the first two inputs."},
+ {"name":"רוב אי-זוגיים","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>((a&1)+(b&1)+(c&1))>=2?15:0","difficulty":"medium","note":"Majority vote over the parity bits of three numbers (15 if at least two are odd)."},
+ {"name":"הקרוב ל-א מבין ב ו-ג","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>Math.abs(b-a)<=Math.abs(c-a)?b:c","difficulty":"hard","note":"Two absolute differences, a comparison, then selection (ties go to b)."},
+ {"name":"סכום או גלישה","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>a+b>15?c:a+b","difficulty":"hard","note":"Detect carry-out of a 4-bit addition and return c on overflow, else the sum."},
+ {"name":"מיקום הגדול","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>a>=b&&a>=c?0:(b>=c?1:2)","difficulty":"hard","note":"Argmax of three: return the position (0,1,2) of the largest value, earliest on ties."},
+ {"name":"ספירת ביטים","kind":"num","ins":[0],"src":"a=>(a&1)+((a>>1)&1)+((a>>2)&1)+((a>>3)&1)","difficulty":"medium","note":"Popcount of a 4-bit number: extract each bit and add them."},
+ {"name":"קוד גריי","kind":"num","ins":[0],"src":"a=>a^(a>>1)","difficulty":"easy","note":"Gray code: XOR a number with itself shifted right by one."},
+ {"name":"היפוך ביטים","kind":"num","ins":[0],"src":"a=>((a&1)<<3)|((a&2)<<1)|((a&4)>>1)|((a&8)>>3)","difficulty":"hard","note":"Reverse the order of the four bits, needing both left and right bit moves."}
+]}

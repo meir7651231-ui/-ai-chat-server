@@ -1,0 +1,14 @@
+{"tasks":[
+{"name":"מיון עולה","kind":"list2list","src":"l=>[...l].sort((a,b)=>a-b)","difficulty":"easy","note":"Sorts the list in ascending order."},
+{"name":"היפוך","kind":"list2list","src":"l=>[...l].reverse()","difficulty":"easy","note":"Reverses the order of the list."},
+{"name":"בלי שני הראשונים","kind":"list2list","src":"l=>l.slice(2)","difficulty":"easy","note":"Drops the first two elements by position (empty if fewer than three)."},
+{"name":"רק מעל 11","kind":"list2list","src":"l=>l.filter(x=>x>11)","difficulty":"easy","note":"Keeps elements greater than 11 (i.e. 12..15) in original order."},
+{"name":"שלושת הקטנים","kind":"list2list","src":"l=>[...l].sort((a,b)=>a-b).slice(0,3)","difficulty":"medium","note":"Sorts ascending and keeps the first three (the three smallest)."},
+{"name":"אי-זוגיים מהגדול","kind":"list2list","src":"l=>l.filter(x=>x%2===1).sort((a,b)=>b-a)","difficulty":"medium","note":"Keeps odd elements and sorts them in descending order."},
+{"name":"האמצע הפוך","kind":"list2list","src":"l=>l.slice(1,-1).reverse()","difficulty":"medium","note":"Drops the first and last elements and reverses what remains."},
+{"name":"רק 9, 12, 14","kind":"list2list","src":"l=>l.filter(x=>x===9||x===12||x===14)","difficulty":"medium","note":"Keeps only members of the fixed set {9,12,14}, preserving order."},
+{"name":"זוגיים קודם","kind":"list2list","src":"l=>[...l.filter(x=>x%2===0),...l.filter(x=>x%2===1)]","difficulty":"medium","note":"Stable partition: even elements first, then odd ones, each in original order."},
+{"name":"בלי שני הקטנים, מהגדול","kind":"list2list","src":"l=>[...l].sort((a,b)=>a-b).slice(2).reverse()","difficulty":"hard","note":"Three steps: sort ascending, drop the two smallest, then reverse."},
+{"name":"גדולים מהראשון","kind":"list2list","src":"l=>l.filter(x=>x>l[0])","difficulty":"hard","note":"Keeps elements greater than the first element (the comparison value comes from the list itself)."},
+{"name":"זוגיים עד האי-זוגי","kind":"list2list","src":"l=>{ const r=[]; for(const x of l){ if(x%2===1) break; r.push(x); } return r; }","difficulty":"hard","note":"Take-while loop: keeps the leading run of even elements, stopping at the first odd one."}
+]}

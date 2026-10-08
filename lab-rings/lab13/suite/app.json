@@ -1,0 +1,104 @@
+{
+ "tasks": [
+  {
+   "name": "קנייה אם יש מספיק כסף",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(bal,price)=>price<=bal?bal-price:bal",
+   "difficulty": "medium",
+   "note": "Conditional subtraction: new balance after a purchase only if affordable, else unchanged."
+  },
+  {
+   "name": "משלוח חינם מעל 10",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(total,fee)=>total>=10?0:fee",
+   "difficulty": "easy",
+   "note": "Threshold test on one input selecting between zero and the other input."
+  },
+  {
+   "name": "יום סוף שבוע?",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "d=>d%7>=5?15:0",
+   "difficulty": "medium",
+   "note": "Modulo-7 day-of-week then a range test: flag 15 when day counter d falls on days 5-6 of the week."
+  },
+  {
+   "name": "קנס איחור",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(due,ret,fee)=>ret>due?Math.min(15,(ret-due)*fee):0",
+   "difficulty": "hard",
+   "note": "Compare, subtract, multiply and saturate: days late times daily fee, capped at 15."
+  },
+  {
+   "name": "מיקום ההצעה הגבוהה",
+   "kind": "list2num",
+   "src": "l=>l.length?l.indexOf(Math.max(...l)):15",
+   "difficulty": "medium",
+   "note": "0-based position of the largest element, with 15 as the not-found sentinel for an empty list."
+  },
+  {
+   "name": "יש שני מספרים עוקבים?",
+   "kind": "list2num",
+   "src": "l=>l.some(x=>l.includes(x+1))?15:0",
+   "difficulty": "hard",
+   "note": "Pairwise search: flag 15 if any two values in the list differ by exactly 1, regardless of position."
+  },
+  {
+   "name": "האחרון מתחת ל-12",
+   "kind": "list2num",
+   "src": "l=>{ for(let i=l.length-1;i>=0;i--){ if(l[i]<12) return l[i]; } return 0; }",
+   "difficulty": "medium",
+   "note": "Backward scan returning the last element below 12, or 0 if none."
+  },
+  {
+   "name": "ממוצע ציונים",
+   "kind": "list2num",
+   "src": "l=>l.length?Math.floor(l.reduce((a,b)=>a+b,0)/l.length):0",
+   "difficulty": "hard",
+   "note": "Sum, count and integer division: the floor of the mean, 0 for an empty list."
+  },
+  {
+   "name": "שלושת האחרונים, החדש ראשון",
+   "kind": "list2list",
+   "src": "l=>l.slice(-3).reverse()",
+   "difficulty": "easy",
+   "note": "Recent-items view: the last three elements, most recent first."
+  },
+  {
+   "name": "קניות לפי הסדר עד תקציב 30",
+   "kind": "list2list",
+   "src": "l=>{ let s=0; const r=[]; for(const x of l){ if(s+x>30) break; s+=x; r.push(x); } return r; }",
+   "difficulty": "hard",
+   "note": "Loop with a running total: keep the longest prefix whose sum stays within a budget of 30."
+  },
+  {
+   "name": "טבלת מובילים: שלושה ראשונים",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>b-a).slice(0,3)",
+   "difficulty": "medium",
+   "note": "Leaderboard view: the three largest values, highest first (fewer if the list is short)."
+  },
+  {
+   "name": "ירידות מחיר",
+   "kind": "list2list",
+   "src": "l=>l.filter((x,i)=>i>0&&x<l[i-1])",
+   "difficulty": "medium",
+   "note": "Neighbor comparison: keep each element that is smaller than the one right before it."
+  }
+ ]
+}
