@@ -10,7 +10,7 @@ function assemble(parts){ const out=[], lab={}, fix=[]; for(const x of parts){ i
 const T=(c)=>[['WHERE',c],['GO'],['TAKE']], P=(c)=>[['WHERE',c],['GO'],['PUT']];
 const PUSH15=[...T(4),['TAKE'],['CALC'],['TAKE'],['CALC']];   // NAND(NAND(x,x),x)=15 — «תמיד»
 // save: תאים שהתנאי נוגע בהם ושהמסגרת צריכה (0,1 = ראש-הרשימה, 3 = המצביע, 4 = האיבר) — נשמרים במחסנית סביב התנאי
-export const condSave=p=>[0,1,3,4].filter(c=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1])).has(c));
+export const condSave=p=>{ const any=p.some(x=>x[0]==='WHERE@'); const u=new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1])); return [0,1,3,4,8,9,10,11,12,13,14,15].filter(c=>any||u.has(c)); };   // גם תאי-הרשימה, אם התנאי נוגע בהם
 export function filterFrame(cond,remove,save=condSave(cond)){ const pre=save.flatMap(c=>T(c)), post=[...save].reverse().flatMap(c=>P(c)); return assemble([
   ...T(4),['TAKE'],['CALC'],['TAKE'],['CALC'],['SHR'],['SHR'],['SHR'],...P(3),   // תא3 ⇐ 1 (החוליה של ראש-הרשימה)
   'LOOP', ...T(3),['WHERE@'],['GO'],['TAKE'],...P(4),   // x ⇐ mem[p]

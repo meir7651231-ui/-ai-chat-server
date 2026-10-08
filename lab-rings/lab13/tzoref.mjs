@@ -212,7 +212,8 @@ export function shorten(p0,gen,{minutes=10,window=24,quiet=2,tag=''}={}){
   if(!(fresh(best)&&hard(best))) throw new Error('נקודת ההתחלה לא עוברת את הבודק');
   if(process.env.NOTRICKS!=='1'){ const t=TR.applyTricks(best,(q)=>ok(q)&&fresh(q)); if(t.used&&t.prog.length<best.length&&hard(t.prog)){ say(`  ✓ מחברת-הטריקים (${t.used}): ${best.length} → ${t.prog.length}`); best=t.prog; } }
   // «נייד»: קוד שעובד רק כשיש בדיוק 3 פקודות לפניו (כמו בבודק) — אסור; חייב לעבוד גם במקום אחר בתוכנית גדולה
-  const posOk=(p)=>{ if(process.env.NOPOS) return true; for(let t=0;t<60;t++){ const e=gen(); const n=10+2*(t%5); const P=[]; for(let i=0;i<n;i++) P.push(i%2?['GO']:['WHERE',0]); const q=[...P,...p.map(x=>x[2]==='code'?['WHERE',x[1]+n,'code']:x)]; const r=runSlow(q,e.mem,{maxSteps:300000}); if(!r||r.st.length||!e.ok(r.mem)) return false; } return true; };
+  // ריפוד «ממולכד»: דוחף זבל ומזיז מצביעים — קפיצה לשורה קבועה שלא סומנה ככתובת-קוד תנחת בתוכו ותיתפס (jumpfix.mjs)
+  const posOk=(p)=>{ if(process.env.NOPOS) return true; for(let t=0;t<60;t++){ const e=gen(); const k=3+(t%5); const P=[]; for(let i=0;i<k;i++) P.push(['WHERE',(t*7+i*5)%16],['GO'],['TAKE']); P.push(['WHERE',(t*3)%16],['GO']); const n=P.length; const q=[...P,...p.map(x=>x[2]==='code'?['WHERE',x[1]+n,'code']:x)]; const r=runSlow(q,e.mem,{maxSteps:300000}); if(!r||r.st.length!==k||!e.ok(r.mem)) return false; } return true; };
   const accept=(p,why)=>{ if(p.length<best.length&&fresh(p)&&hard(p)&&posOk(p)){ try{ TR.record(best,p,tag||why); }catch{} say(`  ✓ ${why}: ${best.length} → ${p.length}  (${((clock()-T0)/60000).toFixed(1)} דק')`); best=p; if(firstWinAt==null) firstWinAt=tries; return true; } return false; };
   // זוג שינויים, בסדר שהלומד מציע; כל ניסיון נרשם ללמידה
   function pairs(a,b){ const firsts=[]; const sigs=new Set();
