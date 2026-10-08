@@ -1,5 +1,5 @@
 // «שרשרת»: 0–2 כלים שמשנים רשימה (סנן, מיין, הפוך, בלי הראשון…) ⇒ כלי אחד שמחשב מספר מהרשימה. הכל מהמדף, המכונה בוחרת.
-import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker } from './tzoref.mjs'; import { listGen } from './listcomp.mjs';
+import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck } from './tzoref.mjs'; import { listGen } from './listcomp.mjs';
 const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x); const Z=[['WHERE',0],['GO']]; const PAD=[...Z,...Z,...Z,...Z,...Z];
 const RUN=(p,m)=>run(p,m,{maxSteps:600000}); const J=x=>JSON.stringify(x);
@@ -14,7 +14,8 @@ export function pipeCompose(gen,{N=150,maxPre=2}={}){ const sh=JSON.parse(fs.rea
   let pres=[[]]; for(let k=1;k<=maxPre;k++) pres=[...pres,...pres.filter(s=>s.length===k-1).flatMap(s=>L.map(b=>[...s,b]))];
   const best=[]; for(const pre of pres){ const P=seq(pre); const mems=ex.map(e=>{ const r=pre.length?RUN(P,e.mem):{mem:e.mem.slice()}; return r&&r.mem; }); if(mems.some(m=>!m)) continue;
     for(const v of V){ let ok=true; for(let i=0;i<N;i++){ const r=RUN(v.prog,mems[i]); if(!r||r.st.length||(r.mem[2]&15)!==ex[i].want){ ok=false; break; } } if(!ok) continue;
-      const p=seq([...pre,v]); if(chk(p)) best.push({prog:p,how:[...pre.map(b=>b.name),v.name].join(' ⇒ ')}); } if(best.length) break; }
+      const p=seq([...pre,v]); if(chk(p)&&!finalCheck(p,gen,5000).bad) best.push({prog:p,how:[...pre.map(b=>b.name),v.name].join(' ⇒ ')}); } if(best.length) break; }
+  if(process.env.PDBG) console.log("משנים:",L.map(b=>b.name).join(" | "));
   best.sort((a,b)=>a.prog.length-b.prog.length); return best[0]?{...best[0],nL:L.length,nV:V.length}:{prog:null,nL:L.length,nV:V.length}; }
 if((process.argv[1]||'').endsWith('pipeline.mjs')){ const sum=l=>l.reduce((a,b)=>a+b,0);
   const TASKS=[['סכום האי-זוגיים',l=>sum(l.filter(x=>x%2))],['כמה זוגיים גדולים מ-12',l=>l.filter(x=>x%2===0&&x>12).length],['הקטן מבין הגדולים מ-12',l=>{ const q=l.filter(x=>x>12); return q.length?Math.min(...q):0; }],
