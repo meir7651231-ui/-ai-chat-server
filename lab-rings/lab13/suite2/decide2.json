@@ -1,0 +1,88 @@
+{
+ "tasks": [
+  {
+   "name": "קצץ את הצד הכבד",
+   "kind": "list2list",
+   "difficulty": "medium",
+   "src": "l=>{ if(!l.length) return []; const s=l.reduce((a,b)=>a+b,0), t=2*s>23*l.length?Math.max(...l):Math.min(...l); return l.filter(x=>x!==t); }",
+   "note": "If/else on the average (sum vs 11.5 times the length): when the average is above 11.5 it drops the maximum, otherwise it drops the minimum."
+  },
+  {
+   "name": "מעל החציון",
+   "kind": "list2list",
+   "difficulty": "medium",
+   "src": "l=>{ const s=[...l].sort((a,b)=>a-b), n=s.length; if(!n) return []; const m=n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2; return l.filter(x=>x>m); }",
+   "note": "Statistic filter: keeps the elements strictly above the median (mean of the two middle values for even length), in original order."
+  },
+  {
+   "name": "בלי הגבוה והנמוך",
+   "kind": "list2list",
+   "difficulty": "easy",
+   "src": "l=>{ if(!l.length) return []; const M=Math.max(...l), m=Math.min(...l); return l.filter(x=>x!==M&&x!==m); }",
+   "note": "Judges' trimmed scores: removes both the maximum and the minimum, keeping the rest in order (lists of length 2 or less become empty)."
+  },
+  {
+   "name": "בין הראשון לאחרון",
+   "kind": "list2list",
+   "difficulty": "medium",
+   "src": "l=>{ if(l.length<2) return []; const a=Math.min(l[0],l[l.length-1]), b=Math.max(l[0],l[l.length-1]); return l.filter(x=>x>a&&x<b); }",
+   "note": "Range filter from the list's own endpoints: keeps elements whose value lies strictly between the first and last values, whichever is larger."
+  },
+  {
+   "name": "זוגיות מתחלפת",
+   "kind": "list2list",
+   "difficulty": "medium",
+   "src": "l=>{ const r=[]; for(const x of l){ if(r.length&&x%2===r[r.length-1]%2) break; r.push(x); } return r; }",
+   "note": "Take-while on a neighbor relation: keeps the leading run whose parity alternates, stopping at the first element with the same parity as the one before it."
+  },
+  {
+   "name": "קרובים לממוצע",
+   "kind": "list2list",
+   "difficulty": "medium",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); return l.filter(x=>Math.abs(2*n*x-2*s)<=3*n); }",
+   "note": "Outlier removal against a statistic: keeps the elements within 1.5 of the list average (computed exactly from the sum), in original order."
+  },
+  {
+   "name": "שיאים מקומיים",
+   "kind": "list2list",
+   "difficulty": "medium",
+   "src": "l=>l.filter((x,i)=>(i===0||x>l[i-1])&&(i===l.length-1||x>l[i+1]))",
+   "note": "Two-sided neighbor filter: keeps each element larger than both its neighbors (an end element only needs to beat its single neighbor)."
+  },
+  {
+   "name": "אריזה לתיק עד 40",
+   "kind": "list2list",
+   "difficulty": "medium",
+   "src": "l=>{ let s=0; const r=[]; for(const x of l){ if(s+x<=40){ s+=x; r.push(x); } } return r; }",
+   "note": "Greedy packing with skipping: goes in order and adds each item that still fits a capacity of 40, skipping (not stopping at) items that do not fit."
+  },
+  {
+   "name": "מהשיא עד השפל",
+   "kind": "list2list",
+   "difficulty": "hard",
+   "src": "l=>{ if(!l.length) return []; const i=l.indexOf(Math.max(...l)), j=l.indexOf(Math.min(...l)); return l.slice(Math.min(i,j),Math.max(i,j)+1); }",
+   "note": "Positional slice chosen by statistics: keeps the contiguous stretch between the positions of the maximum and the minimum, both included."
+  },
+  {
+   "name": "החצי הכבד",
+   "kind": "list2list",
+   "difficulty": "hard",
+   "src": "l=>{ const h=Math.floor(l.length/2), A=l.slice(0,h), B=l.slice(l.length-h), S=a=>a.reduce((p,q)=>p+q,0); return S(A)>=S(B)?A:B; }",
+   "note": "Decision between two halves: compares the sums of the first and last floor(n/2) elements (the middle one is ignored) and keeps the heavier half, the first half on a tie."
+  },
+  {
+   "name": "מגמת הפתיחה",
+   "kind": "list2list",
+   "difficulty": "hard",
+   "src": "l=>{ if(l.length<2) return [...l]; const up=l[1]>l[0], r=[l[0],l[1]]; for(let i=2;i<l.length;i++){ if(up?l[i]>l[i-1]:l[i]<l[i-1]) r.push(l[i]); else break; } return r; }",
+   "note": "Direction decided by the data: the first step sets rising or falling, then keeps the longest prefix that continues in that same direction."
+  },
+  {
+   "name": "רצף איכות בממוצע 12",
+   "kind": "list2list",
+   "difficulty": "hard",
+   "src": "l=>{ if(!l.length) return []; let s=l[0]; const r=[l[0]]; for(let i=1;i<l.length;i++){ if(s+l[i]<12*(r.length+1)) break; s+=l[i]; r.push(l[i]); } return r; }",
+   "note": "Take-while on a running statistic: always keeps the first element, then extends the prefix while the average of the kept elements stays at least 12 (running sum vs 12 times the count)."
+  }
+ ]
+}

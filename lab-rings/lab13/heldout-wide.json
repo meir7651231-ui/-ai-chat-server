@@ -1,0 +1,12 @@
+{"tasks":[
+{"name":"סכום לפחות 40?","kind":"list2num","src":"l=>l.reduce((a,b)=>a+b,0)>=40?15:0","difficulty":"medium","note":"Threshold on a total above 15: flag 15 if the sum of the list is at least 40."},
+{"name":"קח כל עוד הסכום הרץ עד 25","kind":"list2list","src":"l=>{ let s=0; const r=[]; for(const x of l){ if(s+x>25) break; s+=x; r.push(x); } return r; }","difficulty":"hard","note":"Longest prefix whose running sum stays within 25."},
+{"name":"שליש הסכום","kind":"list2num","src":"l=>Math.floor(l.reduce((a,b)=>a+b,0)/3)","difficulty":"hard","note":"Integer division of a total above 15 by a constant (answer mod 16 as usual)."},
+{"name":"כמה פריטים עד שהסכום עובר 20","kind":"list2num","src":"l=>{ let s=0,c=0; for(const x of l){ c++; s+=x; if(s>20) break; } return c; }","difficulty":"medium","note":"Count items up to and including the one whose running sum passes 20 (all items if it never passes)."},
+{"name":"קנייה חמדנית בתקציב 40","kind":"list2list","src":"l=>{ let s=0; const r=[]; for(const x of l){ if(s+x<=40){ s+=x; r.push(x); } } return r; }","difficulty":"hard","note":"Greedy: keep each item that still fits a budget of 40, skip the ones that do not, continue."},
+{"name":"כמה נשאר מתקציב 50 בקנייה לפי הסדר","kind":"list2num","src":"l=>{ let s=50; for(const x of l){ if(x>s) break; s-=x; } return s; }","difficulty":"hard","note":"Budget left after buying in order until an item does not fit (mod 16 as usual)."},
+{"name":"ממוצע לפחות 12?","kind":"list2num","src":"l=>l.length&&Math.floor(l.reduce((a,b)=>a+b,0)/l.length)>=12?15:0","difficulty":"hard","note":"Flag 15 when the floor of the mean is at least 12 (0 for an empty list)."},
+{"name":"הוצא מההתחלה כל עוד הסכום הרץ עד 20","kind":"list2list","src":"l=>{ let s=0,i=0; while(i<l.length&&s+l[i]<=20){ s+=l[i]; i++; } return l.slice(i); }","difficulty":"hard","note":"Drop the longest prefix whose running sum stays within 20, keep the rest."},
+{"name":"הסכום חלקי 16","kind":"list2num","src":"l=>Math.floor(l.reduce((a,b)=>a+b,0)/16)","difficulty":"medium","note":"High nibble of a total that can reach 92."},
+{"name":"כמה נכנסים כשכל פריט עולה x-8, תקציב 10","kind":"list2num","src":"l=>{ let s=0,c=0; for(const x of l){ if(s+(x-8)>10) break; s+=x-8; c++; } return c; }","difficulty":"hard","note":"Running total of a per-item cost (x-8) against a budget of 10: how many items fit in order."}
+]}

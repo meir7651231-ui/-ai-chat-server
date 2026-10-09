@@ -1,0 +1,14 @@
+{"tasks":[
+{"name":"טווח המחירים","kind":"list2num","src":"l=>l.length?Math.max(...l)-Math.min(...l):0","difficulty":"easy","note":"Price spread: largest minus smallest element; 0 for the empty list."},
+{"name":"מדליית ארד","kind":"list2num","src":"l=>l.length<3?0:[...l].sort((a,b)=>b-a)[2]","difficulty":"medium","note":"Third largest value (bronze medal); 0 when the list has fewer than 3 elements."},
+{"name":"איבר בשני שלישים","kind":"list2num","src":"l=>l.length?l[Math.floor(2*l.length/3)]:0","difficulty":"medium","note":"Element at original index floor(2n/3), the two-thirds position computed from the length; 0 for an empty list."},
+{"name":"אמצע ההפוך","kind":"list2num","src":"l=>{ if(!l.length) return 0; const r=[...l].reverse(); return r[r.length>>1]; }","difficulty":"medium","note":"Middle element of the reversed list (index floor(n/2) after reversing, i.e. the lower-middle of the original); 0 if empty."},
+{"name":"רבעון עליון","kind":"list2num","src":"l=>{ if(!l.length) return 0; const s=[...l].sort((a,b)=>a-b); return s[(3*(s.length-1))>>2]; }","difficulty":"hard","note":"Upper quartile: sorted ascending, take index floor(3*(n-1)/4); 0 for an empty list."},
+{"name":"המרחק בין הקצוות","kind":"list2num","src":"l=>l.length?Math.abs(l[l.length-1]-l[0]):0","difficulty":"easy","note":"Absolute difference between the last and the first element; 0 for empty or single-element lists."},
+{"name":"ראשון מעל 11","kind":"list2num","src":"l=>{ const i=l.findIndex(x=>x>11); return i<0?15:i; }","difficulty":"easy","note":"0-based index of the first element greater than 11; 15 when there is none (including empty)."},
+{"name":"מרחק מקסימום ממינימום","kind":"list2num","src":"l=>l.length?Math.abs(l.indexOf(Math.max(...l))-l.indexOf(Math.min(...l))):0","difficulty":"medium","note":"Distance between the positions of the max and the min (absolute index difference); 0 if empty."},
+{"name":"גדולים מהאחרון","kind":"list2num","src":"l=>l.length?l.filter(x=>x>l[l.length-1]).length:0","difficulty":"easy","note":"Counts elements larger than the last element; 0 for an empty list."},
+{"name":"קטנים מהראשון","kind":"list2num","src":"l=>l.length?l.slice(1).filter(x=>x<l[0]).length:0","difficulty":"medium","note":"Number of inversions with the first element: later elements smaller than l[0]; 0 if empty."},
+{"name":"מספר היפוכים","kind":"list2num","src":"l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) if(l[i]>l[j]) c++; return Math.min(c,15); }","difficulty":"hard","note":"Total number of inverted pairs (i<j with l[i]>l[j]), capped at 15 since it can reach 28."},
+{"name":"פער המנצח","kind":"list2num","src":"l=>{ if(l.length<2) return 0; const s=[...l].sort((a,b)=>b-a); return s[0]-s[1]; }","difficulty":"medium","note":"Winning margin: largest minus second largest value; 0 when fewer than 2 elements."}
+]}

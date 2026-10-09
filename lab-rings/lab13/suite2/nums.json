@@ -1,0 +1,14 @@
+{"tasks":[
+{"name":"כל קפה רביעי חינם","kind":"num","ins":[0,1],"src":"(n,p)=>n%4===3?0:p","difficulty":"easy","note":"Loyalty card: the price p is charged unless n (coffees already bought) is 3 mod 4, when this one is free."},
+{"name":"קנה k קבל אחד חינם","kind":"num","ins":[0,1],"src":"(q,k)=>q-Math.floor(q/(k+1))","difficulty":"medium","note":"Buy-k-get-1-free: of q items, every (k+1)-th is free; returns how many are paid (k=0 makes all free)."},
+{"name":"מחיר ליחידה לפי כמות","kind":"num","ins":[0,1],"src":"(q,p)=>Math.max(0,p-(q>=10?2:q>=5?1:0))","difficulty":"medium","note":"Volume pricing tiers: base unit price p drops by 1 from 5 items and by 2 from 10 items, never below 0."},
+{"name":"אבן נייר ומספריים","kind":"num","ins":[0,1],"src":"(a,b)=>(a%3-b%3+3)%3","difficulty":"medium","note":"Rock-paper-scissors on moves a%3 and b%3: 0 draw, 1 first player wins, 2 second player wins."},
+{"name":"שעון 12 שעות","kind":"num","ins":[0,3],"src":"(h,d)=>((h+d+11)%12)+1","difficulty":"medium","note":"12-hour clock display: hour h plus d hours shown as 1..12 (hour 0 or 12 displays as 12)."},
+{"name":"חצי מחיר עד תקרה","kind":"num","ins":[1,3],"src":"(p,c)=>p-Math.min(p>>1,c)","difficulty":"medium","note":"50% off (rounded down) but the discount is capped at c: price minus min(floor(p/2), c)."},
+{"name":"בתוך המשמרת?","kind":"num","ins":[0,1,3],"src":"(t,s,len)=>((t-s)&15)<len?15:0","difficulty":"hard","note":"Wraparound time window on a 16-hour clock: flag 15 if time t lies in the len hours starting at s."},
+{"name":"הקרוב ל-10","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>{ let best=a; for(const x of [b,c]){ const d=Math.abs(x-10), bd=Math.abs(best-10); if(d<bd||(d===bd&&x>best)) best=x; } return best; }","difficulty":"hard","note":"Picks the input closest to a fixed target 10, breaking distance ties in favour of the larger value."},
+{"name":"המחיר הנכון","kind":"num","ins":[0,1,3],"src":"(a,b,t)=>{ const okA=a<=t, okB=b<=t; if(okA&&okB) return a>=b?1:2; return okA?1:(okB?2:0); }","difficulty":"hard","note":"Price-is-right winner: the bid closest to price t without going over (1 or 2, first bidder wins ties, 0 if both over)."},
+{"name":"ממוצע שני הטובים","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>(a+b+c-Math.min(a,b,c))>>1","difficulty":"medium","note":"Score rule: drop the worst of three scores and return the floor average of the best two (sum may exceed 15)."},
+{"name":"חלוקת חשבון","kind":"num","ins":[0,1,3],"src":"(a,b,n)=>n?Math.min(15,Math.ceil((a+b)/n)):0","difficulty":"hard","note":"Split a two-item bill a+b among n people, rounding each share up, capped at 15; n=0 gives 0."},
+{"name":"פער המוביל","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>{ const s=[a,b,c].sort((x,y)=>y-x); return s[0]-s[1]; }","difficulty":"medium","note":"Leader's margin: the largest of three minus the second largest (0 when the top two tie)."}
+]}

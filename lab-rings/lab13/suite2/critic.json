@@ -1,0 +1,18 @@
+{"tasks":[
+{"name":"עיגול ל-5 הקרוב","kind":"num","ins":[3],"src":"a=>Math.round(a/5)*5","difficulty":"easy","note":"Rounds a price to the nearest multiple of 5 (halves round up), giving 0, 5, 10 or 15."},
+{"name":"מחיר כרטיס לפי גיל","kind":"num","ins":[1],"src":"a=>a<3?0:(a<12?5:10)","difficulty":"easy","note":"Ticket price by age bracket: under 3 free, under 12 costs 5, otherwise 10."},
+{"name":"הזמנה דורשת אישור","kind":"num","ins":[0,1],"src":"(q,p)=>q*p>20?15:0","difficulty":"easy","note":"Flags (15/0) an order whose total quantity times unit price exceeds 20, a product that can reach 225."},
+{"name":"דקות איחור","kind":"num","ins":[0,3],"src":"(arr,start)=>Math.max(0,arr-start)","difficulty":"easy","note":"Minutes late: arrival minus start time, floored at 0 when on time or early."},
+{"name":"כמה עברו את המבחן","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>(a>=10?1:0)+(b>=10?1:0)+(c>=10?1:0)","difficulty":"easy","note":"Counts how many of three exam scores reach the pass mark of 10 (0..3)."},
+{"name":"סוג המשולש","kind":"num","ins":[0,1,3],"src":"(a,b,c)=>{ if(!a||!b||!c||a+b<=c||a+c<=b||b+c<=a) return 0; if(a===b&&b===c) return 1; if(a===b||b===c||a===c) return 2; return 3; }","difficulty":"hard","note":"Triangle classifier from three side lengths: 0 invalid (needs pair sums up to 30), 1 equilateral, 2 isosceles, 3 scalene."},
+{"name":"המוצר הזול ביותר","kind":"list2num","src":"l=>l.length?Math.min(...l):0","difficulty":"easy","note":"Cheapest item: the minimum of the list; 0 for the empty list."},
+{"name":"סכום ביקורת","kind":"list2num","src":"l=>l.reduce((a,b)=>a+b,0)&15","difficulty":"easy","note":"Checksum: the total of all elements (up to 92) reduced mod 16; 0 for the empty list."},
+{"name":"הפריט השלישי","kind":"list2num","src":"l=>l.length>2?l[2]:0","difficulty":"easy","note":"Element at fixed index 2 (the third item); 0 when the list is shorter than 3."},
+{"name":"מספר עמודים","kind":"list2num","src":"l=>Math.ceil(l.length/3)","difficulty":"easy","note":"Pagination: number of pages needed to show the list at 3 items per page (0 for empty)."},
+{"name":"רווח מקסימלי ממניה","kind":"list2num","src":"l=>{ let m=0, lo=16; for(const x of l){ if(x-lo>m) m=x-lo; if(x<lo) lo=x; } return m; }","difficulty":"hard","note":"Best buy-then-sell profit: max of l[j]-l[i] over i<j, 0 if prices never rise."},
+{"name":"היפוך שלושת הראשונים","kind":"list2list","src":"l=>[...l.slice(0,3).reverse(),...l.slice(3)]","difficulty":"easy","note":"Reverses only the first three elements and keeps the rest in place."},
+{"name":"מחיקת הפריט השלישי","kind":"list2list","src":"l=>l.filter((x,i)=>i!==2)","difficulty":"easy","note":"Deletes the item at index 2 (third position) if it exists."},
+{"name":"ביטול ההוספה האחרונה","kind":"list2list","src":"l=>l.slice(0,-1)","difficulty":"easy","note":"Undo: drops the most recently added (last) item."},
+{"name":"סבב בטורניר","kind":"list2list","src":"l=>{ const r=[]; for(let i=0;i<l.length;i+=2) r.push(i+1<l.length?Math.max(l[i],l[i+1]):l[i]); return r; }","difficulty":"medium","note":"Knockout round: the larger of each adjacent pair advances, and an unpaired last element advances automatically."},
+{"name":"זוג לכרטיס מתנה 23","kind":"list2list","src":"l=>{ for(let j=1;j<l.length;j++) for(let i=0;i<j;i++) if(l[i]+l[j]===23) return [l[i],l[j]]; return []; }","difficulty":"hard","note":"Finds the first pair (by position of its second item) whose sum is exactly 23 and returns it in list order; [] if none."}
+]}

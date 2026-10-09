@@ -1,0 +1,13 @@
+{"tasks":[
+{"name": "חציון עליון", "kind": "list2num", "difficulty": "hard", "src": "l=>{ if(!l.length) return 0; const s=[...l].sort((a,b)=>a-b); return s[s.length>>1]; }", "note": "HELD-OUT (pickat). Sort, then index n>>1 (upper median); empty gives 0."},
+{"name": "השני בגודלו (ממוין)", "kind": "list2num", "difficulty": "medium", "src": "l=>{ if(l.length<2) return 0; const s=[...l].sort((a,b)=>b-a); return s[1]; }", "note": "HELD-OUT (pickat). Second largest; fewer than 2 elements gives 0."},
+{"name": "הלפני-אחרון", "kind": "list2num", "difficulty": "medium", "src": "l=>l.length<2?0:l[l.length-2]", "note": "HELD-OUT (pickat). Element before the last (unsorted); fewer than 2 gives 0."},
+{"name": "האמצעי (לא ממוין)", "kind": "list2num", "difficulty": "medium", "src": "l=>l.length?l[(l.length-1)>>1]:0", "note": "HELD-OUT (pickat). Middle element of the unsorted list (lower middle); empty gives 0."},
+{"name": "השלישי בקטנו", "kind": "list2num", "difficulty": "hard", "src": "l=>l.length<3?0:[...l].sort((a,b)=>a-b)[2]", "note": "HELD-OUT (pickat). Third smallest; fewer than 3 gives 0."},
+{"name": "רבעון תחתון", "kind": "list2num", "difficulty": "hard", "src": "l=>{ if(!l.length) return 0; const s=[...l].sort((a,b)=>a-b); return s[s.length>>2]; }", "note": "HELD-OUT (pickat). Sorted, index n>>2 (lower quartile); empty gives 0."},
+{"name": "השלישי מהסוף", "kind": "list2num", "difficulty": "medium", "src": "l=>l.length<3?0:l[l.length-3]", "note": "HELD-OUT (pickat). Third element from the end (unsorted); fewer than 3 gives 0."},
+{"name": "שני-שלישים בממוין", "kind": "list2num", "difficulty": "hard", "src": "l=>{ if(!l.length) return 0; const s=[...l].sort((a,b)=>a-b); return s[Math.floor(2*(s.length-1)/3)]; }", "note": "HELD-OUT (pickat). Sorted, index floor(2(n-1)/3); empty gives 0. Position table not a single shelf tool."},
+{"name": "הרביעי ברשימה", "kind": "list2num", "difficulty": "medium", "src": "l=>l.length<4?0:l[3]", "note": "HELD-OUT (pickat). Fourth element of the unsorted list; fewer than 4 gives 0 (k=3 is not a shelf constant)."},
+{"name": "השלישי בגודלו", "kind": "list2num", "difficulty": "hard", "src": "l=>l.length<3?0:[...l].sort((a,b)=>b-a)[2]", "note": "HELD-OUT (pickat). Third largest; fewer than 3 gives 0."},
+{"name": "חציון הזוגיים", "kind": "list2num", "difficulty": "hard", "src": "l=>{ const s=l.filter(x=>x%2===0).sort((a,b)=>a-b); return s.length?s[(s.length-1)>>1]:0; }", "note": "HELD-OUT (pickat). Lower median of the even values only (filter step + sort; k depends on the filtered length); none gives 0."}
+]}

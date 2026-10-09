@@ -1,0 +1,9 @@
+{"tasks":[
+{"name":"זוגיים ממוינים ואז אי-זוגיים ממוינים","kind":"list2list","difficulty":"hard","src":"l=>[...l].sort((a,b)=>((a&1)-(b&1))||(a-b))","note":"Held-out (keysort): sort by parity (evens first), ties ascending by value."},
+{"name":"יורד לפי שארית ב-3, שוויון לפי ערך","kind":"list2list","difficulty":"hard","src":"l=>[...l].sort((a,b)=>((b%3)-(a%3))||(a-b))","note":"Held-out (keysort): descending by x mod 3, ties ascending by value."},
+{"name":"סדר עדיפות קבוע","kind":"list2list","difficulty":"hard","src":"l=>{ const P=[13,8,15,10,9,14,11,12]; return [...l].sort((a,b)=>P.indexOf(a)-P.indexOf(b)); }","note":"Held-out (keysort): an arbitrary fixed priority order on 8..15."},
+{"name":"לפי הביט השלישי, שוויון בסדר יורד","kind":"list2list","difficulty":"hard","src":"l=>[...l].sort((a,b)=>(((a>>2)&1)-((b>>2)&1))||(b-a))","note":"Held-out (keysort): key = bit 2, ties DESCENDING by value."},
+{"name":"לפי מרחק מ-11, שוויון לפי ערך","kind":"list2list","difficulty":"hard","src":"l=>[...l].sort((a,b)=>(Math.abs(a-11)-Math.abs(b-11))||(a-b))","note":"Held-out (keysort): key = |x-11|, ties ascending."},
+{"name":"מיון יציב לפי שני הביטים התחתונים","kind":"list2list","difficulty":"hard","src":"l=>[...l].sort((a,b)=>(a&3)-(b&3))","note":"Held-out (keysort): stable sort by x mod 4 — ties keep the ORIGINAL input order (not a total order on values)."},
+{"name":"אי-זוגיים קודם, שוויון בסדר הפוך מהמקור","kind":"list2list","difficulty":"hard","src":"l=>{ const o=l.filter(x=>x%2===1), e=l.filter(x=>x%2===0); return [...o.reverse(),...e.reverse()]; }","note":"Held-out (keysort): odds first, each group in REVERSED input order (anti-stable ties)."}
+]}
