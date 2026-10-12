@@ -8,7 +8,7 @@
 // המכונה בוחרת הכל מהדוגמאות: קודם מסיקה מהדוגמאות מה קרה לכל איבר (נשאר/הוצא/נחתך), ואז מחפשת «עזר» שהתווית
 // היא פונקציה שלו ושל האיבר, וכלי מהמדף (או צירוף שבונה-הערכים מוצא) שנותן בדיוק את הטבלה הזו.
 import fs from 'fs'; import { placements, makeChecker, finalCheck } from './tzoref.mjs';
-import { valueBuild } from './tzoref-value.mjs';
+import { valueBuild } from './tzoref-value.mjs'; import { cap, lenOk } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const J=JSON.stringify;
 const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x);
@@ -89,7 +89,7 @@ const truthy=v=>v!==0;
 let KINDS=null;
 function shelfKinds(sh){ const sig=sh.named.map(b=>b.name+':'+b.prog.length).join('|'); if(KINDS&&KINDS.sig===sig) return KINDS;
   const PAD=[...Z,...Z,...Z,...Z,...Z]; const g=listGenId(); const ex=Array.from({length:80},()=>g());
-  const L=[], V=[]; for(const b of sh.named){ if(b.prog.length>300||b.bad) continue; let ok=true, okV=true, ch=0, keeps=true, setp=true;
+  const L=[], V=[]; for(const b of sh.named){ if(!lenOk(b,300)||b.bad) continue; let ok=true, okV=true, ch=0, keeps=true, setp=true;
     for(const e of ex){ const r=RUN(b.prog,e.mem); if(!r||r.st.length){ ok=false; break; } const r2=RUN([...PAD,...shift(b.prog,PAD.length)],e.mem.map((v,c)=>c>=2&&c<8?R(16):v));
       if(!r2||r2.st.length||J(walk(r2.mem))!==J(walk(r.mem))){ ok=false; break; } if((r2.mem[2]&15)!==(r.mem[2]&15)) okV=false; const a=walk(r.mem), l=walk(e.mem); if(J(a)!==J(l)) ch++;
       if([1,8,9,10,11,12,13,14,15].some(c=>r.mem[c]!==e.mem[c])) keeps=false; if(J([...a].sort())!==J([...l].sort())) setp=false; }
@@ -108,14 +108,14 @@ function tablesF(named){ const out=[]; for(const b of named){ const ins=(b.ins||
 const listGenId=()=>()=>{ const m=new Array(16).fill(0); const p=[8,9,10,11,12,13,14,15]; for(let i=7;i>0;i--){ const j=R(i+1); [p[i],p[j]]=[p[j],p[i]]; } const l=p.slice(0,R(9)); m[1]=l[0]||0; l.forEach((a,i)=>{ m[a]=l[i+1]||0; }); return {mem:m.map((v,k)=>[0,1,8,9,10,11,12,13,14,15].includes(k)?v:R(16))}; };
 export function scanCompose(gen,{N=200,ms=+process.env.CUTMS||200000,maxPre=2,useVB=!process.env.NOVB,say=()=>{}}={}){ const DEAD=Date.now()+ms; const T0=Date.now();
   const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const ex=Array.from({length:N},()=>gen()); const Ls=ex.map(e=>walk(e.mem)); const Ws=ex.map(e=>JSON.parse(e.want));
-  const {L,V,U1,B2}=shelfKinds(sh);
+  const K0=shelfKinds(sh); const L=cap(K0.L,'cut.L1'), LK=cap(K0.L,'cut.L'), V=cap(K0.V,'cut.V'), U1=cap(K0.U1,'cut.T'), B2=cap(K0.B2,'cut.T');   // סדר-תועלת + מנה לכלי-הסולם (ladder-order.mjs)
   const byName=new Map(sh.named.map(b=>[b.name,b]));
   // שיבוץ כלי-מספר לתאים: כניסות ⇒ תא 2
   const placeCache=new Map(); const place=(name,ins)=>{ const k=name+'|'+ins.join(); if(placeCache.has(k)) return placeCache.get(k); const b=byName.get(name); let q=null;
     if(b){ const P=placements(b,6000).filter(z=>z.ins.join()===ins.join()&&z.out===2); q=P.find(z=>[...usedC(z.prog)].every(c=>c<8&&!FRAMECELLS.includes(c)||ins.includes(c)))||P.find(z=>[...usedC(z.prog)].every(c=>c<8))||null; }
     placeCache.set(k,q?q.prog:null); return q?q.prog:null; };
   // רצפי «לפני»: 0..maxPre משנים. לכל רצף — הזיכרון אחרי, והרשימה שנוצרה. «אחרי»: רק משנה-סדר (אותה קבוצה)
-  let pres=[[]]; for(let k=1;k<=maxPre;k++) pres=[...pres,...pres.filter(s=>s.length===k-1).flatMap(s=>L.map(b=>[...s,b]))];
+  let pres=[[]]; for(let k=1;k<=maxPre;k++) pres=[...pres,...pres.filter(s=>s.length===k-1&&s.every(b=>LK.includes(b))).flatMap(s=>(k===1?L:LK).map(b=>[...s,b]))];   // סולם: «לפני» יחיד — מנה גדולה (cut.L1); זוג — מנה קטנה (cut.L)
   const posts=[null,...L.filter(b=>b.setp)];
   const skels=[]; const memCache=new Map();
   // הזיכרון אחרי ה«לפני» — מריצים בדיוק את הקוד שהמסגרת תריץ (כלי שתלוי במקום שלו בתוכנית — נופל כאן ולא בבודק)

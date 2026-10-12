@@ -1,18 +1,23 @@
 // «בונה-ערכים»: במקום לחפש פקודות — מחפש צירוף של חלקים לפי מה שהם נותנים (ערכים על הדוגמאות).
 // כל ערך חדש שנראה כבר (אותן תוצאות בכל הדוגמאות) — נזרק. כך מגיעים מהר לצירופים של 3–5 חלקים.
 // בסוף: הופך את הצירוף לתוכנית (שיבוץ תאים בלי לדרוס ערכים חיים), ובודק אותה בבודק הרגיל.
-import { loadShelf, placements, makeChecker } from './tzoref.mjs'; import { partTables } from './tzoref-tables.mjs'; import { dataOf } from './recipes.mjs'; import { keepOf as GM_KEEP_ } from './tzoref-goals.mjs'; const GM_KEEP=n=>GM_KEEP_(n,{}); import { run as runSlow } from './machine3s.mjs';
+import { loadShelf, placements, makeChecker } from './tzoref.mjs'; import { partTables } from './tzoref-tables.mjs'; import { dataOf } from './recipes.mjs'; import { keepOf as GM_KEEP_ } from './tzoref-goals.mjs'; const GM_KEEP=n=>GM_KEEP_(n,{}); import { run as runSlow } from './machine3s.mjs'; import { cap, isLadder } from './ladder-order.mjs';
 // טבלה לחלק עם 3 כניסות (16×16×16) — כמו partTables, רק לשלוש
 export function tables3(named){ const out=[]; for(const b of named){ const ins=(b.ins||[]).filter(c=>c<8), o=b.out??2; if(ins.length!==3||o>7||/רשימה|ספור|בלי|אמצע|וקטן/.test(b.name)) continue;
   const T=new Uint8Array(4096); let ok=true; for(let x=0;x<4096&&ok;x++){ let v=null; for(let k=0;k<2;k++){ const m=Array.from({length:16},()=>Math.floor(Math.random()*16)); m[ins[0]]=x>>8; m[ins[1]]=(x>>4)&15; m[ins[2]]=x&15; const r=runSlow(b.prog,m,{maxSteps:20000}); if(!r||r.st.length){ ok=false; break; } if(v==null) v=r.mem[o]; else if(v!==r.mem[o]){ ok=false; break; } } T[x]=v??0; }
   if(ok) out.push({name:b.name,k:3,T}); } return out; }
 let T3CACHE=null;
 export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,maxSize=5,maxBank=3000000,ms=60000,tries=60,keep=+process.env.VKEEP||3000,extra=[],ban=[]}=opts; const t0=Date.now();
+  if(ms<=0) return {prog:null,made:0,ms:0};   // תקציב-זמן אחד לכל הסבבים (סבב נוסף מקבל רק את מה שנשאר — לא 90 שנ׳ חדשות)
   const sh=loadShelf(); const blocks=new Map(sh.named.map(b=>[b.name,b]));
   const TB=partTables(sh.named.filter(b=>!b.bad&&b.name!==name)).filter(t=>t.name!=='העתק'); if(!T3CACHE) T3CACHE=tables3(sh.named.filter(b=>!b.bad)); TB.push(...T3CACHE.filter(t=>t.name!==name)); for(let i=TB.length-1;i>=0;i--) if(ban.includes(TB[i].name)) TB.splice(i,1);
+  // כפולים ומנה (ladder-order.mjs): לוח של כלי-סולם שזהה ללוח קודם — מיותר (EQ למטה עדיין מכיר את כולם לשיבוץ); ואחריהם לפי סדר-תועלת
+  { const seenT=new Set(); const keep=[]; for(const t of TB){ const k=t.k+':'+Array.from(t.T).join(','); if(isLadder(t.name)&&seenT.has(k)) continue; seenT.add(k); keep.push(t); } const c=cap(keep,'vb.TB'); TB.length=0; TB.push(...c); }
   const ex0=[...extra,...Array.from({length:N},()=>gen())]; const ex=ex0; const NN=ex.length; const want=Uint8Array.from(ex.map(e=>e.want&15)); const wkey=Buffer.from(want).toString('latin1');
   const seen=new Map(); const bySize=[]; let found=null, made=0;
-  const TGT=new Map(); const add=(vec,expr,s)=>{ const k=Buffer.from(vec).toString('latin1'); if(seen.has(k)) return; if(!found&&TGT.has(k)){ const t=TGT.get(k); found=t.k===1?{f:t.f,k:1,a:expr}:t.side?{f:t.f,k:2,a:expr,b:t.x}:{f:t.f,k:2,a:t.x,b:expr}; } if(seen.size>maxBank){ if(k===wkey) found=expr; return; }   /* מחסן מלא ⇒ רק בודקים, לא שומרים */ seen.set(k,expr); (bySize[s]||(bySize[s]=[])).push({vec,expr}); made++; if(k===wkey) found=expr; };
+  // תקרת-זיכרון: המחסן נחשב «מלא» גם כשהערימה גדלה מעבר ל-VBHEAP (ברירת-מחדל 3GB) — לא רק לפי מספר הערכים
+  const HEAPCAP=(+process.env.VBHEAP||3000)*1e6; let heapFull=false, nAdd=0;
+  const TGT=new Map(); const add=(vec,expr,s)=>{ const k=Buffer.from(vec).toString('latin1'); if(seen.has(k)) return; if(!found&&TGT.has(k)){ const t=TGT.get(k); found=t.k===1?{f:t.f,k:1,a:expr}:t.side?{f:t.f,k:2,a:expr,b:t.x}:{f:t.f,k:2,a:t.x,b:expr}; } if((++nAdd&65535)===0&&!heapFull&&process.memoryUsage().heapUsed>HEAPCAP) heapFull=true; if(seen.size>maxBank||heapFull){ if(k===wkey) found=expr; return; }   /* מחסן מלא ⇒ רק בודקים, לא שומרים */ seen.set(k,expr); (bySize[s]||(bySize[s]=[])).push({vec,expr}); made++; if(k===wkey) found=expr; };
   bySize[0]=[]; ins.forEach((c,i)=>add(Uint8Array.from(ex.map(e=>e.mem[c]&15)),{cell:c},0));
   const close=v=>{ let eq=0; const joint=new Map(); for(let e=0;e<NN;e++){ if(v[e]===want[e]) eq++; const k=v[e]*16+want[e]; joint.set(k,(joint.get(k)||0)+1); } return eq+0.5*(NN-joint.size); };   // «קרוב»: שווה לתשובה, או קובע אותה
   // «פתרון לאחור»: התשובה = F(x, ?) — לכל x שכבר נבנה, מחשבים מה חייב להיות ה-? (כשיש רק אפשרות אחת) ומחפשים אותו במחסן
@@ -45,7 +50,7 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
   if(!found) return {prog:null,made,ms:Date.now()-t0};
   { const tbl=new Map(TB.map(t=>[t.name,t])); const ev=(e,m)=>e.cell!=null?m[e.cell]&15:(e.k===1?tbl.get(e.f).T[ev(e.a,m)]:e.k===3?tbl.get(e.f).T[ev(e.a,m)*256+ev(e.b,m)*16+ev(e.c,m)]:tbl.get(e.f).T[ev(e.a,m)*16+ev(e.b,m)]);
     const bad=[]; for(let t=0;t<3000&&bad.length<16;t++){ const x=gen(); if(ev(found,x.mem)!==(x.want&15)) bad.push(x); }
-    if(bad.length&&(opts.round||0)<6) return valueBuild(gen,{...opts,round:(opts.round||0)+1,extra:[...(opts.extra||[]),...bad]}); }
+    if(bad.length&&(opts.round||0)<6){ seen.clear(); bySize.length=0; TGT.clear(); INV.clear(); return valueBuild(gen,{...opts,ms:ms-(Date.now()-t0),round:(opts.round||0)+1,extra:[...(opts.extra||[]),...bad]}); } }   // משחררים את המחסן לפני הסבב הבא (אחרת כל הסבבים חיים יחד בזיכרון)
   const EQ=new Map(); { const byT=new Map(); for(const t of [...partTables(sh.named.filter(b=>!b.bad&&b.name!==name)),...T3CACHE.filter(t=>t.name!==name)]){ const k=t.k+':'+Array.from(t.T).join(','); if(!byT.has(k)) byT.set(k,[]); byT.get(k).push(t.name); } for(const L of byT.values()) for(const n of L) EQ.set(n,L); }
   const chk=makeChecker(gen,300); const size=e=>e.cell!=null?0:1+size(e.a)+(e.b?size(e.b):0)+(e.c?size(e.c):0);
   const usedCells=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]).filter(c=>c<8));
@@ -94,7 +99,7 @@ export function valueBuild(gen,opts={}){ const {name='',ins=[0,1],out=2,N=96,max
   // לא הצלחנו להפוך לתוכנית: חוסמים את החלקים «המוברגים» שבצירוף (אין להם שיבוץ גמיש) ומחפשים צירוף אחר
   const names=[]; const walk=e=>{ if(e.cell!=null) return; names.push(e.f); walk(e.a); if(e.b) walk(e.b); if(e.c) walk(e.c); }; walk(found);
   const stuck=[...new Set(names)].filter(n=>(EQ.get(n)||[n]).every(m=>blocks.get(m)?.movable===false)); const k3=[...new Set(names)].filter(n=>T3CACHE.some(t=>t.name===n)); const ban2=[...new Set([...ban,...(stuck.length?stuck:k3.length?k3:names.slice(0,1))])];   // קודם מוברגים, אחר-כך חלקי-שלושה, ורק בסוף השורש
-  if((opts.banRound||0)<4&&Date.now()-t0<ms) return valueBuild(gen,{...opts,ban:ban2,banRound:(opts.banRound||0)+1,ms:ms-(Date.now()-t0)});
+  if((opts.banRound||0)<4&&Date.now()-t0<ms){ seen.clear(); bySize.length=0; TGT.clear(); INV.clear(); return valueBuild(gen,{...opts,ban:ban2,banRound:(opts.banRound||0)+1,ms:ms-(Date.now()-t0)}); }
   return {prog:null,expr:found,made,ms:Date.now()-t0,why:'נמצא צירוף, אבל לא הצלחתי להפוך אותו לתוכנית'}; }
 export const show=e=>e.cell!=null?'תא'+e.cell:`${e.f}(${show(e.a)}${e.b?', '+show(e.b):''}${e.c?', '+show(e.c):''})`;
 if(import.meta.url==='file://'+process.argv[1]){ const { goals, goalFor }=await import('./tzoref-goals.mjs'); const G=goals();

@@ -7,7 +7,7 @@
 // הצעדים הורסים את הרשימה ⇒ המוח המאוחד עוטף ב«שומר-רשימה» (keepList).
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck, movable } from './tzoref.mjs'; import { valueBuild } from './tzoref-value.mjs';
 import { runFastG, walk, walkA, Z, shift, relocate } from './chainsafe.mjs'; import { assemble } from './posframes.mjs'; import { stepTools, pickExamplesFor, seqProg } from './poscompose.mjs';
-import { deepRelocOk, repairJumps } from './jumpfix.mjs';   // (במעבדה החיה reloc.mjs שונה שמו ל-jumpfix.mjs — אותו תוכן)
+import { deepRelocOk, repairJumps } from './jumpfix.mjs'; import { cap } from './ladder-order.mjs';   // (במעבדה החיה reloc.mjs שונה שמו ל-jumpfix.mjs — אותו תוכן)
 const R=k=>Math.floor(Math.random()*k); const J=JSON.stringify; const PADN=14; const NMAX=8;
 const usedC=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]));
 // עזרי-מסגרת (כמו ב-posframes): T = דחוף תא, P = שים בתא, AT = לך לכתובת שבתא, GOTO = קפיצה תמיד
@@ -29,7 +29,7 @@ export function pickFrame(kTool){ return assemble([
 export function unaryTable(prog,{upto=15}={}){ const tt=[]; const q=[...Z,...shift(prog,Z.length)]; for(let v=0;v<=upto;v++){ let z=null; for(let t=0;t<4;t++){ const m=Array.from({length:16},()=>R(16)); m[0]=v; const r=run(q,m,{maxSteps:20000}); if(!r||r.st.length) return null; const y=r.mem[2]&15; if(z===null) z=y; else if(z!==y) z=-1; } tt.push(z); } return tt; }
 // כלים חד-מקומיים מהמדף (קלט תא 0 או בלי קלט, תשובה בתא 2, רק תאים 0..7, בלי «לאן מהמחסנית»); קפיצות קבועות ⇒ מועברות (relocate) או שהכלי נזרק
 function kTools(sh){ const out=[], seen=new Set(); for(const b of sh.named){ if(b.bad||(b.out??2)!==2||!['','0'].includes((b.ins||[]).join())||b.prog.length>250||b.prog.some(x=>x[0]==='WHERE@')) continue; if([...usedC(b.prog)].some(c=>c>7)) continue;
-    const prog=relocate(b.prog); if(!prog) continue; const tt=unaryTable(prog,{upto:NMAX}); if(!tt) continue; const k=tt.join(','); if(seen.has(k)) continue; seen.add(k); out.push({name:b.name,prog,tt}); } return out; }
+    const prog=relocate(b.prog); if(!prog) continue; const tt=unaryTable(prog,{upto:NMAX}); if(!tt) continue; const k=tt.join(','); if(seen.has(k)) continue; seen.add(k); out.push({name:b.name,prog,tt}); } return cap(out,'pick.K'); }
 // הדרישות על k מתוך רשימות-מצב והתשובות: eq[n] = המקום (כשהתשובה ברשימה) · ge[n] = «מעבר לסוף» (תשובה 0). סתירה ⇒ null
 export function kReq(lists,wants){ const eq=Array(NMAX+1).fill(null), ge=Array(NMAX+1).fill(false);
   for(let i=0;i<lists.length;i++){ const s=lists[i], w=wants[i], n=s.length; if(n>NMAX) return null; if(w===0){ if(n) ge[n]=true; continue; } const p=s.indexOf(w); if(p<0) return null; if(eq[n]===null) eq[n]=p; else if(eq[n]!==p) return null; }

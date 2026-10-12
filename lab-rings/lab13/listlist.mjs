@@ -1,5 +1,5 @@
 // רשימה ⇒ רשימה: משימה = רצף של כלי-רשימה שמשנים את הרשימה (הפוך, מיין, דלג על הראשון…) — הפלט של אחד הוא הקלט של הבא
-import fs from 'fs'; import { run } from './machine3.mjs'; import { makeChecker, finalCheck } from './tzoref.mjs';
+import fs from 'fs'; import { run } from './machine3.mjs'; import { makeChecker, finalCheck } from './tzoref.mjs'; import { cap, lenOk } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const LISTC=[0,1,8,9,10,11,12,13,14,15];
 const shuf=()=>{ const p=[8,9,10,11,12,13,14,15]; for(let i=7;i>0;i--){ const j=R(i+1); [p[i],p[j]]=[p[j],p[i]]; } return p; };
 const walk=m=>{ const out=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ out.push(a); a=m[a]; } return out; };
@@ -8,12 +8,16 @@ const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x); c
 export function llCompose(gen,{maxLen=3,N=120}={}){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const ex=Array.from({length:N},()=>gen());
   // כלים שמשנים רשימה: מסתיימים תמיד, ובחלק מהדוגמאות הרשימה אחרי ≠ לפני; וגם «ניידים» (עובדים אחרי ריפוד)
   const PAD=[...Z,...Z,...Z,...Z,...Z,...Z,...Z]; const T=[];
-  for(const b of sh.named){ if(b.prog.length>300) continue; let ok=true, changed=0; for(const e of ex){ const r=run(b.prog,e.mem,{maxSteps:300000}); if(!r||r.st.length){ ok=false; break; } const a=walk(r.mem); if(JSON.stringify(a)!==JSON.stringify(walk(e.mem))) changed++;
+  const STP=new Map();   // כמה צעדים לכל היותר הכלי לקח על הדוגמאות ⇒ תקציב-צעדים לצירוף
+  for(const b of sh.named){ if(!lenOk(b,300)) continue; let ok=true, changed=0, mx=0; for(const e of ex){ const r=run(b.prog,e.mem,{maxSteps:300000}); if(!r||r.st.length){ ok=false; break; } mx=Math.max(mx,r.steps); STP.set(b,mx); const a=walk(r.mem); if(JSON.stringify(a)!==JSON.stringify(walk(e.mem))) changed++;
       const r2=run([...PAD,...shift(b.prog,PAD.length)],e.mem,{maxSteps:300000}); if(!r2||JSON.stringify(walk(r2.mem))!==JSON.stringify(a)){ ok=false; break; } }
     if(ok&&changed>N/4) T.push(b); }
   const chk=makeChecker(gen,300,600000); const seq=(names)=>{ let p=[]; for(const b of names){ p=[...p,...Z]; p=[...p,...shift(b.prog,p.length)]; } return p; };
-  const okOn=p=>ex.every(e=>{ const r=run(p,e.mem,{maxSteps:600000}); return r&&!r.st.length&&e.ok(r.mem); });
-  let level=[[]]; for(let L=1;L<=maxLen;L++){ const next=[]; for(const s of level) for(const b of T){ const ns=[...s,b]; const p=seq(ns); if(okOn(p)&&chk(p)) return {prog:p,how:ns.map(x=>x.name).join(' ⇒ '),tools:T.map(x=>x.name)}; next.push(ns); } level=next; }
+  // תקציב-צעדים לצירוף: פי 4 מסכום הצעדים של חלקיו (ועוד 20,000) — צירוף שלא נגמר נעצר מהר, במקום 600,000 צעדים
+  const okOn=(p,ns)=>{ const ms=Math.min(600000,20000+4*ns.reduce((a,b)=>a+(STP.get(b)||300000),0)); return ex.every(e=>{ const r=run(p,e.mem,{maxSteps:ms}); return r&&!r.st.length&&e.ok(r.mem); }); };
+  // סדר-תועלת + מנה (ladder-order.mjs): כלי-בסיס כולם כמו קודם; כלי-סולם — כולם כצעד יחיד, ורק המנה בצירופים
+  const T1=cap(T,'ll.T1'), TK=cap(T,'ll.T'), TKS=new Set(TK);
+  let level=[[]]; for(let L=1;L<=maxLen;L++){ const next=[]; for(const s of level) for(const b of (L===1?T1:TK)){ const ns=[...s,b]; const p=seq(ns); if(okOn(p,ns)&&chk(p)) return {prog:p,how:ns.map(x=>x.name).join(' ⇒ '),tools:T.map(x=>x.name)}; if(TKS.has(b)) next.push(ns); } level=next; }
   return {prog:null,tools:T.map(x=>x.name)}; }
 if((process.argv[1]||'').endsWith('listlist.mjs')){
   const T=[

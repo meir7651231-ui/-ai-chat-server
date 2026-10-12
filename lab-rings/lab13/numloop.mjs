@@ -9,7 +9,7 @@
 //   נסיגה          c=D; r=I; חזור c: r=F(r,R)  — F מוסק מהטבלה  (חזקה, קנס, סדרה חשבונית בהפרשים, חצי עליון עם בן-לוויה)
 //   נהג+צובר       x=I; r=I'; חזור K / עד x=0: r=B(V1(r),V2(x)); x=H(x)  (היפוך ביטים)
 import fs from 'fs'; import crypto from 'crypto';
-import { run } from './machine3s.mjs'; import { makeChecker, finalCheck } from './tzoref.mjs';
+import { run } from './machine3s.mjs'; import { makeChecker, finalCheck } from './tzoref.mjs'; import { cap, isLadder } from './ladder-order.mjs';
 import { add4 } from './lifted-add.mjs'; import { shr4 } from './lifted-shr.mjs';
 
 const R=k=>Math.floor(Math.random()*k);
@@ -47,9 +47,9 @@ export function loadPrims({file='shelf3.json',cache='numloop-prims.json'}={}){ i
       if(!relocTest(bb,T)) continue; blocks.push(bb); }
     fs.writeFileSync(cache,JSON.stringify({h,blocks:blocks.map(b=>({...b,T:Array.from(b.T)}))})); }
   // אותו לוח — רק הקצרה
-  const byT=new Map(); for(const b of blocks){ const kk=b.k+':'+key(b.T); const o=byT.get(kk); if(!o||b.len<o.len) byT.set(kk,b); }
+  const byT=new Map(); for(const b of blocks){ const kk=b.k+':'+key(b.T); const o=byT.get(kk); if(!o||(isLadder(o.name)&&!isLadder(b.name))||(isLadder(o.name)===isLadder(b.name)&&b.len<o.len)) byT.set(kk,b); }   // כפול: נציג מהמדף הבסיסי קודם, אחר-כך הקצר
   const bas=basicPrims(); const bk=new Set(bas.map(p=>p.k+':'+key(p.T)));
-  PR=[...bas,...[...byT.values()].filter(b=>!bk.has(b.k+':'+key(b.T))).sort((a,b)=>a.len-b.len)];
+  PR=[...bas,...cap([...byT.values()].filter(b=>!bk.has(b.k+':'+key(b.T))).sort((a,b)=>a.len-b.len),'loop.PR')];   // כלי-סולם: אחרי הבסיס, לפי סדר-תועלת, עד המנה (ladder-order.mjs)
   PR.forEach((p,i)=>{ p.id=i; p.bool=p.T.every(v=>v===0||v===15||v===255); p.cost=p.basic?1:p.len+4;
     if(p.k===2){ const IL=new Int16Array(256).fill(-1), IR=new Int16Array(256).fill(-1);   // הפוך: x ו-w ⇒ ה-y היחיד (אם יש)
       for(let x=0;x<16;x++) for(let w=0;w<16;w++){ let y=-1,n=0,z=-1,m=0; for(let c=0;c<16;c++){ if(p.T[x*16+c]===w){ y=c; n++; } if(p.T[c*16+x]===w){ z=c; m++; } } if(n===1) IL[x*16+w]=y; if(m===1) IR[x*16+w]=z; }

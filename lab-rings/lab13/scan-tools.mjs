@@ -1,7 +1,7 @@
 // «לוחות לסורק»: כל כלי-מספר מהמדף (קלט אחד/שניים/שלושה) + 256 הלוגיות ⇒ לוח-ערכים מלא (16 / 256 / 4096 כניסות).
 // כלי נכנס רק אם: (1) עונה אותו דבר עם זבל שונה בשאר התאים, (2) לא נוגע בתאי הרשימה (8–15) ולא משנה את הקלטים שלו,
 // (3) עובד גם כשמזיזים אותו (כתובות-קוד) וגם כשממפים את התאים שלו לתאים אחרים — כי המסגרת שמה אותו בתאים שלה.
-import fs from 'fs'; import crypto from 'crypto'; import { run } from './machine3s.mjs';
+import fs from 'fs'; import crypto from 'crypto'; import { run } from './machine3s.mjs'; import { cap, isLadder } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k);
 export const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x);
 export const dataCells=p=>[...new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]))];
@@ -36,6 +36,9 @@ export function scanTools({maxLen=260,quiet=true}={}){ const sh=JSON.parse(fs.re
     if(!e){ const T=tableOf(it.prog,it.ins,it.out); const ok=Array.from(T).some(v=>v>=0)&&remapOk(it,T); e={ok,T:ok?Array.from(T):null}; cache[h]=e; dirty=true; if(!quiet) console.log((ok?'✓ ':'✗ ')+it.name); }
     if(!e.ok) continue; const k=it.ins.length; const rec={name:it.name,ins:it.ins,out:it.out,prog:it.prog,T:Int8Array.from(e.T),k}; (k===1?out.U:k===2?out.B:out.T).push(rec); }
   if(dirty) fs.writeFileSync(CACHE,JSON.stringify(cache));
-  return out; }
+  if(MODE==='base'){ const nb=a=>a.filter(x=>!isLadder(x.name)); return {U:nb(out.U),B:nb(out.B),T:nb(out.T)}; }   // שלב-בסיס: בלי כלי-סולם (כמו המדף הקר)
+  return {U:cap(out.U,'scan.T'),B:cap(out.B,'scan.T'),T:cap(out.T,'scan.T')}; }   // סולם: מנה (ladder-order.mjs)
+// מצב: 'all' (ברירת-מחדל — כל המדף עם המנה) · 'base' (רק כלי-הבסיס) — לחיפוש בשלבים (scanfold-staged.mjs)
+let MODE='all'; export const setScanMode=m=>{ MODE=m; }; export const scanMode=()=>MODE;   // סולם: מנה (ladder-order.mjs)
 if((process.argv[1]||'').endsWith('scan-tools.mjs')){ const t=Date.now(); const r=scanTools({quiet:false}); console.log(`קלט אחד ${r.U.length} · שניים ${r.B.length} · שלושה ${r.T.length} · ${Date.now()-t}ms`);
   console.log('U:',r.U.map(x=>x.name).join(' | ')); console.log('B:',r.B.map(x=>x.name).join(' | ')); console.log('T:',r.T.filter(x=>!x.name.startsWith('לוגי')).map(x=>x.name).join(' | ')); }

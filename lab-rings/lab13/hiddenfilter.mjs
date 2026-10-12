@@ -1,7 +1,7 @@
 // «סינון נסתר»: התשובה היא מספר, ולא רואים אילו איברים הוצאו. המכונה מנסה את כל 256 התנאים האפשריים על 8..15
 // יחד עם כל מחשב-מספר מהמדף, מוצאת זוג שמסביר את כל הדוגמאות, לומדת את התנאי (אם חסר), ובונה: סנן ⇒ חשב.
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck, shorten, movable, placements } from './tzoref.mjs'; import { listGen } from './listcomp.mjs'; import { pipeCompose } from './pipeline.mjs';
-import { filterFrame } from './filtcomp.mjs'; import { valueBuild } from './tzoref-value.mjs';
+import { filterFrame } from './filtcomp.mjs'; import { valueBuild } from './tzoref-value.mjs'; import { cap } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x); const Z=[['WHERE',0],['GO']]; const RUN=(p,m)=>run(p,m,{maxSteps:600000});
 const relink=(m,l)=>{ const q=m.slice(); for(let c=8;c<16;c++) q[c]=0; q[1]=l[0]||0; l.forEach((a,i)=>{ q[a]=l[i+1]||0; }); return q; };
@@ -16,7 +16,7 @@ async function ensureCond(tt){ const sh=JSON.parse(fs.readFileSync('shelf3.json'
   const b={name,prog:s,ins:[0],out:2}; const q=placements(b,6000).find(z=>z.ins.join()==='4'&&z.out===2&&[...usedC(z.prog)].every(c=>c<8)); return q?{name,prog:q.prog,learned:true,len:s.length}:null; }
 export async function hiddenFilter(gen,{N=80,ms=+process.env.HFMS||300000}={}){ const DEAD=Date.now()+ms; const direct=pipeCompose(gen); if(direct.prog) return {...direct,via:'שרשרת מהמדף'};
   const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const ex=Array.from({length:N},()=>gen()); const Ls=ex.map(e=>walk(e.mem));
-  const V=sh.named.filter(b=>b.prog.some(x=>x[0]==='WHERE@')&&b.prog.length<=200&&!/^(בלי|רק) /.test(b.name));
+  const V=cap(sh.named.filter(b=>b.prog.some(x=>x[0]==='WHERE@')&&b.prog.length<=200&&!/^(בלי|רק) /.test(b.name)),'hf.V');   // סולם: מנה (ladder-order.mjs)
   // ערכי כל מחשב על כל רשימה-מסוננת אפשרית — מחושב לפי דרישה ונשמר
   const cache=new Map(); const val=(v,i,S)=>{ const l=Ls[i].filter(x=>S>>(x-8)&1); const k=v.name+'|'+i+'|'+l.join(','); if(cache.has(k)) return cache.get(k); const r=RUN(v.prog,relink(ex[i].mem,l)); const y=r&&!r.st.length?r.mem[2]&15:-1; cache.set(k,y); return y; };
   for(let S=1;S<255;S++) for(const v of V){ if(Date.now()>DEAD) return {prog:null,timeout:true}; let ok=true; for(let i=0;i<N&&ok;i++) if(val(v,i,S)!==ex[i].want) ok=false; if(!ok) continue;

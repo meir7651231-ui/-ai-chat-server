@@ -11,7 +11,7 @@
 import { basicBuild, compile, tableOf } from './tzoref-basic.mjs';
 import { valueBuild } from './tzoref-value.mjs';
 import { loadShelf, placements } from './tzoref.mjs';
-import { partTables } from './tzoref-tables.mjs';
+import { partTables } from './tzoref-tables.mjs'; import { cap } from './ladder-order.mjs';
 import { run } from './machine3s.mjs';
 
 const R=k=>Math.floor(Math.random()*k);
@@ -97,7 +97,7 @@ function leafValue(sp,ctx,ms){ if(ms<1500) return null; let r; const t=Date.now(
 
 // ─── 2. ריכוז: לבנה של שני קלטים (מהמדף) שאחריה התשובה תלויה בפחות קלטים ───
 let TB2=null, BLK=null;
-function tables(){ if(!TB2){ const sh=loadShelf(); BLK=new Map(sh.named.map(b=>[b.name,b])); TB2=partTables(sh.named.filter(b=>!b.bad&&b.movable!==false)).filter(t=>t.k===2&&!t.partial&&t.name!=='העתק'); } return TB2; }
+function tables(){ if(!TB2){ const sh=loadShelf(); BLK=new Map(sh.named.map(b=>[b.name,b])); TB2=cap(partTables(sh.named.filter(b=>!b.bad&&b.movable!==false)).filter(t=>t.k===2&&!t.partial&&t.name!=='העתק'),'case.TB'); } return TB2; }   // סולם: מנה (ladder-order.mjs)
 function blockAt(b,ci,cj,D,keep,T){ // הלבנה b בתאים ci,cj ⇒ D, בלי לגעת בתאים אחרים שאסור
   for(const p of placements(b,4000)){ if(p.ins.join()!==[ci,cj].join()||p.out!==D) continue; const U=usedCells(p.prog); if([...U].some(c=>keep.includes(c)&&c!==ci&&c!==cj&&c!==D)) continue;
     let ok=true; for(let t=0;t<120&&ok;t++){ const m=Array.from({length:16},()=>R(16)); const x=m[ci], y=m[cj]; const keepV=keep.map(c=>m[c]); const r=run(p.prog,m,{maxSteps:60000});

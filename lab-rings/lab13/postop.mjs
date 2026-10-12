@@ -6,7 +6,7 @@
 //   ועוד: שני קיפולים (על שתי קבוצות) מחוברים בפעולה מהמדף — למשל ספירה על א פחות ספירה על ב.
 // המכונה בוחרת הכל מהדוגמאות; כאן כתובים רק המסגרת והחיפוש.
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, shorten, movable, placements } from './tzoref.mjs';
-import { partTables } from './tzoref-tables.mjs'; import { valueBuild } from './tzoref-value.mjs'; import { filterFrame } from './filtcomp.mjs';
+import { partTables } from './tzoref-tables.mjs'; import { valueBuild } from './tzoref-value.mjs'; import { filterFrame } from './filtcomp.mjs'; import { cap } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x);
 const usedC=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]));
@@ -20,7 +20,7 @@ function assemble(parts){ const out=[], lab={}, fix=[]; for(const x of parts){ i
 // לוחות-כפל של המדף — פעם אחת לכל כלי (נשמר בזיכרון; כלי חדש ⇒ רק הוא מחושב)
 const TBC=new Map(); const tkey=b=>b.name+'|'+b.prog.length;
 function tablesOf(sh){ const need=sh.named.filter(b=>!b.bad&&!TBC.has(tkey(b))); if(need.length){ const got=partTables(need); for(const b of need) TBC.set(tkey(b),got.find(t=>t.name===b.name)||null); }
-  return sh.named.filter(b=>!b.bad).map(b=>{ const t=TBC.get(tkey(b)); return t&&!t.partial?{...t,len:b.prog.length,at:b.prog.some(x=>x[0]==='WHERE@')}:null; }).filter(Boolean); }
+  return cap(sh.named.filter(b=>!b.bad).map(b=>{ const t=TBC.get(tkey(b)); return t&&!t.partial?{...t,len:b.prog.length,at:b.prog.some(x=>x[0]==='WHERE@')}:null; }).filter(Boolean),'po.TB'); }   // סולם: מנה (ladder-order.mjs)
 // שיבוץ כלי בתאים נתונים; מבין השיבוצים — זה שנוגע הכי מעט בתאים «חיים»
 function place(b,ins,out,live=[]){ let best=null, bs=1e9; for(const q of placements(b,6000)){ if(q.ins.join()!==ins.join()||q.out!==out) continue; const U=usedC(q.prog); if([...U].some(c=>c>=8)) continue;
     const s=live.filter(c=>U.has(c)&&!ins.includes(c)&&c!==out).length; if(s<bs){ bs=s; best=q.prog; if(!s) break; } } return best; }
@@ -116,7 +116,7 @@ export async function postOpCompose(gen,{N=240,NB=3000,ms=+process.env.POMS||200
   return {prog:null,ms:Date.now()-t0}; }
 const relink=(m,l)=>{ const q=m.slice(); for(let c=8;c<16;c++) q[c]=0; q[1]=l[0]||0; l.forEach((a,i)=>{ q[a]=l[i+1]||0; }); return q; };
 function shelfVDiscover(gen,TB,DEAD,{N=80,NB=400}={}){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8'));
-  const V=sh.named.filter(b=>!b.bad&&b.prog.some(x=>x[0]==='WHERE@')&&b.prog.length<=200&&!/^(בלי|רק) |הפוך|מיין/.test(b.name));
+  const V=cap(sh.named.filter(b=>!b.bad&&b.prog.some(x=>x[0]==='WHERE@')&&b.prog.length<=200&&!/^(בלי|רק) |הפוך|מיין/.test(b.name)),'po.V');
   const ex=Array.from({length:N+NB},()=>gen()), Ls=ex.map(e=>walk(e.mem)); const cache=new Map();
   const val=(v,i,S)=>{ const l=Ls[i].filter(x=>S>>(x-8)&1); const k=v.name+'|'+l.join(','); if(cache.has(k)) return cache.get(k); const r=run(v.prog,relink(ex[i].mem,l),{maxSteps:600000}); const y=r&&!r.st.length?r.mem[2]&15:-1; cache.set(k,y); return y; };
   const consistent=(v,S,from,to,map)=>{ for(let i=from;i<to;i++){ const y=val(v,i,S); if(y<0) return false; const w=ex[i].want&15; if(map[y]<0) map[y]=w; else if(map[y]!==w) return false; } return true; };

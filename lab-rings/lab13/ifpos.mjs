@@ -3,13 +3,13 @@
 // «לא אכפת»: כשהצעד לא משנה את הרשימה (מיון של רשימה ממוינת, היפוך של איבר אחד) — מותר לתנאי לענות כל דבר.
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck, movable } from './tzoref.mjs'; import { valueBuild } from './tzoref-value.mjs';
 import { runFastG, encodeG, walk, walkA, shift, Z } from './chainsafe.mjs'; import { ifFrame } from './posframes.mjs';
-import { stepTools, pickExamplesFor, offsetCheck } from './poscompose.mjs';
+import { stepTools, pickExamplesFor, offsetCheck } from './poscompose.mjs'; import { cap } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const J=JSON.stringify; const PADN=14, PADA=Array.from({length:PADN},(_,i)=>i%2?['GO']:['WHERE',0]);
 const usedC=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]));
 // פעולות חד-מקומיות מהמדף: טבלה מלאה על 0..15 (רק אם התשובה תלויה בתא 0 בלבד)
 function unaryOps(sh){ const out=[], seen=new Set(); for(const b of sh.named){ if(b.bad||(b.ins||[]).join()!=='0'||(b.out??2)!==2||b.prog.length>200||b.prog.some(x=>x[0]==='WHERE@')) continue; if([...usedC(b.prog)].some(c=>c>7)) continue;
     const tt=[]; let ok=true; for(let v=0;v<16&&ok;v++){ let z=null; for(let t=0;t<4;t++){ const m=Array.from({length:16},()=>R(16)); m[0]=v; const r=run([...Z,...b.prog],m,{maxSteps:20000}); if(!r||r.st.length){ ok=false; break; } const y=r.mem[2]&15; if(z===null) z=y; else if(z!==y){ ok=false; break; } } tt.push(z); }
-    if(!ok) continue; const k=tt.map(x=>x?1:0).join(''); if(seen.has(k)) continue; seen.add(k); out.push({name:b.name,prog:b.prog,nz:tt.map(x=>x!==0)}); } return out; }
+    if(!ok) continue; const k=tt.map(x=>x?1:0).join(''); if(seen.has(k)) continue; seen.add(k); out.push({name:b.name,prog:b.prog,nz:tt.map(x=>x!==0)}); } return cap(out,'ifp.ops'); }
 export async function learnValCond(tab,{say=()=>{},ms=90000}={}){ const name='ערכים: '+tab.map((x,i)=>x?i:null).filter(x=>x!==null).join(',');
   const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const have=sh.named.find(b=>b.name===name); if(have) return {name,prog:have.prog,learned:false};
   const tt=tab.map(x=>x?15:0); const gen=()=>{ const mem=Array.from({length:16},()=>R(16)); const w=tt[mem[0]], k=mem[0]; return {mem,want:w,ok:r=>r[2]===w&&r[0]===k}; };

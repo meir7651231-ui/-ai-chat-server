@@ -8,7 +8,7 @@
 // תאים: 1 = ראש הרשימה הממוינת, 3 = שארית הקלט, 4 = x, 5 = K(x), 6 = «חוליה» (הכתובת שמצביעה על הנוכחי), 7 = K(נוכחי). 0,2 = קלט/פלט לכלים.
 // כלי בחריץ שנוגע בתאי-המסגרת או בתאי-הרשימה — התאים נשמרים במחסנית סביבו (כמו guardCells).
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck, movable } from './tzoref.mjs'; import { valueBuild, show } from './tzoref-value.mjs';
-import { runFastG, encodeG, walk, walkA, shift, chainSafeLL, relocate } from './chainsafe.mjs'; import { assemble } from './posframes.mjs';
+import { runFastG, encodeG, walk, walkA, shift, chainSafeLL, relocate } from './chainsafe.mjs'; import { assemble } from './posframes.mjs'; import { cap } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const J=JSON.stringify;
 const T=c=>[['WHERE',c],['GO'],['TAKE']], P=c=>[['WHERE',c],['GO'],['PUT']], AT=c=>[...T(c),['WHERE@'],['GO']];
 const PUSH15=[...T(4),['TAKE'],['CALC'],['TAKE'],['CALC']], PUSH1=[...PUSH15,['SHR'],['SHR'],['SHR']], PUSH0=[...PUSH15,...PUSH15,['CALC']];
@@ -74,6 +74,7 @@ function preSteps(sh,ex){ const base=ex.map(e=>e.mem); const one=[];
   for(const b of sh.named){ if(b.bad||b.prog.length>400) continue; const bc=encodeG(b.prog); let ok=true, ch=0;
     for(const e of ex){ const r=runFastG(bc,e.mem,0,200000); if(!r){ ok=false; break; } const l=walk(e.mem), o=walkA(r); if(o.length!==l.length||J([...o].sort())!==J([...l].sort())){ ok=false; break; } if(J(o)!==J(l)) ch++; }
     if(!ok||!ch) continue; const s=chainSafeLL(b.prog,ex.slice(0,60)); if(s&&loopClean(s.prog)) one.push({name:b.name,prog:s.prog}); }
+  { const c=cap(one,'ks.pre'); one.length=0; one.push(...c); }
   const PADN=14, PAD=Array.from({length:PADN},(_,i)=>i%2?['GO']:['WHERE',0]);
   const apply=(steps)=>{ let mems=base; for(const s of steps){ const c=encodeG([...PAD,...shift(s.prog,PADN)]); const nx=[]; for(const m of mems){ const r=runFastG(c,m,PADN,300000); if(!r) return null; nx.push(Array.from(r)); } mems=nx; } return mems; };
   const out=[{steps:[],SL:base.map(m=>walk(m))}], sig=new Set([J(out[0].SL)]);
@@ -106,7 +107,7 @@ export async function keySortCompose(gen,{N=400,ms=+process.env.KSMS||240000,sav
   const ex=Array.from({length:N},()=>gen()); const Ls=ex.map(e=>walk(e.mem)), Os=ex.map(e=>JSON.parse(e.want));
   for(let i=0;i<ex.length;i++){ const l=Ls[i], o=Os[i]; if(l.length!==o.length||J([...l].sort())!==J([...o].sort())) return {prog:null,why:'הפלט אינו סידור-מחדש של הקלט'}; }
   if(Ls.every((l,i)=>J(l)===J(Os[i]))) return {prog:null,why:'אין שינוי'};
-  const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const cmps=cmpTools(sh); const pres=preSteps(sh,ex.slice(0,150));
+  const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const cmps=cap(cmpTools(sh),'ks.cmp'); const pres=preSteps(sh,ex.slice(0,150));   // סולם: מנה (ladder-order.mjs)
   // מועמדים: (צעד-מקדים, שוברי-שוויון) ⇒ רמות. מעדיפים בלי צעד-מקדים, ומפתח שאינו קבוע
   const cands=[]; for(const p of pres) for(const tie of ['stable','anti']){ const L=p.steps.length?levelsFrom(p.SL,Os.slice(0,p.SL.length),tie):levelsFrom(Ls,Os,tie); if(!L||L.m===0) continue; cands.push({pre:p.steps,tie,L}); }
   say(`  צעדים-מקדימים: ${pres.length-1} · מועמדים (מקדים × שוויון) עם מפתח עקבי: ${cands.length} · כלי-השוואה: ${cmps.length}`);

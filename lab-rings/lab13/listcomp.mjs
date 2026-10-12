@@ -1,6 +1,6 @@
 // «מרכיב-הרשימות»: משימה על רשימה = פעולה רגילה על התשובות של כלי-רשימה שכבר במדף.
 // מריצים כלי א (שומרים קודם את ראש-הרשימה), מעבירים את התשובה לתא בטוח, מחזירים את הראש, מריצים כלי ב, ומחברים בפעולה.
-import fs from 'fs'; import { run } from './machine3.mjs'; import { partTables } from './tzoref-tables.mjs'; import { placements, makeChecker, finalCheck } from './tzoref.mjs';
+import fs from 'fs'; import { run } from './machine3.mjs'; import { partTables } from './tzoref-tables.mjs'; import { placements, makeChecker, finalCheck } from './tzoref.mjs'; import { cap, lenOk } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const LISTC=[0,1,8,9,10,11,12,13,14,15];
 const shuf=()=>{ const p=[8,9,10,11,12,13,14,15]; for(let i=7;i>0;i--){ const j=R(i+1); [p[i],p[j]]=[p[j],p[i]]; } return p; };
 export const listGen=f=>()=>{ const m=new Array(16).fill(0); const l=shuf().slice(0,R(9)); m[1]=l[0]||0; l.forEach((a,i)=>{ m[a]=l[i+1]||0; }); const w=f(l)&15; const mem=m.map((v,k)=>LISTC.includes(k)?v:R(16)); return {mem,want:w,ok:r=>r[2]===w}; };
@@ -11,15 +11,16 @@ const Z=[['WHERE',0],['GO']];   // כל כלי מתחיל כאילו מההתח�
 export function listCompose(gen,{N=200,ban=[]}={}){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8'));
   const ex=Array.from({length:N},()=>gen()); const want=ex.map(e=>e.want);
   // כלי-רשימה בטוחים: עונים בתא 2 ולא משנים את הרשימה (תאים 8–15)
-  const tools=[]; for(const b of sh.named){ if(ban.includes(b.name)||!b.prog.some(x=>x[0]==='WHERE@')||b.prog.length>(+process.env.MAXTOOL||400)) continue; let ok=true; const v=[];
+  const tools=[]; for(const b of sh.named){ if(ban.includes(b.name)||!b.prog.some(x=>x[0]==='WHERE@')||!lenOk(b,+process.env.MAXTOOL||400)) continue; let ok=true; const v=[];
     const PAD=[['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO'],['WHERE',0],['GO']]; const moved=[...PAD,...shift(b.prog,PAD.length)];
     for(const e of ex){ const r=run(b.prog,e.mem,{maxSteps:20000}); if(!r||[8,9,10,11,12,13,14,15].some(c=>r.mem[c]!==e.mem[c])){ ok=false; break; } const r2=run(moved,e.mem,{maxSteps:20000}); if(!r2||(r2.mem[2]&15)!==(r.mem[2]&15)){ ok=false; break; } v.push(r.mem[2]&15); }   // «נייד»: עובד גם כשהוא לא בתחילת התוכנית
     if(ok) tools.push({b,v,prog:b.prog,name:b.name}); }
+  { const c=cap(tools,'lc.tools'); tools.length=0; tools.push(...c); }   // סדר-תועלת + מנה לכלי-הסולם (ladder-order.mjs)
   // עלים נגזרים: פעולה חד-מקומית על תשובה של כלי (למשל «כפול 2» על «סכום רשימה»)
-  const U1=partTables(sh.named.filter(b=>!b.bad)).filter(t=>t.k===1&&!t.partial); const base=tools.slice();
+  const U1=cap(partTables(sh.named.filter(b=>!b.bad)).filter(t=>t.k===1&&!t.partial),'lc.U1'); const base=tools.slice();
   for(const tb of U1){ const opB=sh.named.find(b=>b.name===tb.name); if(!opB) continue; const P=placements(opB,6000).filter(q=>q.ins.join()==='3'&&q.out===2); if(!P.length) continue;
     for(const t of base){ const prog=[...t.prog,...mv(2,3),...shift(P[0].prog,t.prog.length+6)]; tools.push({v:t.v.map(x=>tb.T[x]),prog,name:`${tb.name}(${t.name})`,b:{name:`${tb.name}(${t.name})`,prog}}); } }
-  const TB=partTables(sh.named.filter(b=>!b.bad)).filter(t=>t.k<=2&&!t.partial); const eq=(v)=>v.every((x,i)=>x===want[i]);
+  const TB=cap(partTables(sh.named.filter(b=>!b.bad)).filter(t=>t.k<=2&&!t.partial),'lc.TB'); const eq=(v)=>v.every((x,i)=>x===want[i]);
   const cands=[];
   for(const t of tools) if(eq(t.v)) cands.push({kind:1,A:t});
   for(const tb of TB.filter(t=>t.k===1)) for(const t of tools) if(want.every((w,i)=>tb.T[t.v[i]]===w)) cands.push({kind:2,A:t,op:tb});

@@ -6,7 +6,7 @@
 // אם התשובה = «חלק מהמקומות» של מצב כלשהו, ואין במדף תנאי-מקום מתאים — הטבלה נלמדת מהדוגמאות ונבנית (valueBuild), ונשמרת במדף.
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck, movable } from './tzoref.mjs'; import { valueBuild } from './tzoref-value.mjs';
 import { runG, runFastG, encodeG, walk, walkA, shift, Z, chainSafeLL, chainSafeLN, relocate, zeroCells } from './chainsafe.mjs';
-import { posFilterFrame, suffixMapFrame, rotateToFrame } from './posframes.mjs';
+import { posFilterFrame, suffixMapFrame, rotateToFrame } from './posframes.mjs'; import { cap, lenOk } from './ladder-order.mjs';
 const R=k=>Math.floor(Math.random()*k); const J=JSON.stringify;
 const PADN=14, PAD=Array.from({length:PADN},(_,i)=>i%2?['GO']:['WHERE',0]);
 const usedC=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]));
@@ -21,11 +21,12 @@ function condTools(sh){ const out=[]; for(const b of sh.named){ if(b.bad||(b.ins
 // הכלים: מהמדף + מסגרות שהחריצים שלהן מולאו מהמדף. כפולים (אותו פלט על הדוגמאות) וכלים שלא משנים כלום — נזרקים.
 export function stepTools(ex,{sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')),say=()=>{}}={}){
   const LL=[], LN=[]; const ins=ex.map(e=>J(walk(e.mem)));
-  for(const b of sh.named){ if(b.bad||b.prog.length>400) continue; let ok=true, ch=0, keeps=true;
+  for(const b of sh.named){ if(b.bad||!lenOk(b,400)) continue; let ok=true, ch=0, keeps=true;
     const bc=encodeG(b.prog); for(const e of ex){ const r=runFastG(bc,e.mem,0,200000); if(!r){ ok=false; break; } if(J(walkA(r))!==J(walk(e.mem))) ch++; if(r[1]!==e.mem[1]||walk(e.mem).some(x=>r[x]!==e.mem[x])) keeps=false; }
     if(!ok) continue;
     if(ch){ const s=chainSafeLL(b.prog,ex); if(s) LL.push({name:b.name,prog:s.prog,safe:true,fix:s.fix}); else { const rel=relocate(b.prog); if(rel) LL.push({name:b.name,prog:[...zeroCells([0]),...shift(rel,12)],safe:false,fix:'שביר: עובד רק על זיכרון נקי'}); } }
     else if(keeps&&b.prog.some(x=>x[0]==='WHERE@')){ const s=chainSafeLN(b.prog,ex); if(s) LN.push({name:b.name,prog:s.prog,fix:s.fix,v:s.v}); } }
+  { const a=cap(LL,'st.LL'), b=cap(LN,'st.LN'); LL.length=0; LL.push(...a); LN.length=0; LN.push(...b); }   // סדר-תועלת + מנה לכלי-הסולם (ladder-order.mjs)
   const conds=condTools(sh); const cand=[];
   for(const t of LL) cand.push({name:t.name,prog:t.prog,kind:'מדף'});
   for(const t of LL.filter(t=>t.safe)) for(const fh of [true,false]) cand.push({name:`על-כל-זנב${fh?'':' (כולל הכל)'} [${t.name}]`,prog:suffixMapFrame(t.prog,fh),kind:'זנב'});

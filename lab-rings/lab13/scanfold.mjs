@@ -3,7 +3,7 @@
 // המכונה בוחרת את הכלים מהדוגמאות: קודם מדמה את הקיפול ב-JS על לוחות-הערכים של הכלים (מהיר, אלפי מועמדים בשנייה),
 // ורק מועמד שעבר — מורכב לקוד-מכונה ונבדק במכונה עצמה. אני כותב רק את המסגרת והחיפוש; מה נכנס לחריצים — מהמדף.
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker } from './tzoref.mjs';
-import { scanTools, shift, dataCells, remap } from './scan-tools.mjs';
+import { scanTools, shift, dataCells, remap, scanMode } from './scan-tools.mjs';
 const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 
 // ─── 1. לוחות: הפעלת כלי על וקטורים ─────────────────────────────────────────
@@ -21,7 +21,9 @@ export const show=e=>e.v!=null?e.v:`${e.f.name}(${e.a.map(show).join(', ')})`;
 
 // סגירות: פונקציות של משתנה אחד (16 כניסות) ושל שניים (r,s — 256 כניסות), עד גודל קטן, בלי כפילויות (לפי הלוח)
 let LIB=null, LIBT=0;   // נבנה מחדש אם המדף השתנה (למשל תנאי חדש שנלמד באותה ריצה)
-export function lib(){ let mt=0; try{ mt=fs.statSync('shelf3.json').mtimeMs; }catch{} if(LIB&&mt===LIBT) return LIB; LIBT=mt; const {U,B,T}=scanTools(); const Tn=T.filter(t=>!t.name.startsWith('לוגי'));
+const LIBS=new Map();   // לכל מצב-מדף (scanMode) ספרייה משלו
+export function lib(){ let mt=0; try{ mt=fs.statSync('shelf3.json').mtimeMs; }catch{} const md=scanMode(); const c=LIBS.get(md); if(c&&c.t===mt) return c.L; LIB=buildLib(); LIBS.set(md,{t:mt,L:LIB}); return LIB; }
+function buildLib(){ const {U,B,T}=scanTools(); const Tn=T.filter(t=>!t.name.startsWith('לוגי'));
   // משתנה אחד
   const A16=Int8Array.from({length:16},(_,i)=>i); const UC=[], seenU=new Map();
   const addU=(e,tab)=>{ if(tab.every(v=>v<0)) return; const k=hashArr(tab); if(seenU.has(k)) return; const r={e,tab,size:sizeOf(e)}; seenU.set(k,r); UC.push(r); return r; };

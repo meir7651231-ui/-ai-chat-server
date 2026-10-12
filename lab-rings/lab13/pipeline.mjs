@@ -1,19 +1,24 @@
 // «שרשרת»: 0–2 כלים שמשנים רשימה (סנן, מיין, הפוך, בלי הראשון…) ⇒ כלי אחד שמחשב מספר מהרשימה. הכל מהמדף, המכונה בוחרת.
-import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck } from './tzoref.mjs'; import { listGen } from './listcomp.mjs';
+import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck } from './tzoref.mjs'; import { listGen } from './listcomp.mjs'; import { cap, lenOk } from './ladder-order.mjs';
 const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 const shift=(p,o)=>p.map(x=>x[2]==='code'&&x[1]>=0?['WHERE',x[1]+o,'code']:x); const Z=[['WHERE',0],['GO']]; const PAD=[...Z,...Z,...Z,...Z,...Z];
 const RUN=(p,m)=>run(p,m,{maxSteps:600000}); const J=x=>JSON.stringify(x);
 export function pipeCompose(gen,{N=150,maxPre=2}={}){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); const ex=Array.from({length:N},()=>gen());
   const L=[], V=[];   // L: משני-רשימה · V: מחשבי-מספר (לא משנים את הרשימה)
-  for(const b of sh.named){ if(b.prog.length>300) continue; let ok=true, ch=0, keeps=true;
-    for(const e of ex){ const r=RUN(b.prog,e.mem); if(!r||r.st.length){ ok=false; break; } const r2=RUN([...PAD,...shift(b.prog,PAD.length)],e.mem); if(!r2||J(walk(r2.mem))!==J(walk(r.mem))||(r2.mem[2]&15)!==(r.mem[2]&15)){ ok=false; break; }
+  const STP=new Map();   // צעדים לכל היותר של כל כלי על הדוגמאות ⇒ תקציב-צעדים לרצף
+  for(const b of sh.named){ if(!lenOk(b,300)) continue; let ok=true, ch=0, keeps=true;
+    for(const e of ex){ const r=RUN(b.prog,e.mem); if(!r||r.st.length){ ok=false; break; } STP.set(b,Math.max(STP.get(b)||0,r.steps)); const r2=RUN([...PAD,...shift(b.prog,PAD.length)],e.mem); if(!r2||J(walk(r2.mem))!==J(walk(r.mem))||(r2.mem[2]&15)!==(r.mem[2]&15)){ ok=false; break; }
       if(J(walk(r.mem))!==J(walk(e.mem))) ch++; if([8,9,10,11,12,13,14,15].some(c=>r.mem[c]!==e.mem[c])) keeps=false; }
     if(!ok) continue; if(ch>0) L.push(b); else if(keeps&&b.prog.some(x=>x[0]==='WHERE@')) V.push(b); }
   const chk=makeChecker(gen,300,600000); const seq=bs=>{ let p=[]; for(const b of bs){ p=[...p,...Z]; p=[...p,...shift(b.prog,p.length)]; } return p; };
   // קודם מחשבים, לכל רצף-משנים, את הרשימות שיוצאות; ואז בודקים כל מחשב-מספר מולן (בלי להרכיב תוכנית לכל צירוף)
-  let pres=[[]]; for(let k=1;k<=maxPre;k++) pres=[...pres,...pres.filter(s=>s.length===k-1).flatMap(s=>L.map(b=>[...s,b]))];
-  const best=[]; for(const pre of pres){ const P=seq(pre); const mems=ex.map(e=>{ const r=pre.length?RUN(P,e.mem):{mem:e.mem.slice()}; return r&&r.mem; }); if(mems.some(m=>!m)) continue;
-    for(const v of V){ let ok=true; for(let i=0;i<N;i++){ const r=RUN(v.prog,mems[i]); if(!r||r.st.length||(r.mem[2]&15)!==ex[i].want){ ok=false; break; } } if(!ok) continue;
+  // סדר-תועלת + מנה (ladder-order.mjs): משנה יחיד — כל הסולם; זוגות — רק המנה; מחשבי-מספר — לפי המנה שלהם
+  const L1=cap(L,'pipe.L1'), LK=cap(L,'pipe.L'), VV=cap(V,'pipe.V');
+  let pres=[[]]; for(let k=1;k<=maxPre;k++) pres=[...pres,...pres.filter(s=>s.length===k-1&&s.every(b=>LK.includes(b))).flatMap(s=>(k===1?L1:LK).map(b=>[...s,b]))];
+  const best=[]; for(const pre of pres){ const P=seq(pre); const ms=Math.min(600000,20000+4*pre.reduce((a,b)=>a+(STP.get(b)||300000),0));
+    // נעצרים בדוגמה הראשונה שנכשלת (התוצאה זהה — רצף שנכשל באחת נזרק), ובתקציב-צעדים במקום 600,000
+    const mems=[]; for(const e of ex){ const r=pre.length?run(P,e.mem,{maxSteps:ms}):{mem:e.mem.slice()}; if(!r||!r.mem) break; mems.push(r.mem); } if(mems.length<ex.length) continue;
+    for(const v of VV){ let ok=true; const mv=Math.min(600000,20000+4*(STP.get(v)||150000)); for(let i=0;i<N;i++){ const r=run(v.prog,mems[i],{maxSteps:mv}); if(!r||r.st.length||(r.mem[2]&15)!==ex[i].want){ ok=false; break; } } if(!ok) continue;
       const p=seq([...pre,v]); if(chk(p)&&!finalCheck(p,gen,5000).bad) best.push({prog:p,how:[...pre.map(b=>b.name),v.name].join(' ⇒ ')}); } if(best.length) break; }
   if(process.env.PDBG) console.log("משנים:",L.map(b=>b.name).join(" | "));
   best.sort((a,b)=>a.prog.length-b.prog.length); return best[0]?{...best[0],nL:L.length,nV:V.length}:{prog:null,nL:L.length,nV:V.length}; }

@@ -8,7 +8,7 @@
 //   טבלה נלמדת רק אם היא מסכימה עם כל ~2300 הדוגמאות ו«סגורה»: כמעט אין תאים שנראו פעם אחת בלבד (אחרת זו שינון).
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { makeChecker, finalCheck, movable, placements } from './tzoref.mjs'; import { valueBuild } from './tzoref-value.mjs';
 import { runFastG, encodeG, walk, walkA, shift, Z, chainSafeLN, chainSafeLL } from './chainsafe.mjs'; import { assemble } from './posframes.mjs';
-import { stepTools, pickExamplesFor } from './poscompose.mjs'; import { learnValCond } from './ifpos.mjs'; import { filterFrame } from './filtcomp.mjs';
+import { stepTools, pickExamplesFor } from './poscompose.mjs'; import { cap } from './ladder-order.mjs'; import { learnValCond } from './ifpos.mjs'; import { filterFrame } from './filtcomp.mjs';
 const R=k=>Math.floor(Math.random()*k); const J=JSON.stringify;
 const PADN=14, PAD=Array.from({length:PADN},(_,i)=>i%2?['GO']:['WHERE',0]); const encP=p=>encodeG([...PAD,...shift(p,PADN)]);
 const usedC=p=>new Set(p.filter(x=>x[0]==='WHERE'&&!x[2]).map(x=>x[1]));
@@ -29,14 +29,14 @@ export function ifElseFrame(c,A,B){ const cond=[];
 function shelfOps(sh,k){ const out=[], seen=new Set(); const key=k===1?'0':'0,1', N=k===1?16:256;
   for(const b of sh.named){ if(b.bad||(b.ins||[]).join()!==key||(b.out??2)!==2||b.prog.length>250||b.prog.some(x=>x[0]==='WHERE@')) continue;
     const nz=new Uint8Array(N); let ok=true; for(let x=0;x<N&&ok;x++){ let z=null; for(let t=0;t<3;t++){ const m=Array.from({length:16},()=>R(16)); if(k===1) m[0]=x; else { m[0]=x>>4; m[1]=x&15; } const r=run([...Z,...b.prog],m,{maxSteps:20000}); if(!r||r.st.length){ ok=false; break; } const y=r.mem[2]&15; if(z===null) z=y; else if(z!==y){ ok=false; break; } } nz[x]=z?1:0; }
-    if(!ok||nz.every(x=>x===nz[0])) continue; const s=nz.join(''); if(seen.has(s)) continue; seen.add(s); out.push({name:b.name,prog:b.prog,nz}); } return out; }
+    if(!ok||nz.every(x=>x===nz[0])) continue; const s=nz.join(''); if(seen.has(s)) continue; seen.add(s); out.push({name:b.name,prog:b.prog,nz}); } return cap(out,'ife.ops'); }
 // סטטיסטיקות: כלי רשימה⇒מספר בטוחים-לשרשרת (מ-stepTools), ועוד כלים בלי «לאן מהמחסנית» ששומרים על הרשימה (למשל «הראשון»). קבועים וכפולים — נזרקים.
 function statTools(sh,ex,LN){ const out=[], sig=new Set(); const add=(name,prog)=>{ const C=encP(prog); const v=[]; for(const e of ex){ const m=runFastG(C,e.mem,PADN,300000); if(!m) return; v.push(m[2]&15); } if(v.every(x=>x===v[0])) return; const k=J(v); if(sig.has(k)) return; sig.add(k); out.push({name,prog,C}); };
   for(const l of [...LN].sort((a,b)=>a.prog.length-b.prog.length)) add(l.name,l.prog);
   for(const b of sh.named){ if(b.bad||b.prog.length>200||b.prog.some(x=>x[0]==='WHERE@')) continue; let keeps=true, ok=true; const bc=encodeG(b.prog);
     for(const e of ex){ const r=runFastG(bc,e.mem,0,200000); if(!r){ ok=false; break; } if(r[1]!==e.mem[1]||walk(e.mem).some(x=>r[x]!==e.mem[x])){ keeps=false; break; } }
     if(!ok||!keeps) continue; const s=chainSafeLN(b.prog,ex); if(s) add(b.name,s.prog); }
-  return out; }
+  return cap(out,'ife.stats'); }
 // סינון-לפי-ערך שנלמד מהדוגמאות: ברשימה מלאה (כל 8 הערכים) הפלט, אם הוא תת-רשימה, קובע בדיוק טבלה «נשאר/הוצא». עד שתי טבלאות שחוזרות.
 //   חסרה טבלה (למשל ברשימה מלאה תמיד מנצח אותו צד)? הדוגמאות שאף טבלה לא מסבירה מתאחדות לטבלה נוספת (מהארוכה לקצרה; דוגמה סותרת — מדלגים), אם כל 8 הערכים נקבעו.
 export function filterTables(exs){ const subs=[]; for(const e of exs){ const l=walk(e.mem); if(!l.length) continue; const w=JSON.parse(e.want); let j=0; for(const x of l) if(j<w.length&&w[j]===x) j++; if(j!==w.length) continue; const keep=new Set(w); subs.push({l,rm:l.map(x=>!keep.has(x))}); }
