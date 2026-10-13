@@ -175,7 +175,7 @@ function bitSplit(sp,c,ctx,depth){ for(const k of [3,0,1,2]){ if(Date.now()>ctx.
 // ─── הפותר ───
 function solve(sp,ctx,depth=0){ if(Date.now()>ctx.deadline||depth>ctx.maxDepth) return null; const pad='  '.repeat(depth);
   const T=trivials(sp); if(T[0]&&T[0].n===sp.W.length){ const code=trivCode(T[0]); if(code) return {code,how:T[0].name}; }
-  const cs=relevant(sp); const res=r=>{ if(r&&!verify(r.code,sp)){ ctx.log.push(pad+'✗ נכשל בבדיקת-הצומת ('+r.how+')'); if(process.env.CASEDBG){ const i=sp.pts.findIndex((p,i)=>!goodAt(r.code,sp,i)); console.log('DBG', JSON.stringify(r.code), 'pt', Array.from(sp.pts[i]).join(','), 'want', sp.W[i], 'got', runAt(r.code,sp,i)); } return null; } return r; };
+  const cs=relevant(sp); const res=r=>{ if(r&&!verify(r.code,sp)){ ctx.log.push(pad+'✗ נכשל בבדיקת-הצומת ('+r.how+')'); if(process.env.CASEDBG){ const i=sp.pts.findIndex((p,i)=>!goodAt(r.code,sp,i)); console.log('DBG', JSON.stringify(r.code), 'pt', Array.from(sp.pts[i]).join(','), 'want', sp.W[i], 'got', runAt(r.code,sp,i)); } return null; } if(r&&globalThis.__PSIG&&globalThis.__PSIG.onCaseNode) globalThis.__PSIG.onCaseNode(sp.W.length,depth); return r; };   // probe hook (probe-signals.mjs), read-only
   if(cs.length===1){ let r=leafBasic(sp,cs,2500); if(r) return res(r);
     r=leafValue(sp,ctx,Math.min(6000,ctx.deadline-Date.now())); if(r) return res(r);
     if(uniq(sp,cs).length>=4){ r=bitSplit(sp,cs[0],ctx,depth); if(r) return res(r); }   // כל חצייה מקטינה את התחום פי 2 ⇒ נגמר לבד

@@ -149,7 +149,8 @@ export function fastSearch(o) {
   const top120 = L => { if (L.length <= 120) return L; let t = topCache.get(L); if (!t) { t = topByClose(L, 120); topCache.set(L, t); } return t; };
   const TR = process.env.VTRACE ? (m => { C.made = made; tick(C); console.log(`  [fast] v=${((vnow() - t0) / 1000).toFixed(1)}s real=${((performance.now() - R0) / 1000).toFixed(1)}s ${m} made=${made} tgt=${tn} sizes=${bySize.map(x => x ? x.length : 0).join('/')}`); }) : null; const R0 = performance.now(); const setupMs = vnow() - t0;
   if (TR) TR('start NN=' + NN + ' TB=' + nT);
-  for (let s = 1; s <= maxSize && !found; s++) { if (TR) TR('level ' + s);
+  let sReached = 0;   // probe hook (probe-signals.mjs): the level in progress when the search stopped
+  for (let s = 1; s <= maxSize && !found; s++) { sReached = s; if (TR) TR('level ' + s);
     if (s >= 3) tryCover(); if (found) break; tryInv(3000); if (found) break;
     if (s >= 3 && bySize[s - 1] && bySize[s - 1].length > keep) { const L = bySize[s - 1]; const Cn = L.filter(isConst); const nc = L.filter(x => !isConst(x)); bySize[s - 1] = [...Cn, ...topByClose(nc, keep)]; }
     if (!bySize[s]) bySize[s] = [];
@@ -172,6 +173,7 @@ export function fastSearch(o) {
   if (!found) tryInv(20000);
   if (!found) tryCover();
   C.made = made; tick(C); if (TR) TR('end found=' + !!found);
+  if (globalThis.__PSIG) globalThis.__PSIG.onValue({ made, lvl: found ? sReached : (clock() ? sReached : maxSize + 1), found: !!found, NN, sizes: bySize.map(x => x ? x.length : 0), score: id => close2(id), eqOf: id => { let q = 0; const off = id * STR; for (let e = 0; e < NN; e++) if (A[off + e] === want[e]) q++; return q; }, want });   // read-only snapshot for the probe (no effect on the search)
   if (PROF) { PROF.calls++; PROF.setup += setupMs; PROF.real += performance.now() - R0; PROF.model += VSTATS.model - M0; if (found) PROF.found++; }
   return { found, made }; }
 // VPROF=1: totals per process (calls, setup ms before the search, real ms in the search, modelled ms of the original engine)

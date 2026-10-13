@@ -350,7 +350,7 @@ export function loopBuild(gen,{ins=[0,1],ms=240000,say=()=>{},only=null}={}){ co
     recurMs:[300,1500,6000], onceMsL:[800,4000],
     fit:(pts,nv,o)=>{ const k=nv+'|'+(o.mode||'')+'|'+pts.map(p=>p.x.join(',')+':'+p.w).join(';'); const m=memo.get(k); if(m&&(m.e||m.ms>=o.ms)) return m.e; const r=fit(pts,nv,o); memo.set(k,{e:r,ms:o.ms}); return r; }};
   const chk=makeChecker(gen,300); let tried=0;
-  const valueOk=fr=>{ const X=new Array(K); for(let i=0;i<N;i++){ for(let j=0;j<K;j++) X[j]=digit(i,j,K); if(evalFrame(fr,X)!==T[i]) return false; } return true; };
+  const PS=globalThis.__PSIG; const valueOk=fr=>{ const X=new Array(K); for(let i=0;i<N;i++){ for(let j=0;j<K;j++) X[j]=digit(i,j,K); if(evalFrame(fr,X)!==T[i]){ if(PS&&PS.onLoopMiss) PS.onLoopMiss(i,N); return false; } } return true; };   // PS: probe hook (probe-signals.mjs), read-only
   const TPL=[['ספירה-עד-אפס',tWhileCount],['מונה+אחרי',tCountPost],['זוג',tPair],['פעם-אחת',tOnce],['נהג+צובר',tDriver],['נסיגה',tRecur]].filter(([n])=>!only||only.includes(n));
   const G=TPL.map(([name,tpl])=>({name,it:tpl(ctx),done:false,n:0,ms:0}));
   for(let slice=+process.env.LSLICE||4000; !ctx.out()&&G.some(g=>!g.done); slice*=2){

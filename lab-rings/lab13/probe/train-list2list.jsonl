@@ -1,0 +1,33 @@
+{"key":"app.json|שלושת האחרונים, החדש ראשון","name":"שלושת האחרונים, החדש ראשון","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(5s)"]}
+{"key":"app.json|קניות לפי הסדר עד תקציב 30","name":"קניות לפי הסדר עד תקציב 30","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"app.json|טבלת מובילים: שלושה ראשונים","name":"טבלת מובילים: שלושה ראשונים","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(5s)"]}
+{"key":"app.json|ירידות מחיר","name":"ירידות מחיר","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(14s)"]}
+{"key":"critic.json|סיבוב שמאלה","name":"סיבוב שמאלה","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(4s)"]}
+{"key":"critic.json|כל איבר שני","name":"כל איבר שני","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(5s)"]}
+{"key":"critic.json|סיבוב עד הקטן","name":"סיבוב עד הקטן","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"critic.json|קצוות לסירוגין","name":"קצוות לסירוגין","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"critic.json|מיון לפי שני הביטים התחתונים","name":"מיון לפי שני הביטים התחתונים","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"decide.json|הורד ראשון אם זוגי","name":"הורד ראשון אם זוגי","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✓(1s)"]}
+{"key":"decide.json|בלי המקסימום","name":"בלי המקסימום","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(12s)"]}
+{"key":"decide.json|קח כל עוד קטן מ-13","name":"קח כל עוד קטן מ-13","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"decide.json|דלג על אי-זוגיים בהתחלה","name":"דלג על אי-זוגיים בהתחלה","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✓(2s)"]}
+{"key":"decide.json|הפוך אם ראשון גדול מאחרון","name":"הפוך אם ראשון גדול מאחרון","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"decide.json|מיין אם האורך אי-זוגי","name":"מיין אם האורך אי-זוגי","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"decide.json|קטנים מהאחרון","name":"קטנים מהאחרון","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(16s)"]}
+{"key":"decide.json|מהמקסימום והלאה","name":"מהמקסימום והלאה","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✓(2s)"]}
+{"key":"decide.json|שיאים מתחדשים","name":"שיאים מתחדשים","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(4s)"]}
+{"key":"decide.json|רישא יורדת","name":"רישא יורדת","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(5s)"]}
+{"key":"decide.json|זוגיות הפוכה לראשון","name":"זוגיות הפוכה לראשון","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(15s)"]}
+{"key":"decide.json|הזוגיות של הרוב","name":"הזוגיות של הרוב","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(4s)"]}
+{"key":"reorder.json|מיון עולה","name":"מיון עולה","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✓(2s)"]}
+{"key":"reorder.json|היפוך","name":"היפוך","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✓(1s)"]}
+{"key":"reorder.json|בלי שני הראשונים","name":"בלי שני הראשונים","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(13s)"]}
+{"key":"reorder.json|רק מעל 11","name":"רק מעל 11","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"reorder.json|שלושת הקטנים","name":"שלושת הקטנים","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"reorder.json|אי-זוגיים מהגדול","name":"אי-זוגיים מהגדול","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(6s)"]}
+{"key":"reorder.json|האמצע הפוך","name":"האמצע הפוך","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(15s)"]}
+{"key":"reorder.json|רק 9, 12, 14","name":"רק 9, 12, 14","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(4s)"]}
+{"key":"reorder.json|זוגיים קודם","name":"זוגיים קודם","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}
+{"key":"reorder.json|בלי שני הקטנים, מהגדול","name":"בלי שני הקטנים, מהגדול","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(15s)"]}
+{"key":"reorder.json|גדולים מהראשון","name":"גדולים מהראשון","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(13s)"]}
+{"key":"reorder.json|זוגיים עד האי-זוגי","name":"זוגיים עד האי-זוגי","kind":"list2list","ms":20000,"tried":["מסגרות-החלטה✗(3s)"]}

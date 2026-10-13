@@ -68,10 +68,11 @@ function track(F,s,c,cx){ const {S,st,n}=cx; const old=new Int8Array(S), nw=new 
 // האם r ⇐ F(r,s) מההתחלה c נותן בסוף ערך שקובע את התשובה? (כל ערך-סוף ⇒ תשובה אחת) — ממלא map
 const MV_=new Int8Array(16), MG_=new Int32Array(16); let GEN_=0;
 const out_=(map,g)=>{ for(let v=0;v<16;v++) map[v]=MG_[v]===g?MV_[v]:-1; return true; };
+export const FITPROBE={best:0};   // probe hook (probe-signals.mjs): most examples a candidate stayed consistent on (read-only signal)
 function fits(F,s,c,cx,want,map){ const g=++GEN_; const st=cx.st, n=cx.n;
-  for(let e=0;e<n;e++){ let r=c; for(let t=st[e],z=st[e+1];t<z;t++){ r=F[(r<<4)|s[t]]; if(r<0) return false; } const w=want[e]; if(MG_[r]!==g){ MG_[r]=g; MV_[r]=w; } else if(MV_[r]!==w) return false; } return out_(map,g); }
+  for(let e=0;e<n;e++){ let r=c; for(let t=st[e],z=st[e+1];t<z;t++){ r=F[(r<<4)|s[t]]; if(r<0){ if(e>FITPROBE.best) FITPROBE.best=e; return false; } } const w=want[e]; if(MG_[r]!==g){ MG_[r]=g; MV_[r]=w; } else if(MV_[r]!==w){ if(e>FITPROBE.best) FITPROBE.best=e; return false; } } return out_(map,g); }
 function fits3(F,a,b,pos,c,cx,want,map){ const g=++GEN_; const st=cx.st, n=cx.n;   // F בעל שלוש כניסות; המצב בכניסה pos, a ו-b בשתי האחרות (בסדר)
-  for(let e=0;e<n;e++){ let r=c; for(let t=st[e],z=st[e+1];t<z;t++){ const x=a[t], y=b[t]; r=pos===0?F[(r<<8)|(x<<4)|y]:pos===1?F[(x<<8)|(r<<4)|y]:F[(x<<8)|(y<<4)|r]; if(r<0) return false; } const w=want[e]; if(MG_[r]!==g){ MG_[r]=g; MV_[r]=w; } else if(MV_[r]!==w) return false; } return out_(map,g); }
+  for(let e=0;e<n;e++){ let r=c; for(let t=st[e],z=st[e+1];t<z;t++){ const x=a[t], y=b[t]; r=pos===0?F[(r<<8)|(x<<4)|y]:pos===1?F[(x<<8)|(r<<4)|y]:F[(x<<8)|(y<<4)|r]; if(r<0){ if(e>FITPROBE.best) FITPROBE.best=e; return false; } } const w=want[e]; if(MG_[r]!==g){ MG_[r]=g; MV_[r]=w; } else if(MV_[r]!==w){ if(e>FITPROBE.best) FITPROBE.best=e; return false; } } return out_(map,g); }
 // כלי-סיום: פונקציה של משתנה אחד שמתאימה לכל הזוגות (ערך-סוף ⇒ תשובה)
 function findG(map){ const {UC,IDX,W32}=lib(); let id=true; for(let v=0;v<16;v++) if(map[v]>=0&&map[v]!==v){ id=false; break; } if(id) return UC[0];
   const keys=[]; for(let v=0;v<16;v++) if(map[v]>=0) keys.push((v<<4)|map[v]);

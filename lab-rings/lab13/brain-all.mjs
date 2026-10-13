@@ -6,7 +6,7 @@ import fs from 'fs'; import { run } from './machine3s.mjs'; import { valueBuild,
 import { listGen, listCompose } from './listcomp.mjs'; import { llGen, llCompose } from './listlist.mjs'; import { pipeCompose } from './pipeline.mjs';
 import { loopBuild } from './numloop.mjs'; import { STAGE_ENV, STAGE_DEFAULT, learnedBudget, record } from './stagestats.mjs'; import { repairJumps, deepRelocOk } from './jumpfix.mjs'; import { posCompose } from './poscompose.mjs'; import { ifPosCompose } from './ifpos.mjs'; import { caseBuild } from './tzoref-case.mjs'; import { bitsliceSolve } from './bitslice.mjs';
 import { filterCompose } from './filtcomp.mjs'; import { ifCompose } from './ifcomp.mjs'; import { hiddenFilter } from './hiddenfilter.mjs'; import { scanCompose as cutCompose } from './cutframes.mjs'; import { postOpCompose } from './postop.mjs'; import { scanCompose as foldCompose } from './scanfold.mjs'; import { foldStaged } from './scanfold-staged.mjs';
-import { pickAtCompose } from './pickat.mjs'; import { wideCompose } from './wideframes.mjs'; import { keySortCompose } from './keysort.mjs'; import { ifElseCompose } from './ifelse.mjs';
+import { probeNum, scanGate, timeGate, PROBE_ON } from './probe-plan.mjs'; import { pickAtCompose } from './pickat.mjs'; import { wideCompose } from './wideframes.mjs'; import { keySortCompose } from './keysort.mjs'; import { ifElseCompose } from './ifelse.mjs';
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 export function genFor(spec){ const f=new Function('return ('+spec.src+')')();
   if(spec.kind==='num'){ const ins=spec.ins; return ()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c]))&15; const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; }; }
@@ -31,30 +31,37 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
   const passes=(p,n)=>{ for(let k=0;k<n;k++){ const e=strict(); const z=run(p,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) return false; } return true; };
   const honest=x=>{ if(!x) return null; if(passes(x.prog,20000)) return {...x,sure:true}; for(const [w,tag] of [[keepList(x.prog),''],[(()=>{ const f=repairJumps(x.prog,gen); return f&&keepList(f); })(),' + תיקון-קפיצות']]) if(w&&passes(w,20000)) return {...x,prog:w,how:(x.how||x.stage)+' · עטוף ב«שומר-רשימה»'+tag,sure:true}; tried.push(x.stage+': נפסל — הורס את הרשימה'); return null; };
   const attempt=async(name,fn)=>{ const t=Date.now(); const ev=STAGE_ENV[name], lb=learnedBudget(name), prev=ev?process.env[ev]:undefined; if(ev&&lb&&lb<(+prev||STAGE_DEFAULT[ev])) process.env[ev]=String(lb);   // תקציב שנלמד מהניסיון (stagestats.mjs)
-    let r=null; try{ r=await fn(); }catch(e){ r={prog:null,err:String(e.message||e).slice(0,80)}; if(process.env.DEBUGERR) console.error('STAGE-ERR',name,e.stack); } finally{ if(ev){ if(prev===undefined) delete process.env[ev]; else process.env[ev]=prev; } } record(name,!!(r&&r.prog),Math.round((Date.now()-t)/1000),spec.kind); tried.push(`${name}${r&&r.prog?'✓':'✗'}(${((Date.now()-t)/1000).toFixed(0)}s)`); say(tried.at(-1)); return r&&r.prog?{...r,stage:name}:null; };
+    let r=null; try{ r=await fn(); }catch(e){ r={prog:null,err:String(e.message||e).slice(0,80)}; if(process.env.DEBUGERR) console.error('STAGE-ERR',name,e.stack); } finally{ if(ev){ if(prev===undefined) delete process.env[ev]; else process.env[ev]=prev; } } record(name,!!(r&&r.prog),Math.round((Date.now()-t)/1000),spec.kind); tried.push(`${name}${r&&r.prog?'✓':'✗'}(${((Date.now()-t)/1000).toFixed(0)}s)${r&&r.ptag||''}`); say(tried.at(-1)); return r&&r.prog?{...r,stage:name}:null; };
   let r=null;
   if(spec.kind==='num'){ const left=()=>(+process.env.NUMMS||280000)-(Date.now()-T0), off=s=>(process.env.NUMOFF||'').split(',').includes(s);   // NUMOFF=loop,case,bits מכבה שלבים
     const sure=x=>{ if(!x) return null; for(let k=0;k<20000;k++){ const e=gen(); const z=run(x.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)){ tried.push(x.stage+': נפסל בבדיקה הסופית'); return null; } } return {...x,sure:true}; };   // שלב שנכשל בבדיקה הסופית ⇒ ממשיכים לבא אחריו
     const loop=ms=>attempt('מסגרת-לולאה',()=>loopBuild(gen,{ins:spec.ins,ms})).then(sure);
+    if(PROBE_ON()&&!process.env.LOOPFIRST) r=await probeNum({spec,gen,attempt,sure,tried,left,off,showExpr,   // probe-plan.mjs: cheap probes decide order and budgets
+      valueFull:async()=>{ const x=await attempt('בונה-ערכים',()=>valueBuild(gen,{name:spec.name,ins:spec.ins,out:2,ms:+process.env.VMS||90000})); if(x) x.how=x.how||(x.expr?'בונה-ערכים: '+showExpr(x.expr):'בונה-ערכים'); return x; },
+      loopFull:()=>loop(Math.min(+process.env.LOOPMS||60000,left()-10000)),
+      caseFull:async()=>{ const x=sure(await attempt('פיצול-מקרים',()=>caseBuild(gen,{ins:spec.ins,ms:Math.min(+process.env.CASEMS||280000,left()-(off('bits')?10000:+process.env.BSRESERVE||50000))}))); if(x) x.how='פיצול-מקרים: '+x.how; return x; },
+      bitsFull:ms=>bitsliceSolve(gen,{ins:spec.ins,ms}) });
+    else {
     if(process.env.LOOPFIRST&&!off('loop')) r=await loop(+process.env.LOOPMS||30000);
     if(!r){ r=await attempt('בונה-ערכים',()=>valueBuild(gen,{name:spec.name,ins:spec.ins,out:2,ms:+process.env.VMS||90000})); if(r) r.how=r.how||(r.expr?'בונה-ערכים: '+showExpr(r.expr):'בונה-ערכים'); }   // הצירוף שנמצא (אילו כלים — גם מהסולם)
     if(!r&&!process.env.LOOPFIRST&&!off('loop')&&left()>15000) r=await loop(Math.min(+process.env.LOOPMS||60000,left()-10000));   // מסגרת-לולאה: מהירה וקצרה, 0–20 שנ׳ במה שהיא פותרת
     if(!r&&!off('case')&&left()>30000){ r=sure(await attempt('פיצול-מקרים',()=>caseBuild(gen,{ins:spec.ins,ms:Math.min(+process.env.CASEMS||280000,left()-(off('bits')?10000:+process.env.BSRESERVE||50000))}))); if(r) r.how='פיצול-מקרים: '+r.how; }
     if(!r&&!off('bits')&&left()>15000) r=await attempt('פריסת-ביטים',()=>bitsliceSolve(gen,{ins:spec.ins,ms:left()-10000}));   // רשת-ביטחון: מדויק לכל פונקציה של הקלטים (ארוך)
+    }
   }
   else if(spec.kind==='list2num'){ r=honest(await attempt('צירוף-זוג',()=>listCompose(gen)))
       || honest(await attempt('בחירה-במקום',()=>pickAtCompose(gen,{ms:+process.env.PICKMS||150000})))   // [0–2 צעדים] ⇒ אורך ⇒ k(n) נלמד ⇒ הליכה k חוליות (pickat.mjs) · דוחה משימה לא-מתאימה תוך שנייה
       || honest(await attempt('מצב-רחב',()=>wideCompose(gen,{ms:+process.env.WIDEMS||120000})))   // מספרים מעל 15 בשני תאים: צובר / תקציב K / חילוק חוזר (wideframes.mjs)
       || honest(await attempt('שרשרת',()=>pipeCompose(gen)))
       || honest(await attempt('קיפול+מיפוי',()=>postOpCompose(gen,{ms:+process.env.POMS||150000})))   // קיפול על תת-קבוצה נסתרת + פעולה אחריו / שני קיפולים (postop.mjs)
-      || honest(await attempt('סריקה-עם-זיכרון',()=>foldStaged(gen,{ms:+process.env.SCANMS||150000})))   // מצב רץ: שיא, קודם, מיקום (scanfold.mjs)
+      || honest(await attempt('סריקה-עם-זיכרון',()=>PROBE_ON()?scanGate(gen,spec,+process.env.SCANMS||150000):foldStaged(gen,{ms:+process.env.SCANMS||150000})))   // מצב רץ: שיא, קודם, מיקום (scanfold.mjs)
       || honest(await attempt('סינון-נסתר',()=>hiddenFilter(gen)));
     if(r&&!deepRelocOk(r.prog,strict)){ const f=repairJumps(r.prog,gen); if(f&&deepRelocOk(f,strict)) r={...r,prog:f,how:(r.how||r.stage)+' · תיקון-קפיצות',sure:false}; else tried.push(r.stage+': לא נייד (קפיצה קבועה)'); } }   // שער-ניידות גם כאן; תוכנית מתוקנת נבדקת שוב (sure=false)
   else { r=await attempt('רצף-כלים',()=>llCompose(gen)) || await attempt('סינון',()=>filterCompose(gen))
       || await attempt('סינון+תנאי-נלמד',async()=>{ const tt=inferFromExamples(gen); if(!tt) return {prog:null}; const n=await learnCond(tt); if(!n) return {prog:null}; return filterCompose(gen); })
       || await attempt('רצף-מקום',()=>posCompose(gen)) || await attempt('אם-רשימה',()=>ifPosCompose(gen))   // עד 4 צעדים + מסגרות-מקום (סנן לפי מקום, על-כל-זנב, סובב-אל) · תנאי על כל הרשימה (poscompose.mjs, ifpos.mjs)
       || await attempt('מסגרות-סריקה',()=>cutCompose(gen,{ms:+process.env.CUTMS||150000}))   // קח/דלג-כל-עוד, סנן מול ערך-מהרשימה, מצב-רץ (cutframes.mjs)
-      || await attempt('מסגרות-החלטה',()=>ifCompose(gen))
+      || await attempt('מסגרות-החלטה',()=>PROBE_ON()?timeGate('מסגרות-החלטה','list2list',ms=>ifCompose(gen,{ms}),+process.env.IFMS||240000):ifCompose(gen))
       || await attempt('מיון-לפי-מפתח',()=>keySortCompose(gen,{ms:+process.env.KSMS||240000}))   // סידור-מחדש לפי מפתח שנלמד מהדוגמאות (keysort.mjs)
       || await attempt('מצב-רחב',()=>wideCompose(gen,{ms:+process.env.WIDEMS||120000}))   // קח/דלג/הוצא לפי תקציב בשני תאים (wideframes.mjs)
       || await attempt('אם-אחרת',()=>ifElseCompose(gen,{ms:Math.max(20000,(+process.env.IFEMS||285000)-(Date.now()-T0))}));   // אם [תנאי] אז [צעד א] אחרת [צעד ב] (ifelse.mjs) · מקבל רק את מה שנשאר מ-5 דקות
