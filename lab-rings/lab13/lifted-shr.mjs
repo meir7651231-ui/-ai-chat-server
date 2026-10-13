@@ -7,6 +7,8 @@ const P=SHR_SRC.trim().split(/\s+/).map(t=>{ const m=t.match(/^(\D+)(\d*)$/); re
 function runBits(prog,input,cells=8){ const mem=new Array(cells).fill(0); input.forEach((v,i)=>{ mem[i]=v; }); let A=0,P=0; const st=[];
   for(const [op,k] of prog){ if(op==='WHERE') A=k; else if(op==='GO') P=A; else if(op==='TAKE') st.push(mem[P]); else if(op==='PUT') mem[P]=st.pop(); else { const b=st.pop(),a=st.pop(); st.push(a&b?0:1); } }
   return mem; }
-export function shr4(x){ const m=runBits(P,[x&1,(x>>1)&1,(x>>2)&1,(x>>3)&1]); return m[4]|(m[5]<<1)|(m[6]<<2)|(m[7]<<3); }
+export function shr4Lifted(x){ const m=runBits(P,[x&1,(x>>1)&1,(x>>2)&1,(x>>3)&1]); return m[4]|(m[5]<<1)|(m[6]<<2)|(m[7]<<3); }
+const TAB=Uint8Array.from({length:16},(_,x)=>shr4Lifted(x));   // אותן תשובות — מטבלה שהתוכנית שנלמדה מילאה פעם אחת
+export function shr4(x){ return TAB[x&15]; }
 if(import.meta.url==='file://'+process.argv[1]){ let ok=0; for(let x=0;x<16;x++) if(shr4(x)===(x>>1)) ok++;
   console.log(`«הזז ימינה» (${P.length} פעולות-יסוד במכונה של הספרות): ${ok}/16 נכונים`); }

@@ -8,8 +8,11 @@ function runBits(prog, input, cells = 7) { // המכונה הראשונה: תא�
   const mem = new Array(cells).fill(0); input.forEach((v, i) => { mem[i] = v; }); let A = 0, P = 0; const st = [];
   for (const [op, k] of prog) { if (op === 'WHERE') A = k; else if (op === 'GO') P = A; else if (op === 'TAKE') st.push(mem[P]); else if (op === 'PUT') mem[P] = st.pop(); else { const b = st.pop(), a = st.pop(); st.push(a & b ? 0 : 1); } }
   return mem; }
-export function add4(a, b) { let carry = 0, sum = 0;
+// add4Lifted: המחבר שנלמד, מופעל ביט אחרי ביט. add4: אותן תשובות — מטבלה שהמחבר עצמו מילא פעם אחת (256 זוגות), במקום להריץ אותו מחדש בכל חיבור.
+export function add4Lifted(a, b) { let carry = 0, sum = 0;
   for (let i = 0; i < 4; i++) { const m = runBits(FA, [(a >> i) & 1, (b >> i) & 1, carry]); sum |= m[3] << i; carry = m[4]; }
   return sum; }
+const TAB = new Uint8Array(256); for (let a = 0; a < 16; a++) for (let b = 0; b < 16; b++) TAB[a * 16 + b] = add4Lifted(a, b);
+export function add4(a, b) { return TAB[(a & 15) * 16 + (b & 15)]; }
 if (import.meta.url === 'file://' + process.argv[1]) { let ok = 0; for (let a = 0; a < 16; a++) for (let b = 0; b < 16; b++) if (add4(a, b) === ((a + b) & 15)) ok++;
   console.log(`המחבר שנלמד (${FA.length} פעולות לביט), מופעל 4 פעמים: ${ok}/256 חיבורים נכונים`); }
