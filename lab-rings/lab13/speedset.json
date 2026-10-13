@@ -1,0 +1,248 @@
+{
+ "tasks": [
+  {
+   "name": "סוג המשולש",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ if(!a||!b||!c||a+b<=c||a+c<=b||b+c<=a) return 0; if(a===b&&b===c) return 1; if(a===b||b===c||a===c) return 2; return 3; }",
+   "difficulty": "hard",
+   "note": "Triangle classifier from three side lengths: 0 invalid (needs pair sums up to 30), 1 equilateral, 2 isosceles, 3 scalene.",
+   "from": "suite2",
+   "file": "critic.json"
+  },
+  {
+   "name": "חלוקת חשבון",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,n)=>n?Math.min(15,Math.ceil((a+b)/n)):0",
+   "difficulty": "hard",
+   "note": "Split a two-item bill a+b among n people, rounding each share up, capped at 15; n=0 gives 0.",
+   "from": "suite2",
+   "file": "nums.json"
+  },
+  {
+   "name": "הקרוב ל-10",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ let best=a; for(const x of [b,c]){ const d=Math.abs(x-10), bd=Math.abs(best-10); if(d<bd||(d===bd&&x>best)) best=x; } return best; }",
+   "difficulty": "hard",
+   "note": "Picks the input closest to a fixed target 10, breaking distance ties in favour of the larger value.",
+   "from": "suite2",
+   "file": "nums.json"
+  },
+  {
+   "name": "ספרת האחדות של המכפלה",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>(a*b)%10",
+   "difficulty": "medium",
+   "note": "Last decimal digit of the product a*b, a non-power-of-two modulus on a value up to 225.",
+   "from": "suite2",
+   "file": "bits.json"
+  },
+  {
+   "name": "חיבור רווי עם סימן",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ const s=x=>x>7?x-16:x; return Math.max(-8,Math.min(7,s(a)+s(b)))&15; }",
+   "difficulty": "hard",
+   "note": "Signed 4-bit addition (8..15 = -8..-1) that saturates at 7 and -8 instead of wrapping.",
+   "from": "suite2",
+   "file": "bits.json"
+  },
+  {
+   "name": "קבע את ביט ב לערך ג",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ const m=1<<(b&3); return (c&1)?(a|m):(a&~m&15); }",
+   "difficulty": "hard",
+   "note": "Writes the parity bit of c into bit (b mod 4) of a: set it if c is odd, clear it if c is even.",
+   "from": "suite2",
+   "file": "bits.json"
+  },
+  {
+   "name": "מספר פסגות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(l[i]>l[i-1]&&l[i]>l[i+1]) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts interior local maxima, each compared with both neighbours; the ends never count.",
+   "from": "suite2",
+   "file": "agg2.json"
+  },
+  {
+   "name": "הקפיצה הגדולה",
+   "kind": "list2num",
+   "src": "l=>{ let m=0; for(let i=1;i<l.length;i++) m=Math.max(m,Math.abs(l[i]-l[i-1])); return m; }",
+   "difficulty": "medium",
+   "note": "Largest absolute difference between neighbouring elements (biggest price swing); fewer than 2 elements gives 0.",
+   "from": "suite2",
+   "file": "agg2.json"
+  },
+  {
+   "name": "רווח מקסימלי ממניה",
+   "kind": "list2num",
+   "src": "l=>{ let m=0, lo=16; for(const x of l){ if(x-lo>m) m=x-lo; if(x<lo) lo=x; } return m; }",
+   "difficulty": "hard",
+   "note": "Best buy-then-sell profit: max of l[j]-l[i] over i<j, 0 if prices never rise.",
+   "from": "suite2",
+   "file": "critic.json"
+  },
+  {
+   "name": "דלי הדירוג של הממוצע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length; if(!n) return 0; const s=l.reduce((a,b)=>a+b,0); return s<10*n?1:(s<12*n?2:3); }",
+   "difficulty": "hard",
+   "note": "Buckets the mean rating without dividing: 1 if mean<10, 2 if mean<12, else 3; empty list gives 0.",
+   "from": "suite2",
+   "file": "app2.json"
+  },
+  {
+   "name": "מדליית ארד",
+   "kind": "list2num",
+   "src": "l=>l.length<3?0:[...l].sort((a,b)=>b-a)[2]",
+   "difficulty": "medium",
+   "note": "Third largest value (bronze medal); 0 when the list has fewer than 3 elements.",
+   "from": "suite2",
+   "file": "stats.json"
+  },
+  {
+   "name": "גדולים מהאחרון",
+   "kind": "list2num",
+   "src": "l=>l.length?l.filter(x=>x>l[l.length-1]).length:0",
+   "difficulty": "easy",
+   "note": "Counts elements larger than the last element; 0 for an empty list.",
+   "from": "suite2",
+   "file": "stats.json"
+  },
+  {
+   "name": "מספר היפוכים",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) if(l[i]>l[j]) c++; return Math.min(c,15); }",
+   "difficulty": "hard",
+   "note": "Total number of inverted pairs (i<j with l[i]>l[j]), capped at 15 since it can reach 28.",
+   "from": "suite2",
+   "file": "stats.json"
+  },
+  {
+   "name": "התא הפנוי הבא",
+   "kind": "list2num",
+   "src": "l=>{ if(!l.length) return 8; let v=l[l.length-1]; for(let k=0;k<7;k++){ v=v===15?8:v+1; if(!l.includes(v)) return v; } return 0; }",
+   "difficulty": "hard",
+   "note": "Round-robin locker allocation: the first locker in 8..15 not taken, searching cyclically after the most recently taken one (last element); empty gives 8, all taken gives 0.",
+   "from": "suite2",
+   "file": "app2.json"
+  },
+  {
+   "name": "ארגזים של 10",
+   "kind": "list2num",
+   "src": "l=>Math.ceil(l.reduce((a,b)=>a+b,0)/10)",
+   "difficulty": "medium",
+   "note": "Packing: total (up to 92) divided by a capacity of 10, rounded up, i.e. boxes needed (empty gives 0).",
+   "from": "suite2",
+   "file": "agg2.json"
+  },
+  {
+   "name": "רק 9, 12, 14",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x===9||x===12||x===14)",
+   "difficulty": "medium",
+   "note": "Keeps only members of the fixed set {9,12,14}, preserving order.",
+   "from": "suite",
+   "file": "reorder.json"
+  },
+  {
+   "name": "רק מעל 11",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x>11)",
+   "difficulty": "easy",
+   "note": "Keeps elements greater than 11 (i.e. 12..15) in original order.",
+   "from": "suite",
+   "file": "reorder.json"
+  },
+  {
+   "name": "זוגיות הפוכה לראשון",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x%2!==l[0]%2)",
+   "difficulty": "hard",
+   "note": "Keeps only elements whose parity differs from the first element's parity (so the first is always dropped).",
+   "from": "suite",
+   "file": "decide.json"
+  },
+  {
+   "name": "שלושת האחרונים, החדש ראשון",
+   "kind": "list2list",
+   "src": "l=>l.slice(-3).reverse()",
+   "difficulty": "easy",
+   "note": "Recent-items view: the last three elements, most recent first.",
+   "from": "suite",
+   "file": "app.json"
+  },
+  {
+   "name": "הקרוב ל-12 קודם",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>(Math.abs(a-12)-Math.abs(b-12))||(a-b))",
+   "difficulty": "medium",
+   "note": "Nearest-to-target ordering: sorts by distance from 12, ties broken by the smaller value first.",
+   "from": "suite2",
+   "file": "reorder2.json"
+  },
+  {
+   "name": "מגמת הפתיחה",
+   "kind": "list2list",
+   "difficulty": "hard",
+   "src": "l=>{ if(l.length<2) return [...l]; const up=l[1]>l[0], r=[l[0],l[1]]; for(let i=2;i<l.length;i++){ if(up?l[i]>l[i-1]:l[i]<l[i-1]) r.push(l[i]); else break; } return r; }",
+   "note": "Direction decided by the data: the first step sets rising or falling, then keeps the longest prefix that continues in that same direction.",
+   "from": "suite2",
+   "file": "decide2.json"
+  },
+  {
+   "name": "היפוך כל חצי",
+   "kind": "list2list",
+   "src": "l=>{ const h=Math.floor(l.length/2); return [...l.slice(0,h).reverse(),...l.slice(h).reverse()]; }",
+   "difficulty": "medium",
+   "note": "Splits at floor(n/2) and reverses each half separately (the longer half is the second one).",
+   "from": "suite2",
+   "file": "reorder2.json"
+  },
+  {
+   "name": "העמוד האחרון",
+   "kind": "list2list",
+   "src": "l=>l.length?l.slice(Math.floor((l.length-1)/3)*3):[]",
+   "difficulty": "easy",
+   "note": "Pagination with 3 items per page: returns the items on the last page (1 to 3 items), empty for an empty list.",
+   "from": "suite2",
+   "file": "app2.json"
+  },
+  {
+   "name": "סבב בטורניר",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(let i=0;i<l.length;i+=2) r.push(i+1<l.length?Math.max(l[i],l[i+1]):l[i]); return r; }",
+   "difficulty": "medium",
+   "note": "Knockout round: the larger of each adjacent pair advances, and an unpaired last element advances automatically.",
+   "from": "suite2",
+   "file": "critic.json"
+  }
+ ]
+}
