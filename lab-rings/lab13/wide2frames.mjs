@@ -4,7 +4,7 @@
 //   במקום יחידה-יחידה. SUBW קופץ ל«חריגה» לפני שהוא משנה משהו (כך אין צורך בעותק).
 // המסגרות:
 //   חלוקה-עם-היסט (רשימה⇒מספר): S ⇐ c0 + Σg(x) ⇒ ⌊S/d⌋ (d קבוע או n; c0 קבוע, n−1 או ⌊n/2⌋) — עיגול למעלה / לקרוב.
-//   חוצה-סף (רשימה⇒מספר): תקציב K, מחסרים g(x) — האיבר שבו הסכום הרץ עבר את K (אחרת 0) ⇒ כלי-סיום.
+//   חוצה-סף (רשימה⇒מספר): תקציב K, מחסרים g(x) — האיבר שבו הסכום הרץ עבר את K (אחרת 0) / האחרון שנכנס / המקום שבו עבר (מ-1 או מ-0; walk) ⇒ כלי-סיום.
 //   שני-חלקים (שתיהן): D ⇐ בסיס + Σg(הראשונים k1) − Σg(מאחרי k2), k = ⌊n/2⌋ או ⌈n/2⌉.
 //            רשימה⇒מספר: |A−B| (רווי ב-15) / A≥B? / A>B?  ·  רשימה⇒רשימה: לפי A≥B (או A>B) — השאר את הראשונים k1 או את מה שאחרי k2.
 //   ממוצע-רץ (שתיהן): D ⇐ בסיס + Σ(g(x) − c); איבר «עובר» אם D נשאר ≥ בסיס (ממוצע ≥ c, או > c) · הראשון חופשי? (חריץ)
@@ -141,11 +141,12 @@ export function codeNum(p){ const parts=[];
       'OUT',...postCode(p.post,p.out==='rem'?L:Q));   // rem: מה שנשאר אחרי החלוקה (S mod d)
     return assemble(parts); }
   if(p.fr==='stopx'){ const C=0, X=3, L=4, H=5, M=6, S=7; const out=p.out||'xc';   // xc: האיבר שעבר · xp: האחרון שנכנס (גם אם אף אחד לא עבר) · xp0: האחרון שנכנס, ו-0 אם לא עבר
+    const idx=out==='ic'||out==='i0';   // (walk) ic: המקום (מ-1) של האיבר שעבר, 0 אם לא עבר · i0: המקום (מ-0), ו-15 אם לא עבר (כלי-הסיום ממפה) — M סופר כמה נכנסו
     parts.push(...SET(L,p.K&15),...SET(H,p.K>>4),...SET(M,0),...MV(1,X),
       'LOOP',...T_(X),['J','BODY'],...GOTO('NONE'),
-      'BODY',...gCode(p.g,X,C,new Set([X,L,H,M])),...SUBW(L,H,C,S,'CROSS'),...MV(X,M),...NEXTX(X),...GOTO('LOOP'),
-      'CROSS',...MV(out==='xc'?X:M,2),...GOTO('OUT'),
-      'NONE',...(out==='xp'?MV(M,2):SET(2,0)),
+      'BODY',...gCode(p.g,X,C,new Set([X,L,H,M])),...SUBW(L,H,C,S,'CROSS'),...(idx?INC(M):MV(X,M)),...NEXTX(X),...GOTO('LOOP'),
+      'CROSS',...(out==='ic'?[...T_(M),...CONST[1],['ADD'],...P_(2)]:MV(out==='xc'?X:M,2)),...GOTO('OUT'),
+      'NONE',...(out==='xp'?MV(M,2):out==='i0'?SET(2,15):SET(2,0)),
       'OUT',...postCode(p.post,2));
     return assemble(parts); }
   if(p.fr==='half'){ const L=4, H=5, K1=6;
@@ -318,7 +319,7 @@ function findPost(raw,want,U,isFlag){ const m=new Int8Array(16).fill(-1); for(le
 export function describe(p){ const g=p.g.name; const post=!p.post?'':p.post.kind==='id'?'':p.post.kind==='const2'?` ⇒ ${p.post.a} : ${p.post.b}`:p.post.kind==='tool'?` ⇒ ${p.post.name}`:' ⇒ [לוח שנלמד]';
   const kk=k=>k==='c'?'⌈n/2⌉':'⌊n/2⌋'; const cmp=p.base===128?'≥':'>';
   if(p.fr==='updiv') return p.out==='rem'?`S=Σ${g} ⇒ S mod ${p.d}${post}`:`S=${p.off==='n1'?'n−1':p.off==='nh'?'⌊n/2⌋':p.off}+Σ${g} ⇒ S חלקי ${p.d}${post}`;
-  if(p.fr==='stopx') return `תקציב ${p.K} · g=${g} · ${{xc:'האיבר שבו הסכום עבר',xp:'האחרון שנכנס',xp0:'האחרון שנכנס לפני שעבר (0 אם לא עבר)'}[p.out||'xc']}${post}`;
+  if(p.fr==='stopx') return `תקציב ${p.K} · g=${g} · ${{xc:'האיבר שבו הסכום עבר',xp:'האחרון שנכנס',xp0:'האחרון שנכנס לפני שעבר (0 אם לא עבר)',ic:'המקום (מ-1) שבו הסכום עבר (0 אם לא עבר)',i0:'המקום (מ-0) שבו הסכום עבר (15 אם לא עבר)'}[p.out||'xc']}${post}`;
   if(p.fr==='nextfit') return `מיכלים של ${p.K} לפי הסדר · g=${g} ⇒ כמה מיכלים${post}`;
   if(p.fr==='relb') return `תקציב יחסי: ${p.m2}·קידומת ${p.strict?'<':'≤'} ${p.m1}·Σ${g} ⇒ ${p.kind==='list'?(p.mode==='take'?'קח-כל-עוד':'הוצא-כל-עוד'):p.out==='xc'?'האיבר שעבר':'כמה נכנסו'}${post}`;
   if(p.fr==='half') return `שני-חלקים: A=Σ${g}(ראשונים ${kk(p.k1)}) B=Σ${g}(אחרי ${kk(p.k2)}) ⇒ `+(p.kind==='list'?`A${cmp}B ? ${p.map==='A'?'A':'B'} : ${p.map==='A'?'B':'A'}`:p.out==='flag'?`A${cmp}B?${post}`:p.out==='pos'?`max(0,A−B)${post}`:p.out==='neg'?`max(0,B−A)${post}`:`|A−B|${post}`);
@@ -337,8 +338,9 @@ function plansNum(ex,G,U,F){ const W=ex.map(e=>e.want); const out=[]; const len=
     for(let d=2;d<=15;d++) add({fr:'updiv',g,d,off:0,out:'rem'},S.map(s=>s%d),false,g.cost+1.6);   // S mod d
     add({fr:'updiv',g,d:'n',off:0,out:'rem'},S.map((s,e)=>len[e]?s%len[e]:0),false,g.cost+1.7);
     // חוצה-סף
-    for(let K=0;K<=255;K++){ const rs=gv.map((v,e)=>{ let B=K, last=0; for(let i=0;i<v.length;i++){ if(B>=v[i]){ B-=v[i]; last=ex[e].l[i]; } else return [ex[e].l[i],last,last]; } return [0,last,0]; });
+    for(let K=0;K<=255;K++){ const rs=gv.map((v,e)=>{ let B=K, last=0; for(let i=0;i<v.length;i++){ if(B>=v[i]){ B-=v[i]; last=ex[e].l[i]; } else return [ex[e].l[i],last,last,i]; } return [0,last,0,-1]; });
       add({fr:'stopx',g,K,out:'xc'},rs.map(r=>r[0]),false,g.cost+2+K/1000); add({fr:'stopx',g,K,out:'xp'},rs.map(r=>r[1]),false,g.cost+2.1+K/1000); add({fr:'stopx',g,K,out:'xp0'},rs.map(r=>r[2]),false,g.cost+2.2+K/1000);
+      add({fr:'stopx',g,K,out:'ic'},rs.map(r=>r[3]+1),false,g.cost+2.3+K/1000); add({fr:'stopx',g,K,out:'i0'},rs.map(r=>r[3]<0?15:r[3]),false,g.cost+2.4+K/1000);   // (walk) מקום החצייה: מ-1 (0 = לא עבר) / מ-0 (15 = לא עבר ⇒ כלי-הסיום)
       if(S.every(s=>s<=K)) break; }
     // שני-חלקים
     if(g.kind!=='one') for(const k1 of ['f','c']) for(const k2 of ['f','c']){ const hs=gv.map(v=>simHalf(v,{k1,k2,base:128}));
@@ -425,4 +427,4 @@ export function wide2Compose(gen,{N=1000,ms=+process.env.WIDE2MS||120000,say=()=
     const fc=finalCheck(prog,gen,2000); if(fc.bad){ say(`  ✗ בבדיקה (${fc.bad}/2000): ${describe({...p,post})}`); continue; }
     return {prog,how:'מצב-רחב-2: '+describe({...p,post}),cands:plans.length,tried,ms:Date.now()-T0}; }
   return {prog:null,cands:plans.length,tried,ms:Date.now()-T0}; }
-export const _test={ADDW,SUBW,JNE,CONST,assemble,INC2,DEC1W,SET,T_,P_,MV};
+export const _test={ADDW,SUBW,JNE,CONST,assemble,INC2,DEC1W,SET,T_,P_,MV,findPost,postCode,gOptions,describe};   // walkframes: גם כלי-הסיום ואפשרויות-g

@@ -1,0 +1,209 @@
+[
+ {
+  "file": "reorder5.json",
+  "name": "מיון החצי הראשון",
+  "kind": "list2list",
+  "difficulty": "medium",
+  "src": "l=>{ const h=l.length>>1; return [...l.slice(0,h).sort((a,b)=>a-b),...l.slice(h)]; }",
+  "note": "Sorts the front half ascending and leaves the rest as is.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(7s) אם-רשימה✗(0s) מסגרות-סריקה✗(1s) מסגרות-החלטה✗(3s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(2s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "מיון שלושה ראשונים",
+  "kind": "list2list",
+  "difficulty": "medium",
+  "src": "l=>[...l.slice(0,3).sort((a,b)=>a-b),...l.slice(3)]",
+  "note": "Sorts the first three elements ascending and leaves the rest.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(7s) אם-רשימה✗(0s) מסגרות-סריקה✗(0s) מסגרות-החלטה✗(3s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "מעבר בועה מהסוף",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const r=[...l]; for(let i=r.length-2;i>=0;i--) if(r[i]>r[i+1]){ const t=r[i]; r[i]=r[i+1]; r[i+1]=t; } return r; }",
+  "note": "Runs one bubble-sort pass from right to left, carrying the smallest element to the front.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(8s) אם-רשימה✗(0s) מסגרות-סריקה✗(1s) מסגרות-החלטה✗(4s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "מחסנית מבטלת",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const s=[]; for(const x of l){ if(s.length&&s[s.length-1]%2===x%2) s.pop(); else s.push(x); } return s; }",
+  "note": "Pushes each element on a stack, but an element with the same parity as the top pops the top instead; returns the stack.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(7s) אם-רשימה✗(0s) מסגרות-סריקה✗(1s) מסגרות-החלטה✗(3s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(3s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(2s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(2s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "יוסף בדילוג",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const a=[...l], r=[]; let i=0; while(a.length){ i=(i+1)%a.length; r.push(a.splice(i,1)[0]); } return r; }",
+  "note": "Lists elements in the order they are removed when every second one around the circle is taken out.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(8s) אם-רשימה✗(0s) מסגרות-סריקה✗(1s) מסגרות-החלטה✗(4s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(64s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "סיבוב לפי הראשון",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const n=l.length; if(!n) return []; const k=l[0]%n; return [...l.slice(k),...l.slice(0,k)]; }",
+  "note": "Rotates left by the first element modulo the length.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(9s) אם-רשימה✗(0s) מסגרות-סריקה✗(1s) מסגרות-החלטה✗(4s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "גל",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const r=[...l]; for(let i=0;i+1<r.length;i++) if((i%2===0)===(r[i]>r[i+1])){ const t=r[i]; r[i]=r[i+1]; r[i+1]=t; } return r; }",
+  "note": "One left-to-right pass of neighbour swaps that makes the list go up, down, up, down.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(8s) אם-רשימה✗(0s) מסגרות-סריקה✗(0s) מסגרות-החלטה✗(6s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(1s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "הגדול מהקצוות",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const r=[]; let i=0, j=l.length-1; while(i<=j) r.push(l[i]>=l[j]?l[i++]:l[j--]); return r; }",
+  "note": "Repeatedly takes the larger of the two ends of the list.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(10s) אם-רשימה✗(0s) מסגרות-סריקה✗(0s) מסגרות-החלטה✗(5s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(1s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "הכנס את האחרון",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ if(l.length<2) return [...l]; const x=l[l.length-1], r=l.slice(0,-1); let i=0; while(i<r.length&&r[i]<x) i++; return [...r.slice(0,i),x,...r.slice(i)]; }",
+  "note": "Moves the last element to just before the first earlier element that is larger than it.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(8s) אם-רשימה✗(0s) מסגרות-סריקה✗(1s) מסגרות-החלטה✗(4s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "לפי גדולים אחריו",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const k=x=>l.slice(l.indexOf(x)+1).filter(y=>y>x).length; return [...l].sort((a,b)=>k(a)-k(b)||l.indexOf(a)-l.indexOf(b)); }",
+  "note": "Sorts by how many larger elements come later, keeping the original order on ties.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(8s) אם-רשימה✗(0s) מסגרות-סריקה✗(0s) מסגרות-החלטה✗(4s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "reorder5.json",
+  "name": "היפוך רצים עולים",
+  "kind": "list2list",
+  "difficulty": "hard",
+  "src": "l=>{ const r=[]; let s=0; for(let i=1;i<=l.length;i++) if(i===l.length||l[i]<l[i-1]){ r.push(...l.slice(s,i).reverse()); s=i; } return r; }",
+  "note": "Reverses each maximal increasing run in place.",
+  "tried": "רצף-כלים✗(0s) סינון✗(0s) סינון+תנאי-נלמד✗(0s) רצף-מקום✗(8s) אם-רשימה✗(0s) מסגרות-סריקה✗(0s) מסגרות-החלטה✗(4s) skip(p=0.01) מיון-לפי-מפתח✗(0s) מצב-רחב✗(0s) אם-אחרת✗(0s) מיפוי-מקומות✗(0s) מצב-רחב-2✗(1s) סינון-סטטיסטי✗(1s) סידור-מקומי✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "העוקב של הראשון",
+  "kind": "list2num",
+  "difficulty": "medium",
+  "src": "l=>{ if(!l.length) return 0; const b=l.filter(x=>x>l[0]); return b.length?Math.min(...b):0; }",
+  "note": "Returns the smallest element larger than the first one, or 0 if none.",
+  "tried": "צירוף-זוג✗(6s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(45s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(4s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "מתחלקים באורך",
+  "kind": "list2num",
+  "difficulty": "medium",
+  "src": "l=>l.filter(x=>x%l.length===0).length",
+  "note": "Counts elements divisible by the length of the list.",
+  "tried": "צירוף-זוג✗(7s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(3s) סריקה-עם-זיכרון✗(58s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(4s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(1s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "מקסימום בכל זוג",
+  "kind": "list2num",
+  "difficulty": "medium",
+  "src": "l=>{ let s=0; for(let i=0;i<l.length;i+=2) s+=i+1<l.length?Math.max(l[i],l[i+1]):l[i]; return s&15; }",
+  "note": "Sums the larger element of each consecutive pair (a lone last element counts as is), modulo 16.",
+  "tried": "צירוף-זוג✗(6s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(3s) סריקה-עם-זיכרון✗(52s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(5s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "מרחק בין שני הקטנים",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ if(l.length<2) return 0; const s=[...l].sort((a,b)=>a-b); return Math.abs(l.indexOf(s[0])-l.indexOf(s[1])); }",
+  "note": "Returns how many places apart the two smallest elements are, or 0 for short lists.",
+  "tried": "צירוף-זוג✗(6s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(46s) skip-C2b(p=0.07) סינון-נסתר✗(1s) מצב-רחב-2✗(4s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(1s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "שארית חוזרת",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ const seen=new Set(); for(const x of l){ if(seen.has(x%4)) return x; seen.add(x%4); } return 0; }",
+  "note": "Returns the first element whose remainder modulo 4 already appeared, or 0 if none.",
+  "tried": "צירוף-זוג✗(6s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(47s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(4s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(1s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "מסלול מצביע",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ const n=l.length; if(!n) return 0; const seen=new Set(); let i=0; while(!seen.has(i)){ seen.add(i); i=(i+l[i])%n; } return seen.size; }",
+  "note": "From index 0 jumps forward by each element modulo the length and counts distinct positions visited.",
+  "tried": "צירוף-זוג✗(6s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(52s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(4s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "שלשות עולות",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) for(let k=j+1;k<l.length;k++) if(l[i]<l[j]&&l[j]<l[k]) c++; return Math.min(15,c); }",
+  "note": "Counts increasing triples in order of position, capped at 15.",
+  "tried": "צירוף-זוג✗(10s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(47s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(3s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(1s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "הרחוק מהממוצע",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ if(!l.length) return 0; const s=l.reduce((a,b)=>a+b,0); let b=l[0]; for(const x of l){ const d=Math.abs(x*l.length-s), e=Math.abs(b*l.length-s); if(d>e||(d===e&&x>b)) b=x; } return b; }",
+  "note": "Returns the element farthest from the mean, the larger one on ties.",
+  "tried": "צירוף-זוג✗(7s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(60s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(4s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "מינימום המקסימומים",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ if(l.length<2) return l.length?l[0]:0; let m=15; for(let i=1;i<l.length;i++) m=Math.min(m,Math.max(l[i-1],l[i])); return m; }",
+  "note": "Takes the larger of each neighbour pair and returns the smallest of those.",
+  "tried": "צירוף-זוג✗(6s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(45s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(3s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "סדרה חשבונית ארוכה",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ if(l.length<3) return l.length; let b=2, c=2; for(let i=2;i<l.length;i++){ c=(l[i]-l[i-1]===l[i-1]-l[i-2])?c+1:2; if(c>b) b=c; } return b; }",
+  "note": "Returns the length of the longest stretch of neighbours with a constant step.",
+  "tried": "צירוף-זוג✗(7s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(52s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(3s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(1s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "קטע זוגי ארוך",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ let b=0; for(let i=0;i<l.length;i++){ let s=0; for(let j=i;j<l.length;j++){ s+=l[j]; if(s%2===0&&j-i+1>b) b=j-i+1; } } return b; }",
+  "note": "Returns the length of the longest contiguous stretch with an even sum.",
+  "tried": "צירוף-זוג✗(4s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(57s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(3s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ },
+ {
+  "file": "agg5.json",
+  "name": "פיצול מאוזן",
+  "kind": "list2num",
+  "difficulty": "hard",
+  "src": "l=>{ const t=l.reduce((a,b)=>a+b,0); let s=0, b=t; for(let i=0;i<l.length;i++){ s+=l[i]; b=Math.min(b,Math.abs(t-2*s)); } return Math.min(15,b); }",
+  "note": "Cuts the list into a front and a back part and returns the smallest possible difference of their sums, capped at 15.",
+  "tried": "צירוף-זוג✗(4s) בחירה-במקום✗(0s) מצב-רחב✗(1s) שרשרת✗(0s) קיפול+מיפוי✗(2s) סריקה-עם-זיכרון✗(48s) skip-C2b(p=0.07) סינון-נסתר✗(0s) מצב-רחב-2✗(3s) זוגות✗(117s) חלונות✗(0s) חמדני✗(0s) רצפים-וקטעים✗(0s) הליכה-בצעד✗(0s) שותפים-וצירופים✗(0s) דירוג-ומחלקות✗(0s)"
+ }
+]

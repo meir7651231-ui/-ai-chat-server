@@ -1,0 +1,365 @@
+{
+ "tasks": [
+  {
+   "name": "הקטן מבין שניים",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>Math.min(a,b)",
+   "difficulty": "easy",
+   "note": "Returns the smaller of the two inputs."
+  },
+  {
+   "name": "לא-וגם",
+   "kind": "num",
+   "ins": [
+    0,
+    3
+   ],
+   "src": "(a,b)=>15-(a&b)",
+   "difficulty": "easy",
+   "note": "Returns the bitwise NAND of the two inputs on four bits."
+  },
+  {
+   "name": "כיבוי הביט הנמוך",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>a&14",
+   "difficulty": "easy",
+   "note": "Clears the lowest bit of a, rounding it down to an even number."
+  },
+  {
+   "name": "פחות שלוש ברצפה",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>Math.max(0,a-3)",
+   "difficulty": "easy",
+   "note": "Subtracts 3 from a, never going below 0."
+  },
+  {
+   "name": "זוגי או לא",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>a%2===0?15:0",
+   "difficulty": "easy",
+   "note": "Flags 15 when a is even, else 0."
+  },
+  {
+   "name": "כפול עד 15",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>Math.min(15,2*a)",
+   "difficulty": "easy",
+   "note": "Doubles a, saturating at 15."
+  },
+  {
+   "name": "סכום שלושה עד 15",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>Math.min(15,a+b+c)",
+   "difficulty": "easy",
+   "note": "Adds the three inputs, saturating at 15."
+  },
+  {
+   "name": "מרחק משמונה",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>Math.abs(a-8)",
+   "difficulty": "easy",
+   "note": "Returns the distance of a from 8."
+  },
+  {
+   "name": "בחירה לפי זוגיות",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>a%2?b:a",
+   "difficulty": "easy",
+   "note": "Returns a when a is even, otherwise b."
+  },
+  {
+   "name": "ועוד חמש מעגלי",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>(a+5)&15",
+   "difficulty": "easy",
+   "note": "Adds 5 to a modulo 16."
+  },
+  {
+   "name": "שליש",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>Math.floor(a/3)",
+   "difficulty": "medium",
+   "note": "Divides a by 3, rounding down."
+  },
+  {
+   "name": "גודל הטווח",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>Math.min(15,Math.max(0,b-a+1))",
+   "difficulty": "medium",
+   "note": "Counts the whole numbers from a to b inclusive, 0 when b is below a, capped at 15."
+  },
+  {
+   "name": "עיגול למעלה לשלוש",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>Math.min(15,Math.ceil(a/3)*3)",
+   "difficulty": "medium",
+   "note": "Rounds a up to a multiple of 3, capped at 15."
+  },
+  {
+   "name": "ממוצע כלפי מעלה",
+   "kind": "num",
+   "ins": [
+    0,
+    3
+   ],
+   "src": "(a,b)=>(a+b+1)>>1",
+   "difficulty": "medium",
+   "note": "Returns the average of the two inputs rounded up."
+  },
+  {
+   "name": "סך ביטים בשניים",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ const pc=x=>(x&1)+(x>>1&1)+(x>>2&1)+(x>>3&1); return pc(a)+pc(b); }",
+   "difficulty": "medium",
+   "note": "Counts the set bits of both inputs together."
+  },
+  {
+   "name": "מקסימום או מינימום",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>c&1?Math.max(a,b):Math.min(a,b)",
+   "difficulty": "medium",
+   "note": "Returns the larger of a and b when c is odd, the smaller when c is even."
+  },
+  {
+   "name": "ספרות בבסיס 4",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>(a>>2)+(a&3)",
+   "difficulty": "medium",
+   "note": "Sums the two base-4 digits of a."
+  },
+  {
+   "name": "עד כפולה של 4",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>(4-(a&3))&3",
+   "difficulty": "medium",
+   "note": "Returns how much must be added to a to reach a multiple of 4."
+  },
+  {
+   "name": "האיבר הבא בסדרה",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>(2*b-a)&15",
+   "difficulty": "medium",
+   "note": "Continues the arithmetic sequence a, b by one step, modulo 16."
+  },
+  {
+   "name": "סיבוב ביט שמאלה",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>((a<<1)|(a>>3))&15",
+   "difficulty": "medium",
+   "note": "Rotates the four bits of a left by one place."
+  },
+  {
+   "name": "ריבוע ההפרש",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>Math.min(15,(a-b)*(a-b))",
+   "difficulty": "medium",
+   "note": "Returns the squared difference of the inputs, capped at 15."
+  },
+  {
+   "name": "ממוצע משוקלל",
+   "kind": "num",
+   "ins": [
+    1,
+    3
+   ],
+   "src": "(a,b)=>(3*a+b)>>2",
+   "difficulty": "medium",
+   "note": "Returns three quarters of a plus one quarter of b, rounded down."
+  },
+  {
+   "name": "חסימה בין שניים",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>Math.min(Math.max(a,b),c)",
+   "difficulty": "medium",
+   "note": "Raises a to at least b, then lowers the result to at most c."
+  },
+  {
+   "name": "החזקה הגדולה של 2",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ let p=0; for(let q=1;q<=a;q*=2) p=q; return p; }",
+   "difficulty": "medium",
+   "note": "Returns the largest power of two not above a, or 0 for zero."
+  },
+  {
+   "name": "צעדים לאפס",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ let n=0; while(a){ a=a&1?a-1:a>>1; n++; } return n; }",
+   "difficulty": "hard",
+   "note": "Counts steps to reach 0 when odd numbers drop by one and even numbers are halved."
+  },
+  {
+   "name": "כמה ראשוניים עד",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>{ let c=0; for(let n=2;n<=a;n++){ let p=true; for(let d=2;d*d<=n;d++) if(n%d===0) p=false; if(p) c++; } return c; }",
+   "difficulty": "hard",
+   "note": "Counts the primes up to and including a."
+  },
+  {
+   "name": "המחלק הגדול",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ for(let d=a-1;d>1;d--) if(a%d===0) return d; return a>1?1:0; }",
+   "difficulty": "hard",
+   "note": "Returns the largest divisor of a below a itself, or 0 for 0 and 1."
+  },
+  {
+   "name": "צעדי אוקלידס",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ let n=0; while(b){ const t=a%b; a=b; b=t; n++; } return n; }",
+   "difficulty": "hard",
+   "note": "Counts the remainder steps Euclid's algorithm takes on a and b."
+  },
+  {
+   "name": "סכום ספרות בבסיס 3",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>{ let s=0; while(a){ s+=a%3; a=Math.floor(a/3); } return s; }",
+   "difficulty": "hard",
+   "note": "Sums the base-3 digits of a."
+  },
+  {
+   "name": "פיבונאצ׳י מוכלל",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ let x=a, y=b; for(let i=0;i<c;i++){ const t=(x+y)&15; x=y; y=t; } return x; }",
+   "difficulty": "hard",
+   "note": "Returns term c of the sequence starting a, b where each term is the sum of the two before it, modulo 16."
+  },
+  {
+   "name": "אורך מסלול לינארי",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ const seen=new Set(); let x=c; while(!seen.has(x)){ seen.add(x); x=(a*x+b)&15; } return Math.min(15,seen.size); }",
+   "difficulty": "hard",
+   "note": "Iterates x to a times x plus b modulo 16 from c and counts distinct values before a repeat, capped at 15."
+  },
+  {
+   "name": "מקום בין שווי ביטים",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ const pc=x=>(x&1)+(x>>1&1)+(x>>2&1)+(x>>3&1); let c=0; for(let x=0;x<a;x++) if(pc(x)===pc(a)) c++; return c; }",
+   "difficulty": "hard",
+   "note": "Counts smaller numbers that have the same number of set bits as a."
+  },
+  {
+   "name": "שורש ספרתי של מכפלה",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>a*b?1+(a*b-1)%9:0",
+   "difficulty": "hard",
+   "note": "Returns the repeated decimal digit sum of a times b, or 0 when the product is zero."
+  },
+  {
+   "name": "דרכים לשלם",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ let c=0; for(let z=0;5*z<=a;z++) for(let y=0;5*z+3*y<=a;y++) c++; return c; }",
+   "difficulty": "hard",
+   "note": "Counts ways to pay a using coins of 1, 3 and 5."
+  }
+ ]
+}

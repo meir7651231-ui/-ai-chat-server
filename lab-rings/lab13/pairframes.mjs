@@ -52,11 +52,11 @@ export function accumulators(){ if(INS) return INS; const L=lib(); const BC1=L.B
   INS={agg,last,nonc,two}; return INS; }
 
 // ─── 2. דוגמאות ⇒ הקשר: לכל צעד חיצוני — x, i ; ו«אטומים מיוחדים» (c או S) ─────────────
-function context(lists){ let S=0; for(const l of lists) S+=l.length; const X=new Int8Array(S), I=new Int8Array(S), E=new Int32Array(S), st=new Int32Array(lists.length+1); let t=0;
+export function context(lists){ let S=0; for(const l of lists) S+=l.length; const X=new Int8Array(S), I=new Int8Array(S), E=new Int32Array(S), st=new Int32Array(lists.length+1); let t=0;
   lists.forEach((l,e)=>{ st[e]=t; l.forEach((x,i)=>{ X[t]=x; I[t]=i; E[t]=e; t++; }); }); st[lists.length]=t; return {S,X,I,E,st,n:lists.length,lists}; }
 const SCOPES=['all','before','after','others','nall'];
 // הזרם של אטום-זוג: לכל צעד חיצוני (x במקום t) — הקיפול על y בתחום
-function innerStream(cx,Rt,INt,init,scope){ const out=new Int8Array(cx.S); const {lists,st}=cx;
+export function innerStream(cx,Rt,INt,init,scope){ const out=new Int8Array(cx.S); const {lists,st}=cx;
   for(let e=0;e<lists.length;e++){ const l=lists[e], n=l.length, b=st[e];
     for(let t=0;t<n;t++){ const x=l[t]; let c=init;
       // n מעברים = «עד שמתייצב»: מעבר הוא פונקציה של c בלבד ⇒ מעבר שלא שינה את c — מכאן c קבוע. לא התייצב תוך n מעברים ⇒ זה לא נקודת-שבת (נפסל)
@@ -149,7 +149,7 @@ function callTool(f,argCells,outCell,live){ const map={}; f.ins.forEach((c,j)=>{
   for(const c of scratch){ if(free.length) map[c]=free.shift(); else if(busy.length){ const b=busy.shift(); map[c]=b; save.push(b); } else return null; }
   return [...save.flatMap(c=>T_(c)),{code:[['WHERE',0],['GO'],...shift(remap(f.prog,map),2)]},...[...save].reverse().flatMap(c=>P_(c))]; }
 // ביטוי ⇒ קוד; מחזיר את התא שבו התוצאה. pool = תאים פנויים לזמניים; fixed = תאים חיים
-function emitExpr(e,varCell,pool,fixed,code,temps){ if(e.v!=null) return varCell(e.v);
+export function emitExpr(e,varCell,pool,fixed,code,temps){ if(e.v!=null) return varCell(e.v);
   const args=e.a.map(a=>emitExpr(a,varCell,pool,fixed,code,temps));
   for(let j=0;j<args.length;j++) if(args.indexOf(args[j])!==j){ const t=pool.shift(); if(t==null) throw new Error('אין תא זמני'); if(t===1) pool.used1=true; code.push(...MV(args[j],t)); temps.add(t); args[j]=t; }
   const t=pool.shift(); if(t==null) throw new Error('אין תא זמני'); if(t===1) pool.used1=true; const live=new Set([...fixed,...temps]); const c=callTool(e.f,args,t,live); if(!c) throw new Error('אין מקום לכלי'); code.push(...c);
@@ -281,7 +281,7 @@ function toolTable(prog,ins,out){ const k=ins.length, n=1<<(4*k); const T=new In
       if(!r||r.st.length||LV.some(c=>r.mem[c]!==m[c])||ins.some((c,j)=>r.mem[c]!==a[j])){ v=-1; break; } const y=r.mem[out]; if(v==null) v=y; else if(v!==y){ v=-1; break; } }
     T[idx]=v; } return T; }
 // כלי שנלמד: אם במדף כבר יש כלי באותו שם — הוא; אחרת בונה-הערכים בונה אותו מהלוח בלבד (תחום = הקלטים שהלוח מגדיר), נבדק ונשמר במדף
-function learnTool(name,ins,dom,f,{ms=60000,by,say=()=>{}}){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); let b=sh.named.find(x=>x.name===name);
+export function learnTool(name,ins,dom,f,{ms=60000,by,say=()=>{}}){ const sh=JSON.parse(fs.readFileSync('shelf3.json','utf8')); let b=sh.named.find(x=>x.name===name);
   const gen=()=>{ const mem=Array.from({length:16},()=>R_(16)); const a=dom[R_(dom.length)]; ins.forEach((c,j)=>{ mem[c]=a[j]; }); const w=f(...a); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,j)=>r[c]===a[j])}; };
   if(!b){ const t0=Date.now(); const v=valueBuild(gen,{name,ins,out:2,ms}); if(!v.prog){ say(`    ✗ בונה-הערכים לא בנה «${name}» (${((Date.now()-t0)/1000).toFixed(0)}s)`); return null; }
     if(finalCheck(v.prog,gen,4000).bad) return null; b={name,prog:v.prog,ins,out:2,movable:movable(v.prog,gen),by};
@@ -292,7 +292,7 @@ function learnTool(name,ins,dom,f,{ms=60000,by,say=()=>{}}){ const sh=JSON.parse
   return {name:b.name,ins:b.ins,out:2,prog:b.prog,T,k:b.ins.length}; }
 // (1) ספירת-זוגות: התשובה = G(#זוגות (y לפני x) עם R(y,x)). רשימות של שני איברים מראות את R ישירות: התשובה שלהן אחד משני ערכים,
 //     והערך של רשימה ריקה/בודדת = «אין זוג». R נבדק אחר כך על כל הדוגמאות דרך החיפוש הרגיל (המעטפת לומדת את G).
-function inferPairRel(gen,M=4000){ const z=new Set(), v=new Map(); for(let t=0;t<M;t++){ const e=gen(); const l=walk(e.mem); if(l.length<2) z.add(e.want); else if(l.length===2){ const k=(l[0]<<4)|l[1]; if(v.has(k)&&v.get(k)!==e.want) return null; v.set(k,e.want); } }
+export function inferPairRel(gen,M=4000){ const z=new Set(), v=new Map(); for(let t=0;t<M;t++){ const e=gen(); const l=walk(e.mem); if(l.length<2) z.add(e.want); else if(l.length===2){ const k=(l[0]<<4)|l[1]; if(v.has(k)&&v.get(k)!==e.want) return null; v.set(k,e.want); } }
   if(z.size!==1||new Set(v.values()).size!==2) return null; const w0=[...z][0]; const T=new Int8Array(256); let n=0, ones=0; for(const y of LV) for(const x of LV){ if(x===y) continue; const k=(y<<4)|x; if(!v.has(k)) return null; const b=v.get(k)!==w0; T[k]=b?15:0; n++; if(b) ones++; }
   if(!ones||ones===n) return null;
   // ההשערה כולה, לפני שבונים משהו: התשובה היא פונקציה של מספר הזוגות (y לפני x) עם R — על 3000 דוגמאות
@@ -309,7 +309,7 @@ function inferKey(gen,M=3000){ const ex=Array.from({length:M},()=>{ const e=gen(
   return ok.length===1?ok[0]:null; }
 
 // חריץ מהמדף לפני בונה-הערכים: ביטוי דו-מקומי (סגירות הסורק, r/s בשני הסדרים) שנותן בדיוק את הלוח (0 / ערך אחד ≠0) על התחום
-function shelfMatch2(T,dom){ const {BC}=lib(); const want=dom.map(([a,b])=>T[(a<<4)|b]!==0);
+export function shelfMatch2(T,dom){ const {BC}=lib(); const want=dom.map(([a,b])=>T[(a<<4)|b]!==0);
   for(const b of BC){ if(!b.useR||!b.useS) continue; for(const [ra,sa] of [['a','b'],['b','a']]){ let v=-1, ok=true;
       for(let k=0;k<dom.length&&ok;k++){ const [a,c]=dom[k]; const r=ra==='a'?a:c, sv=ra==='a'?c:a; const y=b.tab[(r<<4)|sv]; if(y<0){ ok=false; break; } if(want[k]){ if(y===0) ok=false; else if(v<0) v=y; else if(v!==y) ok=false; } else if(y!==0) ok=false; }
       if(ok&&(v===1||v===15)) return {e:b.e,order:ra}; } } return null; }

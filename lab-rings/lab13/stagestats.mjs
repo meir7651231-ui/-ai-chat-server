@@ -4,8 +4,8 @@
 import fs from 'fs';
 const FILE='stage-stats.jsonl';
 export const STAGE_ENV={'בונה-ערכים':'VMS','מסגרת-לולאה':'LOOPMS','פיצול-מקרים':'CASEMS','קיפול+מיפוי':'POMS','סריקה-עם-זיכרון':'SCANMS','סינון-נסתר':'HFMS','בחירה-במקום':'PICKMS','מצב-רחב':'WIDEMS',
-  'רצף-מקום':'POSMS','אם-רשימה':'IFPMS','מסגרות-סריקה':'CUTMS','מסגרות-החלטה':'IFMS','מיון-לפי-מפתח':'KSMS','אם-אחרת':'IFEMS','חלונות':'WINMS','סידור-מקומי':'REARRMS','חמדני':'GREEDYMS','מצב-רחב-2':'WIDE2MS','סינון-סטטיסטי':'SSMS','זוגות':'PAIRMS'};   // fam-judge: שלבים חדשים (מיפוי-מקומות במכוון לא רשום ⇒ תמיד 150 שנ׳)
-export const STAGE_DEFAULT={WINMS:120000,REARRMS:150000,GREEDYMS:120000,VMS:90000,LOOPMS:60000,CASEMS:280000,POMS:150000,SCANMS:150000,HFMS:300000,PICKMS:150000,WIDEMS:120000,POSMS:200000,IFPMS:150000,CUTMS:150000,IFMS:240000,KSMS:240000,IFEMS:285000,WIDE2MS:120000,SSMS:150000,PAIRMS:120000};
+  'רצף-מקום':'POSMS','אם-רשימה':'IFPMS','מסגרות-סריקה':'CUTMS','מסגרות-החלטה':'IFMS','מיון-לפי-מפתח':'KSMS','אם-אחרת':'IFEMS','חלונות':'WINMS','סידור-מקומי':'REARRMS','חמדני':'GREEDYMS','מצב-רחב-2':'WIDE2MS','סינון-סטטיסטי':'SSMS','זוגות':'PAIRMS','רצפים-וקטעים':'RUNSMS','הליכה-בצעד':'WALKMS','שותפים-וצירופים':'TUPMS','דירוג-ומחלקות':'RANKMS'};   // fam-judge: שלבים חדשים (מיפוי-מקומות במכוון לא רשום ⇒ תמיד 150 שנ׳)
+export const STAGE_DEFAULT={RUNSMS:120000,WALKMS:120000,TUPMS:150000,RANKMS:180000,WINMS:120000,REARRMS:150000,GREEDYMS:120000,VMS:90000,LOOPMS:60000,CASEMS:280000,POMS:150000,SCANMS:150000,HFMS:300000,PICKMS:150000,WIDEMS:120000,POSMS:200000,IFPMS:150000,CUTMS:150000,IFMS:240000,KSMS:240000,IFEMS:285000,WIDE2MS:120000,SSMS:150000,PAIRMS:120000};
 let H=null; const load=()=>{ if(H) return H; H={}; try{ for(const l of fs.readFileSync(FILE,'utf8').split('\n')){ if(!l) continue; const r=JSON.parse(l); (H[r.stage]=H[r.stage]||[]).push(r); } }catch{} return H; };
 export function learnedBudget(stage){ if(process.env.STAGEOFF) return null; const obs=load()[stage]; if(!obs) return null;
   const wins=obs.filter(o=>o.ok).map(o=>o.sec); if(!wins.length) return obs.length>=15?20000:null;   // לא הצליח אף פעם ב-15 ניסיונות ⇒ 20 שנ׳

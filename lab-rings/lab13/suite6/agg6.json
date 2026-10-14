@@ -1,0 +1,235 @@
+{
+ "tasks": [
+  {
+   "name": "השלישי מהסוף",
+   "kind": "list2num",
+   "src": "l=>l.length>2?l[l.length-3]:0",
+   "difficulty": "easy",
+   "note": "Returns the third element from the end, or 0 for short lists."
+  },
+  {
+   "name": "ירידה בהתחלה",
+   "kind": "list2num",
+   "src": "l=>l.length>1&&l[0]>l[1]?15:0",
+   "difficulty": "easy",
+   "note": "Flags 15 when the first element is larger than the second, else 0."
+  },
+  {
+   "name": "הגדול מבין שני הראשונים",
+   "kind": "list2num",
+   "src": "l=>Math.max(l[0]||0,l[1]||0)",
+   "difficulty": "easy",
+   "note": "Returns the larger of the first two elements (missing ones count as 0)."
+  },
+  {
+   "name": "סכום שני האחרונים",
+   "kind": "list2num",
+   "src": "l=>l.slice(-2).reduce((a,b)=>a+b,0)&15",
+   "difficulty": "easy",
+   "note": "Adds the last two elements modulo 16."
+  },
+  {
+   "name": "הראשון מעל 12",
+   "kind": "list2num",
+   "src": "l=>{ for(const x of l) if(x>12) return x; return 0; }",
+   "difficulty": "easy",
+   "note": "Returns the first element above 12, or 0 if none."
+  },
+  {
+   "name": "שארית שתיים בשלוש",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>x%3===2).length",
+   "difficulty": "easy",
+   "note": "Counts elements that leave remainder 2 when divided by 3."
+  },
+  {
+   "name": "סכום המקומות של הזוגיים",
+   "kind": "list2num",
+   "src": "l=>Math.min(15,l.reduce((a,x,i)=>x%2===0?a+i:a,0))",
+   "difficulty": "easy",
+   "note": "Adds up the positions of the even elements, capped at 15."
+  },
+  {
+   "name": "הפרש שני הראשונים",
+   "kind": "list2num",
+   "src": "l=>l.length>1?Math.abs(l[0]-l[1]):0",
+   "difficulty": "easy",
+   "note": "Returns the distance between the first two elements, or 0 for short lists."
+  },
+  {
+   "name": "ממוצע הקצוות",
+   "kind": "list2num",
+   "src": "l=>l.length?(l[0]+l[l.length-1])>>1:0",
+   "difficulty": "easy",
+   "note": "Returns the average of the first and last elements rounded down, or 0 when empty."
+  },
+  {
+   "name": "זוגי בראש או בזנב",
+   "kind": "list2num",
+   "src": "l=>l.length?(l[0]%2===0?l[0]:l[l.length-1]):0",
+   "difficulty": "easy",
+   "note": "Returns the first element when it is even, otherwise the last element; 0 when empty."
+  },
+  {
+   "name": "רצף עוקבים ארוך",
+   "kind": "list2num",
+   "src": "l=>{ let b=l.length?1:0, c=1; for(let i=1;i<l.length;i++){ c=l[i]===l[i-1]+1?c+1:1; if(c>b) b=c; } return b; }",
+   "difficulty": "medium",
+   "note": "Returns the length of the longest stretch where each element is one more than the one before it."
+  },
+  {
+   "name": "ממוצע הזוגיים",
+   "kind": "list2num",
+   "src": "l=>{ const e=l.filter(x=>x%2===0); return e.length?Math.floor(e.reduce((a,b)=>a+b,0)/e.length):0; }",
+   "difficulty": "medium",
+   "note": "Returns the average of the even elements rounded down, or 0 if there are none."
+  },
+  {
+   "name": "הירידה הראשונה",
+   "kind": "list2num",
+   "src": "l=>{ for(let i=1;i<l.length;i++) if(l[i]<l[i-1]) return l[i]; return 0; }",
+   "difficulty": "medium",
+   "note": "Returns the first element that is smaller than the one before it, or 0 if none."
+  },
+  {
+   "name": "רצפים אי-זוגיים",
+   "kind": "list2num",
+   "src": "l=>l.filter((x,i)=>x%2===1&&(i===0||l[i-1]%2===0)).length",
+   "difficulty": "medium",
+   "note": "Counts the maximal stretches of neighbouring odd elements."
+  },
+  {
+   "name": "מקום הזוגי הגדול",
+   "kind": "list2num",
+   "src": "l=>{ let b=-1; for(let i=0;i<l.length;i++) if(l[i]%2===0&&(b<0||l[i]>l[b])) b=i; return b<0?15:b; }",
+   "difficulty": "medium",
+   "note": "Returns the index of the largest even element, or 15 if there is no even element."
+  },
+  {
+   "name": "שינויי כיוון",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if((l[i]-l[i-1])*(l[i+1]-l[i])<0) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts the places where the list switches between going up and going down."
+  },
+  {
+   "name": "שיא במקומות זוגיים",
+   "kind": "list2num",
+   "src": "l=>l.filter((x,i)=>i%2===0).reduce((a,b)=>Math.max(a,b),0)",
+   "difficulty": "medium",
+   "note": "Returns the largest element at an even position, or 0 when empty."
+  },
+  {
+   "name": "מספר האיים",
+   "kind": "list2num",
+   "src": "l=>l.filter((x,i)=>x>=12&&(i===0||l[i-1]<12)).length",
+   "difficulty": "medium",
+   "note": "Counts the maximal stretches of neighbouring elements that are 12 or more."
+  },
+  {
+   "name": "הקרוב לאחרון",
+   "kind": "list2num",
+   "src": "l=>{ if(l.length<2) return 0; const t=l[l.length-1]; let b=l[0]; for(const x of l.slice(0,-1)) if(Math.abs(x-t)<Math.abs(b-t)||(Math.abs(x-t)===Math.abs(b-t)&&x<b)) b=x; return b; }",
+   "difficulty": "medium",
+   "note": "Among all elements before the last, returns the one closest in value to the last (the smaller on ties); 0 for short lists."
+  },
+  {
+   "name": "חציון שלושת הראשונים",
+   "kind": "list2num",
+   "src": "l=>{ const w=l.slice(0,3).sort((a,b)=>a-b); return w.length?w[(w.length-1)>>1]:0; }",
+   "difficulty": "medium",
+   "note": "Returns the middle value of the first three elements (the lower middle when there are only two), or 0 when empty."
+  },
+  {
+   "name": "הנפילה הגדולה",
+   "kind": "list2num",
+   "src": "l=>{ let m=0; for(let i=1;i<l.length;i++) m=Math.max(m,l[i-1]-l[i]); return m; }",
+   "difficulty": "medium",
+   "note": "Returns the largest drop from an element to the next one, or 0 if the list never goes down."
+  },
+  {
+   "name": "הקטן שאחרי השיא",
+   "kind": "list2num",
+   "src": "l=>{ const i=l.indexOf(Math.max(...l)); return i>=0&&i+1<l.length?Math.min(...l.slice(i+1)):0; }",
+   "difficulty": "medium",
+   "note": "Returns the smallest element that comes after the largest one, or 0 if the largest is last."
+  },
+  {
+   "name": "מקום הקרוב לממוצע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length; if(!n) return 15; const s=l.reduce((a,b)=>a+b,0); let b=0; for(let i=1;i<n;i++) if(Math.abs(l[i]*n-s)<Math.abs(l[b]*n-s)) b=i; return b; }",
+   "difficulty": "medium",
+   "note": "Returns the index of the element closest to the mean (the first on ties), or 15 when empty."
+  },
+  {
+   "name": "שודד הבתים",
+   "kind": "list2num",
+   "src": "l=>{ let a=0, b=0; for(const x of l){ const c=Math.max(b,a+x-8); a=b; b=c; } return Math.min(15,b); }",
+   "difficulty": "hard",
+   "note": "Picks elements with no two neighbours both picked so that the total of (element minus 8) is largest, and returns that total capped at 15."
+  },
+  {
+   "name": "הסכום החסר הראשון",
+   "kind": "list2num",
+   "src": "l=>{ const v=l.map(x=>x-7).sort((a,b)=>a-b); let r=1; for(const x of v){ if(x>r) break; r+=x; } return Math.min(15,r); }",
+   "difficulty": "hard",
+   "note": "Subtracts 7 from every element and returns the smallest positive whole number that is not the sum of some of them, capped at 15."
+  },
+  {
+   "name": "גובה עץ החיפוש",
+   "kind": "list2num",
+   "src": "l=>{ const L=[], R=[]; let h=0; for(let i=0;i<l.length;i++){ let p=0, d=1; if(i){ for(;;){ d++; const s=l[i]<l[p]?L:R; if(s[p]===undefined){ s[p]=i; break; } p=s[p]; } } h=Math.max(h,d); } return h; }",
+   "difficulty": "hard",
+   "note": "Inserts the elements in order into a binary search tree and returns its height in nodes (0 when empty)."
+  },
+  {
+   "name": "מינימום קפיצות",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length; if(n<2) return 0; const d=Array(n).fill(99); d[0]=0; for(let i=0;i<n;i++) for(let k=1;k<=l[i]%3+1&&i+k<n;k++) d[i+k]=Math.min(d[i+k],d[i]+1); return d[n-1]; }",
+   "difficulty": "hard",
+   "note": "From index 0, each element x allows a jump forward of 1 up to x mod 3 plus 1 places; returns the fewest jumps to reach the last index."
+  },
+  {
+   "name": "הדו-טוני הארוך",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length, u=[], w=[]; for(let i=0;i<n;i++){ u[i]=1; for(let j=0;j<i;j++) if(l[j]<l[i]) u[i]=Math.max(u[i],u[j]+1); } for(let i=n-1;i>=0;i--){ w[i]=1; for(let j=i+1;j<n;j++) if(l[j]<l[i]) w[i]=Math.max(w[i],w[j]+1); } let b=0; for(let i=0;i<n;i++) b=Math.max(b,u[i]+w[i]-1); return b; }",
+   "difficulty": "hard",
+   "note": "Returns the length of the longest subsequence that first rises and then falls."
+  },
+  {
+   "name": "משחק הקצוות",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length, m={}; const f=(i,j)=>{ if(i>j) return 0; const k=i*9+j; if(!(k in m)) m[k]=Math.max(l[i]-f(i+1,j),l[j]-f(i,j-1)); return m[k]; }; return Math.max(0,Math.min(15,f(0,n-1))); }",
+   "difficulty": "hard",
+   "note": "Two players alternately take an element from either end, both playing optimally; returns how much more the first player collects, clamped to 0..15."
+  },
+  {
+   "name": "זוגות על אלכסון",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) if(l[j]-l[i]===j-i) c++; return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Counts pairs of positions whose value difference equals their distance, capped at 15."
+  },
+  {
+   "name": "קטעים שסכומם מתחלק בארבע",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++){ let s=0; for(let j=i;j<l.length;j++){ s+=l[j]; if(s%4===0) c++; } } return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Counts contiguous stretches whose sum is a multiple of four, capped at 15."
+  },
+  {
+   "name": "ממוצע של שניים אחרים",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>l.some(a=>a!==x&&a<x&&l.includes(2*x-a))).length",
+   "difficulty": "hard",
+   "note": "Counts the elements that are the exact average of two other elements of the list."
+  },
+  {
+   "name": "מקסימומים שונים בחלונות",
+   "kind": "list2num",
+   "src": "l=>{ if(l.length<3) return l.length?1:0; const s=new Set(); for(let i=0;i+2<l.length;i++) s.add(Math.max(l[i],l[i+1],l[i+2])); return s.size; }",
+   "difficulty": "hard",
+   "note": "Counts the distinct maxima among all windows of three neighbours (a shorter non-empty list is one window)."
+  }
+ ]
+}
