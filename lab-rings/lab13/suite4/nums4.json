@@ -1,0 +1,374 @@
+{
+ "tasks": [
+  {
+   "name": "משלים ל-15",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>15-a",
+   "difficulty": "easy",
+   "note": "Returns the 4-bit complement 15 minus a."
+  },
+  {
+   "name": "פי שלוש",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>(a*3)&15",
+   "difficulty": "easy",
+   "note": "Triples a and keeps the low four bits."
+  },
+  {
+   "name": "הגדול מבין שניים",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>Math.max(a,b)",
+   "difficulty": "easy",
+   "note": "Returns the larger of the two inputs."
+  },
+  {
+   "name": "איחוד ביטים",
+   "kind": "num",
+   "ins": [
+    0,
+    3
+   ],
+   "src": "(a,b)=>a|b",
+   "difficulty": "easy",
+   "note": "Returns the bitwise OR of the two inputs."
+  },
+  {
+   "name": "חצי",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>a>>1",
+   "difficulty": "easy",
+   "note": "Halves a, rounding down."
+  },
+  {
+   "name": "קסור",
+   "kind": "num",
+   "ins": [
+    1,
+    3
+   ],
+   "src": "(a,b)=>a^b",
+   "difficulty": "easy",
+   "note": "Returns the bitwise XOR of the two inputs."
+  },
+  {
+   "name": "מקסימום שלושה",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>Math.max(a,b,c)",
+   "difficulty": "easy",
+   "note": "Returns the largest of three inputs."
+  },
+  {
+   "name": "שארית שלוש",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>a%3",
+   "difficulty": "easy",
+   "note": "Returns a modulo 3."
+  },
+  {
+   "name": "שווים?",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>a===b?15:0",
+   "difficulty": "easy",
+   "note": "Flags 15 when both inputs are equal, else 0."
+  },
+  {
+   "name": "סכום מוגבל",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>Math.min(15,a+b)",
+   "difficulty": "easy",
+   "note": "Adds the inputs, saturating at 15."
+  },
+  {
+   "name": "ריבוע מודולו",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>(a*a)&15",
+   "difficulty": "medium",
+   "note": "Squares a and keeps the low four bits."
+  },
+  {
+   "name": "מפת אוהל",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>a<8?2*a:2*(15-a)+1",
+   "difficulty": "medium",
+   "note": "Tent map: doubles a below 8, otherwise folds it back down from the top."
+  },
+  {
+   "name": "חילוף חצאי ביטים",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>((a&3)<<2)|(a>>2)",
+   "difficulty": "medium",
+   "note": "Swaps the low and high two-bit halves of a."
+  },
+  {
+   "name": "ממוצע",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>(a+b)>>1",
+   "difficulty": "medium",
+   "note": "Returns the floor of the average of the two inputs."
+  },
+  {
+   "name": "שארית מוזזת",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>a%(b+1)",
+   "difficulty": "medium",
+   "note": "Returns a modulo b plus one."
+  },
+  {
+   "name": "כיבוי ביטים",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>a&~b&15",
+   "difficulty": "medium",
+   "note": "Clears in a every bit that is set in b."
+  },
+  {
+   "name": "סכום מודולו",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>(a+b)%(c+1)",
+   "difficulty": "medium",
+   "note": "Returns a plus b modulo c plus one."
+  },
+  {
+   "name": "ממוצע שלושה",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>Math.floor((a+b+c)/3)",
+   "difficulty": "medium",
+   "note": "Returns the floor of the mean of three inputs."
+  },
+  {
+   "name": "זוגיים בשלישייה",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>[a,b,c].filter(x=>x%2===0).length",
+   "difficulty": "medium",
+   "note": "Counts how many of the three inputs are even."
+  },
+  {
+   "name": "הכנסת ביט",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>((a<<1)|(b&1))&15",
+   "difficulty": "medium",
+   "note": "Shifts a left by one and shifts in the low bit of b."
+  },
+  {
+   "name": "מכפלה מודולו",
+   "kind": "num",
+   "ins": [
+    0,
+    3
+   ],
+   "src": "(a,b)=>(a*b)&15",
+   "difficulty": "medium",
+   "note": "Multiplies the inputs modulo 16."
+  },
+  {
+   "name": "משולשי מודולו",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>(a*(a+1)/2)&15",
+   "difficulty": "medium",
+   "note": "Returns the a-th triangular number modulo 16."
+  },
+  {
+   "name": "עליות",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>(a<b?1:0)+(b<c?1:0)",
+   "difficulty": "medium",
+   "note": "Counts the strict rises from a to b and from b to c."
+  },
+  {
+   "name": "אפסים בסוף",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>{ if(!a) return 4; let n=0; while(!(a&1)){ a>>=1; n++; } return n; }",
+   "difficulty": "medium",
+   "note": "Counts trailing zero bits of a, with 4 for zero."
+  },
+  {
+   "name": "צעדי קולץ",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ let n=0; while(a>1){ a=a&1?3*a+1:a/2; n++; } return Math.min(n,15); }",
+   "difficulty": "hard",
+   "note": "Counts Collatz steps from a down to 1, capped at 15."
+  },
+  {
+   "name": "מחלקים משותפים",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ let c=0; for(let d=1;d<=Math.min(a,b);d++) if(a%d===0&&b%d===0) c++; return c; }",
+   "difficulty": "hard",
+   "note": "Counts the common divisors of the inputs, with 0 when either is zero."
+  },
+  {
+   "name": "כפולות 3 בטווח",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ let c=0; for(let x=a;x<=b;x++) if(x%3===0) c++; return c; }",
+   "difficulty": "hard",
+   "note": "Counts multiples of three in the closed range from a to b."
+  },
+  {
+   "name": "צעדים במעגל",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ for(let k=0;k<16;k++) if(((a+k*c)&15)===b) return k; return 15; }",
+   "difficulty": "hard",
+   "note": "Counts steps of size c modulo 16 needed to go from a to b, or 15 if never reached."
+  },
+  {
+   "name": "סכום מחלקים",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ let s=0; for(let d=1;d<a;d++) if(a%d===0) s+=d; return s&15; }",
+   "difficulty": "hard",
+   "note": "Sums the proper divisors of a modulo 16."
+  },
+  {
+   "name": "ביטים משותפים",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ let x=a&b, c=0; while(x){ c+=x&1; x>>=1; } return c; }",
+   "difficulty": "hard",
+   "note": "Counts the bits set in both inputs."
+  },
+  {
+   "name": "מרחק מלך",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(p,q)=>Math.max(Math.abs((p>>2)-(q>>2)),Math.abs((p&3)-(q&3)))",
+   "difficulty": "hard",
+   "note": "Returns king-move distance between two cells of a 4x4 grid."
+  },
+  {
+   "name": "חזקה מודולרית",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ if(!c) return 0; let r=1%c; for(let i=0;i<b;i++) r=(r*a)%c; return r; }",
+   "difficulty": "hard",
+   "note": "Computes a to the power b modulo c, or 0 when c is zero."
+  },
+  {
+   "name": "מקדם בינומי",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ if(b>a) return 0; let r=1; for(let i=0;i<b;i++) r=r*(a-i)/(i+1); return Math.min(15,r); }",
+   "difficulty": "hard",
+   "note": "Returns a choose b capped at 15."
+  },
+  {
+   "name": "מנה עליונה",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>a?Math.min(15,Math.ceil(b/a)):15",
+   "difficulty": "hard",
+   "note": "Returns ceiling of b divided by a capped at 15, or 15 when a is zero."
+  }
+ ]
+}
