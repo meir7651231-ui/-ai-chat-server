@@ -1,12 +1,14 @@
 // «המוח המאוחד»: מקבל משימה (רק דוגמאות קלט/פלט) ובוחר לבד איזה בונה לנסות — מהמהיר לאיטי.
 //   מספרים            ⇒ בונה-ערכים ⇒ מסגרת-לולאה ⇒ פיצול-מקרים ⇒ פריסת-ביטים (תקציב אחד למשימה: כל שלב מקבל רק את מה שנשאר)
-//   רשימה ⇒ מספר      (בדיקה קשוחה: הרשימה חייבת להישאר שלמה; פתרון הורס נעטף ב«שומר-רשימה») ⇒ צירוף-זוג ⇒ בחירה-במקום ⇒ מצב-רחב ⇒ שרשרת ⇒ קיפול+מיפוי ⇒ סריקה-עם-זיכרון ⇒ סינון-נסתר (לומד תנאי חסר) · שער-ניידות
-//   רשימה ⇒ רשימה     ⇒ רצף-כלים ⇒ סינון ⇒ סינון עם תנאי שנלמד מהדוגמאות ⇒ רצף-מקום ⇒ אם-רשימה ⇒ מסגרות-סריקה ⇒ מסגרות-החלטה ⇒ מיון-לפי-מפתח ⇒ מצב-רחב ⇒ אם-אחרת · שער-ניידות (תיקון-קפיצות)
+//   רשימה ⇒ מספר      (בדיקה קשוחה: הרשימה חייבת להישאר שלמה; פתרון הורס נעטף ב«שומר-רשימה») ⇒ צירוף-זוג ⇒ בחירה-במקום ⇒ מצב-רחב ⇒ שרשרת ⇒ קיפול+מיפוי ⇒ סריקה-עם-זיכרון ⇒ סינון-נסתר (לומד תנאי חסר) ⇒ מצב-רחב-2 ⇒ זוגות (לולאה כפולה, יחס/מפתח נלמד) · שער-ניידות
+//   רשימה ⇒ רשימה     ⇒ רצף-כלים ⇒ סינון ⇒ סינון עם תנאי שנלמד מהדוגמאות ⇒ רצף-מקום ⇒ אם-רשימה ⇒ מסגרות-סריקה ⇒ מסגרות-החלטה ⇒ מיון-לפי-מפתח ⇒ מצב-רחב ⇒ אם-אחרת ⇒ מיפוי-מקומות ⇒ מצב-רחב-2 ⇒ סינון-סטטיסטי · שער-ניידות (תיקון-קפיצות)
+//   (fam-judge: ארבעת השלבים החדשים בסוף השרשראות — הזולים/בלי-כתיבה-למדף קודם: מיפוי-מקומות <0.3s, מצב-רחב-2 0.5–4s; הלומדים-וכותבים-למדף אחרונים: סינון-סטטיסטי, זוגות)
 import fs from 'fs'; import { run } from './machine3s.mjs'; import { valueBuild, show as showExpr } from './tzoref-value.mjs'; import { shorten, finalCheck, movable } from './tzoref.mjs';
 import { listGen, listCompose } from './listcomp.mjs'; import { llGen, llCompose } from './listlist.mjs'; import { pipeCompose } from './pipeline.mjs';
 import { loopBuild } from './numloop.mjs'; import { STAGE_ENV, STAGE_DEFAULT, learnedBudget, record } from './stagestats.mjs'; import { repairJumps, deepRelocOk } from './jumpfix.mjs'; import { posCompose } from './poscompose.mjs'; import { ifPosCompose } from './ifpos.mjs'; import { caseBuild } from './tzoref-case.mjs'; import { bitsliceSolve } from './bitslice.mjs';
 import { filterCompose } from './filtcomp.mjs'; import { ifCompose } from './ifcomp.mjs'; import { hiddenFilter } from './hiddenfilter.mjs'; import { scanCompose as cutCompose } from './cutframes.mjs'; import { postOpCompose } from './postop.mjs'; import { scanCompose as foldCompose } from './scanfold.mjs'; import { foldStaged } from './scanfold-staged.mjs';
 import { probeNum, scanGate, timeGate, PROBE_ON } from './probe-plan.mjs'; import { pickAtCompose } from './pickat.mjs'; import { wideCompose } from './wideframes.mjs'; import { keySortCompose } from './keysort.mjs'; import { ifElseCompose } from './ifelse.mjs';
+import { permCompose } from './permmap.mjs'; import { wide2Compose } from './wide2frames.mjs'; import { statScanCompose } from './statscan.mjs'; import { pairCompose } from './pairframes.mjs';
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 export function genFor(spec){ const f=new Function('return ('+spec.src+')')();
   if(spec.kind==='num'){ const ins=spec.ins; return ()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c]))&15; const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; }; }
@@ -55,7 +57,9 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
       || honest(await attempt('שרשרת',()=>pipeCompose(gen)))
       || honest(await attempt('קיפול+מיפוי',()=>postOpCompose(gen,{ms:+process.env.POMS||150000})))   // קיפול על תת-קבוצה נסתרת + פעולה אחריו / שני קיפולים (postop.mjs)
       || honest(await attempt('סריקה-עם-זיכרון',()=>PROBE_ON()?scanGate(gen,spec,+process.env.SCANMS||150000):foldStaged(gen,{ms:+process.env.SCANMS||150000})))   // מצב רץ: שיא, קודם, מיקום (scanfold.mjs)
-      || honest(await attempt('סינון-נסתר',()=>hiddenFilter(gen)));
+      || honest(await attempt('סינון-נסתר',()=>hiddenFilter(gen)))
+      || honest(await attempt('מצב-רחב-2',()=>wide2Compose(gen,{ms:+process.env.WIDE2MS||120000})))   // חלוקה-עם-היסט / חוצה-סף / שני-חלקים / ממוצע-רץ (wide2frames.mjs) · נכשל תוך 0.5–4 שנ׳, לא כותב למדף
+      || honest(await attempt('זוגות',()=>pairCompose(gen,{ms:+process.env.PAIRMS||120000})));   // לולאה כפולה / איבר-מול-סטטיסטיקה, יחס/מפתח נלמד (pairframes.mjs) · אחרון: עד ~117 שנ׳ על משימה שלא נפתרה
     if(r&&!deepRelocOk(r.prog,strict)){ const f=repairJumps(r.prog,gen); if(f&&deepRelocOk(f,strict)) r={...r,prog:f,how:(r.how||r.stage)+' · תיקון-קפיצות',sure:false}; else tried.push(r.stage+': לא נייד (קפיצה קבועה)'); } }   // שער-ניידות גם כאן; תוכנית מתוקנת נבדקת שוב (sure=false)
   else { r=await attempt('רצף-כלים',()=>llCompose(gen)) || await attempt('סינון',()=>filterCompose(gen))
       || await attempt('סינון+תנאי-נלמד',async()=>{ const tt=inferFromExamples(gen); if(!tt) return {prog:null}; const n=await learnCond(tt); if(!n) return {prog:null}; return filterCompose(gen); })
@@ -64,7 +68,10 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
       || await attempt('מסגרות-החלטה',()=>PROBE_ON()?timeGate('מסגרות-החלטה','list2list',ms=>ifCompose(gen,{ms}),+process.env.IFMS||240000):ifCompose(gen))
       || await attempt('מיון-לפי-מפתח',()=>keySortCompose(gen,{ms:+process.env.KSMS||240000}))   // סידור-מחדש לפי מפתח שנלמד מהדוגמאות (keysort.mjs)
       || await attempt('מצב-רחב',()=>wideCompose(gen,{ms:+process.env.WIDEMS||120000}))   // קח/דלג/הוצא לפי תקציב בשני תאים (wideframes.mjs)
-      || await attempt('אם-אחרת',()=>ifElseCompose(gen,{ms:Math.max(20000,(+process.env.IFEMS||285000)-(Date.now()-T0))}));   // אם [תנאי] אז [צעד א] אחרת [צעד ב] (ifelse.mjs) · מקבל רק את מה שנשאר מ-5 דקות
+      || await attempt('אם-אחרת',()=>ifElseCompose(gen,{ms:Math.max(20000,(+process.env.IFEMS||285000)-(Date.now()-T0))}))   // אם [תנאי] אז [צעד א] אחרת [צעד ב] (ifelse.mjs) · מקבל רק את מה שנשאר מ-5 דקות
+      || await attempt('מיפוי-מקומות',()=>permCompose(gen,{ms:+process.env.PERMMS||150000}))   // פלט[i] = קלט[p(n,i)]: m(n) ו-p(n,i) נלמדים מהדוגמאות (permmap.mjs) · דוחה תוך <0.3 שנ׳ · בלי תקציב-נלמד
+      || await attempt('מצב-רחב-2',()=>wide2Compose(gen,{ms:+process.env.WIDE2MS||120000}))   // שני-חלקים / ממוצע-רץ / קיצוץ-עד-שנכנס (wide2frames.mjs) · לא כותב למדף
+      || await attempt('סינון-סטטיסטי',()=>statScanCompose(gen,{ms:+process.env.SSMS||150000}));   // סנן/קח/דלג/פרוסה לפי x·הבא·הקודם·סטטיסטיקות, זוגות, יש-קודם, הזוג-הראשון, מיון-במקום (statscan.mjs) · לומד וכותב למדף ⇒ אחרון
     if(r&&!deepRelocOk(r.prog,gen)){ const f=repairJumps(r.prog,gen); if(f&&deepRelocOk(f,gen)) r={...r,prog:f,how:(r.how||r.stage)+' · תיקון-קפיצות'}; else tried.push(r.stage+': לא נייד (קפיצה קבועה)'); } }   // שער-ניידות: פתרון שקופץ לשורה קבועה בלי סימון ⇒ repairJumps; לא נוגע בפתרון נייד ולא מבטל פתרון
   let bad=null; if(r){ bad=0; if(!r.sure) for(let k=0;k<20000;k++){ const e=strict(); const z=run(r.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) bad++; } }
   return {ok:!!r&&bad===0,prog:r&&bad===0?r.prog:null,len:r?.prog?.length??null,how:r?.how||null,stage:r?.stage||null,bad,tried,ms:Date.now()-T0}; }
