@@ -1,0 +1,18 @@
+G0 FROZEN 2026-10-14T20:16:12Z
+sha256(fg/grammar.mjs) = b3593bebe0c29479d951a9a1aa6bb9efa5062c2793013cc3821fa9731e4c911f
+No grammar changes after this line. Costs / templates (fg/prior/*.json) and the index are learned data, not grammar.
+
+G0 = strat-library/dsl.mjs productions (198) + 7 productions named by strat-plan.md Track A:
+  e.prv, e.nxt                 lambda leaves (strat-dsl prv/nxt)
+  g.lt, g.eq, g.odd            conditions of the case split (strat-dsl lt/eq/odd)
+  l.ite                        ite(B,A,C) for lists (g.ite for numbers was already in the library grammar); case split only, held-out acceptance
+  l.cat                        A++B, meet-in-the-middle only (A+-B, m16, cap reuse library g.add/g.sub/g.and15/g.cap15)
+
+Justification from strat-judge/u6.mjs (blind suite6 hits by strat-dsl that strat-library missed, 6 tasks):
+  ירידה בהתחלה (list2num)              m16(sub(m16(amax(n,l)),amax(sec/x,l)))      -> m16, A-B
+  סכום המקומות של הזוגיים (list2num)   cap(pcnt((0==(b%2)),l))                     -> cap
+  שינויי כיוון (list2num)               sub(cnt((x%prv)<nxt),cnt(prv<(x%nxt)))      -> prv/nxt, A-B
+  סיבוב עד ירידה (list2list)            cat(dw((prv mx last)<x,l),tw(...))          -> A++B, prv
+  רצפים אי-זוגיים (list2num)           scnt(spl(x in {9,11,13,15},l))              -> (spl/scnt NOT added: not named by the plan)
+  מספר האיים (list2num)                 scnt(spl(12<=x,l))                          -> (spl/scnt NOT added: not named by the plan)
+  ite(B,A,C): no suite6 dsl-only hit uses it; added because the plan names it.

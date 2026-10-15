@@ -1,0 +1,8 @@
+cost 1 0.0s K:48 Ne:15 Be:0 Np:11 Bp:0 Bt:0 N:12 B:0 D:1 L:1
+cost 2 0.1s K:0 Ne:53 Be:0 Np:49 Bp:0 Bt:32 N:65 B:8 D:61 L:1
+cost 3 0.5s K:0 Ne:560 Be:268 Np:297 Bp:196 Bt:0 N:515 B:80 D:338 L:42
+cost 4 2.4s K:0 Ne:4206 Be:208 Np:2298 Bp:165 Bt:79 N:5287 B:423 D:2639 L:263
+cost 5 15.1s K:0 Ne:12381 Be:8678 Np:11237 Bp:4186 Bt:85 N:44433 B:3700 D:24603 L:4326
+cost 6 50.9s K:0 Ne:16511 Be:11848 Np:12008 Bp:10775 Bt:1147 N:111162 B:6004 D:71665 L:29918
+cost 7 91.3s K:0 Ne:16511 Be:16511 Np:12008 Bp:16511 Bt:1501 N:131654 B:6004 D:142484 L:97573
+{"file":"fg/tmp/uni120.part","cfg":"uni","made":872415,"evald":4570112,"ms":120025,"lastCost":8,"timeout":true,"counts":{"N":390777,"L":132124,"B":16219}}

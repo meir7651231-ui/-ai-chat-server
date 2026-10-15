@@ -8,9 +8,14 @@ import { listGen, listCompose } from './listcomp.mjs'; import { llGen, llCompose
 import { loopBuild } from './numloop.mjs'; import { STAGE_ENV, STAGE_DEFAULT, learnedBudget, record } from './stagestats.mjs'; import { repairJumps, deepRelocOk } from './jumpfix.mjs'; import { posCompose } from './poscompose.mjs'; import { ifPosCompose } from './ifpos.mjs'; import { caseBuild } from './tzoref-case.mjs'; import { bitsliceSolve } from './bitslice.mjs';
 import { filterCompose } from './filtcomp.mjs'; import { ifCompose } from './ifcomp.mjs'; import { hiddenFilter } from './hiddenfilter.mjs'; import { scanCompose as cutCompose } from './cutframes.mjs'; import { postOpCompose } from './postop.mjs'; import { scanCompose as foldCompose } from './scanfold.mjs'; import { foldStaged } from './scanfold-staged.mjs';
 import { probeNum, scanGate, timeGate, PROBE_ON } from './probe-plan.mjs'; import { pickAtCompose } from './pickat.mjs'; import { wideCompose } from './wideframes.mjs'; import { keySortCompose } from './keysort.mjs'; import { ifElseCompose } from './ifelse.mjs';
-import { permCompose } from './permmap.mjs'; import { wide2Compose } from './wide2frames.mjs'; import { statScanCompose } from './statscan.mjs'; import { pairCompose } from './pairframes.mjs'; import { winCompose } from './winframes.mjs'; import { rearrCompose } from './rearr.mjs'; import { greedyCompose } from './greedyframes.mjs'; import { runsCompose } from './runframes.mjs'; import { walkCompose } from './walkframes.mjs'; import { tupleCompose } from './tupleframes.mjs'; import { rankCompose } from './rankframes.mjs';
+import { permCompose } from './permmap.mjs'; import { wide2Compose } from './wide2frames.mjs'; import { statScanCompose } from './statscan.mjs'; import { pairCompose } from './pairframes.mjs'; import { winCompose } from './winframes.mjs'; import { rearrCompose } from './rearr.mjs'; import { greedyCompose } from './greedyframes.mjs'; import { runsCompose } from './runframes.mjs'; import { walkCompose } from './walkframes.mjs'; import { tupleCompose } from './tupleframes.mjs'; import { rankCompose } from './rankframes.mjs'; import { grammarStage } from './fg/stage.mjs';   // «דקדוק»: חיפוש בדקדוק G0 (fg/) · FG=0 מכבה
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
-export function genFor(spec){ const f=new Function('return ('+spec.src+')')();
+// fg/subspec.mjs: a sub-spec carries its own example source spec.draw() ⇒ {l, y} (a parent list run through the witness), instead of src
+function drawGen(spec,strictL){ const d=spec.draw; const LC=spec.kind==='list2num'?LISTCELLS:[0,...LISTCELLS];
+  const g=()=>{ const {l,y}=d(); const m=new Array(16).fill(0); m[1]=l[0]||0; l.forEach((a,i)=>{ m[a]=l[i+1]||0; }); const mem=m.map((v,k)=>LC.includes(k)?v:R(16));
+    if(spec.kind==='list2num'){ const w=y&15; return {mem,want:w,ok:r=>r[2]===w}; } const w=JSON.stringify(y); return {mem,want:w,ok:r=>JSON.stringify(walk(r))===w}; };
+  return spec.kind==='list2num'&&strictL?strictList(g):g; }
+export function genFor(spec){ if(spec.draw) return drawGen(spec,!process.env.LOOSELIST); const f=new Function('return ('+spec.src+')')();
   if(spec.kind==='num'){ const ins=spec.ins; return ()=>{ const mem=Array.from({length:16},()=>R(16)); const w=f(...ins.map(c=>mem[c]))&15; const keep=ins.map(c=>mem[c]); return {mem,want:w,ok:r=>r[2]===w&&ins.every((c,i)=>r[c]===keep[i])}; }; }
   if(spec.kind==='list2num') return process.env.LOOSELIST?listGen(f):strictList(listGen(f)); return llGen(f); }
 // בדיקה קשוחה ל«רשימה ⇒ מספר»: התשובה בתא 2 — וגם הרשימה (תא 1 ותאים 8–15) נשארת בדיוק כמו שהייתה
@@ -29,10 +34,13 @@ async function learnCond(tt){ const name='תנאי: '+tt.slice(8).map((x,i)=>x?S
   const S2=JSON.parse(fs.readFileSync('shelf3.json','utf8')); S2.named.push({name,prog:s,ins:[0],out:2,movable:movable(s,gen),by:'המוח המאוחד: תנאי שנלמד'}); fs.writeFileSync('shelf3.json',JSON.stringify(S2));
   const LG=JSON.parse(fs.readFileSync('tzoref-learned-goals.json','utf8')); LG[name]={ins:[0],tt:Array.from({length:16},(_,v)=>v<8?0:tt[v])}; fs.writeFileSync('tzoref-learned-goals.json',JSON.stringify(LG)); return name; }
 export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec); const tried=[]; const T0=Date.now();
-  const gen=spec.kind==='list2num'?listGen(new Function('return ('+spec.src+')')()):strict;   // הבונים מחפשים עם הבדיקה הרגילה; כל פתרון עובר אחר כך את הבדיקה הקשוחה
+  const gen=spec.kind==='list2num'?(spec.draw?drawGen(spec,false):listGen(new Function('return ('+spec.src+')')())):strict;   // הבונים מחפשים עם הבדיקה הרגילה; כל פתרון עובר אחר כך את הבדיקה הקשוחה
   const passes=(p,n)=>{ for(let k=0;k<n;k++){ const e=strict(); const z=run(p,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) return false; } return true; };
   const honest=x=>{ if(!x) return null; if(passes(x.prog,20000)) return {...x,sure:true}; for(const [w,tag] of [[keepList(x.prog),''],[(()=>{ const f=repairJumps(x.prog,gen); return f&&keepList(f); })(),' + תיקון-קפיצות']]) if(w&&passes(w,20000)) return {...x,prog:w,how:(x.how||x.stage)+' · עטוף ב«שומר-רשימה»'+tag,sure:true}; tried.push(x.stage+': נפסל — הורס את הרשימה'); return null; };
-  const attempt=async(name,fn)=>{ const t=Date.now(); const ev=STAGE_ENV[name], lb=learnedBudget(name), prev=ev?process.env[ev]:undefined; if(ev&&lb&&lb<(+prev||STAGE_DEFAULT[ev])) process.env[ev]=String(lb);   // תקציב שנלמד מהניסיון (stagestats.mjs)
+  const attempt=async(name,fn)=>{ const t=Date.now(); const ev=STAGE_ENV[name], lb=learnedBudget(name), prev=ev?process.env[ev]:undefined; if(ev&&lb&&lb<(+prev||STAGE_DEFAULT[ev])) process.env[ev]=String(lb);
+    const capMs=spec.kind!=='num'&&+process.env.TASKMS?(+process.env.TASKMS)-(t-T0):Infinity;   // תקרה לכל משימה (TASKMS): מה שלא נמצא בזמן הזה — כנראה לא יימצא
+    if(capMs<1000){ if(ev){ if(prev===undefined) delete process.env[ev]; else process.env[ev]=prev; } tried.push(`${name}-cap`); return null; }
+    if(ev&&capMs<Infinity&&capMs<(+process.env[ev]||STAGE_DEFAULT[ev])) process.env[ev]=String(Math.round(capMs));   // תקציב שנלמד מהניסיון (stagestats.mjs)
     let r=null; try{ r=await fn(); }catch(e){ r={prog:null,err:String(e.message||e).slice(0,80)}; if(process.env.DEBUGERR) console.error('STAGE-ERR',name,e.stack); } finally{ if(ev){ if(prev===undefined) delete process.env[ev]; else process.env[ev]=prev; } } record(name,!!(r&&r.prog),Math.round((Date.now()-t)/1000),spec.kind); tried.push(`${name}${r&&r.prog?'✓':'✗'}(${((Date.now()-t)/1000).toFixed(0)}s)${r&&r.ptag||''}`); say(tried.at(-1)); return r&&r.prog?{...r,stage:name}:null; };
   let r=null;
   if(spec.kind==='num'){ const left=()=>(+process.env.NUMMS||280000)-(Date.now()-T0), off=s=>(process.env.NUMOFF||'').split(',').includes(s);   // NUMOFF=loop,case,bits מכבה שלבים
@@ -51,23 +59,25 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
     if(!r&&!off('bits')&&left()>15000) r=await attempt('פריסת-ביטים',()=>bitsliceSolve(gen,{ins:spec.ins,ms:left()-10000}));   // רשת-ביטחון: מדויק לכל פונקציה של הקלטים (ארוך)
     }
   }
-  else if(spec.kind==='list2num'){ r=honest(await attempt('צירוף-זוג',()=>listCompose(gen)))
+  else if(spec.kind==='list2num'){ r=(process.env.FG==='0'?null:honest(await attempt('דקדוק',()=>grammarStage(spec,{ms:+process.env.FGMS||60000}))))   // ראשון: חיפוש במילון/דקדוק (מהיר)
+      || honest(await attempt('צירוף-זוג',()=>listCompose(gen)))
       || honest(await attempt('בחירה-במקום',()=>pickAtCompose(gen,{ms:+process.env.PICKMS||150000})))   // [0–2 צעדים] ⇒ אורך ⇒ k(n) נלמד ⇒ הליכה k חוליות (pickat.mjs) · דוחה משימה לא-מתאימה תוך שנייה
       || honest(await attempt('מצב-רחב',()=>wideCompose(gen,{ms:+process.env.WIDEMS||120000})))   // מספרים מעל 15 בשני תאים: צובר / תקציב K / חילוק חוזר (wideframes.mjs)
       || honest(await attempt('שרשרת',()=>pipeCompose(gen)))
       || honest(await attempt('קיפול+מיפוי',()=>postOpCompose(gen,{ms:+process.env.POMS||150000})))   // קיפול על תת-קבוצה נסתרת + פעולה אחריו / שני קיפולים (postop.mjs)
-      || honest(await attempt('סריקה-עם-זיכרון',()=>PROBE_ON()?scanGate(gen,spec,+process.env.SCANMS||150000):foldStaged(gen,{ms:+process.env.SCANMS||150000})))   // מצב רץ: שיא, קודם, מיקום (scanfold.mjs)
       || honest(await attempt('סינון-נסתר',()=>hiddenFilter(gen)))
       || honest(await attempt('מצב-רחב-2',()=>wide2Compose(gen,{ms:+process.env.WIDE2MS||120000})))   // חלוקה-עם-היסט / חוצה-סף / שני-חלקים / ממוצע-רץ (wide2frames.mjs) · נכשל תוך 0.5–4 שנ׳, לא כותב למדף
-      || honest(await attempt('זוגות',()=>pairCompose(gen,{ms:+process.env.PAIRMS||120000})))
       || honest(await attempt('חלונות',()=>winCompose(gen,{ms:+process.env.WINMS||120000})))
       || honest(await attempt('חמדני',()=>greedyCompose(gen,{ms:+process.env.GREEDYMS||120000})))
       || honest(await attempt('רצפים-וקטעים',()=>runsCompose(gen,{ms:+process.env.RUNSMS||120000})))
       || honest(await attempt('הליכה-בצעד',()=>walkCompose(gen,{ms:+process.env.WALKMS||120000})))
       || honest(await attempt('שותפים-וצירופים',()=>tupleCompose(gen,{ms:+process.env.TUPMS||150000})))
-      || honest(await attempt('דירוג-ומחלקות',()=>rankCompose(gen,{ms:+process.env.RANKMS||180000})));   // לולאה כפולה / איבר-מול-סטטיסטיקה, יחס/מפתח נלמד (pairframes.mjs) · אחרון: עד ~117 שנ׳ על משימה שלא נפתרה
+      || honest(await attempt('דירוג-ומחלקות',()=>rankCompose(gen,{ms:+process.env.RANKMS||180000})))   // לולאה כפולה / איבר-מול-סטטיסטיקה, יחס/מפתח נלמד (pairframes.mjs) · אחרון: עד ~117 שנ׳ על משימה שלא נפתרה
+      || honest(await attempt('סריקה-עם-זיכרון',()=>PROBE_ON()?scanGate(gen,spec,+process.env.SCANMS||150000):foldStaged(gen,{ms:+process.env.SCANMS||150000})))   // אחרי כל השיטות המהירות: איטית כשאינה מוצאת
+      || honest(await attempt('זוגות',()=>pairCompose(gen,{ms:+process.env.PAIRMS||120000})));
     if(r&&!deepRelocOk(r.prog,strict)){ const f=repairJumps(r.prog,gen); if(f&&deepRelocOk(f,strict)) r={...r,prog:f,how:(r.how||r.stage)+' · תיקון-קפיצות',sure:false}; else tried.push(r.stage+': לא נייד (קפיצה קבועה)'); } }   // שער-ניידות גם כאן; תוכנית מתוקנת נבדקת שוב (sure=false)
-  else { r=await attempt('רצף-כלים',()=>llCompose(gen)) || await attempt('סינון',()=>filterCompose(gen))
+  else { r=(process.env.FG==='0'?null:await attempt('דקדוק',()=>grammarStage(spec,{ms:+process.env.FGMS||60000})))   // ראשון: חיפוש במילון/דקדוק (מהיר)
+      || await attempt('רצף-כלים',()=>llCompose(gen)) || await attempt('סינון',()=>filterCompose(gen))
       || await attempt('סינון+תנאי-נלמד',async()=>{ const tt=inferFromExamples(gen); if(!tt) return {prog:null}; const n=await learnCond(tt); if(!n) return {prog:null}; return filterCompose(gen); })
       || await attempt('רצף-מקום',()=>posCompose(gen)) || await attempt('אם-רשימה',()=>ifPosCompose(gen))   // עד 4 צעדים + מסגרות-מקום (סנן לפי מקום, על-כל-זנב, סובב-אל) · תנאי על כל הרשימה (poscompose.mjs, ifpos.mjs)
       || await attempt('מסגרות-סריקה',()=>cutCompose(gen,{ms:+process.env.CUTMS||150000}))   // קח/דלג-כל-עוד, סנן מול ערך-מהרשימה, מצב-רץ (cutframes.mjs)
