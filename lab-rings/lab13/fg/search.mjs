@@ -46,7 +46,7 @@ const hashArr = (vals) => { let h1 = 2166136261 | 0, h2 = 5381; const mix = (c) 
 export function makeCtx(PR) {
   const PG = PR.map(glob); const K = PR.length;
   const E = []; PR.forEach((l, k) => l.forEach((x, i) => E.push([x, i, l, PG[k]])));
-  const PP = []; PR.forEach((l, k) => { for (let i = 0; i < l.length; i++) for (let j = 0; j < l.length; j++) if (i !== j && (Math.abs(i - j) === 1 || (i * 7 + j * 3 + k) % 4 === 0)) PP.push([l[i], l[j], i, l, PG[k]]); });
+  const PP = []; PR.forEach((l, k) => { for (let i = 0; i < l.length; i++) for (let j = 0; j < l.length; j++) if (i !== j && (Math.abs(i - j) === 1 || (i * 7 + j * 3 + k) % 4 === 0)) PP.push([l[i], l[j], i, l, PG[k], j]); });
   for (let a = -3; a < 20; a += 2) for (let b = -2; b < 20; b += 3) PP.push([a, b, 1, PR[PR.length - 1], PG[PG.length - 1]]);
   const TR = []; PR.forEach((l, k) => { for (let i = 0; i < l.length; i++) for (let j = i + 1; j < l.length; j++) for (let m = j + 1; m < l.length; m++) if (TR.length < 4000 && (i + j + m + k) % 3 === 0) TR.push([l[i], l[j], l[m], l, PG[k]]); });
   const valsN = (f) => { const v = new Int32Array(K); for (let k = 0; k < K; k++) { const x = f(PR[k], PG[k]); v[k] = Number.isInteger(x) && Math.abs(x) < 1e9 ? x : NONINT; } return v; };
@@ -55,8 +55,8 @@ export function makeCtx(PR) {
   const sig = {
     Ne: (f) => hashArr(E.map(([x, i, l, G]) => f(x, i, l, G))),
     Be: (f) => hashArr(E.map(([x, i, l, G]) => (f(x, i, l, G) ? 1 : 0))),
-    Np: (f) => hashArr(PP.map(([a, b, i, l, G]) => f(a, b, i, l, G))),
-    Bp: (f) => hashArr(PP.map(([a, b, i, l, G]) => (f(a, b, i, l, G) ? 1 : 0))),
+    Np: (f) => hashArr(PP.map(([a, b, i, l, G, j]) => f(a, b, i, l, G, j))),
+    Bp: (f) => hashArr(PP.map(([a, b, i, l, G, j]) => (f(a, b, i, l, G, j) ? 1 : 0))),
     Bt: (f) => hashArr(TR.map(([a, b, c, l, G]) => (f(a, b, c, l, G) ? 1 : 0))),
     K: (f) => 'k' + f,
     D: (f) => hashArr(PR.map((l, k) => f(l, PG[k]))),
@@ -68,12 +68,12 @@ export function makeCtx(PR) {
 // costs: Map name->cost (missing => 1). lib: learned templates [{name, ret, args, tmpl, cost}].
 // onNode(T, node) for T in N/L/B; node = {ast(), c, v (values), f}. Return true to stop.
 const TYPES_ORDER = ['K', 'Ne', 'Be', 'Np', 'Bp', 'Bt', 'N', 'B', 'D', 'L'];
-export function enumerate({ ctx, costs, lib = [], onNode, maxCost = 40, timeMs = 60000, capProd = 1500, capArgs = 120000, log = false, deadline = null }) {
+export function enumerate({ ctx, costs, lib = [], onNode, maxCost = 40, timeMs = 60000, capProd = 1500, capArgs = 120000, log = false, deadline = null, poolsOut = null, g1 = false }) {
   const t0 = Date.now(); const end = deadline ?? t0 + timeMs;
   const prods = [];
-  for (const p of P) if (p.tag !== 'top') prods.push({ name: p.name, ret: p.ret, args: p.args, cost: Math.max(1, costs.get(p.name) ?? 1), mk: p.mk, ast: (a) => ({ p: p.name, a }) });
+  for (const p of P) if (p.tag !== 'top' && (g1 || p.tag !== 'g1')) prods.push({ name: p.name, ret: p.ret, args: p.args, cost: Math.max(1, costs.get(p.name) ?? 1), mk: p.mk, ast: (a) => ({ p: p.name, a }) });
   for (const L of lib) prods.push({ name: L.name, ret: L.ret, args: L.args, cost: L.cost, mk: (fs) => compile(L.tmpl, fs), ast: (a) => instantiate(L.tmpl, a) });
-  const pools = {}; const seen = {};
+  const pools = {}; const seen = {}; if (poolsOut) poolsOut.pools = pools;   // learn.mjs: the fillers of every type (one-hole neighbours)
   for (const T of TYPES_ORDER) { pools[T] = []; seen[T] = new Set(); }
   let made = 0, evald = 0, stop = false;
   const add = (T, c, ast, f) => {
@@ -251,7 +251,7 @@ export function configsFor(prior, cls) {
 // ---------- solve one task: index ⇒ live enumeration ⇒ CEGIS ----------
 // opts: {ms, index (loaded index.mjs object or null), prior, say, live:boolean}
 export function solveLists(kind, oracle, opts = {}) {
-  const { ms = 60000, index = null, prior = null, say = () => {}, live = 'auto', maxRounds = 6 } = opts;
+  const { ms = 60000, index = null, prior = null, say = () => {}, live = 'auto', maxRounds = 6, g1 = false } = opts;
   const T0 = Date.now(), deadline = T0 + ms;
   const task = makeTask(kind, oracle);
   const cexs = []; const rejected = []; let found = null; const stats = { cands: 0, heldOutRejects: 0, exhaustRejects: 0, rounds: 0, phase: null };
@@ -271,8 +271,15 @@ export function solveLists(kind, oracle, opts = {}) {
   if (index) {
     stats.phase = 'index';
     const t = targetOf(task, index.probes);
-    index.match(kind, t, tryCand, { deadline });
-    if (found) return { ok: true, ...found, via: 'index', ms: Date.now() - T0, cls, cexs: cexs.length, stats };
+    const extra = opts.delta ? opts.delta.forKind(kind) : null;   // learn.mjs history entries (G0 pass); the G1 pass (indexMatch = matchG1) gets none
+    if (opts.indexMatch) opts.indexMatch(kind, t, tryCand, { deadline, extra }); else index.match(kind, t, tryCand, { deadline, extra });
+    if (found) return { ok: true, ...found, via: String(found.how).includes('hist') ? 'history' : 'index', ms: Date.now() - T0, cls, cexs: cexs.length, stats };
+  } else if (opts.delta) {   // learn.mjs history entries without the offline index: the live matcher on the same probes
+    stats.phase = 'history';
+    const t = targetOf(task, PROBES); const m = new Matcher(kind, t, (a, how) => tryCand(a, 'hist:' + how));
+    const ex = opts.delta.forKind(kind); for (const T of ['B', kind === 'list2num' ? 'N' : 'L']) for (const nd of ex[T]) if (m.feed(T, nd)) break;
+    if (!found) m.iteScan(deadline);
+    if (found) return { ok: true, ...found, via: 'history', ms: Date.now() - T0, cls, cexs: cexs.length, stats };
   }
   // phase 2: live enumeration (only when there is no index, or the index produced counterexamples, or forced)
   const goLive = live === true || (live === 'auto' && (!index || cexs.length > 0));
@@ -288,7 +295,7 @@ export function solveLists(kind, oracle, opts = {}) {
       const m = new Matcher(kind, t, tryCand);
       const dl = Date.now() + share;
       stats.phase = 'live:' + cfg.name;
-      enumerate({ ctx, costs: cfg.costs, lib: cfg.lib, deadline: dl,
+      enumerate({ ctx, costs: cfg.costs, lib: cfg.lib, deadline: dl, g1,
         onNode: (T, node) => { if (T === 'level') { return m.iteScan(dl) || (cexs.length > nc0 + 2); } return m.feed(T, node) || (cexs.length > nc0 + 2); } });
       if (!found) m.iteScan(dl);
       say(`  live ${cfg.name} round ${round} ${((Date.now() - T0) / 1000).toFixed(1)}s cands ${stats.cands} cex ${cexs.length}`);

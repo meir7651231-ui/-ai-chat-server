@@ -1,18 +1,25 @@
-G0 FROZEN 2026-10-14T20:16:12Z
-sha256(fg/grammar.mjs) = b3593bebe0c29479d951a9a1aa6bb9efa5062c2793013cc3821fa9731e4c911f
-No grammar changes after this line. Costs / templates (fg/prior/*.json) and the index are learned data, not grammar.
+G1 FROZEN 2026-10-15T23:49:39Z
+sha256(fg/grammar.mjs) = 23b960b9414bc1357769bd0f6bc788cc2c245f27587b17fc5eafe183cc68602b
+No grammar changes after this line. Costs (fg/prior/*.json), the indexes and the compiler are not grammar.
+G0 (frozen 2026-10-14, hash b3593beb...) is kept unchanged inside G1: its productions, costs and index are untouched; the
+only edit to G0 lines forwards the pair index j to pair lambdas (an extra argument G0 lambdas ignore: same values).
+The G1 productions carry tag 'g1'; the stage runs the G0 pass exactly as before and the G1 pass only after it misses.
 
-G0 = strat-library/dsl.mjs productions (198) + 7 productions named by strat-plan.md Track A:
-  e.prv, e.nxt                 lambda leaves (strat-dsl prv/nxt)
-  g.lt, g.eq, g.odd            conditions of the case split (strat-dsl lt/eq/odd)
-  l.ite                        ite(B,A,C) for lists (g.ite for numbers was already in the library grammar); case split only, held-out acceptance
-  l.cat                        A++B, meet-in-the-middle only (A+-B, m16, cap reuse library g.add/g.sub/g.and15/g.cap15)
-
-Justification from strat-judge/u6.mjs (blind suite6 hits by strat-dsl that strat-library missed, 6 tasks):
-  ירידה בהתחלה (list2num)              m16(sub(m16(amax(n,l)),amax(sec/x,l)))      -> m16, A-B
-  סכום המקומות של הזוגיים (list2num)   cap(pcnt((0==(b%2)),l))                     -> cap
-  שינויי כיוון (list2num)               sub(cnt((x%prv)<nxt),cnt(prv<(x%nxt)))      -> prv/nxt, A-B
-  סיבוב עד ירידה (list2list)            cat(dw((prv mx last)<x,l),tw(...))          -> A++B, prv
-  רצפים אי-זוגיים (list2num)           scnt(spl(x in {9,11,13,15},l))              -> (spl/scnt NOT added: not named by the plan)
-  מספר האיים (list2num)                 scnt(spl(12<=x,l))                          -> (spl/scnt NOT added: not named by the plan)
-  ite(B,A,C): no suite6 dsl-only hit uses it; added because the plan names it.
+G1 = G0 + 14 generic productions (frames with typed holes; every hole is filled by the search from examples):
+ (1) structures built while scanning, learned rule + generic read-out
+   l.stackPops(L,Bp)   stack, element pops tops while rel(top,x); read-out: pop order
+   l.heapPush(L,Bp)    array heap, sift-up while rel(parent,child); read-out: the array
+   l.groupBy(L,Ne)     groups by a learned key in order of first appearance
+   e.tdep(Ne)          depth of x in the search tree built by insertion with a learned key
+   l.knockout(L,Bp)    rounds of adjacent matches, rel(a,b) = a beats b; read-out: elimination order, champion
+   l.takeUntilK(L,Be,K) / l.dropUntilK(L,Be,K)   scan with a counter: prefix before / suffix from the k-th match (k=1..4)
+ (2) small "all possibilities" frames over pairs / triples
+   g.cntWin3(Bt)       count consecutive triples with a learned triple relation
+   t.flip(Bp), t.peak(Bp)   triple relations from a pair relation (changes / holds then stops)
+   p.di                index distance of a pair (pair counts, pair streams)
+ (3) wider arithmetic (two cells in the compiler), comparisons against the exact mean
+   agg.mean(D)         floor mean of a stream
+   e.dev, e.adev       x*n - sum (signed / absolute): exact deviation from the mean of the current list
+Justification: g1/heldout/g1held.json (65 tasks written as JS reference functions, none from suite6; >= 5 per production
+or production pair). Written after reading the suite6 failure classes (the builder's brief); suite6 is therefore in-sample
+for G1 and suite7 is the clean test.

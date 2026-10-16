@@ -1,0 +1,235 @@
+{
+ "tasks": [
+  {
+   "name": "האיבר הרביעי",
+   "kind": "list2num",
+   "src": "l=>l.length>3?l[3]:0",
+   "difficulty": "easy",
+   "note": "Returns the fourth element, or 0 for short lists."
+  },
+  {
+   "name": "זוגיים בפתיחה",
+   "kind": "list2num",
+   "src": "l=>l.slice(0,3).filter(x=>x%2===0).length",
+   "difficulty": "easy",
+   "note": "Counts the even elements among the first three."
+  },
+  {
+   "name": "השינוי האחרון",
+   "kind": "list2num",
+   "src": "l=>l.length>1?Math.abs(l[l.length-1]-l[l.length-2]):0",
+   "difficulty": "easy",
+   "note": "Returns the distance between the last two elements, or 0 for short lists."
+  },
+  {
+   "name": "שארית האורך בשלוש",
+   "kind": "list2num",
+   "src": "l=>l.length%3",
+   "difficulty": "easy",
+   "note": "Returns the length of the list modulo 3."
+  },
+  {
+   "name": "הזוגי האחרון",
+   "kind": "list2num",
+   "src": "l=>{ for(let i=l.length-1;i>=0;i--) if(l[i]%2===0) return l[i]; return 0; }",
+   "difficulty": "easy",
+   "note": "Returns the last even element, or 0 if none."
+  },
+  {
+   "name": "הזוגי הקטן",
+   "kind": "list2num",
+   "src": "l=>{ const e=l.filter(x=>x%2===0); return e.length?Math.min(...e):0; }",
+   "difficulty": "easy",
+   "note": "Returns the smallest even element, or 0 if none."
+  },
+  {
+   "name": "בין 9 ל-11",
+   "kind": "list2num",
+   "src": "l=>l.filter(x=>x>=9&&x<=11).length",
+   "difficulty": "easy",
+   "note": "Counts elements from 9 to 11."
+  },
+  {
+   "name": "סכום שלושת הראשונים",
+   "kind": "list2num",
+   "src": "l=>l.slice(0,3).reduce((a,b)=>a+b,0)&15",
+   "difficulty": "easy",
+   "note": "Adds the first three elements modulo 16."
+  },
+  {
+   "name": "המקסימום מעל האחרון",
+   "kind": "list2num",
+   "src": "l=>l.length?Math.max(...l)-l[l.length-1]:0",
+   "difficulty": "easy",
+   "note": "Returns how far the last element is below the largest one, or 0 when empty."
+  },
+  {
+   "name": "שיא החצי הראשון",
+   "kind": "list2num",
+   "src": "l=>{ const h=l.slice(0,l.length>>1); return h.length?Math.max(...h):0; }",
+   "difficulty": "easy",
+   "note": "Returns the largest element of the front half (without the middle element of an odd list), or 0 when it is empty."
+  },
+  {
+   "name": "זוגיים מאחרים",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) if(l[i]%2&&l[j]%2===0) c++; return Math.min(15,c); }",
+   "difficulty": "medium",
+   "note": "Counts the pairs in which an odd element comes before an even one, capped at 15."
+  },
+  {
+   "name": "מעל שני הקצוות",
+   "kind": "list2num",
+   "src": "l=>l.length?l.filter(x=>x>l[0]&&x>l[l.length-1]).length:0",
+   "difficulty": "medium",
+   "note": "Counts the elements larger than both the first and the last element."
+  },
+  {
+   "name": "סכומים רצים זוגיים",
+   "kind": "list2num",
+   "src": "l=>{ let s=0, c=0; for(const x of l){ s+=x; if(s%2===0) c++; } return c; }",
+   "difficulty": "medium",
+   "note": "Counts the prefixes (from the first element on) whose sum is even."
+  },
+  {
+   "name": "זוגות מעורבים",
+   "kind": "list2num",
+   "src": "l=>{ const e=l.filter(x=>x%2===0).length; return Math.min(15,e*(l.length-e)); }",
+   "difficulty": "medium",
+   "note": "Counts the pairs made of one even and one odd element, capped at 15."
+  },
+  {
+   "name": "מקום החציון",
+   "kind": "list2num",
+   "src": "l=>{ if(!l.length) return 15; const s=[...l].sort((a,b)=>a-b); return l.indexOf(s[(l.length-1)>>1]); }",
+   "difficulty": "medium",
+   "note": "Returns the position in the list of its lower median value, or 15 when empty."
+  },
+  {
+   "name": "עודף מעל הקטן",
+   "kind": "list2num",
+   "src": "l=>{ if(!l.length) return 0; const m=Math.min(...l); return Math.min(15,l.reduce((a,x)=>a+x-m,0)); }",
+   "difficulty": "medium",
+   "note": "Adds up how far each element is above the smallest one, capped at 15."
+  },
+  {
+   "name": "הפער הגדול בממוין",
+   "kind": "list2num",
+   "src": "l=>{ const s=[...l].sort((a,b)=>a-b); let g=0; for(let i=1;i<s.length;i++) g=Math.max(g,s[i]-s[i-1]); return g; }",
+   "difficulty": "medium",
+   "note": "Sorts the values and returns the largest gap between neighbours, or 0 for short lists."
+  },
+  {
+   "name": "מאזן זוגיים",
+   "kind": "list2num",
+   "src": "l=>Math.min(15,Math.abs(l.reduce((a,x)=>x%2?a-x:a+x,0)))",
+   "difficulty": "medium",
+   "note": "Returns the distance between the sum of the even elements and the sum of the odd ones, capped at 15."
+  },
+  {
+   "name": "עולים מעל שניים לפניהם",
+   "kind": "list2num",
+   "src": "l=>l.filter((x,i)=>i>1&&x>l[i-2]).length",
+   "difficulty": "medium",
+   "note": "Counts elements larger than the element two places before them."
+  },
+  {
+   "name": "טווח הזוגיים",
+   "kind": "list2num",
+   "src": "l=>{ const i=l.findIndex(x=>x%2===0); if(i<0) return 0; let j=l.length-1; while(l[j]%2) j--; return j-i; }",
+   "difficulty": "medium",
+   "note": "Returns how many places apart the first and last even elements are, or 0 when there is no even element."
+  },
+  {
+   "name": "מקום הזוג הקרוב",
+   "kind": "list2num",
+   "src": "l=>{ if(l.length<2) return 15; let b=0; for(let i=1;i+1<l.length;i++) if(Math.abs(l[i+1]-l[i])<Math.abs(l[b+1]-l[b])) b=i; return b; }",
+   "difficulty": "medium",
+   "note": "Returns the start position of the neighbouring pair with the smallest difference (the first on ties), or 15 for short lists."
+  },
+  {
+   "name": "ממוצע החצי השני",
+   "kind": "list2num",
+   "src": "l=>{ const h=l.slice(l.length>>1); return h.length?Math.floor(h.reduce((a,b)=>a+b,0)/h.length):0; }",
+   "difficulty": "medium",
+   "note": "Returns the average of the back half (with the middle element of an odd list) rounded down, or 0 when empty."
+  },
+  {
+   "name": "ציר חציוני",
+   "kind": "list2num",
+   "src": "l=>{ if(!l.length) return 0; const w=[l[0],l[l.length>>1],l[l.length-1]].sort((a,b)=>a-b); return w[1]; }",
+   "difficulty": "medium",
+   "note": "Returns the median of the first, middle (position half the length) and last elements, or 0 when empty."
+  },
+  {
+   "name": "החלון הקצר לשלושים",
+   "kind": "list2num",
+   "src": "l=>{ let b=0; for(let i=0;i<l.length;i++){ let s=0; for(let j=i;j<l.length;j++){ s+=l[j]; if(s>=30){ if(!b||j-i+1<b) b=j-i+1; break; } } } return b; }",
+   "difficulty": "hard",
+   "note": "Returns the length of the shortest contiguous stretch whose sum is at least 30, or 0 if there is none."
+  },
+  {
+   "name": "שתי עסקאות",
+   "kind": "list2num",
+   "src": "l=>{ const p=a=>{ let m=99, r=0; for(const x of a){ m=Math.min(m,x); r=Math.max(r,x-m); } return r; }; let best=0; for(let k=0;k<=l.length;k++) best=Math.max(best,p(l.slice(0,k))+p(l.slice(k))); return best; }",
+   "difficulty": "hard",
+   "note": "Buys and sells at most twice (never holding two at once) at the listed prices and returns the largest total profit."
+  },
+  {
+   "name": "ספירת העולות הארוכות",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length, L=[], C=[]; let m=0, t=0; for(let i=0;i<n;i++){ L[i]=1; C[i]=1; for(let j=0;j<i;j++) if(l[j]<l[i]){ if(L[j]+1>L[i]){ L[i]=L[j]+1; C[i]=C[j]; } else if(L[j]+1===L[i]) C[i]+=C[j]; } m=Math.max(m,L[i]); } for(let i=0;i<n;i++) if(L[i]===m) t+=C[i]; return Math.min(15,t); }",
+   "difficulty": "hard",
+   "note": "Counts the longest increasing subsequences (not necessarily contiguous), capped at 15; 0 when empty."
+  },
+  {
+   "name": "ימי המתנה לחום",
+   "kind": "list2num",
+   "src": "l=>{ let s=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) if(l[j]>l[i]){ s+=j-i; break; } return Math.min(15,s); }",
+   "difficulty": "hard",
+   "note": "For each element finds how many places later the next larger element comes (0 when none) and returns the total, capped at 15."
+  },
+  {
+   "name": "היפוכי מחבת",
+   "kind": "list2num",
+   "src": "l=>{ const a=[...l]; let c=0; for(let n=a.length;n>1;n--){ const m=a.indexOf(Math.max(...a.slice(0,n))); if(m===n-1) continue; if(m>0){ a.splice(0,m+1,...a.slice(0,m+1).reverse()); c++; } a.splice(0,n,...a.slice(0,n).reverse()); c++; } return c; }",
+   "difficulty": "hard",
+   "note": "Sorts by pancake flips (bring the largest unsorted element to the front with a prefix reversal, then flip it into place, skipping flips that are not needed) and counts the flips."
+  },
+  {
+   "name": "ארגזים ברצף",
+   "kind": "list2num",
+   "src": "l=>{ let c=0, s=0; for(const x of l){ if(!c||s+x>30){ c++; s=x; } else s+=x; } return c; }",
+   "difficulty": "hard",
+   "note": "Packs the elements in order into boxes of capacity 30, opening a new box whenever the next element does not fit, and returns the number of boxes."
+  },
+  {
+   "name": "קטעים שמתחילים במינימום",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length&&l[j]>l[i];j++) c++; return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Counts the contiguous stretches of two or more elements whose first element is their smallest, capped at 15."
+  },
+  {
+   "name": "זוגות שרואים",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++){ let ok=true; for(let k=i+1;k<j;k++) if(l[k]>=Math.min(l[i],l[j])) ok=false; if(ok) c++; } return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Counts the pairs of elements with nothing between them as tall as the shorter of the two, capped at 15."
+  },
+  {
+   "name": "שרשרת קרובים",
+   "kind": "list2num",
+   "src": "l=>{ if(!l.length) return 0; const r=[true]; let c=1; for(let j=1;j<l.length;j++){ r[j]=false; for(let i=0;i<j;i++) if(r[i]&&Math.abs(l[j]-l[i])<=2){ r[j]=true; break; } if(r[j]) c++; } return c; }",
+   "difficulty": "hard",
+   "note": "Starting at the first element, may step forward to any later element whose value differs by at most 2; counts the elements that can be reached (the start included)."
+  },
+  {
+   "name": "תת-סדרה בצעד קבוע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length; if(n<3) return n; let b=2; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++){ const d=l[j]-l[i]; let c=2, last=l[j]; for(let k=j+1;k<n;k++) if(l[k]-last===d){ c++; last=l[k]; } b=Math.max(b,c); } return b; }",
+   "difficulty": "hard",
+   "note": "Returns the length of the longest subsequence (not necessarily contiguous) whose steps are all equal."
+  }
+ ]
+}

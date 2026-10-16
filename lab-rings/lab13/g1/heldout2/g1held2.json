@@ -1,0 +1,52 @@
+{
+ "tasks": [
+  {
+   "name": "מיון לפי מרחק מהממוצע",
+   "kind": "list2list",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); return l.map((x,i)=>[x,i]).sort((A,B)=>Math.abs(A[0]*n-s)-Math.abs(B[0]*n-s)||A[1]-B[1]).map(z=>z[0]); }",
+   "difficulty": "hard",
+   "note": "Elements ordered by their distance from the exact mean, input order on ties.",
+   "g1": "e.adev"
+  },
+  {
+   "name": "סכומי שכנים חוצים 24",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if((l[i-1]+l[i]<24)!==(l[i]+l[i+1]<24)) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Interior positions where exactly one of the two neighbouring pair sums is below 24.",
+   "g1": "t.flip"
+  },
+  {
+   "name": "שלישיות לא מונוטוניות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; const n=l.length; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) for(let k=j+1;k<n;k++) if((l[i]<l[j])!==(l[j]<l[k])) c++; return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Number of index triples i<j<k whose values are not monotone (capped at 15).",
+   "g1": "t.flip"
+  },
+  {
+   "name": "שכן אחד מאותה רביעייה",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; const q=x=>x>>2; for(let i=1;i+1<l.length;i++) if((q(l[i-1])===q(l[i]))!==(q(l[i])===q(l[i+1]))) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Interior positions where exactly one neighbour is in the same block of four values.",
+   "g1": "t.flip"
+  },
+  {
+   "name": "שלישיות הר",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; const n=l.length; for(let i=0;i<n;i++) for(let j=i+1;j<n;j++) for(let k=j+1;k<n;k++) if(l[i]<l[j]&&l[j]>l[k]) c++; return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Number of index triples i<j<k with a peak in the middle (capped at 15).",
+   "g1": "t.peak"
+  },
+  {
+   "name": "סוף זוג באותה זוגיות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(l[i-1]%2===l[i]%2&&l[i]%2!==l[i+1]%2) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Interior positions where a same-parity step is followed by a parity change.",
+   "g1": "t.peak"
+  }
+ ]
+}

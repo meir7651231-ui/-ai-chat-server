@@ -1,0 +1,365 @@
+{
+ "tasks": [
+  {
+   "name": "ברירת מחדל",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>a?a:b",
+   "difficulty": "easy",
+   "note": "Returns a, or b when a is 0."
+  },
+  {
+   "name": "קרובים מספיק",
+   "kind": "num",
+   "ins": [
+    0,
+    3
+   ],
+   "src": "(a,b)=>Math.abs(a-b)<=2?15:0",
+   "difficulty": "easy",
+   "note": "Flags 15 when the two inputs differ by at most 2, else 0."
+  },
+  {
+   "name": "תקרה שבע",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>Math.min(a,7)",
+   "difficulty": "easy",
+   "note": "Returns a, but never more than 7."
+  },
+  {
+   "name": "הנגדי",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>(16-a)&15",
+   "difficulty": "easy",
+   "note": "Returns the number that adds to a to give 0 modulo 16 (16 minus a, and 0 for 0)."
+  },
+  {
+   "name": "הפיכת הביט העליון",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>a^8",
+   "difficulty": "easy",
+   "note": "Flips the top bit of a (adds 8 below 8, subtracts 8 from 8 up)."
+  },
+  {
+   "name": "הביט הנמוך מהשני",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>(a&14)|(b&1)",
+   "difficulty": "easy",
+   "note": "Returns a with its lowest bit replaced by the lowest bit of b."
+  },
+  {
+   "name": "יתרה",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>Math.min(15,Math.max(0,a+b-c))",
+   "difficulty": "easy",
+   "note": "Balance a plus deposit b minus withdrawal c, kept between 0 and 15."
+  },
+  {
+   "name": "הצד הגדול",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>Math.max(a,15-a)",
+   "difficulty": "easy",
+   "note": "Returns the larger of a and 15 minus a."
+  },
+  {
+   "name": "הזוגי הבא",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>(a+2)&14",
+   "difficulty": "easy",
+   "note": "Returns the next even number above a, wrapping modulo 16."
+  },
+  {
+   "name": "שניים גוברים על השלישי",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>a+b>c?15:0",
+   "difficulty": "easy",
+   "note": "Flags 15 when the first two inputs together are larger than the third, else 0."
+  },
+  {
+   "name": "שבועות",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>Math.ceil(a/7)",
+   "difficulty": "medium",
+   "note": "Returns how many weeks are needed to cover a days, that is a divided by 7 rounded up."
+  },
+  {
+   "name": "ריבוע חלקי שש-עשרה",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>(a*a)>>4",
+   "difficulty": "medium",
+   "note": "Squares a and returns the result divided by 16, rounded down."
+  },
+  {
+   "name": "השלמה לכפולה",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>b?(b-a%b)%b:0",
+   "difficulty": "medium",
+   "note": "Returns how much must be added to a to reach a multiple of b, or 0 when b is 0."
+  },
+  {
+   "name": "האי-זוגי הגדול",
+   "kind": "num",
+   "ins": [
+    0,
+    3
+   ],
+   "src": "(a,b)=>Math.max(a%2?a:0,b%2?b:0)",
+   "difficulty": "medium",
+   "note": "Returns the larger of the odd inputs, or 0 when both are even."
+  },
+  {
+   "name": "מעל הממוצע מבין שלושה",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>[a,b,c].filter(x=>3*x>a+b+c).length",
+   "difficulty": "medium",
+   "note": "Counts how many of the three inputs are strictly above their average."
+  },
+  {
+   "name": "מעבר לריבוע",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>{ let k=0; while((k+1)*(k+1)<=a) k++; return a-k*k; }",
+   "difficulty": "medium",
+   "note": "Returns how far a lies above the largest perfect square not above it."
+  },
+  {
+   "name": "גורמים ראשוניים עם חזרות",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ if(a<2) return 0; let c=0; for(let d=2;a>1;) if(a%d===0){ a/=d; c++; } else d++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts the prime factors of a with repetition (12 = 2*2*3 gives 3), 0 for 0 and 1."
+  },
+  {
+   "name": "הספרה הגדולה בבסיס ארבע",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>Math.max(a>>2,a&3)",
+   "difficulty": "medium",
+   "note": "Returns the larger of the two base-4 digits of a."
+  },
+  {
+   "name": "מסלול המעלית",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>Math.min(15,Math.abs(a-b)+Math.abs(b-c))",
+   "difficulty": "medium",
+   "note": "An elevator at floor a picks someone up at floor b and drops them at floor c; returns the floors travelled, capped at 15."
+  },
+  {
+   "name": "מספר משולשי",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>[0,1,3,6,10,15].includes(a)?15:0",
+   "difficulty": "medium",
+   "note": "Flags 15 when a is a triangular number (0, 1, 3, 6, 10, 15), else 0."
+  },
+  {
+   "name": "מהלכי צריח",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(p,q)=>p===q?0:((p>>2)===(q>>2)||(p&3)===(q&3)?1:2)",
+   "difficulty": "medium",
+   "note": "Reads p and q as squares of a 4x4 board (row = top two bits, column = low two bits) and returns how many rook moves lead from p to q (0, 1 or 2)."
+  },
+  {
+   "name": "פיצות",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>Math.min(15,Math.ceil(a*b/8))",
+   "difficulty": "medium",
+   "note": "a people each eat b slices; returns how many 8-slice pizzas to order, capped at 15."
+  },
+  {
+   "name": "ממוצע במשקל כפול",
+   "kind": "num",
+   "ins": [
+    0,
+    3
+   ],
+   "src": "(a,b)=>Math.floor((2*a+b)/3)",
+   "difficulty": "medium",
+   "note": "Returns the weighted average of a (weight 2) and b (weight 1), rounded down."
+  },
+  {
+   "name": "ממתקים שנשארו",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>a?15%a:0",
+   "difficulty": "medium",
+   "note": "15 sweets are shared equally among a children; returns how many are left over (0 when there are no children)."
+  },
+  {
+   "name": "מינימום ריבועים",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ const d=[0]; for(let n=1;n<=a;n++){ d[n]=99; for(let k=1;k*k<=n;k++) d[n]=Math.min(d[n],d[n-k*k]+1); } return d[a]; }",
+   "difficulty": "hard",
+   "note": "Returns the fewest perfect squares (1, 4, 9) that add up to a, 0 for zero."
+  },
+  {
+   "name": "מספרי קטלן",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>{ const c=[1]; for(let n=1;n<=a;n++){ c[n]=0; for(let i=0;i<n;i++) c[n]+=c[i]*c[n-1-i]; } return c[a]%16; }",
+   "difficulty": "hard",
+   "note": "Returns the a-th Catalan number (1, 1, 2, 5, 14, 42, ...) modulo 16."
+  },
+  {
+   "name": "ספרות בבסיס",
+   "kind": "num",
+   "ins": [
+    0,
+    1
+   ],
+   "src": "(a,b)=>{ if(b<2) return 0; let n=1; while(a>=b){ a=Math.floor(a/b); n++; } return n; }",
+   "difficulty": "hard",
+   "note": "Returns how many digits a has when written in base b, or 0 when b is below 2."
+  },
+  {
+   "name": "הסדר של שתיים",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>{ if(a<3||a%2===0) return 0; let x=2%a, k=1; while(x!==1){ x=x*2%a; k++; } return k; }",
+   "difficulty": "hard",
+   "note": "For odd a above 1 returns the smallest k such that 2 to the power k leaves remainder 1 modulo a; 0 otherwise."
+  },
+  {
+   "name": "כדי מים",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ const seen=new Set([0]), q=[[0,0]]; while(q.length){ const [x,y]=q.shift(); if(x===c||y===c) return 15; const p=Math.min(x,b-y), r=Math.min(y,a-x); for(const [u,v] of [[a,y],[x,b],[0,y],[x,0],[x-p,y+p],[x+r,y-r]]){ const k=u*16+v; if(!seen.has(k)){ seen.add(k); q.push([u,v]); } } } return 0; }",
+   "difficulty": "hard",
+   "note": "With jugs holding a and b litres (fill, empty, pour one into the other), flags 15 when exactly c litres can be left in one jug, else 0."
+  },
+  {
+   "name": "משחק הלקיחה",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ const w=[]; for(let n=0;n<=a;n++) w[n]=[1,3,4].some(k=>k<=n&&!w[n-k]); return w[a]?15:0; }",
+   "difficulty": "hard",
+   "note": "Players alternately take 1, 3 or 4 tokens from a pile of a and whoever cannot move loses; flags 15 when the first player can force a win."
+  },
+  {
+   "name": "אחדות עד a",
+   "kind": "num",
+   "ins": [
+    3
+   ],
+   "src": "a=>{ let s=0; for(let x=1;x<=a;x++) for(let y=x;y;y>>=1) s+=y&1; return Math.min(15,s); }",
+   "difficulty": "hard",
+   "note": "Counts all set bits in the numbers from 1 to a, capped at 15."
+  },
+  {
+   "name": "הבא בלי ביטים צמודים",
+   "kind": "num",
+   "ins": [
+    0
+   ],
+   "src": "a=>{ for(let x=a+1;x<16;x++) if(!(x&(x>>1))) return x; return 0; }",
+   "difficulty": "hard",
+   "note": "Returns the next number above a whose binary form has no two neighbouring 1 bits, or 0 if there is none."
+  },
+  {
+   "name": "גולדבך",
+   "kind": "num",
+   "ins": [
+    1
+   ],
+   "src": "a=>{ const pr=n=>{ if(n<2) return false; for(let d=2;d*d<=n;d++) if(n%d===0) return false; return true; }; for(let p=2;p<=a;p++) if(pr(p)&&pr(a-p)) return p; return 0; }",
+   "difficulty": "hard",
+   "note": "Returns the smallest prime p such that a minus p is also prime, or 0 when there is none."
+  },
+  {
+   "name": "הצפרדע בבאר",
+   "kind": "num",
+   "ins": [
+    0,
+    1,
+    3
+   ],
+   "src": "(a,b,c)=>{ if(!c) return 0; let h=0; for(let d=1;d<=15;d++){ h+=a; if(h>=c) return d; h=Math.max(0,h-b); } return 15; }",
+   "difficulty": "hard",
+   "note": "A frog climbs a metres each day and slips back b each night in a well c metres deep; returns the day it gets out (0 for depth 0), capped at 15."
+  }
+ ]
+}

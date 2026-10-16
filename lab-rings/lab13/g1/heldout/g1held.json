@@ -1,0 +1,524 @@
+{
+ "tasks": [
+  {
+   "name": "שליפה כשהעליון גדול",
+   "kind": "list2list",
+   "src": "l=>{ const s=[], r=[]; for(const x of l){ while(s.length&&(s[s.length-1]>x)) r.push(s.pop()); s.push(x); } while(s.length) r.push(s.pop()); return r; }",
+   "difficulty": "medium",
+   "note": "Each element first pops every larger element from the top of a stack, then is pushed; the rest pops at the end. Returns the pop order.",
+   "g1": "l.stackPops"
+  },
+  {
+   "name": "שליפה בזוגיות שווה",
+   "kind": "list2list",
+   "src": "l=>{ const s=[], r=[]; for(const x of l){ while(s.length&&(s[s.length-1]%2===x%2)) r.push(s.pop()); s.push(x); } while(s.length) r.push(s.pop()); return r; }",
+   "difficulty": "medium",
+   "note": "Stack pop order where an element pops the top while the top has the same parity.",
+   "g1": "l.stackPops"
+  },
+  {
+   "name": "שליפה כשהבא רחוק",
+   "kind": "list2list",
+   "src": "l=>{ const s=[], r=[]; for(const x of l){ while(s.length&&(Math.abs(s[s.length-1]-x)>=3)) r.push(s.pop()); s.push(x); } while(s.length) r.push(s.pop()); return r; }",
+   "difficulty": "hard",
+   "note": "Stack pop order where an element pops the top while they differ by at least 3.",
+   "g1": "l.stackPops"
+  },
+  {
+   "name": "שליפה כשהעליון קטן מ-12",
+   "kind": "list2list",
+   "src": "l=>{ const s=[], r=[]; for(const x of l){ while(s.length&&(s[s.length-1]<12)) r.push(s.pop()); s.push(x); } while(s.length) r.push(s.pop()); return r; }",
+   "difficulty": "medium",
+   "note": "Stack pop order where every element pops the tops below 12.",
+   "g1": "l.stackPops"
+  },
+  {
+   "name": "השני שיוצא מהמחסנית",
+   "kind": "list2num",
+   "src": "l=>{ const s=[], r=[]; for(const x of l){ while(s.length&&s[s.length-1]>x) r.push(s.pop()); s.push(x); } while(s.length) r.push(s.pop()); return r.length>1?r[1]:0; }",
+   "difficulty": "hard",
+   "note": "Second element popped when each element pops the larger tops (0 if fewer than two).",
+   "g1": "l.stackPops"
+  },
+  {
+   "name": "שליפה כשהבא זוגי",
+   "kind": "list2list",
+   "src": "l=>{ const s=[], r=[]; for(const x of l){ while(s.length&&(x%2===0)) r.push(s.pop()); s.push(x); } while(s.length) r.push(s.pop()); return r; }",
+   "difficulty": "medium",
+   "note": "An even element empties the stack before it is pushed; the rest pops at the end.",
+   "g1": "l.stackPops"
+  },
+  {
+   "name": "ערימת מינימום",
+   "kind": "list2list",
+   "src": "l=>{ const h=[]; for(const x of l){ h.push(x); let i=h.length-1; while(i>0){ const q=(i-1)>>1; const a=h[q], b=h[i]; if(!(a>b)) break; h[q]=b; h[i]=a; i=q; } } return h; }",
+   "difficulty": "hard",
+   "note": "Array of a min-heap built by pushing the elements in order (sift up).",
+   "g1": "l.heapPush"
+  },
+  {
+   "name": "ערימה של האי-זוגיים",
+   "kind": "list2list",
+   "src": "l=>{ const h=[]; for(const x of l.filter(x=>x%2)){ h.push(x); let i=h.length-1; while(i>0){ const q=(i-1)>>1; const a=h[q], b=h[i]; if(!(a<b)) break; h[q]=b; h[i]=a; i=q; } } return h; }",
+   "difficulty": "hard",
+   "note": "Array of a max-heap built from the odd elements in order.",
+   "g1": "l.heapPush"
+  },
+  {
+   "name": "העלה האחרון בערימת מינימום",
+   "kind": "list2num",
+   "src": "l=>{ const h=[]; for(const x of l){ h.push(x); let i=h.length-1; while(i>0){ const q=(i-1)>>1; if(!(h[q]>h[i])) break; const t=h[q]; h[q]=h[i]; h[i]=t; i=q; } } return h.length?h[h.length-1]:0; }",
+   "difficulty": "hard",
+   "note": "Last slot of a min-heap array built by pushing the elements (0 when empty).",
+   "g1": "l.heapPush"
+  },
+  {
+   "name": "ערימה לפי שארית ארבע",
+   "kind": "list2list",
+   "src": "l=>{ const h=[]; for(const x of l){ h.push(x); let i=h.length-1; while(i>0){ const q=(i-1)>>1; const a=h[q], b=h[i]; if(!(a%4<b%4)) break; h[q]=b; h[i]=a; i=q; } } return h; }",
+   "difficulty": "hard",
+   "note": "Heap array where an element rises while its remainder mod 4 beats the parent.",
+   "g1": "l.heapPush"
+  },
+  {
+   "name": "ילדי השורש בערימת מקסימום",
+   "kind": "list2list",
+   "src": "l=>{ const h=[]; for(const x of l){ h.push(x); let i=h.length-1; while(i>0){ const q=(i-1)>>1; if(!(h[q]<h[i])) break; const t=h[q]; h[q]=h[i]; h[i]=t; i=q; } } return h.slice(1,3); }",
+   "difficulty": "hard",
+   "note": "Slots 1 and 2 of a max-heap array built by pushing the elements.",
+   "g1": "l.heapPush"
+  },
+  {
+   "name": "קיבוץ לפי זוגיות",
+   "kind": "list2list",
+   "src": "l=>{ const k=l.map(x=>x%2); const o=[]; for(const v of k) if(!o.includes(v)) o.push(v); return o.flatMap(v=>l.filter((x,i)=>k[i]===v)); }",
+   "difficulty": "medium",
+   "note": "Groups by parity, the group of the first element first, order kept inside a group.",
+   "g1": "l.groupBy"
+  },
+  {
+   "name": "קיבוץ לפי שארית שלוש",
+   "kind": "list2list",
+   "src": "l=>{ const k=l.map(x=>x%3); const o=[]; for(const v of k) if(!o.includes(v)) o.push(v); return o.flatMap(v=>l.filter((x,i)=>k[i]===v)); }",
+   "difficulty": "medium",
+   "note": "Groups by remainder mod 3 in order of first appearance.",
+   "g1": "l.groupBy"
+  },
+  {
+   "name": "קיבוץ לפי רבעים",
+   "kind": "list2list",
+   "src": "l=>{ const k=l.map(x=>x>>2); const o=[]; for(const v of k) if(!o.includes(v)) o.push(v); return o.flatMap(v=>l.filter((x,i)=>k[i]===v)); }",
+   "difficulty": "medium",
+   "note": "Groups 8-11 and 12-15 in order of first appearance.",
+   "g1": "l.groupBy"
+  },
+  {
+   "name": "קיבוץ לפי שארית ארבע",
+   "kind": "list2list",
+   "src": "l=>{ const k=l.map(x=>x%4); const o=[]; for(const v of k) if(!o.includes(v)) o.push(v); return o.flatMap(v=>l.filter((x,i)=>k[i]===v)); }",
+   "difficulty": "medium",
+   "note": "Groups by remainder mod 4 in order of first appearance.",
+   "g1": "l.groupBy"
+  },
+  {
+   "name": "האחרון אחרי קיבוץ זוגיות",
+   "kind": "list2num",
+   "src": "l=>{ const k=l.map(x=>x%2); const o=[]; for(const v of k) if(!o.includes(v)) o.push(v); const r=o.flatMap(v=>l.filter((x,i)=>k[i]===v)); return r.length?r[r.length-1]:0; }",
+   "difficulty": "medium",
+   "note": "Last element after grouping by parity in order of first appearance.",
+   "g1": "l.groupBy"
+  },
+  {
+   "name": "גובה העץ מהסוף",
+   "kind": "list2num",
+   "src": "l=>{ const dep=(l)=>{ const L={}, R={}, d=[]; l.forEach((x,i)=>{ if(!i){ d.push(1); return; } let p=0, k=1; for(;;){ k++; const s=x<l[p]?L:R; if(s[p]===undefined){ s[p]=i; break; } p=s[p]; } d.push(k); }); return d; }; const d=dep([...l].reverse()); return d.length?Math.max(...d):0; }",
+   "difficulty": "hard",
+   "note": "Height of the binary search tree built by inserting the elements from last to first.",
+   "g1": "e.tdep"
+  },
+  {
+   "name": "עומק האחרון בעץ",
+   "kind": "list2num",
+   "src": "l=>{ const dep=(l)=>{ const L={}, R={}, d=[]; l.forEach((x,i)=>{ if(!i){ d.push(1); return; } let p=0, k=1; for(;;){ k++; const s=x<l[p]?L:R; if(s[p]===undefined){ s[p]=i; break; } p=s[p]; } d.push(k); }); return d; }; const d=dep(l); return d.length?d[d.length-1]:0; }",
+   "difficulty": "hard",
+   "note": "Depth (root = 1) of the last inserted element in the binary search tree.",
+   "g1": "e.tdep"
+  },
+  {
+   "name": "כמה בעומק שתיים",
+   "kind": "list2num",
+   "src": "l=>{ const dep=(l)=>{ const L={}, R={}, d=[]; l.forEach((x,i)=>{ if(!i){ d.push(1); return; } let p=0, k=1; for(;;){ k++; const s=x<l[p]?L:R; if(s[p]===undefined){ s[p]=i; break; } p=s[p]; } d.push(k); }); return d; }; return dep(l).filter(v=>v===2).length; }",
+   "difficulty": "hard",
+   "note": "Number of children of the root of the binary search tree built in order.",
+   "g1": "e.tdep"
+  },
+  {
+   "name": "השורש וילדיו",
+   "kind": "list2list",
+   "src": "l=>{ const dep=(l)=>{ const L={}, R={}, d=[]; l.forEach((x,i)=>{ if(!i){ d.push(1); return; } let p=0, k=1; for(;;){ k++; const s=x<l[p]?L:R; if(s[p]===undefined){ s[p]=i; break; } p=s[p]; } d.push(k); }); return d; }; const d=dep(l); return l.filter((x,i)=>d[i]<=2); }",
+   "difficulty": "hard",
+   "note": "Keeps the elements at depth 1 or 2 of the binary search tree, in input order.",
+   "g1": "e.tdep"
+  },
+  {
+   "name": "מיון לפי עומק יורד",
+   "kind": "list2list",
+   "src": "l=>{ const dep=(l)=>{ const L={}, R={}, d=[]; l.forEach((x,i)=>{ if(!i){ d.push(1); return; } let p=0, k=1; for(;;){ k++; const s=x<l[p]?L:R; if(s[p]===undefined){ s[p]=i; break; } p=s[p]; } d.push(k); }); return d; }; const d=dep(l); return l.map((x,i)=>i).sort((a,b)=>d[b]-d[a]||a-b).map(i=>l[i]); }",
+   "difficulty": "hard",
+   "note": "Deepest elements of the binary search tree first, input order on ties.",
+   "g1": "e.tdep"
+  },
+  {
+   "name": "סכום העומקים",
+   "kind": "list2num",
+   "src": "l=>{ const dep=(l)=>{ const L={}, R={}, d=[]; l.forEach((x,i)=>{ if(!i){ d.push(1); return; } let p=0, k=1; for(;;){ k++; const s=x<l[p]?L:R; if(s[p]===undefined){ s[p]=i; break; } p=s[p]; } d.push(k); }); return d; }; return Math.min(15, dep(l).reduce((a,b)=>a+b,0)); }",
+   "difficulty": "hard",
+   "note": "Total depth of the binary search tree, capped at 15.",
+   "g1": "e.tdep"
+  },
+  {
+   "name": "עד הזוגי השני",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]%2===0&&++c===2) return l.slice(0,i); return [...l]; }",
+   "difficulty": "medium",
+   "note": "Prefix before the second even element (all of it if there is none).",
+   "g1": "l.takeUntilK"
+  },
+  {
+   "name": "עד השלישי מעל 11",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]>11&&++c===3) return l.slice(0,i); return [...l]; }",
+   "difficulty": "medium",
+   "note": "Prefix before the third element above 11.",
+   "g1": "l.takeUntilK"
+  },
+  {
+   "name": "מהאי-זוגי השני",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]%2===1&&++c===2) return l.slice(i); return []; }",
+   "difficulty": "medium",
+   "note": "Suffix starting at the second odd element (empty if there is none).",
+   "g1": "l.dropUntilK"
+  },
+  {
+   "name": "עד העלייה השנייה",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=1;i<l.length;i++) if(l[i]>l[i-1]&&++c===2) return l.slice(0,i); return [...l]; }",
+   "difficulty": "medium",
+   "note": "Prefix before the second element that is larger than its predecessor.",
+   "g1": "l.takeUntilK"
+  },
+  {
+   "name": "מקום הקטן מ-12 השני",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]<12&&++c===2) return i; return l.length; }",
+   "difficulty": "medium",
+   "note": "Index of the second element below 12, or the length if there is none.",
+   "g1": "l.takeUntilK"
+  },
+  {
+   "name": "מהגדול מ-10 השני",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]>10&&++c===2) return l.slice(i); return []; }",
+   "difficulty": "medium",
+   "note": "Suffix starting at the second element above 10.",
+   "g1": "l.dropUntilK"
+  },
+  {
+   "name": "פסגות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(l[i]>l[i-1]&&l[i]>l[i+1]) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts interior elements larger than both neighbours.",
+   "g1": "g.cntWin3"
+  },
+  {
+   "name": "עמקים",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(l[i]<l[i-1]&&l[i]<l[i+1]) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts interior elements smaller than both neighbours.",
+   "g1": "g.cntWin3"
+  },
+  {
+   "name": "שלישיות עולות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(l[i-1]<l[i]&&l[i]<l[i+1]) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts consecutive increasing triples.",
+   "g1": "g.cntWin3"
+  },
+  {
+   "name": "שלישיות כבדות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(l[i-1]+l[i]+l[i+1]>36) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts consecutive triples whose sum is above 36.",
+   "g1": "g.cntWin3"
+  },
+  {
+   "name": "זוגיות מתחלפת בשלישייה",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(l[i-1]%2!==l[i]%2&&l[i]%2!==l[i+1]%2) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts consecutive triples whose parities alternate.",
+   "g1": "g.cntWin3"
+  },
+  {
+   "name": "זוגות רחוקים עוקבים",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+3;j<l.length;j++) if(Math.abs(l[i]-l[j])===1) c++; return c; }",
+   "difficulty": "hard",
+   "note": "Counts pairs at least three places apart whose values differ by one.",
+   "g1": "p.di"
+  },
+  {
+   "name": "זוגות במרחק שתיים עולים",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i+2<l.length;i++) if(l[i]<l[i+2]) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts pairs two places apart where the first is smaller.",
+   "g1": "p.di"
+  },
+  {
+   "name": "זוגות על האלכסון היורד",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) if(l[i]-l[j]===j-i) c++; return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Counts pairs whose value drops by exactly their distance, capped at 15.",
+   "g1": "p.di"
+  },
+  {
+   "name": "זוגות קרובים באותה זוגיות",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length&&j<=i+2;j++) if(l[i]%2===l[j]%2) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts pairs at most two places apart with the same parity.",
+   "g1": "p.di"
+  },
+  {
+   "name": "זוגות במרחק אי-זוגי יורדים",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j+=2) if(l[i]>l[j]) c++; return Math.min(15,c); }",
+   "difficulty": "hard",
+   "note": "Counts pairs an odd distance apart where the first is larger, capped at 15.",
+   "g1": "p.di"
+  },
+  {
+   "name": "ממוצע האי-זוגיים",
+   "kind": "list2num",
+   "src": "l=>{ const e=l.filter(x=>x%2); return e.length?Math.floor(e.reduce((a,b)=>a+b,0)/e.length):0; }",
+   "difficulty": "medium",
+   "note": "Average of the odd elements rounded down, 0 if none.",
+   "g1": "agg.mean"
+  },
+  {
+   "name": "ממוצע הרשימה",
+   "kind": "list2num",
+   "src": "l=>l.length?Math.floor(l.reduce((a,b)=>a+b,0)/l.length):0",
+   "difficulty": "medium",
+   "note": "Average rounded down, 0 when empty.",
+   "g1": "agg.mean"
+  },
+  {
+   "name": "ממוצע ארבעת הראשונים",
+   "kind": "list2num",
+   "src": "l=>{ const e=l.slice(0,4); return e.length?Math.floor(e.reduce((a,b)=>a+b,0)/e.length):0; }",
+   "difficulty": "medium",
+   "note": "Average of the first four elements rounded down.",
+   "g1": "agg.mean"
+  },
+  {
+   "name": "ממוצע מעל עשר",
+   "kind": "list2num",
+   "src": "l=>{ const e=l.filter(x=>x>10); return e.length?Math.floor(e.reduce((a,b)=>a+b,0)/e.length):0; }",
+   "difficulty": "medium",
+   "note": "Average of the elements above 10 rounded down.",
+   "g1": "agg.mean"
+  },
+  {
+   "name": "ממוצע ההפרשים",
+   "kind": "list2num",
+   "src": "l=>{ const e=[]; for(let i=1;i<l.length;i++) e.push(Math.abs(l[i]-l[i-1])); return e.length?Math.floor(e.reduce((a,b)=>a+b,0)/e.length):0; }",
+   "difficulty": "hard",
+   "note": "Average distance between neighbours rounded down.",
+   "g1": "agg.mean"
+  },
+  {
+   "name": "ממוצע במקומות הזוגיים",
+   "kind": "list2num",
+   "src": "l=>{ const e=l.filter((x,i)=>i%2===0); return e.length?Math.floor(e.reduce((a,b)=>a+b,0)/e.length):0; }",
+   "difficulty": "medium",
+   "note": "Average of the elements at even positions rounded down.",
+   "g1": "agg.mean"
+  },
+  {
+   "name": "מקום הרחוק מהממוצע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length; if(!n) return 15; const s=l.reduce((a,b)=>a+b,0); let b=0; for(let i=1;i<n;i++) if(Math.abs(l[i]*n-s)>Math.abs(l[b]*n-s)) b=i; return b; }",
+   "difficulty": "hard",
+   "note": "Index of the element farthest from the exact average (first on ties), 15 when empty.",
+   "g1": "e.adev"
+  },
+  {
+   "name": "הקרוב לממוצע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length; if(!n) return 0; const s=l.reduce((a,b)=>a+b,0); let b=0; for(let i=1;i<n;i++) if(Math.abs(l[i]*n-s)<Math.abs(l[b]*n-s)) b=i; return l[b]; }",
+   "difficulty": "hard",
+   "note": "Value of the element closest to the exact average (first on ties).",
+   "g1": "e.adev"
+  },
+  {
+   "name": "כמה מעל הממוצע המדויק",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); return l.filter(x=>x*n>s).length; }",
+   "difficulty": "medium",
+   "note": "Counts elements strictly above the exact average.",
+   "g1": "e.dev"
+  },
+  {
+   "name": "כמה מתחת לממוצע המדויק",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); return l.filter(x=>x*n<s).length; }",
+   "difficulty": "medium",
+   "note": "Counts elements strictly below the exact average.",
+   "g1": "e.dev"
+  },
+  {
+   "name": "עד הממוצע",
+   "kind": "list2list",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); return l.filter(x=>x*n<=s); }",
+   "difficulty": "medium",
+   "note": "Keeps the elements not above the exact average.",
+   "g1": "e.dev"
+  },
+  {
+   "name": "בלי הרחוק מהממוצע",
+   "kind": "list2list",
+   "src": "l=>{ const n=l.length; if(!n) return []; const s=l.reduce((a,b)=>a+b,0); let b=0; for(let i=1;i<n;i++) if(Math.abs(l[i]*n-s)>Math.abs(l[b]*n-s)) b=i; return l.filter((x,i)=>i!==b); }",
+   "difficulty": "hard",
+   "note": "Removes the element farthest from the exact average (first on ties).",
+   "g1": "e.adev"
+  },
+  {
+   "name": "זוגיות כמו שכן אחד",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if((l[i-1]%2===l[i]%2)!==(l[i]%2===l[i+1]%2)) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts interior elements that share their parity with exactly one neighbour.",
+   "g1": "t.flip"
+  },
+  {
+   "name": "קפיצה גדולה אחת",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if((Math.abs(l[i]-l[i-1])>2)!==(Math.abs(l[i+1]-l[i])>2)) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts interior elements where exactly one of the two neighbouring steps is larger than 2.",
+   "g1": "t.flip"
+  },
+  {
+   "name": "קפיצה ואז צעד קטן",
+   "kind": "list2num",
+   "src": "l=>{ let c=0; for(let i=1;i+1<l.length;i++) if(Math.abs(l[i]-l[i-1])>2&&!(Math.abs(l[i+1]-l[i])>2)) c++; return c; }",
+   "difficulty": "medium",
+   "note": "Counts interior elements reached by a step larger than 2 and left by a step of at most 2.",
+   "g1": "t.peak"
+  },
+  {
+   "name": "מהקטן מ-13 השלישי",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]<13&&++c===3) return l.slice(i); return []; }",
+   "difficulty": "medium",
+   "note": "Suffix starting at the third element below 13.",
+   "g1": "l.dropUntilK"
+  },
+  {
+   "name": "מהעלייה השנייה",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=1;i<l.length;i++) if(l[i]>l[i-1]&&++c===2) return l.slice(i); return []; }",
+   "difficulty": "medium",
+   "note": "Suffix starting at the second element that is larger than its predecessor.",
+   "g1": "l.dropUntilK"
+  },
+  {
+   "name": "מהשני שמעל הראשון",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]>l[0]&&++c===2) return l.slice(i); return []; }",
+   "difficulty": "medium",
+   "note": "Suffix starting at the second element larger than the first element.",
+   "g1": "l.dropUntilK"
+  },
+  {
+   "name": "עד השני שמעל הראשון",
+   "kind": "list2list",
+   "src": "l=>{ let c=0; for(let i=0;i<l.length;i++) if(l[i]>l[0]&&++c===2) return l.slice(0,i); return [...l]; }",
+   "difficulty": "medium",
+   "note": "Prefix before the second element larger than the first element.",
+   "g1": "l.takeUntilK"
+  },
+  {
+   "name": "הראשון מעל הממוצע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); for(const x of l) if(x*n>s) return x; return 0; }",
+   "difficulty": "medium",
+   "note": "First element strictly above the exact average (0 if none).",
+   "g1": "e.dev"
+  },
+  {
+   "name": "האחרון מתחת לממוצע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); let r=0; for(const x of l) if(x*n<s) r=x; return r; }",
+   "difficulty": "medium",
+   "note": "Last element strictly below the exact average (0 if none).",
+   "g1": "e.dev"
+  },
+  {
+   "name": "הרחוק מהממוצע",
+   "kind": "list2num",
+   "src": "l=>{ const n=l.length; if(!n) return 0; const s=l.reduce((a,b)=>a+b,0); let b=0; for(let i=1;i<n;i++) if(Math.abs(l[i]*n-s)>Math.abs(l[b]*n-s)) b=i; return l[b]; }",
+   "difficulty": "hard",
+   "note": "Value of the element farthest from the exact average (first on ties).",
+   "g1": "e.adev"
+  },
+  {
+   "name": "נוקאאוט: הקטן מנצח",
+   "kind": "list2list",
+   "src": "l=>{ let a=[...l]; const r=[]; while(a.length>1){ const b=[]; for(let i=0;i<a.length;i+=2){ if(i+1<a.length){ r.push(Math.max(a[i],a[i+1])); b.push(Math.min(a[i],a[i+1])); } else b.push(a[i]); } a=b; } return [...r,...a]; }",
+   "difficulty": "hard",
+   "note": "Knockout rounds of neighbouring pairs where the smaller advances: the order of elimination, then the champion.",
+   "g1": "l.knockout"
+  },
+  {
+   "name": "סגן האלוף",
+   "kind": "list2num",
+   "src": "l=>{ let a=[...l]; const r=[]; while(a.length>1){ const b=[]; for(let i=0;i<a.length;i+=2){ if(i+1<a.length){ r.push(Math.min(a[i],a[i+1])); b.push(Math.max(a[i],a[i+1])); } else b.push(a[i]); } a=b; } return r.length?r[r.length-1]:0; }",
+   "difficulty": "hard",
+   "note": "In knockout rounds where the larger advances, the last one eliminated (0 for fewer than two).",
+   "g1": "l.knockout"
+  },
+  {
+   "name": "הודחו בסיבוב הראשון",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(let i=0;i+1<l.length;i+=2) r.push(Math.min(l[i],l[i+1])); return r; }",
+   "difficulty": "hard",
+   "note": "The smaller of each neighbouring pair (the first-round losers when the larger advances).",
+   "g1": "l.knockout"
+  },
+  {
+   "name": "נוקאאוט לפי שארית ארבע",
+   "kind": "list2list",
+   "src": "l=>{ let a=[...l]; const r=[]; while(a.length>1){ const b=[]; for(let i=0;i<a.length;i+=2){ if(i+1<a.length){ if(a[i]%4>=a[i+1]%4){ r.push(a[i+1]); b.push(a[i]); } else { r.push(a[i]); b.push(a[i+1]); } } else b.push(a[i]); } a=b; } return [...r,...a]; }",
+   "difficulty": "hard",
+   "note": "Knockout where the larger remainder mod 4 advances (the left one on ties): elimination order, then the champion.",
+   "g1": "l.knockout"
+  },
+  {
+   "name": "האלוף הזוגי",
+   "kind": "list2num",
+   "src": "l=>{ let a=[...l]; while(a.length>1){ const b=[]; for(let i=0;i<a.length;i+=2){ if(i+1<a.length) b.push(a[i]%2===0||a[i+1]%2===1?a[i]:a[i+1]); else b.push(a[i]); } a=b; } return a.length?a[0]:0; }",
+   "difficulty": "hard",
+   "note": "Knockout where an even element beats an odd one (otherwise the left one advances): the champion.",
+   "g1": "l.knockout"
+  }
+ ]
+}

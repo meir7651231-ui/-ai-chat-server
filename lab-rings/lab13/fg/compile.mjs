@@ -16,7 +16,7 @@
 //                 the machine's own stages (subspec.mjs ⇒ brain-all solveAny) and its program is inlined.
 import fs from 'fs';
 import { run } from '../machine3s.mjs';
-import { assemble, JLT, JNE, JEQ, callTool } from '../greedylib.mjs';
+import { assemble, JLT, JNE, JEQ, callTool, ADDW, SUBW } from '../greedylib.mjs';
 import { deepRelocOk } from '../jumpfix.mjs';
 import { T_, P_, MV, SET, INC, DEC, GOTO, LOADAT, STOREAT, PUSHK, JZ, JNZ, NEXT, SAVEL, RESTL, RELINK, CANON, scan, walkTo, countN, chainRev, lab, LISTC } from './bricks.mjs';
 import { compileVals, compileTable, LCELLS, varOf } from './lamc.mjs';
@@ -39,15 +39,15 @@ function observe(ir, lists) {
     node(t, v) { last.set(t, v); let s = vals.get(t); if (!s) { s = { min: Infinity, max: -Infinity, n: 0, nonInt: 0, set: new Set(), emin: Infinity, emax: -Infinity }; vals.set(t, s); }
       if (typeof v === 'number') { if (v < s.min) s.min = v; if (v > s.max) s.max = v; if (!Number.isInteger(v)) s.nonInt++; if (s.set.size < 64) s.set.add(v); }
       else if (typeof v === 'boolean') { const x = v ? 1 : 0; if (x < s.min) s.min = x; if (x > s.max) s.max = x; s.bool = true; }
-      else if (Array.isArray(v)) { for (const x of v) if (typeof x === 'number') { if (x < s.emin) s.emin = x; if (x > s.emax) s.emax = x; } }
+      else if (Array.isArray(v)) { let sm = 0; for (const x of v) if (typeof x === 'number') { sm += x; if (x < s.emin) s.emin = x; if (x > s.emax) s.emax = x; } s.maxLen = Math.max(s.maxLen || 0, v.length); s.maxSum = Math.max(s.maxSum || 0, sm); }
       s.n++;
       if (t.a && t.a.length && !t.p.startsWith('l.') && !t.p.startsWith('d.')) { const ks = t.a.map((c) => (c.lam ? null : last.get(c))); let m = ops.get(t); if (!m) { m = new Map(); ops.set(t, m); } const key = ks.join(','); if (!m.has(key)) m.set(key, { k: ks, y: v }); } },
   };
   for (const l of lists) { try { evalIR(ir, [...l], { hook }); } catch (e) { /* witness may throw on odd inputs: those lists are skipped */ } }
   return { lam: (n) => [...(lam.get(n)?.map.values() || [])], vals: (t) => vals.get(t), ops: (t) => [...(ops.get(t)?.values() || [])] };
 }
-const hasCnt = (e) => !!e && (!!e.cnt || (e.a || []).some(hasCnt));
-const cntNodes = (e, out = []) => { if (!e) return out; if (e.cnt) out.push(e); else (e.a || []).forEach((c) => cntNodes(c, out)); return out; };
+const hasCnt = (e) => !!e && (!!e.cnt || !!e.tdep || (e.a || []).some(hasCnt));   // G1: a tree depth also reads the whole list
+const cntNodes = (e, out = []) => { if (!e) return out; if (e.cnt || e.tdep) out.push(e); else (e.a || []).forEach((c) => cntNodes(c, out)); return out; };
 
 // ───────── compile context ─────────
 class Fail extends Error {}
@@ -60,8 +60,12 @@ class Pool { constructor(cells = [0, 2, 3, 4, 5, 6, 7]) { this.f = [...cells]; }
 // stat variables ⇒ synthetic N nodes on the current list
 const LID = () => ({ p: 'l.id', a: [] });
 const STATNODE = { 'g.n': () => ({ p: 'agg.len', a: [LID()] }), 'g.l0': () => ({ p: 'agg.first', a: [LID()] }), 'g.last': () => ({ p: 'agg.last', a: [LID()] }),
-  'g.mn': () => ({ p: 'agg.min', a: [LID()] }), 'g.mx': () => ({ p: 'agg.max', a: [LID()] }), 'g.sum': () => ({ p: 'agg.sum', a: [LID()] }), 'g.sec': () => ({ p: 'g.at', a: [LID(), { p: '#', v: 1 }] }) };
+  'g.mn': () => ({ p: 'agg.min', a: [LID()] }), 'g.mx': () => ({ p: 'agg.max', a: [LID()] }), 'g.sum': () => ({ p: 'agg.sum', a: [LID()] }),
+  'g.q': () => ({ p: 'agg.mean', a: [LID()] }), 'g.r': () => ({ p: 'agg.meanrem', a: [LID()] }),   // G1: floor mean and remainder of the current list
+  'g.sec': () => ({ p: 'g.at', a: [LID(), { p: '#', v: 1 }] }) };
 const statKey = (v) => 'g.' + v.slice(2);
+// G1 compiler: after Sx ⇐ Sx + v (mod 16), a wrap shows as Sx < v: saturate at 15
+function BORROWJ(Sx, v, SC, K) { const W = lab('sw'); return [...JLT(Sx, v, SC, W), ...GOTO(K), W, ...SET(Sx, 15), K]; }
 // jump to l if cell c == constant k (stack only)
 function JEQK(c, k, l) { const s = lab('eqk'); return [...T_(c), ...PUSHK((16 - k) & 15), ['ADD'], ['J', s], ...GOTO(l), s]; }
 // a = b - c (mod 16) without holes: b + not(c) + 1
@@ -99,7 +103,7 @@ async function genN0(C, t, env) {
   if (BINOPS.has(p) || UNOPS.has(p)) {
     const kids = p === 'g.ltK' ? [t.a[0]] : t.a;
     // operand representation: exact 0..15 · mod 16 (homomorphic parent, or values span ≤ 16 numbers) · capped at 15 (under cap15, counts)
-    let reps; try { reps = kids.map((k) => { const s = C.obs.vals(k); if (s && (s.bool || inRange(s))) return 'exact'; if ((env.mod16 && HOMO.has(p)) || width(s) <= 15) return 'mod16'; if (p === 'g.cap15' && COUNTS.has(k.p)) return 'cap'; throw new Fail(`operand of ${p} needs wide arithmetic`); }); }
+    let reps; try { reps = kids.map((k) => { const s = C.obs.vals(k); if (s && (s.bool || inRange(s))) return 'exact'; if ((env.mod16 && HOMO.has(p)) || width(s) <= 15) return 'mod16'; if (p === 'g.cap15' && (COUNTS.has(k.p) || (k.p === 'agg.sum' && s && s.min >= 0))) return 'cap'; throw new Fail(`operand of ${p} needs wide arithmetic`); }); }
     catch (e) { return await fusedN(C, t, env); }
     const code = [];
     for (let j = 0; j < kids.length; j++) code.push(...(await genN(C, kids[j], { ...env, mod16: reps[j] === 'mod16', cap: reps[j] === 'cap' })), ...T_(2));
@@ -111,7 +115,7 @@ async function genN0(C, t, env) {
     const vars = kids.map((_, j) => '$' + j); const cm = {}; vars.forEach((v, j) => { cm[v] = cells[j]; });
     code.push(...compileTable(vars, rows, cm, 2, { mode: env.mod16 ? 'mod16' : 'num', live: [], free: LCELLS.filter((c) => !cells.includes(c)) }));
     return code; }
-  if (p.startsWith('agg.') || ['g.findIdx', 'g.findLast', 'g.cntPairs', 'g.cntTriples', 'g.at', 'g.indexOf', 'g.indexOfIn', 'g.fold'].includes(p)) return await genSink(C, t, env, t);
+  if (p.startsWith('agg.') || ['g.findIdx', 'g.findLast', 'g.cntPairs', 'g.cntTriples', 'g.at', 'g.indexOf', 'g.indexOfIn', 'g.fold', 'g.cntWin3'].includes(p)) return await genSink(C, t, env, t);
   throw new Fail('unsupported number node ' + p);
 }
 // an arithmetic sub-tree whose intermediate values are wide but whose leaves are small: one hole over the leaves (table from the witness)
@@ -163,6 +167,7 @@ async function genNsynth(C, n, env) {
 // ───────── nested pair counts inside element lambdas (#before / #after / #all): a loop over the chain at cell 1 ─────────
 function mkExtra(C, cells, lamNode) {
   return { cntCode: (node, out, live, free, obs) => {
+    if (node.tdep) return tdepCode(C, cells, node, out, live, free, obs);
     const fr = free.filter((c) => !live.includes(c) && c !== out && c !== 1); if (fr.length < 2) throw new Fail('no temp for nested count');
     const Y = fr[0], G = fr[1]; const X = cells.x; if (X == null) throw new Fail('nested count needs x');
     // rel obs: every (x, other element) pair seen
@@ -175,6 +180,28 @@ function mkExtra(C, cells, lamNode) {
     const stop = node.cnt === 'before' ? JEQ(Y, X, G, D) : node.cnt === 'all' ? JEQ(Y, X, G, S) : [];
     return [...SET(out, 0), ...start, L, ...JZ(Y, D), ...stop, ...relCode, ...JZ(G, S), ...INC(out), S, ...NEXT(Y), ...GOTO(L), D]; } };
 }
+// G1: depth of the current element x in the search tree built by inserting the chain at cell 1 in order (left when key < key(node)).
+// No tree is stored: y (before x) is an ancestor of x exactly when every z before y sends y and x to the same side.
+function tdepCode(C, cells, node, out, live, free, obs) {
+  const fr = free.filter((c) => !live.includes(c) && c !== out && c !== 1); const X = cells.x; if (X == null) throw new Fail('tree depth needs x');
+  const key = node.tdep; const ident = key.v === 'x';
+  const kv = [...lamVars(key)].filter((v) => v !== 'L'); if (kv.some((v) => ['i', 'prv', 'nxt'].includes(v))) throw new Fail('tree key reads the position');
+  if (fr.length < (ident ? 3 : 6)) throw new Fail('no temp for tree depth');
+  const [Y, Z, S, KX0, KY0, KZ0] = fr; const KX = ident ? X : KX0, KY = ident ? Y : KY0, KZ = ident ? Z : KZ0;
+  let kcode = () => [];
+  if (!ident) { // the key as a hole over x (and list stats), from every element of every list seen; ranked when it leaves 0..15
+    const kobs = []; const seen = new Set(); for (const o of obs) { const L = o.L; if (!L) continue; for (let j = 0; j < L.length; j++) { const z = { ...o, x: L[j], i: j }; const k = kv.map((v) => varOf(z, v)).join(','); if (!seen.has(k)) { seen.add(k); kobs.push(z); } } }
+    const vals = [...new Set(kobs.map((o) => evalLam(key, o)))].sort((a, b) => a - b); if (vals.length > 16) throw new Fail('key has more than 16 values');
+    const rk = vals.every((v) => v >= 0 && v <= 15) ? null : new Map(vals.map((v, i) => [v, i])); const valf = (o) => (rk ? rk.get(evalLam(key, o)) : evalLam(key, o));
+    const rest = fr.slice(6);
+    kcode = (src, dst, lv) => compileVals(key, kobs, { ...cells, x: src }, dst, { mode: 'num', live: lv, free: [...rest, dst], valf }); }
+  const LY = lab('ty'), LZ = lab('tz'), YL = lab('tl'), NZ = lab('tn'), ANC = lab('ta'), NA = lab('tb'), DONE = lab('td');
+  const lv0 = [...live, X, out, Y, Z, S, ...(ident ? [] : [KX, KY, KZ])];
+  return [...(ident ? [] : kcode(X, KX, lv0.filter((c) => c !== KX))), ...SET(out, 1), ...MV(1, Y),
+    LY, ...JEQ(Y, X, S, DONE), ...(ident ? [] : kcode(Y, KY, lv0.filter((c) => c !== KY))), ...MV(1, Z),
+    LZ, ...JEQ(Z, Y, S, ANC), ...(ident ? [] : kcode(Z, KZ, lv0.filter((c) => c !== KZ))),
+    ...JLT(KY, KZ, S, YL), ...JLT(KX, KZ, S, NA), ...GOTO(NZ), YL, ...JLT(KX, KZ, S, NZ), ...GOTO(NA),
+    NZ, ...NEXT(Z), ...GOTO(LZ), ANC, ...INC(out), NA, ...NEXT(Y), ...GOTO(LY), DONE]; }
 // a hole inside a frame: every cell the frame holds (not in its pool) is live; if the hole needs more temps than are free,
 // frame cells that the hole does not read are spilled to the stack around it
 function lamCode(C, n, cells, out, live, pool, mode, valf) {
@@ -232,12 +259,12 @@ function produceBase(C, S, pool, live, emit, { mode = 'num', statCells = {}, val
     const V = pool.take(); const cells = { ...cells0, x: X, ...(I != null ? { i: I } : {}), ...(PRV != null ? { prv: PRV } : {}), ...(NXT != null ? { nxt: NXT } : {}) };
     const lv = [...live, X, V, ...[I, PRV, NXT].filter((c) => c != null)];
     code.push(...scan({ X, I, PRV, NXT }, () => [...lamC(cells, V, lv), ...emit(V)])); return code; }
-  if (S.base === 'adj' || S.base === 'chunk2') { const A = pool.take(); const I = usesI ? pool.take() : null; const V = pool.take(); const cells = { ...cells0, a: A, b: X, ...(I != null ? { i: I } : {}) }; const lv = [...live, X, A, V, ...(I != null ? [I] : [])];
+  if (S.base === 'adj' || S.base === 'chunk2') { const A = pool.take(); const I = usesI ? pool.take() : null; const V = pool.take(); const DI = lamVarsOf.includes('di') ? pool.take() : null; if (DI != null) code.push(...SET(DI, 1)); const cells = { ...cells0, a: A, b: X, ...(I != null ? { i: I } : {}), ...(DI != null ? { di: DI } : {}) }; const lv = [...live, X, A, V, ...(I != null ? [I] : []), ...(DI != null ? [DI] : [])];
     if (S.base === 'adj') { const F = lab('adf'); code.push(...SET(A, 0), ...scan({ X, I }, () => [...JZ(A, F), ...(I != null ? DEC(I) : []), ...lamC(cells, V, lv), ...(I != null ? INC(I) : []), ...emit(V), F, ...MV(X, A)])); return code; }
     if (I != null) throw new Fail('chunk2 with i'); const F = lab('chf'), OUT = lab('cho');
     code.push(...SET(A, 0), ...scan({ X }, ({ cont }) => [...JNZ(A, F), ...MV(X, A), ...GOTO(cont), F, ...lamC(cells, V, lv), ...SET(A, 0), ...emit(V)]), ...JZ(A, OUT), ...emit(A), OUT); return code; }
-  if (S.base === 'pairs') { if (usesI) throw new Fail('pairs with i'); const Y = pool.take(), V = pool.take(); const cells = { ...cells0, a: X, b: Y }; const lv = [...live, X, Y, V]; const L2 = lab('pl'), D2 = lab('pd');
-    code.push(...scan({ X }, () => [...MV(X, Y), L2, ...NEXT(Y), ...JZ(Y, D2), ...lamC(cells, V, lv), ...emit(V), ...GOTO(L2), D2])); return code; }
+  if (S.base === 'pairs') { if (usesI) throw new Fail('pairs with i'); const Y = pool.take(), V = pool.take(); const DI = lamVarsOf.includes('di') ? pool.take() : null; const cells = { ...cells0, a: X, b: Y, ...(DI != null ? { di: DI } : {}) }; const lv = [...live, X, Y, V, ...(DI != null ? [DI] : [])]; const L2 = lab('pl'), D2 = lab('pd');
+    code.push(...scan({ X }, () => [...MV(X, Y), ...(DI != null ? SET(DI, 0) : []), L2, ...NEXT(Y), ...(DI != null ? INC(DI) : []), ...JZ(Y, D2), ...lamC(cells, V, lv), ...emit(V), ...GOTO(L2), D2])); return code; }
   if (S.base === 'walk' || S.base === 'walkIdx') { pool.f.unshift(X); code.push(...walkCode(C, S.lam, S.base === 'walk', pool, cells0, { onVisit: (Xc, CUR) => emit(CUR) })); return code; }
   if (S.base === 'segs') { // every contiguous segment [i..j]: a = its sum (kept mod 16: the holes must be functions of it mod 16), b = its length
     if (usesI || (S.pred && lamVars(S.pred.lam).has('i'))) throw new Fail('segs with i');
@@ -284,6 +311,19 @@ async function genSink(C, t, env, vnode) {
     const Lc = await genL(C, L, { ...env }); return [...SAVEL(), ...nC, ...T_(2), ...Lc, ...body, ...RESTL()]; }
   if (p === 'g.indexOf') { const nC = await genN(C, t.a[0], { ...env, mod16: false, cap: false }); const J = 4, X = 3; const F = lab('fi');
     return [...nC, ...MV(2, J), ...SET(2, 15), ...SET(6, 0), ...scan({ X }, ({ brk }) => [...JNE(X, J, 0, F), ...MV(6, 2), ...GOTO(brk), F, ...INC(6)])]; }
+  if (p === 'g.cntWin3') { // G1: consecutive triples (a = previous, b = this, c = next) where the learned triple relation holds
+    const L = t.a[0], lamT = t.a[1]; const { pre, post, orig } = await onList(C, L, env); const env2 = { ...env, orig, cur: L.p === 'l.id' ? env.cur : L };
+    const pool = new Pool([0, 3, 4, 5, 6, 7]); const { code: sc, map: statCells } = await parkStats(C, statVarsOf([lamT]), env2, pool);
+    const X = pool.take(), PRV = pool.take(), NXT = pool.take(), G = pool.take(); const cells = { ...statCells, a: PRV, b: X, c: NXT }; const lv = [2, ...Object.values(statCells), X, PRV, NXT];
+    const tp = lamT.lam.tpair;
+    if (tp) { // t.flip / t.peak: the pair relation is one hole, applied to (previous, this) and to (this, next)
+      const H = pool.take(); const pobs = []; const seen = new Set(); const pv = [...lamVars(tp.rel)].filter((v) => v !== 'L');
+      for (const o of C.obs.lam(lamT)) for (const [a, b] of [[o.a, o.b], [o.b, o.c]]) { const z = { ...o, a, b }; const k = pv.map((v) => varOf(z, v)).join(','); if (!seen.has(k)) { seen.add(k); pobs.push(z); } }
+      const hole = (ca, cb, out, lv2) => holeCode(tp.rel, pobs, { ...statCells, a: ca, b: cb }, out, lv2, pool, { mode: 'bool', valf: (o) => evalLam(tp.rel, o), extra: {} });
+      return [...pre, ...sc, ...SET(2, 0), ...scan({ X, PRV, NXT }, ({ cont }) => { const CNT = lab('wc'), Z1 = lab('wz');
+        if (tp.kind === 'peak') return [...JZ(PRV, cont), ...JZ(NXT, cont), ...hole(PRV, X, G, lv), ...JZ(G, cont), ...hole(X, NXT, H, lv), ...JNZ(H, cont), ...INC(2)];
+        return [...JZ(PRV, cont), ...JZ(NXT, cont), ...hole(PRV, X, G, lv), ...hole(X, NXT, H, [...lv, G]), ...JZ(G, Z1), ...JNZ(H, cont), ...GOTO(CNT), Z1, ...JZ(H, cont), CNT, ...INC(2)]; }), ...post]; }
+    return [...pre, ...sc, ...SET(2, 0), ...scan({ X, PRV, NXT }, ({ cont }) => [...JZ(PRV, cont), ...JZ(NXT, cont), ...lamCode(C, lamT, cells, G, lv, pool, 'bool'), ...JZ(G, cont), ...INC(2)]), ...post]; }
   // stream sinks
   let agg = p.startsWith('agg.') ? p.slice(4) : p; let prod = t.a[0]; let pred = null;
   if (p === 'g.findIdx' || p === 'g.findLast') { pred = t.a[1]; }
@@ -291,6 +331,31 @@ async function genSink(C, t, env, vnode) {
   if (p === 'g.cntTriples') { agg = 'triples'; }
   if (p === 'g.fold') { agg = 'fold'; }
   const S = agg === 'triples' ? { base: 'elem', L: t.a[0], steps: [] } : streamOf(prod);
+  // G1: arg-best over the deviation from the mean. x·n − sum grows with x, so its arg-best is the elements' own; the exact
+  // distance |x·n − sum| is compared pairwise: y beats x ⟺ (y − x)·((x + y)·n − 2·sum) has the right sign, and (x + y)·n vs 2·sum
+  // is x + y vs floor(2·sum/n) (+ remainder test): every number stays in one cell (x + y and the quotient taken mod 16).
+  if ((agg === 'argmin' || agg === 'argmax') && S.base === 'map' && !S.steps.length && S.lam && S.lam.lam.op === 'dev') S.lam = { lam: { v: 'x' } };
+  // the same pairwise comparison serves the first / last element of the list sorted by that distance (stable; a second key x)
+  let adevBest = null;
+  if ((agg === 'argmin' || agg === 'argmax') && S.base === 'map' && !S.steps.length && S.lam && S.lam.lam.op === 'adev') adevBest = { L: S.L, best: agg === 'argmin' ? 'min' : 'max', tie: 'first', out: 'index' };
+  if ((agg === 'first' || agg === 'last') && S.base === 'elem' && !S.steps.length && ['l.sortBy', 'l.sortByDesc', 'l.sortBy2'].includes(S.L.p) && S.L.a[0].p === 'l.id' && S.L.a[1].lam && S.L.a[1].lam.op === 'adev' && (S.L.p !== 'l.sortBy2' || (S.L.a[2].lam && S.L.a[2].lam.v === 'x'))) {
+    const asc = S.L.p !== 'l.sortByDesc', last = agg === 'last'; const best = asc === last ? 'max' : 'min';
+    adevBest = { L: LID(), best, tie: S.L.p === 'l.sortBy2' ? (best === 'max' ? 'xmax' : 'xmin') : (last ? 'last' : 'first'), out: 'value' }; }
+  if (adevBest) {
+    const { best, tie, out } = adevBest;
+    if (out === 'index' && !env.mod16 && st && st.min < 0) throw new Fail('argmax of empty is −1');
+    const { pre, post } = await onList(C, adevBest.L, env);
+    const pool = new Pool([0, 3, 4, 5, 6, 7]); const X = pool.take(), BX = pool.take(), M = pool.take(), R2 = pool.take(), U = pool.take(), SC = pool.take();
+    const EMP = lab('ae'), DL = lab('ad'), DE = lab('af'), END = lab('ax');
+    const onTie = (cont, TK) => tie === 'first' ? GOTO(cont) : tie === 'last' ? GOTO(TK) : tie === 'xmax' ? [...JLT(BX, X, SC, TK), ...GOTO(cont)] : [...JLT(X, BX, SC, TK), ...GOTO(cont)];
+    const code = [...pre, ...SET(U, 0), ...SET(R2, 0), ...SET(BX, 0), ...scan({ X }, () => [...INC(U), ...ADDW(R2, BX, X, SC), ...ADDW(R2, BX, X, SC)]),
+      ...SET(M, 0), ...JZ(U, EMP), DL, ...SUBW(R2, BX, U, SC, DE), ...INC(M), ...GOTO(DL), DE,
+      ...SET(BX, 0), ...scan({ X }, ({ cont }) => { const TK = lab('at'), NEG = lab('an'), POS = lab('ap');
+        const better = (lo, hi) => [...JLT(lo, hi, SC, TK), ...GOTO(cont)];
+        return [...JZ(BX, TK), ...T_(X), ...T_(BX), ['ADD'], ...P_(U), ...JLT(U, M, SC, NEG), ...JLT(M, U, SC, POS), ...T_(R2), ['J', NEG], ...onTie(cont, TK),
+          NEG, ...(best === 'min' ? better(BX, X) : better(X, BX)), POS, ...(best === 'min' ? better(X, BX) : better(BX, X)), TK, ...MV(X, BX)]; }),
+      ...(out === 'index' ? [...SET(2, 0), ...scan({ X }, ({ brk }) => [...JEQ(X, BX, SC, brk), ...INC(2)]), ...GOTO(END), EMP, ...SET(2, 15), END] : [...MV(BX, 2), EMP, ...(() => { const Z = lab('az'); return [...JNZ(U, Z), ...SET(2, 0), Z]; })()]), ...post];
+    return code; }
   // machine lists hold distinct values: mode of a list = its minimum, distinct of a list = its length
   if (S.base === 'elem' && !S.steps.length && agg === 'mode') agg = 'min';
   if (S.base === 'elem' && !S.steps.length && agg === 'distinct') agg = 'len';
@@ -329,10 +394,11 @@ async function genSink(C, t, env, vnode) {
       ...JEQK(VV, hi, D), ...INC(VV), ...GOTO(L), D);
     return [...code, brk, ...post]; }
   // one-pass sinks
-  let init = [], upd;
+  let init = [], upd, finish = [];
   switch (agg) {
     case 'len': case 'count-true': init = SET(Sx, 0); upd = (v) => { if (agg === 'count-true') { const F = lab('ct'); return [...JZ(v, F), ...(env.cap ? JEQK(Sx, 15, F) : []), ...INC(Sx), F]; } if (env.cap) { const F = lab('cp'); return [...JEQK(Sx, 15, F), ...INC(Sx), F]; } return INC(Sx); }; break;
-    case 'sum': if (!env.mod16 && !inRange(st)) throw new Fail('sum needs wide arithmetic'); init = SET(Sx, 0); upd = (v) => [...T_(Sx), ...T_(v), ['ADD'], ...P_(Sx)]; break;
+    case 'sum': if (env.cap && !env.mod16) { const SC = pool.take(); init = SET(Sx, 0); upd = (v) => { const K2 = lab('sk'); return [...T_(Sx), ...T_(v), ['ADD'], ...P_(Sx), ...BORROWJ(Sx, v, SC, K2)]; }; break; }   // G1 compiler: min(15, sum) by saturation
+      if (!env.mod16 && !inRange(st)) throw new Fail('sum needs wide arithmetic'); init = SET(Sx, 0); upd = (v) => [...T_(Sx), ...T_(v), ['ADD'], ...P_(Sx)]; break;
     case 'first': init = SET(Sx, 0); upd = (v) => [...MV(v, Sx), ...GOTO(brk)]; break;
     case 'last': init = SET(Sx, 0); upd = (v) => MV(v, Sx); break;
     case 'min': case 'max': { const FL = pool.take(), SC = pool.take(); init = [...SET(Sx, 0), ...SET(FL, 0)]; if (shift) { const SK = lab('us'); unshift = [...JZ(FL, SK), ...T_(Sx), ...PUSHK(shift & 15), ['ADD'], ...P_(Sx), SK]; } upd = (v) => { const F = lab('mf'), K = lab('mk'), D = lab('md');
@@ -346,10 +412,16 @@ async function genSink(C, t, env, vnode) {
       if (wide && !env.mod16) throw new Fail('fold needs wide arithmetic'); if (lamVars(F.lam).has('i')) throw new Fail('fold with i');
       const obsF = wide ? fo.map((o) => ({ ...o, a: o.a & 15, __o: o })) : fo; const vf = wide ? (o) => evalLam(F.lam, o.__o) : (o) => evalLam(F.lam, o);
       init = SET(Sx, k0 & 15); upd = (v) => { const G = pool.peek(); if (G == null) throw new Fail('no temp (cells)'); return [...holeCode(F.lam, obsF, { ...statCells, a: Sx, b: v }, G, [Sx, v], pool, { mode: wide ? 'mod16' : 'num', valf: vf, extra: {} }), ...MV(G, Sx)]; }; break; }
+    case 'mean': case 'meanrem': { // G1: floor mean of the stream; the sum is kept in two cells (LO, HI), then divided by repeated subtraction
+      const plain = S.base === 'elem' && S.L.p === 'l.id'; const sp = C.obs.vals(prod); if (!plain && (!sp || sp.maxLen > 15 || sp.maxSum > 255)) throw new Fail('mean: stream too long or sum too wide');
+      const LO = pool.take(), HI = pool.take(), CN = pool.take(); init = [...SET(LO, 0), ...SET(HI, 0), ...SET(CN, 0)];   // the answer cell is the adder's scratch until the end
+      upd = (v) => [...ADDW(LO, HI, v, Sx), ...INC(CN)];
+      const DL = lab('mnl'), DE = lab('mne'); const DS = [0, 3, 4, 5, 6, 7].find((c) => ![LO, HI, CN].includes(c));   // the stream is over: any other cell is free for the division
+      finish = [...SET(Sx, 0), ...JZ(CN, DE), DL, ...SUBW(LO, HI, CN, DS, DE), ...INC(Sx), ...GOTO(DL), DE, ...(agg === 'meanrem' ? MV(LO, Sx) : [])]; break; }
     default: throw new Fail('unsupported sink agg.' + agg);
   }
   const extraLive = [...live0];
-  code.push(...init, ...produce(C, S, pool, extraLive, upd, { mode: itemMode, statCells, valf: itemValf, noValue: agg === 'len' && !S.steps.length }), ...unshift);
+  code.push(...init, ...produce(C, S, pool, extraLive, upd, { mode: itemMode, statCells, valf: itemValf, noValue: agg === 'len' && !S.steps.length }), ...unshift, ...finish);
   return [...code, brk, ...post];
 }
 
@@ -560,6 +632,72 @@ async function opBrick(C, t, env) {
     code.push(...PUSHK(0), ...SET(FL, 0), ...scan({ X, I, PRV, NXT }, ({ cont, brk }) => { const PU = lab('wp');
       if (p === 'l.takeWhile') return [...lamCode(C, lamN, cells, G, lv, pool, 'bool'), ...JZ(G, brk), ...T_(X)];
       return [...JNZ(FL, PU), ...lamCode(C, lamN, cells, G, lv, pool, 'bool'), ...JNZ(G, cont), ...SET(FL, 15), PU, ...T_(X)]; }), ...RELINK(2, 3));
+    return code; }
+  if (p === 'l.takeUntilK' || p === 'l.dropUntilK') { // G1: the scan counts the elements where P holds; the K-th one ends the prefix / starts the suffix
+    const K = A[2].v; if (!(K >= 1 && K <= 15)) throw new Fail('until k');
+    const X = pool.take(), I = uses('i') ? pool.take() : null, CN = pool.take(), FL = pool.take(), G = pool.take(); const cells = { ...statCells, x: X, ...(I != null ? { i: I } : {}) };
+    const needPrv = uses('prv'), needNxt = uses('nxt'); const PRV = needPrv ? pool.take() : null, NXT = needNxt ? pool.take() : null; if (PRV != null) cells.prv = PRV; if (NXT != null) cells.nxt = NXT;
+    const lv = [...live0, X, CN, FL, ...[I, PRV, NXT].filter((c) => c != null)];
+    code.push(...PUSHK(0), ...SET(CN, K), ...SET(FL, 0), ...scan({ X, I, PRV, NXT }, ({ cont, brk }) => { const EM = lab('tu'), PU = lab('du');
+      if (p === 'l.takeUntilK') return [...lamCode(C, lamN, cells, G, lv, pool, 'bool'), ...JZ(G, EM), ...DEC(CN), ...JZ(CN, brk), EM, ...T_(X)];
+      return [...JNZ(FL, PU), ...lamCode(C, lamN, cells, G, lv, pool, 'bool'), ...JZ(G, cont), ...DEC(CN), ...JNZ(CN, cont), ...SET(FL, 15), PU, ...T_(X)]; }), ...RELINK(2, 3));
+    return code; }
+  if (p === 'l.stackPops') { // G1: the machine stack is the frame's stack (sentinel 0); popped elements are linked into the output chain as they leave
+    const X = pool.take(), TP = pool.take(), HD = pool.take(), TL = pool.take(), I = uses('i') ? pool.take() : null, G = pool.take();
+    const cells = { ...statCells, a: TP, b: X, ...(I != null ? { i: I } : {}) }; const lv = [...live0, X, TP, HD, TL, ...(I != null ? [I] : [])];
+    const link = () => { const F = lab('spf'), D2 = lab('spd'); return [...JZ(TL, F), ...STOREAT(TL, TP), ...GOTO(D2), F, ...MV(TP, HD), D2, ...MV(TP, TL)]; };
+    const FIN = lab('spn'), END = lab('spe'), NOT = lab('spz');
+    code.push(...PUSHK(0), ...SET(HD, 0), ...SET(TL, 0), ...scan({ X, I }, () => { const LP = lab('spl'), EM = lab('spm'), KP = lab('spk'), PX = lab('spx');
+      return [LP, ...P_(TP), ...JZ(TP, EM), ...lamCode(C, lamN, cells, G, lv, pool, 'bool'), ...JZ(G, KP), ...link(), ...GOTO(LP), KP, ...T_(TP), ...GOTO(PX), EM, ...T_(TP), PX, ...T_(X)]; }),
+      FIN, ...P_(TP), ...JZ(TP, END), ...link(), ...GOTO(FIN), END, ...JZ(TL, NOT), ...SET(G, 0), ...STOREAT(TL, G), NOT, ...MV(HD, 1));
+    return code; }
+  if (p === 'l.groupBy') { // G1: for each element that is the first of its key, every element with that key, in order
+    if (['i', 'prv', 'nxt'].some(uses)) throw new Fail('group key reads the position');
+    const Y = pool.take(), KY = pool.take(), Z = pool.take(), KZ = pool.take(), SC = pool.take();
+    const kc = keyCode(C, lamN); const keyAt = (xc, out, lv) => lamCode(C, lamN, { ...statCells, x: xc }, out, lv, pool, 'num', kc.valf);
+    code.push(...PUSHK(0), ...scan({ X: Y }, ({ cont }) => { const L1 = lab('gb1'), FI = lab('gbf'), L2 = lab('gb2'), D2 = lab('gbd'), SK = lab('gbs');
+      return [...keyAt(Y, KY, [...live0, Y]),
+        ...MV(1, Z), L1, ...JEQ(Z, Y, SC, FI), ...keyAt(Z, KZ, [...live0, Y, KY, Z]), ...JEQ(KZ, KY, SC, cont), ...NEXT(Z), ...GOTO(L1),
+        FI, ...MV(1, Z), L2, ...JZ(Z, D2), ...keyAt(Z, KZ, [...live0, Y, KY, Z]), ...JNE(KZ, KY, SC, SK), ...T_(Z), SK, ...NEXT(Z), ...GOTO(L2), D2]; }), ...RELINK(2, 3));
+    return code; }
+  if (p === 'l.heapPush') { // G1: array mode — the chain is unloaded into cells 8.. (A[k] = mem[8+k], 0 after the end), sifted in place, relinked
+    if (uses('prv') || uses('nxt')) throw new Fail('heap rule reads neighbours');
+    const K = pool.take(), I = pool.take(), Q = pool.take(), AV = pool.take(), BV = pool.take(), G = pool.take();
+    const cells = { ...statCells, a: AV, b: BV, ...(uses('i') ? { i: I } : {}) }; const lv = [...live0, K, I, Q, AV, BV];
+    const ADDR = (c) => [...T_(c), ...PUSHK(8), ['ADD']];                 // push 8 + mem[c]
+    const LOADA = (c, d) => [...ADDR(c), ['WHERE@'], ['GO'], ['TAKE'], ...P_(d)];   // d ⇐ A[mem[c]]
+    const STOREA = (c, v) => [...T_(v), ...ADDR(c), ['WHERE@'], ['GO'], ['PUT']];    // A[mem[c]] ⇐ mem[v]
+    const UL = lab('hu'), UD = lab('hd'), ZL = lab('hz'), PL = lab('hp'), PD = lab('hq'), KL = lab('hk'), KD = lab('he'), SL = lab('hs'), SD = lab('ht'), OL = lab('ho'), OD = lab('hn');
+    code.push(
+      // unload: push the elements, count them in K, zero cells 8..15, pop them into A[K-1] .. A[0]
+      ...SET(K, 0), ...MV(1, AV), UL, ...JZ(AV, UD), ...T_(AV), ...INC(K), ...NEXT(AV), ...GOTO(UL), UD,
+      ...[8, 9, 10, 11, 12, 13, 14, 15].flatMap((c) => SET(c, 0)),
+      PL, ...JZ(K, PD), ...DEC(K), ...ADDR(K), ['WHERE@'], ['GO'], ['PUT'], ...GOTO(PL), PD,
+      // sift: K = 1, 2, .. while K < 8 and A[K] != 0
+      ...SET(K, 1), KL, ...JEQK(K, 8, KD), ...LOADA(K, BV), ...JZ(BV, KD), ...MV(K, I),
+      SL, ...JZ(I, SD), ...T_(I), ...PUSHK(15), ['ADD'], ['SHR'], ...P_(Q), ...LOADA(Q, AV), ...LOADA(I, BV),
+      ...lamCode(C, lamN, cells, G, lv, pool, 'bool'), ...JZ(G, SD), ...STOREA(Q, BV), ...STOREA(I, AV), ...MV(Q, I), ...GOTO(SL), SD,
+      ...INC(K), ...GOTO(KL), KD,
+      // relink A[0..]: push 0, then A[0], A[1], ..
+      ...PUSHK(0), ...SET(K, 0), OL, ...JEQK(K, 8, OD), ...LOADA(K, BV), ...JZ(BV, OD), ...T_(BV), ...INC(K), ...GOTO(OL), OD, ...RELINK(2, 3));
+    return code; }
+  if (p === 'l.knockout') { // G1: array mode; each round compacts the winners to the front (W ≤ R), the losers go on the stack in order
+    if (['prv', 'nxt'].some(uses)) throw new Fail('match rule reads neighbours');
+    const LN = pool.take(), W = pool.take(), R = pool.take(), AV = pool.take(), BV = pool.take(), G = pool.take();
+    const cells = { ...statCells, a: AV, b: BV, ...(uses('i') ? { i: R } : {}) }; const lv = [...live0, LN, W, R, AV, BV];
+    const ADDR = (c) => [...T_(c), ...PUSHK(8), ['ADD']]; const LOADA = (c, d) => [...ADDR(c), ['WHERE@'], ['GO'], ['TAKE'], ...P_(d)]; const STOREA = (c, v) => [...T_(v), ...ADDR(c), ['WHERE@'], ['GO'], ['PUT']];
+    const UL = lab('ku'), UD = lab('kd'), PL = lab('kp'), PD = lab('kq'), RL = lab('kr'), RD = lab('ks'), ML = lab('km'), MD = lab('kn'), ODD = lab('ko'), LOS = lab('kl'), NX = lab('kx'), FIN = lab('kf');
+    code.push(
+      ...SET(LN, 0), ...MV(1, AV), UL, ...JZ(AV, UD), ...T_(AV), ...INC(LN), ...NEXT(AV), ...GOTO(UL), UD,
+      ...MV(LN, W), PL, ...JZ(W, PD), ...DEC(W), ...ADDR(W), ['WHERE@'], ['GO'], ['PUT'], ...GOTO(PL), PD,
+      ...PUSHK(0),
+      RL, ...SET(G, 1), ...JLT(G, LN, BV, ML), ...GOTO(RD),                     // a round while LEN > 1
+      ML, ...SET(W, 0), ...SET(R, 0),
+      MD, ...JLT(R, LN, G, ODD), ...MV(W, LN), ...GOTO(RL),                     // round over: LEN ⇐ W
+      ODD, ...MV(R, AV), ...INC(AV), ...JLT(AV, LN, G, LOS), ...LOADA(R, AV), ...STOREA(W, AV), ...INC(R), ...INC(W), ...GOTO(MD),   // odd last advances
+      LOS, ...LOADA(R, AV), ...INC(R), ...LOADA(R, BV), ...DEC(R), ...lamCode(C, lamN, cells, G, lv, pool, 'bool'),
+      ...JZ(G, NX), ...T_(BV), ...STOREA(W, AV), ...GOTO(FIN), NX, ...T_(AV), ...STOREA(W, BV), FIN, ...INC(R), ...INC(R), ...INC(W), ...GOTO(MD),
+      RD, ...JZ(LN, PD + 'z'), ...SET(R, 0), ...LOADA(R, AV), ...T_(AV), PD + 'z', ...RELINK(2, 3));
     return code; }
   if (p === 'l.move') { // the element at F moves before the T-th of the others (end if T ≥ their count)
     const [F, T] = moveCells;

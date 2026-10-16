@@ -8,7 +8,7 @@ import { listGen, listCompose } from './listcomp.mjs'; import { llGen, llCompose
 import { loopBuild } from './numloop.mjs'; import { STAGE_ENV, STAGE_DEFAULT, learnedBudget, record } from './stagestats.mjs'; import { repairJumps, deepRelocOk } from './jumpfix.mjs'; import { posCompose } from './poscompose.mjs'; import { ifPosCompose } from './ifpos.mjs'; import { caseBuild } from './tzoref-case.mjs'; import { bitsliceSolve } from './bitslice.mjs';
 import { filterCompose } from './filtcomp.mjs'; import { ifCompose } from './ifcomp.mjs'; import { hiddenFilter } from './hiddenfilter.mjs'; import { scanCompose as cutCompose } from './cutframes.mjs'; import { postOpCompose } from './postop.mjs'; import { scanCompose as foldCompose } from './scanfold.mjs'; import { foldStaged } from './scanfold-staged.mjs';
 import { probeNum, scanGate, timeGate, PROBE_ON } from './probe-plan.mjs'; import { pickAtCompose } from './pickat.mjs'; import { wideCompose } from './wideframes.mjs'; import { keySortCompose } from './keysort.mjs'; import { ifElseCompose } from './ifelse.mjs';
-import { permCompose } from './permmap.mjs'; import { wide2Compose } from './wide2frames.mjs'; import { statScanCompose } from './statscan.mjs'; import { pairCompose } from './pairframes.mjs'; import { winCompose } from './winframes.mjs'; import { rearrCompose } from './rearr.mjs'; import { greedyCompose } from './greedyframes.mjs'; import { runsCompose } from './runframes.mjs'; import { walkCompose } from './walkframes.mjs'; import { tupleCompose } from './tupleframes.mjs'; import { rankCompose } from './rankframes.mjs'; import { grammarStage } from './fg/stage.mjs';   // «דקדוק»: חיפוש בדקדוק G0 (fg/) · FG=0 מכבה
+import { permCompose } from './permmap.mjs'; import { wide2Compose } from './wide2frames.mjs'; import { statScanCompose } from './statscan.mjs'; import { pairCompose } from './pairframes.mjs'; import { winCompose } from './winframes.mjs'; import { rearrCompose } from './rearr.mjs'; import { greedyCompose } from './greedyframes.mjs'; import { runsCompose } from './runframes.mjs'; import { walkCompose } from './walkframes.mjs'; import { tupleCompose } from './tupleframes.mjs'; import { rankCompose } from './rankframes.mjs'; import { grammarStage } from './fg/stage.mjs'; import { memoryStage, recordSolved, learnOn } from './fg/learn.mjs';   // Track C «לומדת מעצמה»: זיכרון-התנהגות ⇒ תוכנית, והוספת כל פתרון להיסטוריה · LEARN=0 מכבה   // «דקדוק»: חיפוש בדקדוק G0 (fg/) · FG=0 מכבה
 const R=k=>Math.floor(Math.random()*k); const walk=m=>{ const o=[]; let a=m[1]; for(let i=0;a&&i<10;i++){ o.push(a); a=m[a]; } return o; };
 // fg/subspec.mjs: a sub-spec carries its own example source spec.draw() ⇒ {l, y} (a parent list run through the witness), instead of src
 function drawGen(spec,strictL){ const d=spec.draw; const LC=spec.kind==='list2num'?LISTCELLS:[0,...LISTCELLS];
@@ -43,7 +43,10 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
     if(ev&&capMs<Infinity&&capMs<(+process.env[ev]||STAGE_DEFAULT[ev])) process.env[ev]=String(Math.round(capMs));   // תקציב שנלמד מהניסיון (stagestats.mjs)
     let r=null; try{ r=await fn(); }catch(e){ r={prog:null,err:String(e.message||e).slice(0,80)}; if(process.env.DEBUGERR) console.error('STAGE-ERR',name,e.stack); } finally{ if(ev){ if(prev===undefined) delete process.env[ev]; else process.env[ev]=prev; } } record(name,!!(r&&r.prog),Math.round((Date.now()-t)/1000),spec.kind); tried.push(`${name}${r&&r.prog?'✓':'✗'}(${((Date.now()-t)/1000).toFixed(0)}s)${r&&r.ptag||''}`); say(tried.at(-1)); return r&&r.prog?{...r,stage:name}:null; };
   let r=null;
-  if(spec.kind==='num'){ const left=()=>(+process.env.NUMMS||280000)-(Date.now()-T0), off=s=>(process.env.NUMOFF||'').split(',').includes(s);   // NUMOFF=loop,case,bits מכבה שלבים
+  // «זיכרון» (fg/learn.mjs): אותה התנהגות כבר נפתרה ⇒ התוכנית שהמכונה קיבלה אז (נבדקה על כל הקלטים), ואחריה הבדיקה הרגילה של המוח
+  if(learnOn(spec)&&process.env.LEARN_MEM!=='0'){ const m=await attempt('זיכרון',()=>memoryStage(spec));
+    if(m){ if(spec.kind==='list2num') r=honest(m); else if(spec.kind==='num'){ let okN=true; for(let k=0;k<20000&&okN;k++){ const e=gen(); const z=run(m.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) okN=false; } r=okN?{...m,sure:true}:null; if(!okN) tried.push('זיכרון: נפסל בבדיקה הסופית'); } else r=m; } }
+  if(!r&&spec.kind==='num'){ const left=()=>(+process.env.NUMMS||280000)-(Date.now()-T0), off=s=>(process.env.NUMOFF||'').split(',').includes(s);   // NUMOFF=loop,case,bits מכבה שלבים
     const sure=x=>{ if(!x) return null; for(let k=0;k<20000;k++){ const e=gen(); const z=run(x.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)){ tried.push(x.stage+': נפסל בבדיקה הסופית'); return null; } } return {...x,sure:true}; };   // שלב שנכשל בבדיקה הסופית ⇒ ממשיכים לבא אחריו
     const loop=ms=>attempt('מסגרת-לולאה',()=>loopBuild(gen,{ins:spec.ins,ms})).then(sure);
     if(PROBE_ON()&&!process.env.LOOPFIRST) r=await probeNum({spec,gen,attempt,sure,tried,left,off,showExpr,   // probe-plan.mjs: cheap probes decide order and budgets
@@ -59,7 +62,7 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
     if(!r&&!off('bits')&&left()>15000) r=await attempt('פריסת-ביטים',()=>bitsliceSolve(gen,{ins:spec.ins,ms:left()-10000}));   // רשת-ביטחון: מדויק לכל פונקציה של הקלטים (ארוך)
     }
   }
-  else if(spec.kind==='list2num'){ r=(process.env.FG==='0'?null:honest(await attempt('דקדוק',()=>grammarStage(spec,{ms:+process.env.FGMS||60000}))))   // ראשון: חיפוש במילון/דקדוק (מהיר)
+  else if(!r&&spec.kind==='list2num'){ r=(process.env.FG==='0'?null:honest(await attempt('דקדוק',()=>grammarStage(spec,{ms:+process.env.FGMS||60000}))))   // ראשון: חיפוש במילון/דקדוק (מהיר)
       || honest(await attempt('צירוף-זוג',()=>listCompose(gen)))
       || honest(await attempt('בחירה-במקום',()=>pickAtCompose(gen,{ms:+process.env.PICKMS||150000})))   // [0–2 צעדים] ⇒ אורך ⇒ k(n) נלמד ⇒ הליכה k חוליות (pickat.mjs) · דוחה משימה לא-מתאימה תוך שנייה
       || honest(await attempt('מצב-רחב',()=>wideCompose(gen,{ms:+process.env.WIDEMS||120000})))   // מספרים מעל 15 בשני תאים: צובר / תקציב K / חילוק חוזר (wideframes.mjs)
@@ -76,7 +79,7 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
       || honest(await attempt('סריקה-עם-זיכרון',()=>PROBE_ON()?scanGate(gen,spec,+process.env.SCANMS||150000):foldStaged(gen,{ms:+process.env.SCANMS||150000})))   // אחרי כל השיטות המהירות: איטית כשאינה מוצאת
       || honest(await attempt('זוגות',()=>pairCompose(gen,{ms:+process.env.PAIRMS||120000})));
     if(r&&!deepRelocOk(r.prog,strict)){ const f=repairJumps(r.prog,gen); if(f&&deepRelocOk(f,strict)) r={...r,prog:f,how:(r.how||r.stage)+' · תיקון-קפיצות',sure:false}; else tried.push(r.stage+': לא נייד (קפיצה קבועה)'); } }   // שער-ניידות גם כאן; תוכנית מתוקנת נבדקת שוב (sure=false)
-  else { r=(process.env.FG==='0'?null:await attempt('דקדוק',()=>grammarStage(spec,{ms:+process.env.FGMS||60000})))   // ראשון: חיפוש במילון/דקדוק (מהיר)
+  else if(!r){ r=(process.env.FG==='0'?null:await attempt('דקדוק',()=>grammarStage(spec,{ms:+process.env.FGMS||60000})))   // ראשון: חיפוש במילון/דקדוק (מהיר)
       || await attempt('רצף-כלים',()=>llCompose(gen)) || await attempt('סינון',()=>filterCompose(gen))
       || await attempt('סינון+תנאי-נלמד',async()=>{ const tt=inferFromExamples(gen); if(!tt) return {prog:null}; const n=await learnCond(tt); if(!n) return {prog:null}; return filterCompose(gen); })
       || await attempt('רצף-מקום',()=>posCompose(gen)) || await attempt('אם-רשימה',()=>ifPosCompose(gen))   // עד 4 צעדים + מסגרות-מקום (סנן לפי מקום, על-כל-זנב, סובב-אל) · תנאי על כל הרשימה (poscompose.mjs, ifpos.mjs)
@@ -96,4 +99,6 @@ export async function solveAny(spec,{say=()=>{}}={}){ const strict=genFor(spec);
       || await attempt('דירוג-ומחלקות',()=>rankCompose(gen,{ms:+process.env.RANKMS||180000}));   // סנן/קח/דלג/פרוסה לפי x·הבא·הקודם·סטטיסטיקות, זוגות, יש-קודם, הזוג-הראשון, מיון-במקום (statscan.mjs) · לומד וכותב למדף ⇒ אחרון
     if(r&&!deepRelocOk(r.prog,gen)){ const f=repairJumps(r.prog,gen); if(f&&deepRelocOk(f,gen)) r={...r,prog:f,how:(r.how||r.stage)+' · תיקון-קפיצות'}; else tried.push(r.stage+': לא נייד (קפיצה קבועה)'); } }   // שער-ניידות: פתרון שקופץ לשורה קבועה בלי סימון ⇒ repairJumps; לא נוגע בפתרון נייד ולא מבטל פתרון
   let bad=null; if(r){ bad=0; if(!r.sure) for(let k=0;k<20000;k++){ const e=strict(); const z=run(r.prog,e.mem,{maxSteps:600000}); if(!z||z.st.length||!e.ok(z.mem)) bad++; } }
-  return {ok:!!r&&bad===0,prog:r&&bad===0?r.prog:null,len:r?.prog?.length??null,how:r?.how||null,stage:r?.stage||null,bad,tried,ms:Date.now()-T0}; }
+  const out={ok:!!r&&bad===0,prog:r&&bad===0?r.prog:null,len:r?.prog?.length??null,how:r?.how||null,stage:r?.stage||null,bad,tried,ms:Date.now()-T0};
+  if(out.ok&&learnOn(spec)){ const rec=recordSolved(spec,{...out,ast:r.ast}); if(rec&&rec.isNew) out.learned={id:rec.id,delta:rec.delta,ms:rec.ms}; }   // Track C: כל פתרון נכנס להיסטוריה (זול: מפתח-התנהגות + עץ הדקדוק)
+  return out; }

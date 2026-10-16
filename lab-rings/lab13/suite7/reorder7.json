@@ -1,0 +1,235 @@
+{
+ "tasks": [
+  {
+   "name": "מתחילים מ-12",
+   "kind": "list2list",
+   "src": "l=>{ const i=l.indexOf(12); return i<0?[...l]:[...l.slice(i),...l.slice(0,i)]; }",
+   "difficulty": "easy",
+   "note": "Rotates the list so that the element 12 comes first, or leaves it when 12 is absent."
+  },
+  {
+   "name": "בלי העשר",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x!==10)",
+   "difficulty": "easy",
+   "note": "Removes the element 10."
+  },
+  {
+   "name": "בלי שאחרי המקסימום",
+   "kind": "list2list",
+   "src": "l=>{ const i=l.indexOf(Math.max(...l)); return l.filter((x,j)=>j!==i+1); }",
+   "difficulty": "easy",
+   "note": "Removes the element that comes right after the largest one."
+  },
+  {
+   "name": "הקיצוניים",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>x<10||x>13)",
+   "difficulty": "easy",
+   "note": "Keeps the elements below 10 or above 13."
+  },
+  {
+   "name": "החלפת השני והרביעי",
+   "kind": "list2list",
+   "src": "l=>l.length<4?[...l]:[l[0],l[3],l[2],l[1],...l.slice(4)]",
+   "difficulty": "easy",
+   "note": "Swaps the second and fourth elements."
+  },
+  {
+   "name": "הראשון ואחריו הפוך",
+   "kind": "list2list",
+   "src": "l=>l.length?[l[0],...l.slice(1).reverse()]:[]",
+   "difficulty": "easy",
+   "note": "Keeps the first element and reverses the rest."
+  },
+  {
+   "name": "עד ה-8",
+   "kind": "list2list",
+   "src": "l=>{ const i=l.indexOf(8); return i<0?[...l]:l.slice(0,i); }",
+   "difficulty": "easy",
+   "note": "Keeps what comes before the element 8, or the whole list if 8 is absent."
+  },
+  {
+   "name": "זוגיים במקומות זוגיים",
+   "kind": "list2list",
+   "src": "l=>l.filter((x,i)=>x%2===0&&i%2===0)",
+   "difficulty": "easy",
+   "note": "Keeps the even elements that sit at even positions."
+  },
+  {
+   "name": "האמצעי לסוף",
+   "kind": "list2list",
+   "src": "l=>{ if(!l.length) return []; const m=l.length>>1; return [...l.slice(0,m),...l.slice(m+1),l[m]]; }",
+   "difficulty": "easy",
+   "note": "Moves the element at position half the length (rounded down) to the end."
+  },
+  {
+   "name": "שני הראשונים ממוינים",
+   "kind": "list2list",
+   "src": "l=>l.slice(0,2).sort((a,b)=>a-b)",
+   "difficulty": "easy",
+   "note": "Keeps the first two elements in increasing order."
+  },
+  {
+   "name": "סיבוב בשלשות",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(let i=0;i<l.length;i+=3){ const b=l.slice(i,i+3); r.push(...b.slice(1),b[0]); } return r; }",
+   "difficulty": "medium",
+   "note": "Cuts the list into blocks of three (the last may be shorter) and rotates each block left by one."
+  },
+  {
+   "name": "מיון לפי שארית שבע",
+   "kind": "list2list",
+   "src": "l=>[...l].sort((a,b)=>a%7-b%7)",
+   "difficulty": "medium",
+   "note": "Sorts by the remainder modulo 7, keeping the original order on ties."
+  },
+  {
+   "name": "יש לו עוקב",
+   "kind": "list2list",
+   "src": "l=>l.filter(x=>l.includes(x+1))",
+   "difficulty": "medium",
+   "note": "Keeps the elements whose value plus one is also in the list."
+  },
+  {
+   "name": "הפוך אחרי המקסימום",
+   "kind": "list2list",
+   "src": "l=>{ if(!l.length) return []; const i=l.indexOf(Math.max(...l)); return [...l.slice(0,i+1),...l.slice(i+1).reverse()]; }",
+   "difficulty": "medium",
+   "note": "Reverses the part of the list after the largest element."
+  },
+  {
+   "name": "האי-זוגיים הפוכים במקומם",
+   "kind": "list2list",
+   "src": "l=>{ const o=l.filter(x=>x%2).reverse(); let k=0; return l.map(x=>x%2?o[k++]:x); }",
+   "difficulty": "medium",
+   "note": "Reverses the order of the odd elements among their own positions; even elements stay put."
+  },
+  {
+   "name": "מתחת לממוצע",
+   "kind": "list2list",
+   "src": "l=>{ const s=l.reduce((a,b)=>a+b,0); return l.filter(x=>x*l.length<s); }",
+   "difficulty": "medium",
+   "note": "Keeps the elements strictly below the average."
+  },
+  {
+   "name": "בין שני הזוגיים",
+   "kind": "list2list",
+   "src": "l=>{ const e=[]; l.forEach((x,i)=>{ if(x%2===0) e.push(i); }); return e.length<2?[]:l.slice(e[0]+1,e[1]); }",
+   "difficulty": "medium",
+   "note": "Keeps the elements strictly between the first and second even elements, or nothing when there are fewer than two."
+  },
+  {
+   "name": "מחיקה לפי הראשון",
+   "kind": "list2list",
+   "src": "l=>{ if(!l.length) return []; const k=l[0]%l.length; return l.filter((x,i)=>i!==k); }",
+   "difficulty": "medium",
+   "note": "Removes the element whose position equals the first element modulo the length."
+  },
+  {
+   "name": "חציון בשלשות",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(let i=0;i<l.length;i+=3){ const b=l.slice(i,i+3).sort((x,y)=>x-y); r.push(b[(b.length-1)>>1]); } return r; }",
+   "difficulty": "medium",
+   "note": "Cuts the list into blocks of three and keeps the median of each (the smaller of a two-element block, the element of a one-element block)."
+  },
+  {
+   "name": "צעד לפי הראשון",
+   "kind": "list2list",
+   "src": "l=>{ if(!l.length) return []; const k=l[0]%3+1; return l.filter((x,i)=>i%k===0); }",
+   "difficulty": "medium",
+   "note": "Keeps every k-th element starting with the first, where k is the first element modulo 3 plus 1."
+  },
+  {
+   "name": "נכנס לפודיום",
+   "kind": "list2list",
+   "src": "l=>l.filter((x,i)=>l.slice(0,i).filter(y=>y>x).length<3)",
+   "difficulty": "medium",
+   "note": "Keeps each element that is among the three largest seen so far when it arrives."
+  },
+  {
+   "name": "מיון לפי קרבה לממוצע",
+   "kind": "list2list",
+   "src": "l=>{ const n=l.length, s=l.reduce((a,b)=>a+b,0); return [...l].sort((a,b)=>Math.abs(a*n-s)-Math.abs(b*n-s)); }",
+   "difficulty": "medium",
+   "note": "Sorts by distance from the average, closest first, keeping the original order on ties."
+  },
+  {
+   "name": "הזוג הקרוב",
+   "kind": "list2list",
+   "src": "l=>{ if(l.length<2) return [...l]; let bi=0, bj=1; for(let i=0;i<l.length;i++) for(let j=i+1;j<l.length;j++) if(Math.abs(l[i]-l[j])<Math.abs(l[bi]-l[bj])){ bi=i; bj=j; } return [l[bi],l[bj]]; }",
+   "difficulty": "medium",
+   "note": "Returns the two elements closest in value, in list order (the earliest pair on ties); short lists stay as they are."
+  },
+  {
+   "name": "התמורה הבאה",
+   "kind": "list2list",
+   "src": "l=>{ const a=[...l]; let i=a.length-2; while(i>=0&&a[i]>a[i+1]) i--; if(i<0) return a.reverse(); let j=a.length-1; while(a[j]<a[i]) j--; [a[i],a[j]]=[a[j],a[i]]; return [...a.slice(0,i+1),...a.slice(i+1).reverse()]; }",
+   "difficulty": "hard",
+   "note": "Returns the next arrangement of the same elements in dictionary order, or the increasing arrangement after the last one."
+  },
+  {
+   "name": "היפוך הקטע הלא ממוין",
+   "kind": "list2list",
+   "src": "l=>{ const s=[...l].sort((a,b)=>a-b); let i=0, j=l.length-1; while(i<l.length&&l[i]===s[i]) i++; if(i>=l.length) return [...l]; while(l[j]===s[j]) j--; return [...l.slice(0,i),...l.slice(i,j+1).reverse(),...l.slice(j+1)]; }",
+   "difficulty": "hard",
+   "note": "Reverses the stretch from the first to the last position that differs from the sorted list."
+  },
+  {
+   "name": "מיזוג ראשים",
+   "kind": "list2list",
+   "src": "l=>{ const h=l.length>>1, a=l.slice(0,h), b=l.slice(h), r=[]; while(a.length&&b.length) r.push(a[0]<b[0]?a.shift():b.shift()); return [...r,...a,...b]; }",
+   "difficulty": "hard",
+   "note": "Splits the list into front and back halves (the back gets the extra element) and merges them by repeatedly taking the smaller of the two front elements."
+  },
+  {
+   "name": "הכנסה לשני הקצוות",
+   "kind": "list2list",
+   "src": "l=>{ const r=[]; for(const x of l){ if(r.length&&x<r[0]) r.unshift(x); else r.push(x); } return r; }",
+   "difficulty": "hard",
+   "note": "Builds a new list: each element goes to the front if it is smaller than the current front, otherwise to the back."
+  },
+  {
+   "name": "ראשי המגדלים",
+   "kind": "list2list",
+   "src": "l=>{ const t=[]; for(const x of l){ const i=t.findIndex(y=>y>x); if(i<0) t.push(x); else t[i]=x; } return t; }",
+   "difficulty": "hard",
+   "note": "Puts each element on the leftmost pile whose top is larger, or starts a new pile on the right; returns the pile tops from left to right."
+  },
+  {
+   "name": "ספירה לפי הערך",
+   "kind": "list2list",
+   "src": "l=>{ const a=[...l], r=[]; let p=0; while(a.length){ const v=a.splice(p,1)[0]; r.push(v); if(a.length) p=(p+v%3)%a.length; } return r; }",
+   "difficulty": "hard",
+   "note": "Elements stand in a circle; starting at the first, repeatedly removes the current element and then moves on by its value modulo 3 places; lists the elements in removal order."
+  },
+  {
+   "name": "היפוך בבלוקים משתנים",
+   "kind": "list2list",
+   "src": "l=>{ if(!l.length) return []; const k=l[0]%3+2, r=[]; for(let i=0;i<l.length;i+=k) r.push(...l.slice(i,i+k).reverse()); return r; }",
+   "difficulty": "hard",
+   "note": "Cuts the list into blocks of k (k is the first element modulo 3 plus 2) and reverses each block."
+  },
+  {
+   "name": "הרכבה עם הדירוג",
+   "kind": "list2list",
+   "src": "l=>{ const s=[...l].sort((a,b)=>a-b); return l.map(x=>l[s.indexOf(x)]); }",
+   "difficulty": "hard",
+   "note": "Replaces each element by the element standing at the position equal to its rank (0 for the smallest)."
+  },
+  {
+   "name": "סבב הזוגיים",
+   "kind": "list2list",
+   "src": "l=>{ const e=l.filter(x=>x%2===0); if(e.length) e.unshift(e.pop()); let k=0; return l.map(x=>x%2?x:e[k++]); }",
+   "difficulty": "hard",
+   "note": "Shifts the even elements one even slot to the right (the last even element moves to the first even slot); odd elements stay put."
+  },
+  {
+   "name": "הקטע הקרוב לארבעים",
+   "kind": "list2list",
+   "src": "l=>{ let b=null, bd=99; for(let i=0;i<l.length;i++){ let s=0; for(let j=i;j<l.length;j++){ s+=l[j]; const d=Math.abs(s-40); if(d<bd){ bd=d; b=[i,j]; } } } return b?l.slice(b[0],b[1]+1):[]; }",
+   "difficulty": "hard",
+   "note": "Returns the contiguous stretch whose sum is closest to 40 (the earliest, then the shortest, on ties)."
+  }
+ ]
+}

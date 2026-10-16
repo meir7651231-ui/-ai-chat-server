@@ -6,7 +6,7 @@
 // cells: var ⇒ cell holding it at run time. mode: 'bool' (nonzero = true) · 'num' (exact 0..15) · 'mod16' (value & 15) · 'key' (any order-preserving 0..15 code).
 import fs from 'fs';
 import { run } from '../machine3s.mjs';
-import { assemble, T_, P_, MV, SET, callTool } from '../greedylib.mjs';
+import { assemble, T_, P_, MV, SET, callTool, JLT, JNE } from '../greedylib.mjs';
 import { lib } from '../scanfold.mjs';
 import { scanTools } from '../scan-tools.mjs';
 import { valueBuild } from '../tzoref-value.mjs';
@@ -94,8 +94,11 @@ export function compileVals(e, obs, cells, out, o) {
   const { mode, live, free, valf } = o; const depth = o.depth || 0; const extra = o.extra || {}; const acc = ACC[mode];
   // nested counts: compute them first into temps, then they are plain vars
   if (hasCnt(e)) { const { e2, cnts } = liftCnt(e); const code = []; const cl = { ...cells }; let fr = free.filter((c) => c !== out && !live.includes(c) && !Object.values(cells).includes(c)); const lv = [...live];
-    for (const [name, node] of cnts) { const t = fr.shift(); if (t == null) throw new Error('no temp for count'); if (!extra.cntCode) throw new Error('nested count needs a frame loop'); code.push(...extra.cntCode(node, t, [...lv, ...Object.values(cl)], fr.filter((c) => c !== t), obs)); cl[name] = t; lv.push(t); }
-    const obs2 = obs.map((ob) => { const z = { ...ob }; for (const [name, node] of cnts) z[name] = evalLam(node, ob); return z; });
+    for (const [name, node] of cnts) { const t = fr.shift(); if (t == null) throw new Error('no temp for count');
+      if (isDev(node)) { const sc = fr.find((c) => c !== t); if (sc == null) throw new Error('no temp for deviation'); code.push(...devSignCode(cl, t, sc)); }
+      else { if (!extra.cntCode) throw new Error('nested count needs a frame loop'); code.push(...extra.cntCode(node, t, [...lv, ...Object.values(cl)], fr.filter((c) => c !== t), obs)); }
+      cl[name] = t; lv.push(t); }
+    const obs2 = obs.map((ob) => { const z = { ...ob }; for (const [name, node] of cnts) z[name] = liftVal(node, ob); return z; });
     code.push(...compileVals(e2, obs2, cl, out, { ...o, live: lv, free: fr, valf: (ob) => valf(ob) }));
     return code; }
   const vars = [...lamVars(e)].filter((v) => v !== 'L');
@@ -141,8 +144,16 @@ function structural(e, obs, cells, out, o) {
   code.push(...compileVals(sub, obs2, cl, out, { ...o, live, free: fr, depth: depth + 1, valf }));
   return code;
 }
-const hasCnt = (e) => !!e && (!!e.cnt || (e.a || []).some(hasCnt));
-function liftCnt(e) { const cnts = []; const rec = (x) => { if (x.cnt) { const nm = '#' + cnts.length; cnts.push([nm, x]); return { v: nm }; } if (x.a) return { ...x, a: x.a.map(rec) }; return x; }; return { e2: rec(e), cnts }; }
+// nested parts that are lifted out of a hole and computed first: pair counts (#), G1 tree depths, G1 deviation signs
+const isDev = (x) => !!x && (x.op === 'dev' || x.op === 'adev');
+const hasCnt = (e) => !!e && (!!e.cnt || !!e.tdep || isDev(e) || (e.a || []).some(hasCnt));
+function liftCnt(e) { const cnts = []; const rec = (x) => { if (x.cnt || x.tdep || isDev(x)) { const nm = '#' + cnts.length; cnts.push([nm, x]); return { v: nm }; } if (x.a) return { ...x, a: x.a.map(rec) }; return x; }; return { e2: rec(e), cnts }; }
+// value a lifted part stands for in the table: a count / a depth as is; a deviation only by its sign (0 below the mean, 1 on it, 2 above)
+const liftVal = (node, ob) => { if (isDev(node)) { const d = evalLam({ ...node, op: 'dev' }, ob); return d < 0 ? 0 : d === 0 ? 1 : 2; } return evalLam(node, ob); };
+// sign of x·n − sum from the parked floor mean q and remainder r: above ⟺ x > q ; on it ⟺ x = q and r = 0
+function devSignCode(cells, out, scr) { const X = cells.x, Q = cells['g.q'], Rr = cells['g.r']; if (X == null || Q == null || Rr == null) throw new Error('var g.q not available in this frame');
+  const D = 'dv' + (++DVU); return [...SET(out, 2), ...JLT(Q, X, scr, D), ...SET(out, 0), ...JNE(X, Q, scr, D), ...T_(Rr), ['J', D], ...SET(out, 1), D]; }
+let DVU = 0;
 
 // a hole given directly as a table over named cell vars: rows [{k:[..], y}] (used for operators between computed numbers)
 export function compileTable(vars, rows, cells, out, { mode = 'num', live = [], free = LCELLS } = {}) {

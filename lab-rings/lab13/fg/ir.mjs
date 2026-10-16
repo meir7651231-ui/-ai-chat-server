@@ -7,7 +7,7 @@
 // Nothing here knows a task: this is a syntax translation plus a reference evaluator (the witness used to make sub-specs).
 const MOD = (a, b) => (b > 0 ? ((a % b) + b) % b : 0);
 export const STATS = ['n', 'l0', 'last', 'sec', 'sum', 'mn', 'mx'];
-export const statsOf = (l) => { const n = l.length; let s = 0, mn = 0, mx = 0; if (n) { mn = 99; for (const v of l) { s += v; if (v < mn) mn = v; if (v > mx) mx = v; } } return { n, l0: n ? l[0] : 0, last: n ? l[n - 1] : 0, sec: n > 1 ? l[1] : 0, sum: s, mn, mx }; };
+export const statsOf = (l) => { const n = l.length; let s = 0, mn = 0, mx = 0; if (n) { mn = 99; for (const v of l) { s += v; if (v < mn) mn = v; if (v > mx) mx = v; } } return { n, l0: n ? l[0] : 0, last: n ? l[n - 1] : 0, sec: n > 1 ? l[1] : 0, sum: s, mn, mx, q: n ? Math.floor(s / n) : 0, r: n ? s % n : 0 }; };   // G1: q, r = floor mean and remainder (sum = q·n + r)
 
 // ───────── lambda operators ─────────
 export const OPS = {
@@ -24,13 +24,16 @@ export function evalLam(e, env) {
   if (e.k !== undefined) return e.k;
   if (e.v !== undefined) { const v = e.v; if (v.startsWith('g.')) return env.G[v.slice(2)]; if (v.startsWith('o.')) return env.O[v.slice(2)]; const r = env[v]; if (r === undefined) throw new Error('unbound ' + v); return r; }
   if (e.cnt) { const L = env.L, i = env.i, x = env.x; let c = 0; const lo = e.cnt === 'after' ? i + 1 : 0, hi = e.cnt === 'before' ? i : L.length;
-    for (let j = lo; j < hi; j++) if (j !== i && evalLam(e.rel, { ...env, a: x, b: L[j] })) c++; return c; }
+    for (let j = lo; j < hi; j++) if (j !== i && evalLam(e.rel, { ...env, a: x, b: L[j], di: Math.abs(j - i) })) c++; return c; }
+  if (e.tdep) { const L = env.L, i = env.i; const k = L.map((y, j) => evalLam(e.tdep, { ...env, x: y, i: j, prv: j > 0 ? L[j - 1] : 0, nxt: j + 1 < L.length ? L[j + 1] : 0 }));   // G1: depth in the insertion tree by key
+    let d = 1; for (let j = 0; j < i; j++) { let anc = true; for (let z = 0; z < j; z++) if ((k[j] < k[z]) !== (k[i] < k[z])) { anc = false; break; } if (anc) d++; } return d; }
+  if (e.op === 'dev' || e.op === 'adev') { const v = (evalLam(e.a[0], env) - evalLam(e.a[1], env)) * evalLam(e.a[3], env) - evalLam(e.a[2], env); return e.op === 'adev' ? Math.abs(v) : v; }   // G1: x·n − sum = (x − q)·n − r
   if (e.op === 'in') return e.set.includes(evalLam(e.a[0], env));
   const f = OPS[e.op]; if (!f) throw new Error('op ' + e.op);
   return e.a.length === 1 ? f(evalLam(e.a[0], env)) : f(evalLam(e.a[0], env), evalLam(e.a[1], env));
 }
-export const lamVars = (e, s = new Set()) => { if (e.v !== undefined) s.add(e.v); else if (e.cnt) { s.add('x'); s.add('i'); s.add('L'); lamVars(e.rel, new Set()).forEach((v) => { if (v !== 'a' && v !== 'b') s.add(v); }); } else if (e.a) e.a.forEach((c) => lamVars(c, s)); return s; };
-export const showLam = (e) => e.k !== undefined ? String(e.k) : e.v !== undefined ? e.v : e.cnt ? `#${e.cnt}${showLam(e.rel)}` : e.op === 'in' ? `${showLam(e.a[0])}∈{${e.set}}` : e.a.length === 1 ? `${e.op}(${showLam(e.a[0])})` : `(${showLam(e.a[0])} ${e.op} ${showLam(e.a[1])})`;
+export const lamVars = (e, s = new Set()) => { if (e.v !== undefined) s.add(e.v); else if (e.cnt) { s.add('x'); s.add('i'); s.add('L'); lamVars(e.rel, new Set()).forEach((v) => { if (v !== 'a' && v !== 'b' && v !== 'di') s.add(v); }); } else if (e.tdep) { s.add('x'); s.add('i'); s.add('L'); lamVars(e.tdep, new Set()).forEach((v) => { if (!['x', 'i', 'prv', 'nxt'].includes(v)) s.add(v); }); } else if (e.a) e.a.forEach((c) => lamVars(c, s)); return s; };
+export const showLam = (e) => e.k !== undefined ? String(e.k) : e.v !== undefined ? e.v : e.cnt ? `#${e.cnt}${showLam(e.rel)}` : e.tdep ? `depth[${showLam(e.tdep)}]` : e.op === 'dev' || e.op === 'adev' ? e.op : e.op === 'in' ? `${showLam(e.a[0])}∈{${e.set}}` : e.a.length === 1 ? `${e.op}(${showLam(e.a[0])})` : `(${showLam(e.a[0])} ${e.op} ${showLam(e.a[1])})`;
 
 // ───────── library dialect → IR ─────────
 const LIBBIN = { add: '+', sub: '-', absd: 'ad', mod: '%', min: 'mn', max: 'mx', mul: '*', lt: '<', le: '<=', eq: '==', ne: '!=', or: '||', and: '&&', xor: 'xor' };
@@ -41,6 +44,9 @@ function libLam(t) {   // e.* / p.* / t.* nodes → expression
   if (ns === 'e' && ['x', 'i', 'prv', 'nxt'].includes(nm)) return { v: nm };
   if (ns === 'p' && ['a', 'b'].includes(nm)) return { v: nm };
   if (ns === 'p' && nm === 'i') return { v: 'i' };
+  if (t.p === 'p.di') return { v: 'di' };
+  if (t.p === 'e.dev' || t.p === 'e.adev') return { op: nm, a: [{ v: 'x' }, { v: 'g.q' }, { v: 'g.r' }, { v: 'g.n' }] };
+  if (t.p === 'e.tdep') return { tdep: libLam(t.a[0]) };
   if (['n', 'l0', 'last', 'sum', 'mn', 'mx'].includes(nm)) return { v: 'g.' + nm };
   if (LIBBIN[nm]) return { op: LIBBIN[nm], a: [libLam(t.a[0]), libLam(t.a[1])] };
   if (nm === 'half') return { op: 'half', a: [libLam(t.a[0])] };
@@ -51,14 +57,19 @@ function libLam(t) {   // e.* / p.* / t.* nodes → expression
   if (nm.startsWith('cnt_')) return { cnt: nm.slice(4), rel: libLam(t.a[0]) };
   if (t.p === 't.chain') { const r = libLam(t.a[0]); const sub = (e, m) => e.v !== undefined ? (m[e.v] ?? e) : e.a ? { ...e, a: e.a.map((c) => sub(c, m)) } : e;
     return { op: '&&', a: [sub(r, { a: { v: 'a' }, b: { v: 'b' } }), sub(r, { a: { v: 'b' }, b: { v: 'c' } })] }; }
+  if (t.p === 't.flip' || t.p === 't.peak') { const r = libLam(t.a[0]); const sub = (e, m) => e.v !== undefined ? (m[e.v] ?? e) : e.a ? { ...e, a: e.a.map((c) => sub(c, m)) } : e;
+    const fix = { i: { k: 0 }, di: { k: 1 } }; const ab = sub(r, { a: { v: 'a' }, b: { v: 'b' }, ...fix }), bc = sub(r, { a: { v: 'b' }, b: { v: 'c' }, ...fix });
+    const rel = sub(r, fix);   // the pair relation itself (kept for the compiler: one pair hole applied to both steps)
+    return t.p === 't.flip' ? { op: 'xor', a: [ab, bc], tpair: { kind: 'flip', rel } } : { op: '&&', a: [ab, { op: '!', a: [bc] }], tpair: { kind: 'peak', rel } }; }
   if (t.p === 't.sumK') return { op: '==', a: [{ op: '+', a: [{ op: '+', a: [{ v: 'a' }, { v: 'b' }] }, { v: 'c' }] }, { k: kval(t.a[0]) }] };
   if (t.p === 't.sumgK') return { op: '>', a: [{ op: '+', a: [{ op: '+', a: [{ v: 'a' }, { v: 'b' }] }, { v: 'c' }] }, { k: kval(t.a[0]) }] };
   throw new Error('lib lambda ' + t.p);
 }
 const kval = (t) => +t.p.slice(1);
 const LAMTYPES = { 'l.filter': [1], 'l.sortBy': [1], 'l.sortByDesc': [1], 'l.sortBy2': [1, 2], 'l.runsMap': [1], 'l.runsBest': [1], 'l.stackCancel': [1], 'l.stackWhile': [1], 'l.passLR': [1], 'l.passRL': [1], 'l.twoPtr': [1], 'l.hop': [1], 'l.walk': [1], 'l.takeWhile': [1], 'l.dropWhile': [1],
-  'g.findIdx': [1], 'g.findLast': [1], 'g.fold': [1], 'g.cntPairs': [0], 'g.cntTriples': [0], 'd.map': [0], 'd.adj': [0], 'd.chunk2': [0], 'd.pairs': [0], 'd.mapD': [1], 'd.adjD': [1], 'd.runlens': [1], 'd.segs': [0, 1], 'd.walk': [0] };
-const IMPLICIT = new Set(['d.map', 'd.adj', 'd.chunk2', 'd.pairs', 'd.walk', 'd.segs', 'g.cntPairs', 'g.cntTriples']);
+  'g.findIdx': [1], 'g.findLast': [1], 'g.fold': [1], 'g.cntPairs': [0], 'g.cntTriples': [0], 'd.map': [0], 'd.adj': [0], 'd.chunk2': [0], 'd.pairs': [0], 'd.mapD': [1], 'd.adjD': [1], 'd.runlens': [1], 'd.segs': [0, 1], 'd.walk': [0],
+  'g.cntWin3': [0], 'l.knockout': [1], 'l.stackPops': [1], 'l.heapPush': [1], 'l.groupBy': [1], 'l.takeUntilK': [1], 'l.dropUntilK': [1] };
+const IMPLICIT = new Set(['d.map', 'd.adj', 'd.chunk2', 'd.pairs', 'd.walk', 'd.segs', 'g.cntPairs', 'g.cntTriples', 'g.cntWin3']);
 const G0ALIAS = { 'g.lt': 'b.lt', 'g.eq': 'b.eq', 'g.odd': 'b.odd', 'g.le': 'b.le', 'g.m16': 'g.and15', 'g.cap': 'g.cap15' };   // Track A's G0 names for the dsl additions
 export function fromLib(t) {
   if (G0ALIAS[t.p]) return fromLib({ ...t, p: G0ALIAS[t.p] });
@@ -215,9 +226,10 @@ function ev0(t, L, O, hook) {
     case 'g.indexOf': return L.indexOf(sub(0));
     case 'g.indexOfIn': { const m = sub(0); return m.indexOf(NN(1, L)); }
     case 'g.findIdx': case 'g.findLast': { const m = sub(0); const f = lamF(A[1], m, O, hook); if (t.p === 'g.findIdx') { for (let i = 0; i < m.length; i++) if (f(elemEnv(m, i))) return i; } else for (let i = m.length - 1; i >= 0; i--) if (f(elemEnv(m, i))) return i; return -1; }
-    case 'g.cntPairs': { const m = sub(0); const f = lamF(A[1], m, O, hook); let c = 0; for (let i = 0; i < m.length; i++) for (let j = i + 1; j < m.length; j++) if (f({ a: m[i], b: m[j], i, j })) c++; return c; }
+    case 'g.cntPairs': { const m = sub(0); const f = lamF(A[1], m, O, hook); let c = 0; for (let i = 0; i < m.length; i++) for (let j = i + 1; j < m.length; j++) if (f({ a: m[i], b: m[j], i, j, di: j - i })) c++; return c; }
     case 'g.cntTriples': { const m = sub(0); const f = lamF(A[1], m, O, hook); let c = 0; for (let i = 0; i < m.length; i++) for (let j = i + 1; j < m.length; j++) for (let k = j + 1; k < m.length; k++) if (f({ a: m[i], b: m[j], c: m[k] })) c++; return c; }
     case 'g.fold': { const m = sub(0); const f = lamF(A[1], m, O, hook); let acc = A[2].v; m.forEach((x, i) => { acc = f({ a: acc, b: x, i }); }); return acc; }
+    case 'g.cntWin3': { const m = sub(0); const f = lamF(A[1], m, O, hook); let c = 0; for (let i = 1; i + 1 < m.length; i++) if (f({ a: m[i - 1], b: m[i], c: m[i + 1] })) c++; return c; }
   }
   if (ns === 'agg') { const d = sub(0);
     switch (t.p) {
@@ -225,6 +237,7 @@ function ev0(t, L, O, hook) {
       case 'agg.min': return d.length ? Math.min(...d) : 0; case 'agg.max': return d.length ? Math.max(...d) : 0;
       case 'agg.first': return d.length ? d[0] : 0; case 'agg.last': return d.length ? d[d.length - 1] : 0;
       case 'agg.distinct': return new Set(d).size;
+      case 'agg.mean': { if (!d.length) return 0; return Math.floor(d.reduce((a, b) => a + b, 0) / d.length); }
       case 'agg.mode': { const c = new Map(); let b = 0, bc = 0; for (const v of d) c.set(v, (c.get(v) || 0) + 1); for (const [v, k] of c) if (k > bc || (k === bc && v < b)) { b = v; bc = k; } return b; }
       case 'agg.argmax': return argBest(d, (a, b) => a > b); case 'agg.argmin': return argBest(d, (a, b) => a < b);
       case 'agg.maxrun': { let b = 0, c = 0; for (let i = 0; i < d.length; i++) { c = i && d[i] === d[i - 1] ? c + 1 : 1; if (c > b) b = c; } return b; }
@@ -232,11 +245,11 @@ function ev0(t, L, O, hook) {
   if (ns === 'd') { const m = sub(0); const f = A[1] && A[1].lam ? lamF(A[1], m, O, hook) : null;
     switch (t.p) {
       case 'd.map': case 'd.mapD': return m.map((x, i) => f(elemEnv(m, i)));
-      case 'd.adjD': { const r = []; for (let i = 0; i + 1 < m.length; i++) r.push(f({ a: m[i], b: m[i + 1], i })); return r; }
+      case 'd.adjD': { const r = []; for (let i = 0; i + 1 < m.length; i++) r.push(f({ a: m[i], b: m[i + 1], i, di: 1 })); return r; }
       case 'd.segs': { const fp = lamF(A[2], m, O, hook); const r = []; for (let i = 0; i < m.length; i++) { let sm = 0; for (let j = i; j < m.length; j++) { sm += m[j]; const e = { a: sm, b: j - i + 1, i }; if (fp(e)) r.push(f(e)); } } return r; }
-      case 'd.adj': { const r = []; for (let i = 0; i + 1 < m.length; i++) r.push(f({ a: m[i], b: m[i + 1], i })); return r; }
-      case 'd.chunk2': { const r = []; for (let i = 0; i < m.length; i += 2) r.push(i + 1 < m.length ? f({ a: m[i], b: m[i + 1], i }) : m[i]); return r; }
-      case 'd.pairs': { const r = []; for (let i = 0; i < m.length; i++) for (let j = i + 1; j < m.length; j++) r.push(f({ a: m[i], b: m[j], i })); return r; }
+      case 'd.adj': { const r = []; for (let i = 0; i + 1 < m.length; i++) r.push(f({ a: m[i], b: m[i + 1], i, di: 1 })); return r; }
+      case 'd.chunk2': { const r = []; for (let i = 0; i < m.length; i += 2) r.push(i + 1 < m.length ? f({ a: m[i], b: m[i + 1], i, di: 1 }) : m[i]); return r; }
+      case 'd.pairs': { const r = []; for (let i = 0; i < m.length; i++) for (let j = i + 1; j < m.length; j++) r.push(f({ a: m[i], b: m[j], i, j, di: j - i })); return r; }
       case 'd.scan': { let s = 0; return m.map((v) => (s += v)); }
       case 'd.runlens': { const r = []; let c = 0; for (let i = 0; i < m.length; i++) { if (i && f({ a: m[i - 1], b: m[i], i })) c++; else { if (i) r.push(c); c = 1; } } if (m.length) r.push(c); return r; }
       case 'd.walk': { const n = m.length, seen = new Uint8Array(n), r = []; let i = 0; while (n && !seen[i]) { seen[i] = 1; r.push(i); i = MOD(f(elemEnv(m, i)), n); } return r; }
@@ -251,7 +264,7 @@ function ev0(t, L, O, hook) {
   if (t.p === 'l.segLast') { const S = sub(0); return S[S.length - 1] || []; }
   if (ns === 'l') { const m = sub(0); const G = statsOf(m);
     const f1 = A[1] && A[1].lam ? lamF(A[1], m, O, hook) : null;
-    const pair = (a, b, i) => f1({ a, b, i });
+    const pair = (a, b, i, di = 0) => f1({ a, b, i, di });
     switch (t.p) {
       case 'l.filter': return m.filter((x, i) => f1(elemEnv(m, i)));
       case 'l.sortBy': case 'l.sortByDesc': { const k = m.map((x, i) => f1(elemEnv(m, i))); const s = t.p === 'l.sortBy' ? 1 : -1; return m.map((x, i) => i).sort((a, b) => s * (k[a] - k[b]) || a - b).map((i) => m[i]); }
@@ -272,7 +285,7 @@ function ev0(t, L, O, hook) {
       case 'l.stackRepl': { const s = []; m.forEach((x, i) => { if (s.length && pair(s[s.length - 1], x, i)) s[s.length - 1] = x; else s.push(x); }); return s; }
       case 'l.passLR': { const r = [...m]; for (let i = 0; i + 1 < r.length; i++) if (pair(r[i], r[i + 1], i)) { const q = r[i]; r[i] = r[i + 1]; r[i + 1] = q; } return r; }
       case 'l.passRL': { const r = [...m]; for (let i = r.length - 2; i >= 0; i--) if (pair(r[i], r[i + 1], i)) { const q = r[i]; r[i] = r[i + 1]; r[i + 1] = q; } return r; }
-      case 'l.twoPtr': { const r = []; let i = 0, j = m.length - 1; while (i <= j) r.push(pair(m[i], m[j], i) ? m[i++] : m[j--]); return r; }
+      case 'l.twoPtr': { const r = []; let i = 0, j = m.length - 1; while (i <= j) r.push(pair(m[i], m[j], i, j - i) ? m[i++] : m[j--]); return r; }
       case 'l.hop': { const r = []; let i = 0; while (i < m.length) { r.push(m[i]); const s = f1(elemEnv(m, i)); if (s < 1) break; i += s; } return r; }
       case 'l.walk': { const n = m.length, seen = new Uint8Array(n), r = []; let i = 0; while (n && !seen[i]) { seen[i] = 1; r.push(m[i]); i = MOD(f1(elemEnv(m, i)), n); } return r; }
       case 'l.walkIdx': { const n = m.length, seen = new Set(), r = []; let i = 0; while (i >= 0 && i < n && !seen.has(i)) { seen.add(i); r.push(m[i]); i = f1({ i, x: m[i], n }); } return r; }
@@ -281,6 +294,11 @@ function ev0(t, L, O, hook) {
       case 'l.removeAt': { const f = NN(1, m), k = A[2].v; if (f < 0 || f >= m.length || k < 1 || k > 3) return m; return [...m.slice(0, f), ...m.slice(f + k)]; }
       case 'l.swap': { const a = sub(1, m), b = sub(2, m); if (a < 0 || b < 0 || a >= m.length || b >= m.length) return m; const r = [...m]; const q = r[a]; r[a] = r[b]; r[b] = q; return r; }
       case 'l.takeWhile': { let i = 0; while (i < m.length && f1(elemEnv(m, i))) i++; return m.slice(0, i); }
+      case 'l.stackPops': { const st = [], r = []; m.forEach((x, i) => { while (st.length && pair(st[st.length - 1], x, i)) r.push(st.pop()); st.push(x); }); while (st.length) r.push(st.pop()); return r; }
+      case 'l.heapPush': { const h = []; for (const x of m) { h.push(x); let i = h.length - 1; while (i > 0) { const q = (i - 1) >> 1; if (!pair(h[q], h[i], i)) break; const z = h[q]; h[q] = h[i]; h[i] = z; i = q; } } return h; }
+      case 'l.knockout': { let a = [...m]; const r = []; while (a.length > 1) { const b = []; for (let i = 0; i < a.length; i += 2) { if (i + 1 < a.length) { if (pair(a[i], a[i + 1], i)) { r.push(a[i + 1]); b.push(a[i]); } else { r.push(a[i]); b.push(a[i + 1]); } } else b.push(a[i]); } a = b; } return [...r, ...a]; }
+      case 'l.groupBy': { const k = m.map((x, i) => f1(elemEnv(m, i))); const ord = []; for (const v of k) if (!ord.includes(v)) ord.push(v); const r = []; for (const v of ord) m.forEach((x, i) => { if (k[i] === v) r.push(x); }); return r; }
+      case 'l.takeUntilK': case 'l.dropUntilK': { const K = A[2].v; let c = 0; for (let i = 0; i < m.length; i++) if (f1(elemEnv(m, i)) && ++c === K) return t.p === 'l.takeUntilK' ? m.slice(0, i) : m.slice(i); return t.p === 'l.takeUntilK' ? m : []; }
       case 'l.dropWhile': { let i = 0; while (i < m.length && f1(elemEnv(m, i))) i++; return m.slice(i); }
       case 'l.segLast': return m;   // unreachable (seg.* below)
     } }
