@@ -62,11 +62,17 @@ for (const [i, l] of baseL.entries()) {
   outL.push(rest); outNo.push(first ? baseNo[i] : null);
 }
 
+// ---- signature lines (appended as real-looking code: a comment and/or a code line) ----
+const sigLines = [];
+if (A['sig-line'] && A['sig-line'] !== true) for (const t of String(A['sig-line']).split('\\n')) sigLines.push(CMT + ' ' + t);
+if (A['sig-code'] && A['sig-code'] !== true) for (const t of String(A['sig-code']).split('\\n')) sigLines.push(t);
+if (sigLines.length) { outL.push(''); outNo.push(null); for (const l of sigLines) { outL.push(l); outNo.push(null); } }
+
 // ---- hot lines ---------------------------------------------------------------------------
 let hot = new Set();
 if (A.hot && A.hot !== true) {
   const h = String(A.hot);
-  if (h.startsWith('/')) { const re = new RegExp(h.slice(1, h.lastIndexOf('/'))); outL.forEach((l, i) => re.test(l) && hot.add(i)); }
+  if (h.startsWith('/')) { const body = h.slice(1, h.lastIndexOf('/') > 0 ? h.lastIndexOf('/') : h.length); if (!body) { console.error('--hot regex is empty (quote it)'); process.exit(2); } const re = new RegExp(body); outL.forEach((l, i) => re.test(l) && hot.add(i)); }
   else for (const t of hotText) { const key = t.slice(0, 24); const i = outL.findIndex((l, j) => !hot.has(j) && l.trim().startsWith(key)); if (i >= 0) hot.add(i); else { const k = outL.findIndex((l) => l.includes(key.slice(0, 14))); if (k >= 0) hot.add(k); } }
 }
 
@@ -95,11 +101,11 @@ const page = (theme) => `<!doctype html><html><head><meta charset="utf-8">
 :root[data-t=dark],:root[data-t=transparent]{--bg:#242526;--text:#E6EDF3;--kw:#FF7B72;--fn:#D2A8FF;--cm:#8B949E;--str:#A5D6FF;--num:#79C0FF;--prop:#FFA657;--mark:rgba(187,128,9,.22);--bar:#D29922}
 :root[data-t=transparent]{--bg:transparent}
 html,body{margin:0;background:var(--bg)}
-.frame{width:${W}px;height:${H}px;background:var(--bg);display:flex;align-items:center;box-sizing:border-box;padding:0 ${PADX}px}
+.frame{position:relative;width:${W}px;height:${H}px;background:var(--bg);display:flex;align-items:center;box-sizing:border-box;padding:0 ${PADX}px}
 pre{margin:0;width:100%;font-family:'JetBrains Mono','Heebo',monospace;font-size:${font}px;line-height:${(font * 1.4).toFixed(1)}px;color:var(--text);white-space:pre;font-variant-ligatures:none;font-feature-settings:'calt' 0,'liga' 0}
 .ln{display:block;padding-left:20px;border-left:4px solid transparent;margin-left:-24px}.ln.hot{background:var(--mark);border-left-color:var(--bar)}
-.c{color:var(--cm);font-style:italic}.s,bdi{unicode-bidi:isolate}pre{direction:ltr}.k{color:var(--kw)}.s{color:var(--str)}.n{color:var(--num)}.f{color:var(--fn)}.p{color:var(--prop)}
-</style></head><body><div class="frame" id="f"><pre id="code"></pre></div><script>
+.stamp,.mark{position:absolute;font-family:'JetBrains Mono','Heebo',monospace;font-size:17px;letter-spacing:.06em;color:var(--cm);direction:ltr;unicode-bidi:isolate;font-size:19px}.stamp{right:${PADX}px;bottom:44px}.mark{left:${PADX}px;top:44px}.stamp i,.mark i{font-style:normal;color:var(--bar)}.c{color:var(--cm);font-style:italic}.s,bdi{unicode-bidi:isolate}pre{direction:ltr}.k{color:var(--kw)}.s{color:var(--str)}.n{color:var(--num)}.f{color:var(--fn)}.p{color:var(--prop)}
+</style></head><body><div class="frame" id="f"><pre id="code"></pre>${A.stamp && A.stamp!==true ? `<div class="stamp"><i>●</i> ${String(A.stamp).replace(/&/g,"&amp;").replace(/</g,"&lt;")}</div>` : ""}${A.mark && A.mark!==true ? `<div class="mark">${String(A.mark).replace(/&/g,"&amp;").replace(/</g,"&lt;")}</div>` : ""}</div><script>
 document.documentElement.dataset.t=${JSON.stringify(theme)};
 const lines=${JSON.stringify(outL)}, hot=new Set(${JSON.stringify([...hot])});
 const KW=new Set(${JSON.stringify(L.kw.split(' '))}), CM=${JSON.stringify(L.cm)};
