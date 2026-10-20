@@ -96,19 +96,21 @@ const page = (theme) => `<!doctype html><html><head><meta charset="utf-8">
 :root[data-t=transparent]{--bg:transparent}
 html,body{margin:0;background:var(--bg)}
 .frame{width:${W}px;height:${H}px;background:var(--bg);display:flex;align-items:center;box-sizing:border-box;padding:0 ${PADX}px}
-pre{margin:0;width:100%;font-family:'JetBrains Mono',monospace;font-size:${font}px;line-height:${(font * 1.4).toFixed(1)}px;color:var(--text);white-space:pre;font-variant-ligatures:none;font-feature-settings:'calt' 0,'liga' 0}
+pre{margin:0;width:100%;font-family:'JetBrains Mono','Heebo',monospace;font-size:${font}px;line-height:${(font * 1.4).toFixed(1)}px;color:var(--text);white-space:pre;font-variant-ligatures:none;font-feature-settings:'calt' 0,'liga' 0}
 .ln{display:block;padding-left:20px;border-left:4px solid transparent;margin-left:-24px}.ln.hot{background:var(--mark);border-left-color:var(--bar)}
-.c{color:var(--cm);font-style:italic}.k{color:var(--kw)}.s{color:var(--str)}.n{color:var(--num)}.f{color:var(--fn)}.p{color:var(--prop)}
+.c{color:var(--cm);font-style:italic}.s,bdi{unicode-bidi:isolate}pre{direction:ltr}.k{color:var(--kw)}.s{color:var(--str)}.n{color:var(--num)}.f{color:var(--fn)}.p{color:var(--prop)}
 </style></head><body><div class="frame" id="f"><pre id="code"></pre></div><script>
 document.documentElement.dataset.t=${JSON.stringify(theme)};
 const lines=${JSON.stringify(outL)}, hot=new Set(${JSON.stringify([...hot])});
 const KW=new Set(${JSON.stringify(L.kw.split(' '))}), CM=${JSON.stringify(L.cm)};
 const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 function hl(line){
+  const cmt=(t)=>{ const lead=t.length-t.trimStart().length; let k=lead; for(const mk of ['/**','/*','*/','//','#','*']){ if(t.startsWith(mk,lead)){ k=lead+mk.length; break; } } while(t[k]===' ') k++; return '<span class="c">'+esc(t.slice(0,k))+'<bdi dir="auto">'+esc(t.slice(k))+'</bdi></span>'; };
+  const tt=line.trimStart(); if(CM==='//'&&(tt.startsWith('/*')||tt.startsWith('*'))) return cmt(line);
   let inStr=null, ci=-1;
   for(let i=0;i<line.length;i++){ const ch=line[i]; if(inStr){ if(ch==='\\\\'){i++;continue;} if(ch===inStr) inStr=null; continue; }
     if(ch==="'"||ch==='"'||ch==='\`'){inStr=ch;continue;} if(line.startsWith(CM,i)){ci=i;break;} }
-  let rest=ci>=0?line.slice(0,ci):line, tail=ci>=0?'<span class="c">'+esc(line.slice(ci))+'</span>':'';
+  let rest=ci>=0?line.slice(0,ci):line, tail=ci>=0?cmt(line.slice(ci)):'';
   const re=/('(?:[^'\\\\]|\\\\.)*'|"(?:[^"\\\\]|\\\\.)*"|\`(?:[^\`\\\\]|\\\\.)*\`)|(\\b\\d+(?:\\.\\d+)?\\b)|([A-Za-z_$][\\w$]*)(\\s*\\()?|(\\.[A-Za-z_$][\\w$]*)(\\s*\\()?|([\\s\\S])/g;
   let out='',m; while((m=re.exec(rest))){
     if(m[1]) out+='<span class="s">'+esc(m[1])+'</span>';
