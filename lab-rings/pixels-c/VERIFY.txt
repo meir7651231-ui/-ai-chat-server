@@ -1,0 +1,37 @@
+PIX  (wall s, monotonic, nice -n 10, one job at a time; <10 s = median of 3; CPU s = user+sys of child tree)
+image         | encode s old -> new (x)  | decode s py -> C (x)   | compile | bytes .py -> .c       | exact (diff px old / new x3) ; .c == shipped ; old rerun == archived
+predict wall  |  134.8 ->  76.6 ( 1.76x)  | 186.73 -> 1.955 ( 95.5x) |  0.85 s | 81229 -> 73648 (0.907) | [0] / 8 runs, max 0 ; True ; True
+predict code  |  128.6 ->  74.0 ( 1.74x)  | 120.81 -> 1.855 ( 65.1x) |  0.74 s | 58382 -> 53528 (0.917) | [0] / 8 runs, max 0 ; True ; True
+predict dark  |  160.5 -> 119.5 ( 1.34x)  | 150.31 -> 2.300 ( 65.4x) |  0.90 s | 73170 -> 66470 (0.908) | [0] / 8 runs, max 0 ; True ; True
+predict new   |   28.2 ->  30.5 ( 0.92x)  |  13.75 -> 0.226 ( 60.8x) |  0.46 s | 15336 -> 15093 (0.984) | [0] / 8 runs, max 0 ; True ; True
+dict wall     |  378.7 ->  34.0 (11.13x)  | 144.51 -> 4.559 ( 31.7x) |  1.36 s | 82746 -> 78719 (0.951) | [0] / 8 runs, max 0 ; True ; True
+dict code     |  304.0 ->  27.8 (10.94x)  | 112.63 -> 3.731 ( 30.2x) |  1.43 s | 54216 -> 53171 (0.981) | [0] / 8 runs, max 0 ; True ; True
+dict dark     |  292.5 ->  27.5 (10.63x)  | 113.67 -> 3.802 ( 29.9x) |  1.30 s | 64622 -> 62496 (0.967) | [0] / 8 runs, max 0 ; True ; True
+dict new      |  116.8 ->  12.9 ( 9.08x)  |   0.72 -> 0.105 (  6.8x) |  0.13 s | 13565 -> 11566 (0.853) | [0, 0, 0] / 8 runs, max 0 ; True ; True
+  predict median speedup: encode 1.54x (CPU 1.49x), decode 65.2x
+  dict median speedup: encode 10.78x (CPU 9.66x), decode 30.0x
+  all 8 median speedup: encode 5.42x, decode 46.3x
+
+VEC  (wall s incl. python start-up + final Chromium check, score.py excluded; <10 s = median of 3)
+engine image | old s -> new s (speedup)   | close old->new  | psnr old->new | bytes       | svg new==old ; ==their new ; old==judge ; final check
+trace icon   |    14.7 ->    4.3 (  3.4x cpu  3.1x) |  99.99 ->  99.99 | 58.68 -> 58.68 |   574 ->   574 | True ; True ; True ; max 0
+trace chart  |    37.7 ->    9.7 (  3.9x cpu  2.5x) |  99.99 ->  99.99 | 53.17 -> 53.17 |  3274 ->  3274 | True ; True ; True ; max 0
+trace logo   |     9.1 ->    4.5 (  2.0x cpu  1.5x) | 100.00 -> 100.00 | 59.38 -> 59.38 |   378 ->   378 | True ; True ; True ; max 0
+trace blob   |    18.9 ->    5.5 (  3.4x cpu  3.0x) |  99.99 ->  99.99 | 53.29 -> 53.29 |  1918 ->  1918 | True ; True ; True ; max 0
+trace text   |    37.0 ->    7.8 (  4.7x cpu  3.1x) |  99.96 ->  99.96 | 48.48 -> 48.48 |  3581 ->  3581 | True ; True ; True ; max 0
+trace glow   |     6.5 ->    3.7 (  1.8x cpu  1.7x) | 100.00 -> 100.00 | 56.42 -> 56.42 |   629 ->   629 | True ; True ; True ; max 0
+trace flag   |    16.4 ->    7.4 (  2.2x cpu  1.7x) |  99.94 ->  99.94 | 49.98 -> 49.98 |  1128 ->  1128 | True ; True ; True ; max 0
+trace pie    |    56.4 ->   19.3 (  2.9x cpu  1.2x) |  99.83 ->  99.83 | 41.68 -> 41.68 | 11935 -> 11935 | True ; True ; True ; max 0
+trace face   |    31.2 ->   11.9 (  2.6x cpu  1.6x) |  99.87 ->  99.87 | 44.77 -> 44.77 |  5835 ->  5835 | True ; True ; True ; max 0
+prims icon   |    47.6 ->   15.2 (  3.1x cpu  2.8x) | 100.00 -> 100.00 | 99.00 -> 99.00 |   314 ->   314 | True ; True ; True ; max 0
+prims chart  |   124.0 ->   24.8 (  5.0x cpu  4.2x) |  99.97 ->  99.97 | 48.97 -> 48.97 |  2534 ->  2534 | True ; True ; True ; max 0
+prims logo   |    32.3 ->    9.0 (  3.6x cpu  3.3x) | 100.00 -> 100.00 | 99.00 -> 99.00 |   377 ->   377 | True ; True ; True ; max 0
+prims blob   |    59.7 ->   11.7 (  5.1x cpu  3.7x) |  99.93 ->  99.93 | 49.33 -> 49.33 |   527 ->   527 | True ; True ; True ; max 0
+prims text   |   101.4 ->   13.9 (  7.3x cpu  4.9x) |  99.76 ->  99.76 | 41.90 -> 41.90 |  1856 ->  1856 | True ; True ; True ; max 0
+prims glow   |    14.9 ->    6.4 (  2.3x cpu  1.9x) | 100.00 -> 100.00 | 63.05 -> 63.05 |   707 ->   707 | True ; True ; True ; max 0
+prims flag   |  4359.2 ->   81.2 ( 53.7x cpu 181.8x) |  99.81 ->  99.81 | 38.26 -> 38.25 |  4577 ->  4566 | False ; True ; True ; max 0
+prims pie    |   440.7 ->   49.0 (  9.0x cpu  6.2x) |  99.59 ->  99.59 | 34.35 -> 34.35 |  7126 ->  7126 | True ; True ; True ; max 0
+prims face   | >  5400 ->  195.6 (>  28x cpu > 88x) |      - ->  99.71 |     - -> 38.45 |     - -> 16881 | - ; True ; None ; max 0
+  trace median speedup 2.92x over 9 images (min 1.75x, max 4.75x)
+  prims median speedup 5.07x over 8 images (min 2.34x, max 53.65x)
+  quality regressions beyond -0.5 dB psnr / -0.02 close_pct: none

@@ -1,0 +1,20 @@
+engine image     old s   new s  speedup |  close% old/new  psnr old/new  shapes bytes old/new | svg       | native loop / final check
+-------------------------------------------------------------------------------------------------------------------------------------
+trace  icon       13.9     4.3     3.2x |   99.99/99.99    58.68/58.68    4/4      574/574    | identical | nat 10 fb 0 chk max 0 ok
+trace  chart      37.6     9.2     4.1x |   99.99/99.99    53.17/53.17    6/6     3274/3274   | identical | nat 20 fb 0 chk max 0 ok
+trace  logo        8.3     4.5     1.9x |   100.0/100.0    59.38/59.38    4/4      378/378    | identical | nat 5 fb 0 chk max 0 ok
+trace  blob       17.1     5.2     3.3x |   99.99/99.99    53.29/53.29    4/4     1918/1918   | identical | nat 10 fb 0 chk max 0 ok
+trace  text       33.8     7.2     4.7x |   99.96/99.96    48.48/48.48    3/3     3581/3581   | identical | nat 20 fb 0 chk max 0 ok
+trace  glow        6.1     3.3     1.8x |   100.0/100.0    56.42/56.42    3/3      629/629    | identical | nat 3 fb 0 chk max 0 ok
+trace  flag       16.7     6.9     2.4x |   99.94/99.94    49.98/49.98    8/8     1128/1128   | identical | nat 9 fb 0 chk max 0 ok
+trace  pie        54.5    16.2     3.4x |   99.83/99.83    41.68/41.68   32/32   11935/11935  | identical | nat 14 fb 0 chk max 0 ok
+trace  face       30.1    11.2     2.7x |   99.87/99.87    44.77/44.77    9/9     5835/5835   | identical | nat 10 fb 0 chk max 0 ok
+prims  icon       43.4    10.7     4.1x |   100.0/100.0     99.0/99.0     4/4      314/314    | identical | nat 72 fb 0 chk max 0 ok
+prims  chart     114.6    20.7     5.5x |   99.97/99.97    48.97/48.97   11/11    2534/2534   | identical | nat 619 fb 0 chk max 0 ok
+prims  logo       28.7     8.6     3.3x |   100.0/100.0     99.0/99.0     4/4      377/377    | identical | nat 71 fb 0 chk max 0 ok
+prims  blob       57.4    10.2     5.6x |   99.93/99.93    49.33/49.33    4/4      527/527    | identical | nat 249 fb 0 chk max 0 ok
+prims  text       96.1    13.0     7.4x |   99.76/99.76     41.9/41.9     2/2     1856/1856   | identical | nat 828 fb 0 chk max 0 ok
+prims  glow       13.9     5.7     2.5x |   100.0/100.0    63.05/63.05    3/3      707/707    | identical | nat 38 fb 0 chk max 0 ok
+prims  flag     2253.9    70.9    31.8x |   99.81/99.81    38.26/38.25    9/9     4577/4566   | differs   | nat 274 fb 0 chk max 0 ok
+prims  pie       416.4    40.8    10.2x |   99.59/99.59    34.35/34.35   26/26    7126/7126   | identical | nat 2730 fb 1 chk max 0 ok
+prims  face      >5400   169.9     >32x |       -/99.71        -/38.45    -/16       -/16881  | -         | nat 521 fb 0 chk max 0 ok

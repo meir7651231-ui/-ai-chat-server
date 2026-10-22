@@ -1,0 +1,934 @@
+[
+ {
+  "engine": "trace",
+  "image": "icon",
+  "old": {
+   "image": "icon",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 13.93,
+   "runs": [
+    13.93
+   ],
+   "rc": 0,
+   "load1": 2.69,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/icon.svg",
+   "svg_bytes": 574,
+   "shapes": 4,
+   "exact_pct": 99.54,
+   "close_pct": 99.99,
+   "mean_abs_err": 0.01,
+   "psnr_db": 58.68
+  },
+  "new": {
+   "image": "icon",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 4.29,
+   "runs": [
+    4.29,
+    3.99,
+    4.29
+   ],
+   "rc": 0,
+   "load1": 3.22,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/icon.svg",
+   "svg_bytes": 574,
+   "shapes": 4,
+   "exact_pct": 99.54,
+   "close_pct": 99.99,
+   "mean_abs_err": 0.01,
+   "psnr_db": 58.68,
+   "render_stats": {
+    "native": 10,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 10,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "chart",
+  "old": {
+   "image": "chart",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 37.64,
+   "runs": [
+    37.64
+   ],
+   "rc": 0,
+   "load1": 3.67,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/chart.svg",
+   "svg_bytes": 3274,
+   "shapes": 6,
+   "exact_pct": 99.49,
+   "close_pct": 99.99,
+   "mean_abs_err": 0.02,
+   "psnr_db": 53.17
+  },
+  "new": {
+   "image": "chart",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 9.22,
+   "runs": [
+    9.22,
+    9.03,
+    9.57
+   ],
+   "rc": 0,
+   "load1": 2.49,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/chart.svg",
+   "svg_bytes": 3274,
+   "shapes": 6,
+   "exact_pct": 99.49,
+   "close_pct": 99.99,
+   "mean_abs_err": 0.02,
+   "psnr_db": 53.17,
+   "render_stats": {
+    "native": 20,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 20,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "logo",
+  "old": {
+   "image": "logo",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 8.33,
+   "runs": [
+    8.62,
+    8.33,
+    8.28
+   ],
+   "rc": 0,
+   "load1": 2.96,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/logo.svg",
+   "svg_bytes": 378,
+   "shapes": 4,
+   "exact_pct": 99.73,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.01,
+   "psnr_db": 59.38
+  },
+  "new": {
+   "image": "logo",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 4.45,
+   "runs": [
+    4.46,
+    4.45,
+    4.39
+   ],
+   "rc": 0,
+   "load1": 3.12,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/logo.svg",
+   "svg_bytes": 378,
+   "shapes": 4,
+   "exact_pct": 99.73,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.01,
+   "psnr_db": 59.38,
+   "render_stats": {
+    "native": 5,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 5,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "blob",
+  "old": {
+   "image": "blob",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 17.08,
+   "runs": [
+    17.08
+   ],
+   "rc": 0,
+   "load1": 3.29,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/blob.svg",
+   "svg_bytes": 1918,
+   "shapes": 4,
+   "exact_pct": 99.34,
+   "close_pct": 99.99,
+   "mean_abs_err": 0.03,
+   "psnr_db": 53.29
+  },
+  "new": {
+   "image": "blob",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 5.25,
+   "runs": [
+    5.66,
+    5.25,
+    4.89
+   ],
+   "rc": 0,
+   "load1": 2.71,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/blob.svg",
+   "svg_bytes": 1918,
+   "shapes": 4,
+   "exact_pct": 99.34,
+   "close_pct": 99.99,
+   "mean_abs_err": 0.03,
+   "psnr_db": 53.29,
+   "render_stats": {
+    "native": 10,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 10,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "text",
+  "old": {
+   "image": "text",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 33.77,
+   "runs": [
+    33.77
+   ],
+   "rc": 0,
+   "load1": 2.62,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/text.svg",
+   "svg_bytes": 3581,
+   "shapes": 3,
+   "exact_pct": 98.39,
+   "close_pct": 99.96,
+   "mean_abs_err": 0.07,
+   "psnr_db": 48.48
+  },
+  "new": {
+   "image": "text",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 7.15,
+   "runs": [
+    7.05,
+    7.15,
+    7.61
+   ],
+   "rc": 0,
+   "load1": 2.38,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/text.svg",
+   "svg_bytes": 3581,
+   "shapes": 3,
+   "exact_pct": 98.39,
+   "close_pct": 99.96,
+   "mean_abs_err": 0.07,
+   "psnr_db": 48.48,
+   "render_stats": {
+    "native": 20,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 20,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "glow",
+  "old": {
+   "image": "glow",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 6.07,
+   "runs": [
+    5.96,
+    6.37,
+    6.07
+   ],
+   "rc": 0,
+   "load1": 3.87,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/glow.svg",
+   "svg_bytes": 629,
+   "shapes": 3,
+   "exact_pct": 64.69,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.15,
+   "psnr_db": 56.42
+  },
+  "new": {
+   "image": "glow",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 3.33,
+   "runs": [
+    3.29,
+    3.33,
+    3.64
+   ],
+   "rc": 0,
+   "load1": 3.73,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/glow.svg",
+   "svg_bytes": 629,
+   "shapes": 3,
+   "exact_pct": 64.69,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.15,
+   "psnr_db": 56.42,
+   "render_stats": {
+    "native": 3,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 3,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "flag",
+  "old": {
+   "image": "flag",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 16.68,
+   "runs": [
+    16.68
+   ],
+   "rc": 0,
+   "load1": 3.31,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/flag.svg",
+   "svg_bytes": 1128,
+   "shapes": 8,
+   "exact_pct": 99.2,
+   "close_pct": 99.94,
+   "mean_abs_err": 0.04,
+   "psnr_db": 49.98
+  },
+  "new": {
+   "image": "flag",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 6.87,
+   "runs": [
+    6.66,
+    6.87,
+    7.3
+   ],
+   "rc": 0,
+   "load1": 3.13,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/flag.svg",
+   "svg_bytes": 1128,
+   "shapes": 8,
+   "exact_pct": 99.2,
+   "close_pct": 99.94,
+   "mean_abs_err": 0.04,
+   "psnr_db": 49.98,
+   "render_stats": {
+    "native": 9,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 9,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "pie",
+  "old": {
+   "image": "pie",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 54.49,
+   "runs": [
+    54.49
+   ],
+   "rc": 0,
+   "load1": 2.53,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/pie.svg",
+   "svg_bytes": 11935,
+   "shapes": 32,
+   "exact_pct": 91.57,
+   "close_pct": 99.83,
+   "mean_abs_err": 0.18,
+   "psnr_db": 41.68
+  },
+  "new": {
+   "image": "pie",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 16.2,
+   "runs": [
+    16.2
+   ],
+   "rc": 0,
+   "load1": 1.76,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/pie.svg",
+   "svg_bytes": 11935,
+   "shapes": 32,
+   "exact_pct": 91.57,
+   "close_pct": 99.83,
+   "mean_abs_err": 0.18,
+   "psnr_db": 41.68,
+   "render_stats": {
+    "native": 14,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 14,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "trace",
+  "image": "face",
+  "old": {
+   "image": "face",
+   "engine": "trace",
+   "variant": "old",
+   "secs": 30.08,
+   "runs": [
+    30.08
+   ],
+   "rc": 0,
+   "load1": 1.97,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_trace/face.svg",
+   "svg_bytes": 5835,
+   "shapes": 9,
+   "exact_pct": 87.75,
+   "close_pct": 99.87,
+   "mean_abs_err": 0.16,
+   "psnr_db": 44.77
+  },
+  "new": {
+   "image": "face",
+   "engine": "trace",
+   "variant": "new",
+   "secs": 11.17,
+   "runs": [
+    11.17
+   ],
+   "rc": 0,
+   "load1": 1.81,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_trace/face.svg",
+   "svg_bytes": 5835,
+   "shapes": 9,
+   "exact_pct": 87.75,
+   "close_pct": 99.87,
+   "mean_abs_err": 0.16,
+   "psnr_db": 44.77,
+   "render_stats": {
+    "native": 10,
+    "fallback": 0,
+    "chrome": 0,
+    "checked": 0,
+    "check_mismatch": 0
+   },
+   "final_check": {
+    "max": 0,
+    "n": 0,
+    "flags": 0,
+    "stats": {
+     "native": 10,
+     "fallback": 0,
+     "chrome": 0,
+     "checked": 0,
+     "check_mismatch": 0
+    },
+    "ok": true
+   }
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "icon",
+  "old": {
+   "image": "icon",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 43.42,
+   "runs": [
+    43.42
+   ],
+   "rc": 0,
+   "load1": 2.5,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims/icon.svg",
+   "svg_bytes": 314,
+   "shapes": 4,
+   "exact_pct": 100.0,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.0,
+   "psnr_db": 99.0
+  },
+  "new": {
+   "image": "icon",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 10.69,
+   "runs": [
+    10.69
+   ],
+   "rc": 0,
+   "load1": 0.25,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/icon.svg",
+   "svg_bytes": 314,
+   "shapes": 4,
+   "exact_pct": 100.0,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.0,
+   "psnr_db": 99.0
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "chart",
+  "old": {
+   "image": "chart",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 114.57,
+   "runs": [
+    114.57
+   ],
+   "rc": 0,
+   "load1": 1.45,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims/chart.svg",
+   "svg_bytes": 2534,
+   "shapes": 11,
+   "exact_pct": 99.67,
+   "close_pct": 99.97,
+   "mean_abs_err": 0.04,
+   "psnr_db": 48.97
+  },
+  "new": {
+   "image": "chart",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 20.73,
+   "runs": [
+    20.73
+   ],
+   "rc": 0,
+   "load1": 0.37,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/chart.svg",
+   "svg_bytes": 2534,
+   "shapes": 11,
+   "exact_pct": 99.67,
+   "close_pct": 99.97,
+   "mean_abs_err": 0.04,
+   "psnr_db": 48.97
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "logo",
+  "old": {
+   "image": "logo",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 28.67,
+   "runs": [
+    28.67
+   ],
+   "rc": 0,
+   "load1": 1.17,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims/logo.svg",
+   "svg_bytes": 377,
+   "shapes": 4,
+   "exact_pct": 100.0,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.0,
+   "psnr_db": 99.0
+  },
+  "new": {
+   "image": "logo",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 8.56,
+   "runs": [
+    8.56,
+    9.33,
+    8.51
+   ],
+   "rc": 0,
+   "load1": 0.65,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/logo.svg",
+   "svg_bytes": 377,
+   "shapes": 4,
+   "exact_pct": 100.0,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.0,
+   "psnr_db": 99.0
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "blob",
+  "old": {
+   "image": "blob",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 57.43,
+   "runs": [
+    57.43
+   ],
+   "rc": 0,
+   "load1": 1.47,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims/blob.svg",
+   "svg_bytes": 527,
+   "shapes": 4,
+   "exact_pct": 99.35,
+   "close_pct": 99.93,
+   "mean_abs_err": 0.05,
+   "psnr_db": 49.33
+  },
+  "new": {
+   "image": "blob",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 10.2,
+   "runs": [
+    9.97,
+    10.43
+   ],
+   "rc": 0,
+   "load1": 0.77,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/blob.svg",
+   "svg_bytes": 527,
+   "shapes": 4,
+   "exact_pct": 99.35,
+   "close_pct": 99.93,
+   "mean_abs_err": 0.05,
+   "psnr_db": 49.33
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "text",
+  "old": {
+   "image": "text",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 96.1,
+   "runs": [
+    96.1
+   ],
+   "rc": 0,
+   "load1": 2.86,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims/text.svg",
+   "svg_bytes": 1856,
+   "shapes": 2,
+   "exact_pct": 98.15,
+   "close_pct": 99.76,
+   "mean_abs_err": 0.18,
+   "psnr_db": 41.9
+  },
+  "new": {
+   "image": "text",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 13.03,
+   "runs": [
+    13.03
+   ],
+   "rc": 0,
+   "load1": 0.85,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/text.svg",
+   "svg_bytes": 1856,
+   "shapes": 2,
+   "exact_pct": 98.15,
+   "close_pct": 99.76,
+   "mean_abs_err": 0.18,
+   "psnr_db": 41.9
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "glow",
+  "old": {
+   "image": "glow",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 13.86,
+   "runs": [
+    13.86
+   ],
+   "rc": 0,
+   "load1": 1.2,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims/glow.svg",
+   "svg_bytes": 707,
+   "shapes": 3,
+   "exact_pct": 91.11,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.03,
+   "psnr_db": 63.05
+  },
+  "new": {
+   "image": "glow",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 5.65,
+   "runs": [
+    5.24,
+    5.65,
+    5.85
+   ],
+   "rc": 0,
+   "load1": 0.88,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/glow.svg",
+   "svg_bytes": 707,
+   "shapes": 3,
+   "exact_pct": 91.11,
+   "close_pct": 100.0,
+   "mean_abs_err": 0.03,
+   "psnr_db": 63.05
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "flag",
+  "old": {
+   "svg_bytes": 4577,
+   "shapes": 9,
+   "exact_pct": 98.88,
+   "close_pct": 99.81,
+   "mean_abs_err": 0.15,
+   "psnr_db": 38.26,
+   "image": "flag",
+   "engine": "prims",
+   "secs": 2253.9,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-judge/prims_long/flag.svg",
+   "variant": "old",
+   "source": "vec-judge/prims_long",
+   "rc": 0
+  },
+  "new": {
+   "image": "flag",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 70.87,
+   "runs": [
+    70.87
+   ],
+   "rc": 0,
+   "load1": 0.96,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/flag.svg",
+   "svg_bytes": 4566,
+   "shapes": 9,
+   "exact_pct": 98.88,
+   "close_pct": 99.81,
+   "mean_abs_err": 0.15,
+   "psnr_db": 38.25
+  },
+  "svg": "differs"
+ },
+ {
+  "engine": "prims",
+  "image": "pie",
+  "old": {
+   "image": "pie",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 416.45,
+   "runs": [
+    416.45
+   ],
+   "rc": 0,
+   "load1": 1.03,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims/pie.svg",
+   "svg_bytes": 7126,
+   "shapes": 26,
+   "exact_pct": 30.11,
+   "close_pct": 99.59,
+   "mean_abs_err": 2.09,
+   "psnr_db": 34.35
+  },
+  "new": {
+   "image": "pie",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 40.75,
+   "runs": [
+    40.75
+   ],
+   "rc": 0,
+   "load1": 0.92,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/pie.svg",
+   "svg_bytes": 7126,
+   "shapes": 26,
+   "exact_pct": 30.11,
+   "close_pct": 99.59,
+   "mean_abs_err": 2.09,
+   "psnr_db": 34.35
+  },
+  "svg": "identical"
+ },
+ {
+  "engine": "prims",
+  "image": "face",
+  "old": {
+   "image": "face",
+   "engine": "prims",
+   "variant": "old",
+   "secs": 5400.02,
+   "runs": [
+    5400.02
+   ],
+   "rc": "timeout",
+   "load1": 0.0,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/old_prims_face/face.svg"
+  },
+  "new": {
+   "image": "face",
+   "engine": "prims",
+   "variant": "new",
+   "secs": 169.9,
+   "runs": [
+    169.9
+   ],
+   "rc": 0,
+   "load1": 1.12,
+   "svg": "/tmp/claude-0/-home-user/f7fc857c-d0a9-5552-9b86-ed0f0b4bc3b7/scratchpad/vec-c/bench/new_prims/face.svg",
+   "svg_bytes": 16881,
+   "shapes": 16,
+   "exact_pct": 93.88,
+   "close_pct": 99.71,
+   "mean_abs_err": 0.24,
+   "psnr_db": 38.45
+  },
+  "svg": "-"
+ }
+]

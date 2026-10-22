@@ -1,0 +1,10 @@
+rect          svgs   80  exact   80/80    max|d|   0  mean|d| 0.000000  flagged->chromium   0 (native on those: max 0 mean 0.0000)  native 3.15 ms/svg
+circle        svgs   80  exact   80/80    max|d|   0  mean|d| 0.000000  flagged->chromium   0 (native on those: max 0 mean 0.0000)  native 2.79 ms/svg
+ellipse       svgs   80  exact   80/80    max|d|   0  mean|d| 0.000000  flagged->chromium   0 (native on those: max 0 mean 0.0000)  native 2.85 ms/svg
+polygon       svgs   80  exact   80/80    max|d|   0  mean|d| 0.000000  flagged->chromium   0 (native on those: max 0 mean 0.0000)  native 4.38 ms/svg
+path          svgs   80  exact   80/80    max|d|   0  mean|d| 0.000000  flagged->chromium   0 (native on those: max 0 mean 0.0000)  native 3.29 ms/svg
+stroke        svgs   80  exact   80/80    max|d|   0  mean|d| 0.000000  flagged->chromium   0 (native on those: max 0 mean 0.0000)  native 3.33 ms/svg
+gradient-mix  svgs   80  exact   80/80    max|d|   0  mean|d| 0.000000  flagged->chromium   0 (native on those: max 0 mean 0.0000)  native 3.93 ms/svg
+gradient-obb  svgs   80  exact    0/0     max|d|   0  mean|d| 0.000000  flagged->chromium  80 (native on those: max 1 mean 0.0000)  native 3.95 ms/svg
+hairline      svgs   80  exact    0/0     max|d|   0  mean|d| 0.000000  flagged->chromium  80 (native on those: max 247 mean 0.1644)  native 2.79 ms/svg
+total 76s
