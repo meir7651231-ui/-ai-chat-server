@@ -1,0 +1,17 @@
+{
+  "name": "אורביט · המחולל",
+  "short_name": "המחולל",
+  "description": "משפט אחד. מערכת שלמה. כתבו מה הארגון צריך ואורביט מרכיבה מערכת חיה מהקטלוג.",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./orbit-generator.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#070815",
+  "theme_color": "#070815",
+  "icons": [
+    { "src": "assets/orbit-gen-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/orbit-gen-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/orbit-gen-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
