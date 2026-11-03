@@ -12,7 +12,7 @@ _עודכן: 3.11.2026 · נבדק על commit `f32c524` (ענף-הבסיס `cla
 | שער-הכיסוי | ✅ ירוק | לבנים 497/497 · מנועים 747/747 · תאומי-דאטה 411/411 |
 | נעילת-השוטרים (pins) | ✅ ירוק | 11 קבצים (עודכן יחד עם CLAUDE.md) |
 | **שער-הסינתזה (synth)** | 🔴 **אדום** | שקילות JS↔Dart נשברה — ראו בעיה 1 |
-| boxes · selftest · mutation (משטרה-מלאה) | __FULL__ | `police.mjs` |
+| boxes · selftest · mutation (משטרה-מלאה) | ✅ ירוק | `police.mjs` (3:24 דק') |
 | לוח-האם | ✅ | `node --test new/board.test.mjs` — 1/1 |
 | המחולל-הנקי (`engine/`) | ✅ | spec לדוגמה ⇒ `gen_example.dart`, 5/5 חלקים |
 | `dart analyze runtime/` | ✅ | No issues found |
