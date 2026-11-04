@@ -168,12 +168,12 @@ if (GATE) {
         const meta = twinMeta.get(c);
         const tail = meta && meta.simple && meta.tail.length === f.params.length - 1 ? meta.tail.map(x => dartLit(x)) : f.params.slice(1).map(() => 'null');
         const arg = (t === 'num' || t === 'double') ? `(num.tryParse(${expr}) ?? double.nan)` : t === 'int' ? `(int.tryParse(${expr}) ?? 0)` : expr;
-        expr = `${c}(${[arg, ...tail].join(', ')})${f.ret === 'String' ? '' : f.ret === 'String?' ? " ?? ''" : '.toString()'}`;
+        expr = f.ret === 'String' ? `${c}(${[arg, ...tail].join(', ')})` : f.ret === 'String?' ? `${c}(${[arg, ...tail].join(', ')}) ?? ''` : `jsStr(${c}(${[arg, ...tail].join(', ')}))`;
         if (f.ret === 'String?') expr = `(${c}(${[arg, ...tail].join(', ')}) ?? '')`;
       }
       body.push(`  check('${esc(cf)}', '${esc(ex.in)}', ${expr}, '${esc(ex.out)}');`);
     }
-    const script = `${imps}\nint bad = 0;\nvoid check(String cf, String inp, String got, String want) {\n  if (got != want) { print('DARTFAIL \$cf \$inp => \$got != \$want'); bad = 1; }\n}\nvoid main() {\n${body.join('\n')}\n  print(bad == 1 ? 'DARTBAD' : 'DARTOK');\n}\n`;
+    const script = `${imps}\nString jsStr(dynamic v) => v is List ? v.map(jsStr).join(',') : v.toString();\nint bad = 0;\nvoid check(String cf, String inp, String got, String want) {\n  if (got != want) { print('DARTFAIL \$cf \$inp => \$got != \$want'); bad = 1; }\n}\nvoid main() {\n${body.join('\n')}\n  print(bad == 1 ? 'DARTBAD' : 'DARTOK');\n}\n`;
     const tf = path.join(tmpDir, 'gate.dart');
     fs.writeFileSync(tf, script);
     try {
