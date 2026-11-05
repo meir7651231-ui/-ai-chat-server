@@ -169,6 +169,8 @@ if (GATE) {
         const tail = meta && meta.simple && meta.tail.length === f.params.length - 1 ? meta.tail.map(x => dartLit(x)) : f.params.slice(1).map(() => 'null');
         const arg = (t === 'num' || t === 'double') ? `(num.tryParse(${expr}) ?? double.nan)` : t === 'int' ? `(int.tryParse(${expr}) ?? 0)` : expr;
         expr = `${c}(${[arg, ...tail].join(', ')})${f.ret === 'String' ? '' : f.ret === 'String?' ? " ?? ''" : '.toString()'}`;
+        // JS String(array) = join(','), Dart List.toString() = '[a, b]' — מיישרים את השקילות (ret: List/dynamic)
+        if (/^List\b/.test(f.ret) || f.ret === 'dynamic') expr = `((v) => v is List ? v.join(',') : v.toString())(${c}(${[arg, ...tail].join(', ')}))`;
         if (f.ret === 'String?') expr = `(${c}(${[arg, ...tail].join(', ')}) ?? '')`;
       }
       body.push(`  check('${esc(cf)}', '${esc(ex.in)}', ${expr}, '${esc(ex.out)}');`);
