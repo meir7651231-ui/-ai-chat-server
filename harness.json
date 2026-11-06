@@ -1,0 +1,8 @@
+{
+  "name": "-ai-chat-server",
+  "mandatory": [
+    "in_scope"
+  ],
+  "state_dir": ".harness",
+  "timeout_s": 900
+}
