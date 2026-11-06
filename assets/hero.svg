@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-label="Orbit Genesis: old code broken into atoms, wired into boxes, rebuilt clean">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1018"/>
+      <stop offset="1" stop-color="#121a2b"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#6aa8ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#6aa8ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="360" rx="18" fill="url(#bg)"/>
+
+  <!-- left: tangled legacy -->
+  <g transform="translate(70,70)" fill="none" stroke="#8a94a8" stroke-width="2.2" opacity="0.85">
+    <path d="M10 40 C80 0 40 120 120 80 S160 10 200 70 S90 180 30 150 S150 120 190 190"/>
+    <path d="M20 190 C60 120 140 220 170 120 S60 40 110 20"/>
+    <path d="M0 110 C70 150 120 30 210 120"/>
+  </g>
+  <text x="175" y="300" fill="#8a94a8" font-family="system-ui,Segoe UI,Arial" font-size="18" text-anchor="middle">legacy · maor · buildsmart · yoman</text>
+
+  <!-- arrow 1 -->
+  <path d="M320 180 h70" stroke="#3dff8e" stroke-width="3" marker-end="url(#a)"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3dff8e"/></marker></defs>
+
+  <!-- middle: atoms grid -->
+  <g transform="translate(420,95)">
+    <g fill="#16233a" stroke="#6aa8ff" stroke-width="1.6">
+      <circle cx="20" cy="20" r="13"/><circle cx="65" cy="20" r="13"/><circle cx="110" cy="20" r="13"/><circle cx="155" cy="20" r="13"/>
+      <circle cx="20" cy="65" r="13"/><circle cx="65" cy="65" r="13"/><circle cx="110" cy="65" r="13"/><circle cx="155" cy="65" r="13"/>
+      <circle cx="20" cy="110" r="13"/><circle cx="65" cy="110" r="13"/><circle cx="110" cy="110" r="13"/><circle cx="155" cy="110" r="13"/>
+      <circle cx="20" cy="155" r="13"/><circle cx="65" cy="155" r="13"/><circle cx="110" cy="155" r="13"/><circle cx="155" cy="155" r="13"/>
+    </g>
+  </g>
+  <text x="507" y="300" fill="#6aa8ff" font-family="system-ui,Segoe UI,Arial" font-size="18" text-anchor="middle">pure atoms · contract + test</text>
+
+  <path d="M630 180 h70" stroke="#3dff8e" stroke-width="3" marker-end="url(#a)"/>
+
+  <!-- right: boxes on a board, in orbit -->
+  <circle cx="900" cy="180" r="150" fill="url(#glow)"/>
+  <ellipse cx="900" cy="180" rx="140" ry="52" fill="none" stroke="#3dff8e" stroke-width="1.5" stroke-dasharray="5 6" opacity="0.8"/>
+  <g stroke="#3dff8e" stroke-width="2" fill="#0f1c18">
+    <rect x="820" y="120" width="70" height="50" rx="8"/>
+    <rect x="910" y="120" width="70" height="50" rx="8"/>
+    <rect x="865" y="190" width="70" height="50" rx="8"/>
+  </g>
+  <g stroke="#3dff8e" stroke-width="1.6">
+    <path d="M890 145 h20"/><path d="M855 170 v20 h10"/><path d="M945 170 v20 h-10"/>
+  </g>
+  <circle cx="1040" cy="180" r="7" fill="#ffb020"/>
+  <text x="900" y="300" fill="#3dff8e" font-family="system-ui,Segoe UI,Arial" font-size="18" text-anchor="middle">wired boxes · one board</text>
+
+  <text x="600" y="48" fill="#e8eefc" font-family="system-ui,Segoe UI,Arial" font-size="30" font-weight="700" text-anchor="middle">Orbit Genesis</text>
+  <text x="600" y="338" fill="#b7c2d9" font-family="system-ui,Segoe UI,Arial" font-size="17" text-anchor="middle">Nothing lost. Nothing burned in. Every wire has a contract.</text>
+</svg>
