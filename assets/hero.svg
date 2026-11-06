@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="Orbit Genesis in action: a Hebrew sentence goes in, five catalog atoms are picked and wired, a Flutter screen comes out">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1018"/><stop offset="1" stop-color="#121a2b"/></linearGradient>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#3dff8e"/></marker>
+  </defs>
+  <rect width="1200" height="420" rx="18" fill="url(#bg)"/>
+  <g font-family="system-ui,Segoe UI,Arial">
+    <text x="600" y="46" fill="#e8eefc" font-size="30" font-weight="700" text-anchor="middle">Orbit Genesis</text>
+    <text x="600" y="74" fill="#b7c2d9" font-size="16" text-anchor="middle">A Hebrew sentence in. A wired Flutter screen out. No language model.</text>
+
+    <!-- 1: the sentence (real spec: engine/specs/example.txt) -->
+    <rect x="40" y="105" width="330" height="250" rx="12" fill="#121a2b" stroke="#6aa8ff" stroke-width="1.5"/>
+    <text x="60" y="132" fill="#6aa8ff" font-size="14" font-weight="700">1 · sentence</text>
+    <g fill="#e8eefc" font-size="17" text-anchor="start" direction="rtl">
+      <text x="350" y="168" font-weight="700">מסך לדוגמה:</text>
+      <text x="350" y="200">כותרת ברוכים הבאים</text>
+      <text x="350" y="232">כפתור התחל עכשיו</text>
+      <text x="350" y="264">כרטיס כותרת הכרטיס | …</text>
+      <text x="350" y="296">נתון 42 פריטים פעילים</text>
+      <text x="350" y="328">באנר זה מסך שחולל ממשפט…</text>
+    </g>
+
+    <path d="M380 230 h48" stroke="#3dff8e" stroke-width="3" marker-end="url(#a)"/>
+
+    <!-- 2: atoms picked from the catalog -->
+    <rect x="440" y="105" width="320" height="250" rx="12" fill="#121a2b" stroke="#6aa8ff" stroke-width="1.5"/>
+    <text x="460" y="132" fill="#6aa8ff" font-size="14" font-weight="700">2 · atoms picked + wired</text>
+    <g font-size="15" fill="#e8eefc">
+      <g fill="#16233a" stroke="#3dff8e" stroke-width="1.4">
+        <rect x="465" y="150" width="270" height="32" rx="7"/><rect x="465" y="190" width="270" height="32" rx="7"/>
+        <rect x="465" y="230" width="270" height="32" rx="7"/><rect x="465" y="270" width="270" height="32" rx="7"/>
+        <rect x="465" y="310" width="270" height="32" rx="7"/>
+      </g>
+      <text x="480" y="171">ExampleHeader</text><text x="480" y="211">ExampleButton</text>
+      <text x="480" y="251">ExampleCard</text><text x="480" y="291">ExampleStat</text><text x="480" y="331">ExampleBanner</text>
+      <g fill="#3dff8e" font-size="13" text-anchor="end"><text x="725" y="171">contract ✓</text><text x="725" y="211">contract ✓</text><text x="725" y="251">contract ✓</text><text x="725" y="291">contract ✓</text><text x="725" y="331">contract ✓</text></g>
+    </g>
+
+    <path d="M770 230 h48" stroke="#3dff8e" stroke-width="3" marker-end="url(#a)"/>
+
+    <!-- 3: the screen -->
+    <rect x="880" y="95" width="230" height="290" rx="26" fill="#0f1420" stroke="#8a94a8" stroke-width="2"/>
+    <text x="995" y="122" fill="#8a94a8" font-size="12" text-anchor="middle">3 · gen_example.dart</text>
+    <g text-anchor="start" direction="rtl">
+      <text x="1090" y="156" fill="#e8eefc" font-size="18" font-weight="700">ברוכים הבאים</text>
+      <rect x="900" y="170" width="190" height="34" rx="17" fill="#2f7dff"/>
+      <text x="1050" y="192" fill="#fff" font-size="14">התחל עכשיו</text>
+      <rect x="900" y="216" width="190" height="62" rx="10" fill="#16233a"/>
+      <text x="1080" y="242" fill="#e8eefc" font-size="14" font-weight="700">כותרת הכרטיס</text>
+      <text x="1080" y="264" fill="#b7c2d9" font-size="12">תת-כותרת קצרה</text>
+      <text x="1080" y="312" fill="#3dff8e" font-size="26" font-weight="700">42</text>
+      <text x="1030" y="310" fill="#b7c2d9" font-size="12">פריטים פעילים</text>
+      <rect x="900" y="330" width="190" height="34" rx="8" fill="#3a2c0c" stroke="#ffb020"/>
+      <text x="1080" y="352" fill="#ffb020" font-size="12">זה מסך שחולל ממשפט אחד</text>
+    </g>
+    <text x="600" y="398" fill="#8a94a8" font-size="14" text-anchor="middle">Input and picked atoms: a real run of engine/generate.mjs on engine/specs/example.txt · the phone is a drawing of the generated layout</text>
+  </g>
+</svg>
