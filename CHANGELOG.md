@@ -6,6 +6,8 @@
 ## 2026-11-06 — סדר והצגה
 - README דו-לשוני (`README.md` עברית · `README.en.md` אנגלית) עם hero, תרשים "איך זה עובד", טבלת תוכן והרצה מקומית.
 - נוספו `assets/hero.svg`, `assets/how.svg`, `CHANGELOG.md`, `SECURITY.md`.
+- סבב ב׳: הקלטת-טרמינל אמיתית (`assets/demo.gif`), hero שמראה את המחולל בפעולה, `beforeafter.svg` · `numbers.svg` (רק מדוד) · `install.svg`, פרק "מה זה לא עושה" ושאלות נוספות.
+- `HANDOFF-FORGE.md` הועבר ל-`docs/handoff/` (`git mv`; אין אליו הפניות). שאר ה-HANDOFF נשארו — מפנים אליהם.
 - ללא שינוי קוד.
 
 ## 2026-09-22 — 2026-09-24 — תיק מירון
@@ -14,7 +16,7 @@
 ## 2026-09-04 — 2026-09-05 — מנוע ds-forge וביקורת-פיקסל
 - ds-forge: ‏353/353 אטומים מרונדרים, fallback עברי לפונטים, baseline איכות מקובע.
 - `one.mjs`: צינור ביקורת-הפיקסל המלא בתוך המנוע-האחד.
-- `HANDOFF-FORGE.md`: מדריך שימוש וקטלוג 353 האטומים.
+- `docs/handoff/HANDOFF-FORGE.md`: מדריך שימוש וקטלוג 353 האטומים.
 
 ## 2026-08-30 — המדף המלא ירוק
 - כל 1,672 קבצי-המדף עוברים `flutter analyze` באפס שגיאות + build-web מלא בתוך buildsmart.

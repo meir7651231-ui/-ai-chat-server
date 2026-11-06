@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 210" role="img" aria-label="Measured on 6 Nov 2026: 6,514 files with zero wiring violations; 1,239 atoms each with a contract and a green test; 39 board assertions passing; 0 npm dependencies">
+  <rect width="1200" height="210" rx="16" fill="#0b1018"/>
+  <g font-family="system-ui,Segoe UI,Arial" text-anchor="middle">
+    <g fill="#121a2b" stroke="#24314d" stroke-width="1.2">
+      <rect x="30" y="30" width="270" height="130" rx="12"/><rect x="320" y="30" width="270" height="130" rx="12"/>
+      <rect x="610" y="30" width="270" height="130" rx="12"/><rect x="900" y="30" width="270" height="130" rx="12"/>
+    </g>
+    <g font-size="46" font-weight="800">
+      <text x="165" y="98" fill="#3dff8e">6,514</text><text x="455" y="98" fill="#6aa8ff">1,239</text>
+      <text x="745" y="98" fill="#3dff8e">39</text><text x="1035" y="98" fill="#ffb020">0</text>
+    </g>
+    <g font-size="15" fill="#b7c2d9">
+      <text x="165" y="132">files · 0 wiring violations</text><text x="455" y="132">atoms · contract + green test</text>
+      <text x="745" y="132">board assertions · passing</text><text x="1035" y="132">npm dependencies</text>
+    </g>
+    <text x="600" y="192" fill="#8a94a8" font-size="13">Measured 6 Nov 2026 · wiring-check.mjs · contract-check.mjs · node --test new/board.test.mjs · package.json count</text>
+  </g>
+</svg>

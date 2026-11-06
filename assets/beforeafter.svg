@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" role="img" aria-label="Before: code with burned-in text and numbers, locked to one app. After: a pure atom with data injected, reusable anywhere">
+  <rect width="1200" height="300" rx="16" fill="#0b1018"/>
+  <g font-family="system-ui,Segoe UI,Arial">
+    <rect x="30" y="30" width="555" height="240" rx="12" fill="#1d1216" stroke="#ff5f56" stroke-width="1.5"/>
+    <text x="55" y="64" fill="#ff5f56" font-size="20" font-weight="700">Before · legacy code</text>
+    <g font-family="DejaVu Sans Mono,monospace" font-size="15" fill="#e8eefc">
+      <text x="55" y="104">title: <tspan fill="#ff8a80">'Families'</tspan>          <tspan fill="#8a94a8">// text burned in</tspan></text>
+      <text x="55" y="134">limit: <tspan fill="#ff8a80">42</tspan>                <tspan fill="#8a94a8">// number burned in</tspan></text>
+      <text x="55" y="164">color: <tspan fill="#ff8a80">#2f7dff</tspan>           <tspan fill="#8a94a8">// look burned in</tspan></text>
+    </g>
+    <text x="55" y="214" fill="#b7c2d9" font-size="16">Works in one app only. Moving it means rewriting it.</text>
+    <text x="55" y="244" fill="#b7c2d9" font-size="16">The generator can't pick it — it carries its own context.</text>
+
+    <path d="M592 150 h20" stroke="#3dff8e" stroke-width="3"/><path d="M606 142 l10 8 -10 8" fill="none" stroke="#3dff8e" stroke-width="3"/>
+
+    <rect x="615" y="30" width="555" height="240" rx="12" fill="#0f1c18" stroke="#3dff8e" stroke-width="1.5"/>
+    <text x="640" y="64" fill="#3dff8e" font-size="20" font-weight="700">After · pure atom</text>
+    <g font-family="DejaVu Sans Mono,monospace" font-size="15" fill="#e8eefc">
+      <text x="640" y="104">title: <tspan fill="#6aa8ff">term('entity.family')</tspan></text>
+      <text x="640" y="134">limit: <tspan fill="#6aa8ff">cfg.limit</tspan></text>
+      <text x="640" y="164">color: <tspan fill="#6aa8ff">tokens.primary</tspan></text>
+    </g>
+    <text x="640" y="214" fill="#b7c2d9" font-size="16">Data lives in the data layer and is injected.</text>
+    <text x="640" y="244" fill="#b7c2d9" font-size="16">Same atom, any app, unchanged — with a contract + test.</text>
+  </g>
+</svg>
