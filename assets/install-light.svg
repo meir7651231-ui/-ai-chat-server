@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 170" role="img" aria-label="Three steps: clone the repo, run the checks with Node 22, run the generator. No npm install">
+  <rect x="1" y="1" width="1198" height="168" rx="16" fill="#ffffff" stroke="#d5deec" stroke-width="2"/>
+  <g font-family="system-ui,Segoe UI,Arial">
+    <g fill="#f4f7fc" stroke="#1f63d6" stroke-width="1.4">
+      <rect x="30" y="30" width="360" height="110" rx="12"/><rect x="420" y="30" width="360" height="110" rx="12"/><rect x="810" y="30" width="360" height="110" rx="12"/>
+    </g>
+    <g fill="#0a8a45" font-size="30" font-weight="800"><text x="55" y="75">1</text><text x="445" y="75">2</text><text x="835" y="75">3</text></g>
+    <g fill="#0b1018" font-size="19" font-weight="700"><text x="90" y="72">Clone</text><text x="480" y="72">Check</text><text x="870" y="72">Generate</text></g>
+    <g fill="#3c4a63" font-family="DejaVu Sans Mono,monospace" font-size="14">
+      <text x="55" y="112">git clone … &amp;&amp; cd …</text>
+      <text x="445" y="112">node machtzev/police.mjs --fast</text>
+      <text x="835" y="112">cd engine &amp;&amp; node generate.mjs</text>
+    </g>
+    <text x="600" y="160" fill="#5b6578" font-size="13" text-anchor="middle">Node.js 22 only · no npm install · runs offline</text>
+  </g>
+</svg>

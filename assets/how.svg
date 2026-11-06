@@ -36,6 +36,6 @@
       <path d="M967 80 h28" marker-end="url(#h)"/>
     </g>
     <rect x="140" y="150" width="905" height="50" rx="10" fill="#0f1c18" stroke="#3dff8e" stroke-width="1.6"/>
-    <text x="592" y="182" fill="#3dff8e" font-size="17">police.mjs — wiring · contract · quarry · pins · selftest · mutation (green before every commit)</text>
+    <text x="592" y="182" fill="#3dff8e" font-size="17">police.mjs — 13 gates: wiring · contract · purity · synthesis · coverage · pins … (green before every commit)</text>
   </g>
 </svg>

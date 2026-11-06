@@ -1,16 +1,23 @@
 <p align="right"><a href="README.md">עברית</a> · <b>English</b></p>
 
-<p align="center"><img src="assets/hero.svg" alt="Orbit Genesis in action: a Hebrew sentence goes in, five catalog atoms are picked and wired, a Flutter screen comes out" width="100%"></p>
+<p align="center"><b>⚡ Try it now</b> — one command, ~2 seconds, Node 22 only (<a href="#see-it-run">see the GIF</a>):</p>
+
+```bash
+git clone --depth 1 https://github.com/meir7651231-ui/-ai-chat-server orbit && cd orbit/engine && node generate.mjs
+```
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/hero.svg"><img src="assets/hero-light.svg" alt="Orbit Genesis in action: a Hebrew sentence goes in, five catalog atoms are picked and wired, a Flutter screen comes out" width="100%"></picture></p>
 
 <p align="center">
 <img src="https://img.shields.io/badge/Node.js-22-3dff8e?style=for-the-badge&labelColor=0b1018" alt="Node.js 22">
 <img src="https://img.shields.io/badge/npm%20deps-0-6aa8ff?style=for-the-badge&labelColor=0b1018" alt="zero npm dependencies">
 <img src="https://img.shields.io/badge/status-feature%20freeze-ffb020?style=for-the-badge&labelColor=0b1018" alt="status: feature freeze">
+<img src="https://img.shields.io/badge/quick%20start-~45s-3dff8e?style=for-the-badge&labelColor=0b1018" alt="quick start: about 45 seconds, measured">
 </p>
 
 <h3 align="center">Every wire has a contract. Nothing burned in. No capability lost.</h3>
 
-<p align="center"><a href="#the-problem">The problem</a> · <a href="#how-it-works">How it works</a> · <a href="#see-it-run">Demo</a> · <a href="#the-numbers">The numbers</a> · <a href="#whats-inside">What's inside</a> · <a href="#what-it-does-not-do">What it does not do</a> · <a href="#run-it-locally">Run it</a> · <a href="#status">Status</a> · <a href="#faq">FAQ</a></p>
+<p align="center"><a href="#the-problem">The problem</a> · <a href="#how-it-works">How it works</a> · <a href="#see-it-run">Demo</a> · <a href="#the-numbers">The numbers</a> · <a href="#whats-inside">What's inside</a> · <a href="#what-it-does-not-do">What it does not do</a> · <a href="#quick-start--60-seconds">Quick start</a> · <a href="#docs">Docs</a> · <a href="#status">Status</a> · <a href="#faq">FAQ</a></p>
 
 ---
 
@@ -22,20 +29,20 @@ That code works, but no part of it can move to another project unchanged, and no
 **Orbit Genesis is the clean rebuild.** The old code was broken into tens of thousands of registered atoms; here a new tree is built only
 from pure atoms and wiring boxes — on the way to **the generator**: a Hebrew sentence ⇒ a feature assembled from the catalog.
 
-<p align="center"><img src="assets/beforeafter.svg" alt="Before: code with burned-in text and numbers, locked to one app. After: a pure atom with data injected, reusable anywhere" width="100%"></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/beforeafter.svg"><img src="assets/beforeafter-light.svg" alt="Before: code with burned-in text and numbers, locked to one app. After: a pure atom with data injected, reusable anywhere" width="100%"></picture></p>
 
 ## How it works
 
-<p align="center"><img src="assets/how.svg" alt="Legacy source, quarry, atoms, boxes, board, generator; the police checks every step" width="100%"></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/how.svg"><img src="assets/how-light.svg" alt="Legacy source, quarry, atoms, boxes, board, generator; the police checks every step" width="100%"></picture></p>
 
 1. **Quarry** (`machtzev/`) — carves atom drafts out of the legacy source.
 2. **Atom** (`new/atoms/`) — one pure capability: code + contract + test, with no data inside (see `PURPOSE.md`).
 3. **Box** (`new/boxes/`) — wiring between atoms, nothing else.
 4. **Board** (`new/board.*`) — the motherboard that joins the boxes into one system.
 5. **Generator** (`engine/`) — a deterministic engine that turns a Hebrew sentence into a Flutter screen, with no language model.
-6. **Police** (`machtzev/police.mjs`) — wiring, contract, quarry and pin gates that must be green before every commit.
+6. **Police** (`machtzev/police.mjs`) — 13 gates (wiring, contract, purity, synthesis, coverage, pins and more) that must be green before every commit.
 
-The full rules (in Hebrew): [`LAW.md`](LAW.md) (the seven electrician's laws) · [`PURPOSE.md`](PURPOSE.md) (the purity goal).
+Checked detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) · the laws (Hebrew): [`LAW.md`](LAW.md) · the goal (Hebrew): [`PURPOSE.md`](PURPOSE.md).
 
 ## See it run
 
@@ -45,9 +52,9 @@ A recording of a real run (6 Nov 2026, Node 22, no `npm install`): wiring check 
 
 ## The numbers
 
-<p align="center"><img src="assets/numbers.svg" alt="Measured 6 Nov 2026: 6,514 files with zero wiring violations; 1,239 atoms each with a contract and a green test; 39 board assertions passing; 0 npm dependencies" width="100%"></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/numbers.svg"><img src="assets/numbers-light.svg" alt="Measured 6 Nov 2026: 6,514 files with zero wiring violations; 1,239 atoms each with a contract and a green test; 39 board assertions passing; 0 npm dependencies" width="100%"></picture></p>
 
-Every number here was measured by a run, not estimated. The commands are under [Run it locally](#run-it-locally).
+Every number here was measured by a run, not estimated. The commands are under [Quick start](#quick-start--60-seconds).
 
 ## What's inside
 
@@ -62,7 +69,8 @@ Every number here was measured by a run, not estimated. The commands are under [
 | `screens-seed/` | Screen seeds for assembly |
 | `design/` | Orbit design and brand pages |
 | `knowledge/` | Plans, summaries and close-out notes |
-| `docs/handoff/` | Hand-off notes nothing else links to |
+| `docs/` | Architecture, the generator guide, and `handoff/` — hand-off notes nothing else links to |
+| `.github/` | Issue and PR templates (no workflows) |
 | `meron/` | Topic-by-topic planning file for managing the Meron event (HTML, one topic per file) |
 | `WIRING.md` | The live wiring map (generated — do not edit by hand) |
 | `HANDOFF-MASTER.md` · `HANDOFF-DART-CONVERSION.md` | Hand-off notes other documents link to (they stay at the root) |
@@ -76,23 +84,48 @@ Every number here was measured by a run, not estimated. The commands are under [
 - **It holds no secrets, identities or connections** — those are injected at deploy time (law 6).
 - **There is no CI yet** — checks are run by hand or in a session.
 
-## Run it locally
+## Quick start · 60 seconds
 
-<p align="center"><img src="assets/install.svg" alt="Three steps: clone, check with Node 22, run the generator. No npm install" width="100%"></p>
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/install.svg"><img src="assets/install-light.svg" alt="Three steps: clone, check with Node 22, run the generator. No npm install" width="100%"></picture></p>
 
 Node.js 22 only. There is no `npm install` — the tools use Node's built-in modules only.
 
 ```bash
-git clone <repo-url> && cd <repo-folder>
+git clone --depth 1 https://github.com/meir7651231-ui/-ai-chat-server orbit && cd orbit
 
+(cd engine && node generate.mjs)         # the generator: sentence ⇒ screen
 node machtzev/wiring-check.mjs ./new     # wiring laws on the new tree
-node machtzev/contract-check.mjs ./new   # every atom: contract + green test
 node --test new/board.test.mjs           # board test
+node machtzev/contract-check.mjs ./new   # every atom: contract + green test
 node machtzev/police.mjs --fast          # the fast police (before every commit)
-(cd engine && node generate.mjs)         # run the generator on its specs
 ```
 
-All of these were run on 6 Nov 2026 with Node 22.23.
+**Measured on 6 Nov 2026** from a clean clone, Node 22.23, a 4-core machine:
+
+| Step | Time |
+|---|---|
+| `git clone --depth 1` | 2.3 s |
+| Generator | 0.05 s |
+| Wiring check | 0.2 s |
+| Board test | 0.15 s |
+| Contract check (runs 1,239 tests) | 40.6 s |
+| **Total, clone to four green checks** | **about 44 s** |
+
+`police.mjs --fast` is not in the timing — it is red right now (see [Status](#status)).
+
+Want your own screen? [`docs/GENERATOR.md`](docs/GENERATOR.md).
+
+## Docs
+
+| Document | What it holds |
+|---|---|
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | The layers, the laws and the generator — checked facts only |
+| [`docs/GENERATOR.md`](docs/GENERATOR.md) | Short guide: your own screen in a minute |
+| [`ROADMAP.md`](ROADMAP.md) | What is done, in progress and planned |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | How to contribute — branches, contracts, police |
+| [`CHANGELOG.md`](CHANGELOG.md) | Milestones |
+| [`SECURITY.md`](SECURITY.md) | Public repo, no secrets, private reporting |
+| [`LAW.md`](LAW.md) · [`PURPOSE.md`](PURPOSE.md) | The constitution and the goal (Hebrew) |
 
 ## Status
 
@@ -100,7 +133,7 @@ All of these were run on 6 Nov 2026 with Node 22.23.
 - ✅ Wiring: 6,514 files, zero violations · ✅ Contracts: 1,239 atoms · ✅ Board: 39 assertions pass.
 - 🔴 `police.mjs --fast` is currently red at the synthesis gate (JS↔Dart equivalence). The fix waits in draft PRs #2–#4.
 - Main working branch: `claude/mah-kora-0by8kw`. The repo has no automated CI yet.
-- History: [`CHANGELOG.md`](CHANGELOG.md) · Security: [`SECURITY.md`](SECURITY.md).
+- Next: [`ROADMAP.md`](ROADMAP.md) · History: [`CHANGELOG.md`](CHANGELOG.md) · Security: [`SECURITY.md`](SECURITY.md).
 
 ## FAQ
 
@@ -121,7 +154,7 @@ No. The engine in `engine/` is deterministic: the same sentence gives the same o
 
 <details><summary><b>How is the police here different from agent-police?</b></summary>
 
-`machtzev/police.mjs` is this repo's own build police: wiring, contract, quarry and pin gates. It is not a separate product or plugin.
+`machtzev/police.mjs` is this repo's own build police: 13 gates, from wiring and contracts to purity and pins. It is not a separate product or plugin.
 </details>
 
 <details><summary><b>Why is the police red if wiring and contracts are green?</b></summary>

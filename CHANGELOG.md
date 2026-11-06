@@ -1,29 +1,43 @@
-# יומן שינויים · Changelog
+# Changelog · יומן שינויים
 
-הריפו אינו משחרר גרסאות; כאן נרשמות אבני-הדרך לפי תאריך. הפירוט המלא ב-`git log`.
-*No versioned releases; milestones are listed by date. Full detail in `git log`.*
+All notable changes to this repo are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+The repo has no versioned releases, so each entry is a dated milestone. Full detail: `git log`.
 
-## 2026-11-06 — סדר והצגה
-- README דו-לשוני (`README.md` עברית · `README.en.md` אנגלית) עם hero, תרשים "איך זה עובד", טבלת תוכן והרצה מקומית.
-- נוספו `assets/hero.svg`, `assets/how.svg`, `CHANGELOG.md`, `SECURITY.md`.
-- סבב ב׳: הקלטת-טרמינל אמיתית (`assets/demo.gif`), hero שמראה את המחולל בפעולה, `beforeafter.svg` · `numbers.svg` (רק מדוד) · `install.svg`, פרק "מה זה לא עושה" ושאלות נוספות.
-- `HANDOFF-FORGE.md` הועבר ל-`docs/handoff/` (`git mv`; אין אליו הפניות). שאר ה-HANDOFF נשארו — מפנים אליהם.
-- ללא שינוי קוד.
+כל שינוי משמעותי נרשם כאן, בפורמט Keep a Changelog. אין גרסאות משוחררות — כל רשומה היא אבן-דרך מתוארכת.
 
-## 2026-09-22 — 2026-09-24 — תיק מירון
-- `meron/`: נושאים 01–136 לניהול אירוע מירון — הדמיה + רישום מלא לכל נושא, מחקר רשת ותיקוני עקביות.
+## [Unreleased]
 
-## 2026-09-04 — 2026-09-05 — מנוע ds-forge וביקורת-פיקסל
-- ds-forge: ‏353/353 אטומים מרונדרים, fallback עברי לפונטים, baseline איכות מקובע.
-- `one.mjs`: צינור ביקורת-הפיקסל המלא בתוך המנוע-האחד.
-- `docs/handoff/HANDOFF-FORGE.md`: מדריך שימוש וקטלוג 353 האטומים.
+### Added
+- Bilingual README (`README.md` Hebrew · `README.en.md` English): try-now command, real terminal recording (`assets/demo.gif`), the problem, how it works, the numbers, what's inside, what it does not do, timed quick start, status, FAQ.
+- `assets/`: `hero`, `how`, `beforeafter`, `numbers`, `install` — each as a dark `.svg` and a `-light.svg`, switched by `<picture>`.
+- `docs/ARCHITECTURE.md` (sentence → atoms → screen, checked only) · `docs/GENERATOR.md` (short guide).
+- `CONTRIBUTING.md`, `ROADMAP.md`, `SECURITY.md`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/` (bug · docs). No workflows.
+- `.gitignore`: `.env*`, `node_modules/`, `.dart_tool/`, OS files.
 
-## 2026-08-30 — המדף המלא ירוק
-- כל 1,672 קבצי-המדף עוברים `flutter analyze` באפס שגיאות + build-web מלא בתוך buildsmart.
-- 41 אטומי חוב-המרה בהסגר, ממתינים לתיקון מנוע-ההמרה.
+### Changed
+- `HANDOFF-FORGE.md` moved to `docs/handoff/` (`git mv`; nothing links to it). The other hand-off files stay at the root — other files link to them.
+- No code changed.
 
-## 2026-08-29 — מבחן-הקומפילציה
-- 265 אטומים · 80 מסכים מורכבים · 79 לוחות — מ-1,804 שגיאות לאפס ב-8 סבבי תיקון-מנוע.
+## [2026-09-24] — Meron file · תיק מירון
+### Added
+- `meron/`: topics 01–136 for managing the Meron event — a simulation and a full log per topic, web research and consistency passes.
 
-## 2026-08-24 — לידה
-- הריפו נפתח ריק. כל קובץ נכנס דרך המחצב, עם חוזה ובדיקה, תחת `LAW.md`.
+## [2026-09-05] — ds-forge engine and pixel audit
+### Added
+- ds-forge: 353/353 atoms rendered, Hebrew font fallback, a fixed quality baseline.
+- `one.mjs`: the full pixel-audit pipeline inside the one-engine.
+- `docs/handoff/HANDOFF-FORGE.md`: usage guide and catalog of the 353 atoms.
+
+## [2026-08-30] — The full shelf is green
+### Added
+- All 1,672 shelf files pass `flutter analyze` with zero errors, plus a full web build inside buildsmart.
+### Known issues
+- 41 conversion-debt atoms are quarantined, waiting for a fix in the conversion engine.
+
+## [2026-08-29] — The compile test
+### Added
+- 265 atoms · 80 assembled screens · 79 boards — from 1,804 errors to zero in 8 engine-fix rounds.
+
+## [2026-08-24] — Birth · לידה
+### Added
+- The repo opened empty. Every file comes in through the quarry, with a contract and a test, under `LAW.md`.
