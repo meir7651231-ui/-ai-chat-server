@@ -227,7 +227,7 @@ function generate(slug, specText) {
   for (const part of parts) {
     if (part.role !== 'calc') continue;
     const pendingHebArg = (s) => constFor(s, 'calc_arg');
-    const wrapCall = (f, args) => `${f.name}(${args.join(', ')})${f.ret === 'String' || f.ret === 'String?' ? '' : '.toString()'}${f.ret === 'String?' ? " ?? ''" : ''}`;
+    const wrapCall = (f, args) => (f.ret === 'String' || f.ret === 'String?') ? `${f.name}(${args.join(', ')})${f.ret === 'String?' ? " ?? ''" : ''}` : `((Object? v) => v is List ? v.join(',') : v.toString())(${f.name}(${args.join(', ')}))`;
     let call = null, fnHit = null;
     // 📌 עיגון-מפורש '(fnName)' בסוף חלק-חישוב ⇒ האטום המדויק — לבקשות שהמכונה כותבת לעצמה
     const pinM = part.txt.match(/\(([a-z]\w*)\)\s*$/);
