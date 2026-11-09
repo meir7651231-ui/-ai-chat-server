@@ -57,9 +57,11 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
+// ‏.toString() של Dart: רשימה ⇒ "[a, b]" (ב-JS String(arr) נותן "a,b" — פער שהשער תפס).
+const dartStr = (v) => Array.isArray(v) ? '[' + v.map(dartStr).join(', ') + ']' : String(v);
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  return (out === undefined || out === null) ? null : dartStr(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
