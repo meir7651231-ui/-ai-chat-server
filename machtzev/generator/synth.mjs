@@ -59,6 +59,8 @@ const feed1 = (f, s) => {
 };
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
+  // מערך/אובייקט: String() ב-JS ('א,ח,ת') ≠ .toString() ב-Dart ('[א, ח, ת]') ⇒ אין שקילות-מסך — לא צעד תקף
+  if (out !== null && typeof out === 'object') return null;
   return (out === undefined || out === null) ? null : String(out);
 };
 const runChain = (chain, input) => {
