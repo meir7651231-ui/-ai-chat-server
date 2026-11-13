@@ -57,9 +57,18 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
+// ‏‎.toString()‎ בסמנטיקת-Dart — String(arr) של JS נותן "a,b" אבל Dart נותן "[a, b]" (L38)
+const dartStr = (v) => {
+  if (v === null || v === undefined) return 'null';
+  if (Array.isArray(v)) return `[${v.map(dartStr).join(', ')}]`;
+  if (v instanceof Set) return `{${[...v].map(dartStr).join(', ')}}`;
+  if (v instanceof Map) return `{${[...v].map(([k, x]) => `${dartStr(k)}: ${dartStr(x)}`).join(', ')}}`;
+  if (typeof v === 'object') return `{${Object.entries(v).map(([k, x]) => `${k}: ${dartStr(x)}`).join(', ')}}`;
+  return String(v);
+};
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  return (out === undefined || out === null) ? null : dartStr(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
