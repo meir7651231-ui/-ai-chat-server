@@ -57,9 +57,19 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
+// ‏‎.toString()‎ של Dart, לא String() של JS: רשימה ⇒ "[a, b]" (JS: "a,b"), מפה ⇒ "{k: v}",
+// null פנימי ⇒ "null". פער זה שבר את שער-הסינתזה (חלום sortSupportThreads∘normEmail, 14.11).
+const dartStr = (v) => {
+  if (v === undefined || v === null) return 'null';
+  if (Array.isArray(v)) return '[' + v.map(dartStr).join(', ') + ']';
+  if (v instanceof Map) return '{' + [...v].map(([k, x]) => `${dartStr(k)}: ${dartStr(x)}`).join(', ') + '}';
+  if (typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype)
+    return '{' + Object.entries(v).map(([k, x]) => `${k}: ${dartStr(x)}`).join(', ') + '}';
+  return String(v);
+};
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  return (out === undefined || out === null) ? null : dartStr(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
