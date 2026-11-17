@@ -57,9 +57,18 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
+// ‏‎.toString()‎ בסמנטיקת-Dart: רשימה ⇒ "[a, b]" (לא "a,b" של JS), מפה ⇒ "{k: v}", null ⇒ "null".
+// בלי זה JS ו-Dart נפרדים על כל חוליה שמחזירה מכולה (שער-הסינתזה, לילה 17.11).
+const dartStr = (v) => {
+  if (v === null || v === undefined) return 'null';
+  if (Array.isArray(v)) return '[' + v.map(dartStr).join(', ') + ']';
+  if (v instanceof Map) return '{' + [...v].map(([k, x]) => `${dartStr(k)}: ${dartStr(x)}`).join(', ') + '}';
+  if (typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) return '{' + Object.entries(v).map(([k, x]) => `${k}: ${dartStr(x)}`).join(', ') + '}';
+  return String(v);
+};
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  return (out === undefined || out === null) ? null : dartStr(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
