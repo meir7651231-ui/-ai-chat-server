@@ -212,6 +212,7 @@ if (DREAM) {
       const inp = bank[Math.floor(rnd() * bank.length)];
       const out = runChain(chain, inp);                            // אותה השחלת-מסך כמו בחיפוש ובשער
       if (out === null || !out || out.length > 40 || out === inp || exs.some(e => e.out === out || e.in === inp)) continue;
+      if (/^[\[{]/.test(out)) continue;                           // פלט-מכולה גולמי ({..}/[..]) אינו תצוגה קריאה במסך-RTL — חלום רק על ערך-סקלרי
       exs.push({ in: inp, out });
     }
     if (exs.length !== 2) continue;
