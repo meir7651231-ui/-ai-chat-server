@@ -57,9 +57,16 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
+// ‏Dart-toString: List ⇒ "[a, b]" · Map ⇒ "{k: v}" (לא String(arr) של JS ‏"a,b") — כך מציג המסך המחולל
+const dartStr = (v) => {
+  if (v === null || v === undefined) return 'null';
+  if (Array.isArray(v)) return '[' + v.map(dartStr).join(', ') + ']';
+  if (typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) return '{' + Object.entries(v).map(([k, x]) => `${k}: ${dartStr(x)}`).join(', ') + '}';
+  return String(v);
+};
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  return (out === undefined || out === null) ? null : dartStr(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
@@ -205,6 +212,7 @@ if (DREAM) {
       const inp = bank[Math.floor(rnd() * bank.length)];
       const out = runChain(chain, inp);                            // אותה השחלת-מסך כמו בחיפוש ובשער
       if (out === null || !out || out.length > 40 || out === inp || exs.some(e => e.out === out || e.in === inp)) continue;
+      if (/^[\[{]/.test(out)) continue;                           // פלט-מכולה גולמי ({..}/[..]) אינו תצוגה קריאה במסך-RTL — חלום רק על ערך-סקלרי
       exs.push({ in: inp, out });
     }
     if (exs.length !== 2) continue;
