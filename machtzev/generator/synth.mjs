@@ -57,9 +57,18 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
+// ‏‎.toString()‎ של Dart — לא String() של JS: רשימה ⇒ "[a, b]" (לא "a,b"), מפה ⇒ "{k: v}",
+// ‏double שלם ⇒ "3.0". בלי זה החיפוש "מוכיח" שרשרת שהמסך המחולל לא ישחזר (חלום 4.9).
+const dartStr = (v, ret) => {
+  if (v === null || v === undefined) return 'null';
+  if (Array.isArray(v)) return '[' + v.map(x => dartStr(x)).join(', ') + ']';
+  if (typeof v === 'object') return '{' + Object.entries(v).map(([k, x]) => `${k}: ${dartStr(x)}`).join(', ') + '}';
+  if (typeof v === 'number' && /^double\??$/.test(ret || '') && Number.isInteger(v)) return v.toFixed(1);
+  return String(v);
+};
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  return (out === undefined || out === null) ? null : dartStr(out, f.ret);
 };
 const runChain = (chain, input) => {
   let v = String(input);
