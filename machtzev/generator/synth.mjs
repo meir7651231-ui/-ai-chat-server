@@ -59,7 +59,11 @@ const feed1 = (f, s) => {
 };
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  if (out === undefined || out === null) return null;
+  // מכולה (List/Map/אובייקט) אינה בת-השחלה: JS ‏String([..])='a,b' אך Dart ‏.toString()='[a, b]'
+  // ⇒ פער-שקילות שהמסך היה מציג. נפסלת כאן כדי שחיפוש/חלום/שער לא יקבלו שרשרת כזו (לילה 20.11).
+  if (typeof out === 'object') return null;
+  return String(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
@@ -213,7 +217,15 @@ if (DREAM) {
     const ess = chain.map(c => cleanHe(fnsBy.get(c).he).slice(0, 3).join(' ')).join(' ואז ');
     const desc = `${P.capDream} - ${ess}`;
     const proof = synthesize(desc, exs);
-    if (proof && !proof.shortcut) dreamed = { chain, exs, desc };
+    // כנות-התיאור: השם מונה את חוליות-החלום — מתקבל רק אם ההוכחה משחזרת בדיוק אותה שרשרת
+    // (אחרת המסך מבטיח אטום שאינו בשרשרת — screen-reviewer, לילה 20.11)
+    // ⇒ השם נבנה מחדש מהשרשרת-המוכחת, ומוכח שוב תחת השם הכן.
+    if (proof && !proof.shortcut) {
+      const nameOf = (ch) => `${P.capDream} - ${ch.map(c => cleanHe(fnsBy.get(c).he).slice(0, 3).join(' ')).join(' ואז ')}`;
+      const honest = nameOf(proof.chain);
+      const again = honest === desc ? proof : synthesize(honest, exs);
+      if (again && !again.shortcut && again.chain.join('∘') === proof.chain.join('∘')) dreamed = { chain: proof.chain, exs, desc: honest };
+    }
   }
   if (dreamed) {
     const txt = [dreamed.desc, ...dreamed.exs.map(e => `${e.in} => ${e.out}`)].join('\n') + '\n';
