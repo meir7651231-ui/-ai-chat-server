@@ -217,7 +217,15 @@ if (DREAM) {
     const ess = chain.map(c => cleanHe(fnsBy.get(c).he).slice(0, 3).join(' ')).join(' ואז ');
     const desc = `${P.capDream} - ${ess}`;
     const proof = synthesize(desc, exs);
-    if (proof && !proof.shortcut) dreamed = { chain, exs, desc };
+    // כנות-התיאור: השם מונה את חוליות-החלום — מתקבל רק אם ההוכחה משחזרת בדיוק אותה שרשרת
+    // (אחרת המסך מבטיח אטום שאינו בשרשרת — screen-reviewer, לילה 20.11)
+    // ⇒ השם נבנה מחדש מהשרשרת-המוכחת, ומוכח שוב תחת השם הכן.
+    if (proof && !proof.shortcut) {
+      const nameOf = (ch) => `${P.capDream} - ${ch.map(c => cleanHe(fnsBy.get(c).he).slice(0, 3).join(' ')).join(' ואז ')}`;
+      const honest = nameOf(proof.chain);
+      const again = honest === desc ? proof : synthesize(honest, exs);
+      if (again && !again.shortcut && again.chain.join('∘') === proof.chain.join('∘')) dreamed = { chain: proof.chain, exs, desc: honest };
+    }
   }
   if (dreamed) {
     const txt = [dreamed.desc, ...dreamed.exs.map(e => `${e.in} => ${e.out}`)].join('\n') + '\n';
