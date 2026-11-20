@@ -59,7 +59,11 @@ const feed1 = (f, s) => {
 };
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  if (out === undefined || out === null) return null;
+  // מכולה (List/Map/אובייקט) אינה בת-השחלה: JS ‏String([..])='a,b' אך Dart ‏.toString()='[a, b]'
+  // ⇒ פער-שקילות שהמסך היה מציג. נפסלת כאן כדי שחיפוש/חלום/שער לא יקבלו שרשרת כזו (לילה 20.11).
+  if (typeof out === 'object') return null;
+  return String(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
