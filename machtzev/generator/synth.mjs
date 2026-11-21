@@ -57,9 +57,19 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
+// ‎.toString()‎ של Dart — לא String() של JS: רשימה ⇒ "[a, b]" (JS נותן "a,b"), double שלם ⇒ "1.0".
+//   ערך שאין לו ייצוג-Dart ודאי (Map/אובייקט) ⇒ null — החוליה נפסלת בכנות במקום פער שקט.
+//   (נתפס 21.11: auto-dream הוכח ב-JS כ-"א,ח,ת" והמסך הציג "[א, ח, ת]" — שער-Dart אדום)
+const dartStr = (v, ret = '') => {
+  if (v === undefined || v === null) return 'null';
+  if (Array.isArray(v)) { const xs = v.map(x => dartStr(x)); return xs.includes(null) ? null : `[${xs.join(', ')}]`; }
+  if (typeof v === 'object') return null;
+  if (typeof v === 'number' && /^double\??$/.test(ret) && Number.isInteger(v)) return `${v}.0`;
+  return String(v);
+};
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  return (out === undefined || out === null) ? null : dartStr(out, f.ret);
 };
 const runChain = (chain, input) => {
   let v = String(input);
