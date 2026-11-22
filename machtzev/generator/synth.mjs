@@ -59,7 +59,11 @@ const feed1 = (f, s) => {
 };
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  if (out === undefined || out === null) return null;
+  // ערך-מכולה (מערך/אובייקט) אינו בר-השחלה: String(['a','b'])='a,b' ב-JS אבל
+  // ‎List.toString()‎='[a, b]' ב-Dart — פער-שקילות (נתפס בשער 22.11: sortSupportThreads על מחרוזת)
+  if (typeof out === 'object') return null;
+  return String(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
@@ -205,15 +209,17 @@ if (DREAM) {
       const inp = bank[Math.floor(rnd() * bank.length)];
       const out = runChain(chain, inp);                            // אותה השחלת-מסך כמו בחיפוש ובשער
       if (out === null || !out || out.length > 40 || out === inp || exs.some(e => e.out === out || e.in === inp)) continue;
+      // דליפת-ריק (undefined/null/NaN) אינה יכולת — זה שבר-ערך שמוצג למשתמש כטקסט (נתפס 22.11 בסקירת-מסך)
+      if (/\b(undefined|null|NaN)\b/.test(out)) continue;
       exs.push({ in: inp, out });
     }
     if (exs.length !== 2) continue;
     // חלום מתקבל רק אם מנוע-הסינתזה עצמו מוכיח אותו בהרכבה אמיתית (לא אטום-יחיד,
     // לא מסלול שהחיפוש לא מסוגל לשחזר — למשל חוליית-ביניים ריקה שהגיזום פוסל)
-    const ess = chain.map(c => cleanHe(fnsBy.get(c).he).slice(0, 3).join(' ')).join(' ואז ');
-    const desc = `${P.capDream} - ${ess}`;
-    const proof = synthesize(desc, exs);
-    if (proof && !proof.shortcut) dreamed = { chain, exs, desc };
+    const essOf = (ch) => ch.map(c => cleanHe(fnsBy.get(c).he).slice(0, 3).join(' ')).join(' ואז ');
+    const proof = synthesize(`${P.capDream} - ${essOf(chain)}`, exs);
+    // הכותרת נגזרת מהשרשרת שהוכחה בפועל (לא מהמוגרלת — חוליה שהחיפוש השמיט לא נכנסת לשם המסך)
+    if (proof && !proof.shortcut) dreamed = { chain: proof.chain, exs, desc: `${P.capDream} - ${essOf(proof.chain)}` };
   }
   if (dreamed) {
     const txt = [dreamed.desc, ...dreamed.exs.map(e => `${e.in} => ${e.out}`)].join('\n') + '\n';
