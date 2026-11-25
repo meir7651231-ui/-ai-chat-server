@@ -12,6 +12,16 @@ const ROOT = new URL('../../', import.meta.url).pathname;
 /** מטא-הזנבות של הקציר האחרון: fnName ⇒ { tail:any[], simple:boolean } */
 export const twinMeta = new Map();
 
+/** השחלת-ערך בין-חוליות כמו String(v) של JS: List.toString של Dart = "[a, b]" אבל JS = "a,b"
+ *  (שבר את שקילות-Dart ב-auto-dream, לילה 25.11). String/String? — כמות-שהם; List/dynamic — join(',')
+ *  עם null⇒'' (כמו Array.prototype.join); שאר הטיפוסים — toString. משותף למסך (genesis-gen) ולשער (synth). */
+export const dartStr = (call, ret) => {
+  if (ret === 'String') return call;
+  if (ret === 'String?') return `(${call} ?? '')`;
+  if (ret === 'dynamic' || /^List\b/.test(ret || '')) return `((Object? v) => v is List ? v.map((e) => e == null ? '' : '$e').join(',') : '$v')(${call})`;
+  return `${call}.toString()`;
+};
+
 /** ערך-JS ⇒ ליטרל-Dart (רק לזנבות simple). top=true מוסיף const לאוספים. */
 export const dartLit = (v, top = true) => {
   if (v === null) return 'null';

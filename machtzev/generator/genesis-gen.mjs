@@ -17,7 +17,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { stripComments, snake } from '../assemble/lift-lib.mjs';
-import { dartLit } from './twins.mjs';
+import { dartLit, dartStr } from './twins.mjs';
 import { buildAtlas, writeAtlas } from './atlas.mjs';
 import { pickLook } from '../../new/atoms/pick-look.mjs';
 const LOOKS = JSON.parse(fs.readFileSync(new URL('./knowledge/looks.json', import.meta.url), 'utf8'));
@@ -227,7 +227,7 @@ function generate(slug, specText) {
   for (const part of parts) {
     if (part.role !== 'calc') continue;
     const pendingHebArg = (s) => constFor(s, 'calc_arg');
-    const wrapCall = (f, args) => `${f.name}(${args.join(', ')})${f.ret === 'String' || f.ret === 'String?' ? '' : '.toString()'}${f.ret === 'String?' ? " ?? ''" : ''}`;
+    const wrapCall = (f, args) => dartStr(`${f.name}(${args.join(', ')})`, f.ret);
     let call = null, fnHit = null;
     // 📌 עיגון-מפורש '(fnName)' בסוף חלק-חישוב ⇒ האטום המדויק — לבקשות שהמכונה כותבת לעצמה
     const pinM = part.txt.match(/\(([a-z]\w*)\)\s*$/);

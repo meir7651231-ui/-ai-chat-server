@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, execSync } from 'node:child_process';
 import { buildAtlas } from './atlas.mjs';
-import { buildTwinRegistry, twinMeta, dartLit } from './twins.mjs';
+import { buildTwinRegistry, twinMeta, dartLit, dartStr } from './twins.mjs';
 const HERE = new URL('.', import.meta.url).pathname;
 const ROOT = new URL('../../', import.meta.url).pathname;
 const CAPS = path.join(HERE, 'capabilities');
@@ -168,8 +168,7 @@ if (GATE) {
         const meta = twinMeta.get(c);
         const tail = meta && meta.simple && meta.tail.length === f.params.length - 1 ? meta.tail.map(x => dartLit(x)) : f.params.slice(1).map(() => 'null');
         const arg = (t === 'num' || t === 'double') ? `(num.tryParse(${expr}) ?? double.nan)` : t === 'int' ? `(int.tryParse(${expr}) ?? 0)` : expr;
-        expr = `${c}(${[arg, ...tail].join(', ')})${f.ret === 'String' ? '' : f.ret === 'String?' ? " ?? ''" : '.toString()'}`;
-        if (f.ret === 'String?') expr = `(${c}(${[arg, ...tail].join(', ')}) ?? '')`;
+        expr = dartStr(`${c}(${[arg, ...tail].join(', ')})`, f.ret);
       }
       body.push(`  check('${esc(cf)}', '${esc(ex.in)}', ${expr}, '${esc(ex.out)}');`);
     }
