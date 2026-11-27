@@ -59,7 +59,11 @@ const feed1 = (f, s) => {
 };
 const stepFn = (f, s) => {
   const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+  if (out === undefined || out === null) return null;
+  // ערך-מכולה (Array/Object) אינו בר-השחלה: String([..]) של JS ⇒ "a,b" אך ‏.toString() של Dart
+  // ⇒ "[a, b]" — השחלת-המסך הייתה סוטה מהדוגמאות (שבר-שער 4.9→27.11: normEmail∘sortSupportThreads)
+  if (typeof out === 'object') return null;
+  return String(out);
 };
 const runChain = (chain, input) => {
   let v = String(input);
