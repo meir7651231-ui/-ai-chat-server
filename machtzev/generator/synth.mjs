@@ -57,10 +57,19 @@ const feed1 = (f, s) => {
   if (t === 'int') return /^[+-]?\d+$/.test(s.trim()) ? parseInt(s, 10) : 0;                                            // int.tryParse ?? 0
   return s;
 };
-const stepFn = (f, s) => {
-  const out = twins.get(f.name)(feed1(f, s));
-  return (out === undefined || out === null) ? null : String(out);
+// מחרוזת-בין-חוליות בסמנטיקת Dart ‎.toString()‎ — לא String() של JS:
+// ‏List ⇒ "[a, b]" (ב-JS: "a,b"); Map/אובייקט ⇒ לא-ניתן-להשחלה (null).
+// (פער זה שבר את שער-השקילות: אחת ⇒ "א,ח,ת" ב-JS מול "[א, ח, ת]" ב-Dart — לילה 28.11)
+const dartStr = (v) => {
+  if (v === undefined || v === null) return null;
+  if (Array.isArray(v)) {
+    const parts = v.map(x => (x === null || x === undefined) ? 'null' : dartStr(x));
+    return parts.some(p => p === null) ? null : `[${parts.join(', ')}]`;
+  }
+  if (typeof v === 'object') return null;
+  return String(v);
 };
+const stepFn = (f, s) => dartStr(twins.get(f.name)(feed1(f, s)));
 const runChain = (chain, input) => {
   let v = String(input);
   for (const c of chain) { try { v = stepFn(fnsBy.get(c), v); } catch { return null; } if (v === null) return null; }
